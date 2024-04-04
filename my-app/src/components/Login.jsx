@@ -38,8 +38,8 @@ const Login = () => {
       Submit
     </Button>
 
-    <p style={{ marginTop: '10px', textAlign: 'center' }}>Don't have an account? Sign Up</p>
-    Forgot Password?
+    <p style={{ marginTop: '10px', textAlign: 'center' }}>Don't have an account? <NavLink to="/Signup">Sign Up</NavLink></p>
+    <NavLink to="/forget-password">Forgot Password?</NavLink>
 
 
   </Form>  )
