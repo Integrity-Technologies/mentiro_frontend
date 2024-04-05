@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { signUp } from '../actions/authActions';
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -59,7 +60,10 @@ const SignUp = () => {
 
 
   return (
-<Form className='border-top  right  bottom  left'  onSubmit={handleSubmit}>
+    <div className="container">
+  <div className="row justify-content-center">
+    <div className="col-md-6">
+<Form className='border border-1 gap p-4 mt-5'  onSubmit={handleSubmit}>
 <Form.Group className="mb-3" controlId="formBasicSignUp">
         <h2>SignUp</h2>
       </Form.Group>
@@ -72,37 +76,45 @@ const SignUp = () => {
       <Form.Group className="mb-3" controlId="formBasicLastName">
         <Form.Label>Last Name</Form.Label>
         <Form.Control type="text" name="lastName" placeholder="Enter last name" />
-        {errors.firstName && <Form.Text className="text-danger">{errors.firstName}</Form.Text>}
+        {errors.lastName && <Form.Text className="text-danger">{errors.lastName}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" name="email" placeholder="Enter email" />
-        {errors.firstName && <Form.Text className="text-danger">{errors.firstName}</Form.Text>}
+        {errors.email && <Form.Text className="text-danger">{errors.email}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPhone">
         <Form.Label>Phone</Form.Label>
         <Form.Control type="phone" name="phone" placeholder="Enter phone number" />
-        {errors.firstName && <Form.Text className="text-danger">{errors.firstName}</Form.Text>}
+        {errors.phone && <Form.Text className="text-danger">{errors.phone}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" name="password" placeholder="Password" />
-        {errors.firstName && <Form.Text className="text-danger">{errors.firstName}</Form.Text>}
+        {errors.password && <Form.Text className="text-danger">{errors.password}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicCompanyName">
         <Form.Label>Company Name</Form.Label>
         <Form.Control type="text" name="companyName" placeholder="Enter company name" />
-        {errors.firstName && <Form.Text className="text-danger">{errors.firstName}</Form.Text>}
+        {errors.companyName && <Form.Text className="text-danger">{errors.companyName}</Form.Text>}
       </Form.Group>
       {authError && <p className="text-danger">{authError}</p>}
+      <p>
+        Already have an account? <NavLink to="/">Log In</NavLink>
+      </p>
       <Button variant="primary" type="submit">
         Submit
       </Button>
-    </Form> )
+    </Form>
+    </div>
+    </div>
+    </div>
+    
+ )
 }
 
 export default SignUp
