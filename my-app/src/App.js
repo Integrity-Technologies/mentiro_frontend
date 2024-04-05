@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import ForgetPassword from "./components/ForgetPassword";
+import AdminDashboard from "./components/AdminDashboard";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
     <Routes>
     <Route path="/Signup" element={<SignUp />} />
     <Route path="/forget-password" element={<ForgetPassword />} />
+    <Route path="/admin-dashboard" component={AdminDashboard} />
 
 
       {/* <Route path="/about" element={<About />} />

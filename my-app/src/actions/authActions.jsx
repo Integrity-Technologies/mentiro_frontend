@@ -22,6 +22,8 @@ export const signUp = (userData) => async (dispatch) => {
     }
 };
 
+
+
 export const login = (userData) => async (dispatch) => {
     try {
         const res = await axios.post('/api/login', userData);
