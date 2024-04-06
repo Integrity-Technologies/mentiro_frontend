@@ -1,0 +1,12 @@
+{
+    "login.email": "Email",            
+    "login.password": "Password",
+    "signup.firstname": "First Name",
+    "signup.lastname": "Last Name",
+    "signup.email": "Email",
+    "signup.password": "Password",
+    "signup.phone": "Phone",
+    "signup.companyName": "Company Name",
+    "ForgetPassword.email": "Email"
+
+}

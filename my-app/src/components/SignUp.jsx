@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { signUp } from '../actions/authActions';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 
 
 const SignUp = () => {
-
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const authError = useSelector(state => state.auth.error);
     const [errors, setErrors] = useState({});
@@ -68,37 +69,37 @@ const SignUp = () => {
         <h2>SignUp</h2>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicFirstName">
-        <Form.Label>First Name</Form.Label>
+        <Form.Label>{t("signup.firstname")}</Form.Label>
         <Form.Control type="text" name="firstName" placeholder="Enter first name" />
         {errors.firstName && <Form.Text className="text-danger">{errors.firstName}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicLastName">
-        <Form.Label>Last Name</Form.Label>
+        <Form.Label>{t("signup.lastname")}</Form.Label>
         <Form.Control type="text" name="lastName" placeholder="Enter last name" />
         {errors.lastName && <Form.Text className="text-danger">{errors.lastName}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
+        <Form.Label>{t("signup.email")}</Form.Label>
         <Form.Control type="email" name="email" placeholder="Enter email" />
         {errors.email && <Form.Text className="text-danger">{errors.email}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPhone">
-        <Form.Label>Phone</Form.Label>
+        <Form.Label>{t("signup.phone")}</Form.Label>
         <Form.Control type="phone" name="phone" placeholder="Enter phone number" />
         {errors.phone && <Form.Text className="text-danger">{errors.phone}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
+        <Form.Label>{t("signup.password")}</Form.Label>
         <Form.Control type="password" name="password" placeholder="Password" />
         {errors.password && <Form.Text className="text-danger">{errors.password}</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicCompanyName">
-        <Form.Label>Company Name</Form.Label>
+        <Form.Label>{t("signup.companyName")}</Form.Label>
         <Form.Control type="text" name="companyName" placeholder="Enter company name" />
         {errors.companyName && <Form.Text className="text-danger">{errors.companyName}</Form.Text>}
       </Form.Group>

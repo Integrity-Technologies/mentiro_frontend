@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import { forgotPassword } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ForgetPassword = () => {
+    const { t } = useTranslation();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
@@ -52,7 +54,7 @@ const ForgetPassword = () => {
             {!isSubmitted && (
               <>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Email Address*</Form.Label>
+                  <Form.Label>{t("login.email")}</Form.Label>
                   <Form.Control type="email" name="email" placeholder="Enter email" />
                   {errors.email && <Form.Text className="text-danger">{errors.email}</Form.Text>}
                 </Form.Group>

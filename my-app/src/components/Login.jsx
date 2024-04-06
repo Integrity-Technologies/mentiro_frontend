@@ -5,8 +5,10 @@ import { Redirect } from "protected-react-router";
 import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/authActions";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+    const { t } = useTranslation();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
@@ -32,16 +34,24 @@ const Login = () => {
     }
     if (Object.keys(newErrors).length === 0) {
         try {
-          const res = dispatch(login(userData));
+           dispatch(login(userData));
           console.log(userData);
 
-          // Assuming the backend response contains user role information
-          const userRole = res.payload.user.role;
-          if (userRole === "admin") {
-            setRedirectTo("/admin-dashboard");
-          } else if (userRole === "customer") {
-            setRedirectTo("/customer-dashboard");
+          const isAdmin = false; // Assuming it's set to false, change to true if the user is an admin
+
+          if (isAdmin) {
+          setRedirectTo("/admin-dashboard");
+          } else {
+          setRedirectTo("/customer-dashboard");
           }
+// we puse usthis for another logic if response give error
+        //   // Assuming the backend response contains user role information
+        //   const userRole = res.payload.user.role;
+        //   if (userRole === "admin") {
+        //     setRedirectTo("/admin-dashboard");
+        //   } else if (userRole === "customer") {
+        //     setRedirectTo("/customer-dashboard");
+        //   }
         } catch (error) {
           // Handle login failure
           setErrors({ login: "Login failed. Please try again." });
@@ -74,12 +84,12 @@ const validateEmail = (email) => {
     >
       <h4 className="text-center">LOGIN</h4>
       <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email Address*</Form.Label>
+        <Form.Label>{t("login.email")}</Form.Label>
         <Form.Control type="email" name="email" placeholder="Enter email" />
         {errors.email && <Form.Text className="text-danger">{errors.email}</Form.Text>}
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password*</Form.Label>
+        <Form.Label>{t("login.password")}</Form.Label>
         <Form.Control type="password" name="password" placeholder="Password" />
         {errors.password && <Form.Text className="text-danger">{errors.password}</Form.Text>}
       </Form.Group>
