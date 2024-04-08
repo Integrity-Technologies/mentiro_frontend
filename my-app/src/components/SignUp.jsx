@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import validationRules from '../locals/ValidationRules.json'
 import { signUp } from '../actions/authActions';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -26,26 +27,16 @@ const SignUp = () => {
             companyName: formData.get('companyName')
         };
         const newErrors = {};
-        if (!userData.firstName) {
-            newErrors.firstName = 'Please enter your first name';
-        }
-        if (!userData.lastName) {
-            newErrors.lastName = 'Please enter your last name';
-        }
-        if (!userData.email) {
-            newErrors.email = 'Please enter your email';
-        } else if (!validateEmail(userData.email)) {
-            newErrors.email = 'Please enter a valid email address';
-        }
-        if (!userData.phone) {
-            newErrors.phone = 'Please enter your phone number';
-        }
-        if (!userData.password) {
-            newErrors.password = 'Please enter your password';
-        }
-        if (!userData.companyName) {
-            newErrors.companyName = 'Please enter your company name';
-        }
+        Object.keys(validationRules.signup).forEach((field) => {
+          const rules = validationRules.signup[field];
+          if (rules.required && !userData[field]) {
+            newErrors[field] = rules.errorMessage;
+          } else if (rules.format === 'email' && userData[field] && !validateEmail(userData[field])) {
+            newErrors[field] = rules.errorMessage;
+          } else if (rules.minLength && userData[field].length < rules.minLength) {
+            newErrors[field] = rules.errorMessage;
+          }
+        });
 
         if (Object.keys(newErrors).length === 0) {
             dispatch(signUp(userData));

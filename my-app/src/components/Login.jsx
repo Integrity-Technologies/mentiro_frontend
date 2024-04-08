@@ -6,6 +6,8 @@ import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/authActions";
 import { useTranslation } from "react-i18next";
+import validationRules from '../locals/ValidationRules.json'; // Import validation rules JSON
+
 
 const Login = () => {
     const { t } = useTranslation();
@@ -23,15 +25,14 @@ const Login = () => {
       password: formData.get("password"),
     };
     const newErrors = {};
-    if (!userData.email) {
-        newErrors.email = 'Please enter your email';
-    } else if (!validateEmail(userData.email)) {
-        newErrors.email = 'Please enter a valid email address';
-    }
-
-    if (!userData.password) {
-        newErrors.password = 'Please enter your password';
-    }
+    Object.keys(validationRules.login).forEach((field) => {
+      const rules = validationRules.login[field];
+      if (rules.required && !userData[field]) {
+        newErrors[field] = rules.errorMessage;
+      } else if (rules.format === 'email' && userData[field] && !validateEmail(userData[field])) {
+        newErrors[field] = rules.errorMessage;
+      }
+    });
     if (Object.keys(newErrors).length === 0) {
         try {
            dispatch(login(userData));

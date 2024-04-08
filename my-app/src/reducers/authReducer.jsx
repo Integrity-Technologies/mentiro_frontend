@@ -18,6 +18,7 @@ const authReducer = (state = initialState, action) => {
                 error: null
             };
         case FORGOT_PASSWORD_SUCCESS:
+            localStorage.removeItem('token');
             return {
                 ...state,
                 error: null 

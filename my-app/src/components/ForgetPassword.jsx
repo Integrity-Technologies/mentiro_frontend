@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { forgotPassword } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import validationRules from "../locals/ValidationRules.json"
 
 const ForgetPassword = () => {
     const { t } = useTranslation();
@@ -20,11 +21,14 @@ const ForgetPassword = () => {
       email: formData.get("email"),
     };
     const newErrors = {};
-    if (!userData.email) {
-      newErrors.email = "Please enter your email";
-    } else if (!validateEmail(userData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
+    Object.keys(validationRules.forgetPassword).forEach((field) => {
+      const rules = validationRules.forgetPassword[field];
+      if (rules.required && !userData[field]) {
+        newErrors[field] = rules.errorMessage;
+      } else if (rules.format === "email" && userData[field] && !validateEmail(userData[field])) {
+        newErrors[field] = rules.errorMessage;
+      }
+    });
 
     if (Object.keys(newErrors).length === 0) {
       try {
