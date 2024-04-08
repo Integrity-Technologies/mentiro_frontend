@@ -29,8 +29,8 @@ function App() {
 
   
     <BrowserRouter>
-    <Login />
     <Routes>
+    <Route path="/" element={<Login />} />
     <Route path="/Signup" element={<SignUp />} />
     <Route path="/forget-password" element={<ForgetPassword />} />
     <Route path="/admin-dashboard" component={AdminDashboard} />
