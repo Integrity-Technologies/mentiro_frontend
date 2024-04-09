@@ -1,11 +1,61 @@
 {
-    "login.email": "ēˌmāl",            
-    "login.password": "Password",
-    "signup.firstname": "First Name",
-    "signup.lastname": "Last Name",
-    "signup.email": "Email",
-    "signup.password": "Password",
-    "signup.phone": "Phone",
-    "signup.companyName": "Company Name",
-    "ForgetPassword.email": "Email"
+  "signup": {
+    "title": "التسجيل",
+    "firstname": "الاسم الأول",
+    "enterFirstName": "ادخل الاسم الأول",
+    "enterLastName": "ادخل الاسم الأخير",
+    "lastname": "الاسم الأخير",
+    "email": "البريد الإلكتروني",
+    "enterEmail": "ادخل البريد الإلكتروني",
+    "phone": "الهاتف",
+    "enterPhone": "ادخل رقم الهاتف",
+    "password": "كلمة المرور",
+    "enterPassword": "ادخل كلمة المرور",
+    "companyName": "اسم الشركة",
+    "enterCompanyName": "ادخل اسم الشركة",
+    "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+    "login": "تسجيل الدخول",
+    "submit": "إرسال",
+    "errors": {
+      "firstNameRequired": "الرجاء إدخال الاسم الأول الخاص بك",
+      "lastNameRequired": "الرجاء إدخال الاسم الأخير الخاص بك",
+      "emailRequired": "الرجاء إدخال البريد الإلكتروني الخاص بك",
+      "emailInvalid": "الرجاء إدخال عنوان بريد إلكتروني صحيح",
+      "phoneRequired": "الرجاء إدخال رقم هاتفك",
+      "passwordRequired": "الرجاء إدخال كلمة المرور الخاصة بك",
+      "passwordLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+      "companyNameRequired": "الرجاء إدخال اسم شركتك"
+    }
+  },
+  "login": {
+    "title": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "enterEmail": "ادخل البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "enterPassword": "ادخل كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "signUp": "التسجيل",
+    "submit": "إرسال",
+    "errors": {
+      "emailRequired": "الرجاء إدخال البريد الإلكتروني الخاص بك",
+      "emailInvalid": "الرجاء إدخال عنوان بريد إلكتروني صحيح",
+      "passwordRequired": "الرجاء إدخال كلمة المرور الخاصة بك"
+    }
+  },
+  "forgetPassword": {
+    "title": "إعادة تعيين كلمة المرور",
+    "email": "البريد الإلكتروني",
+    "enterEmail": "ادخل البريد الإلكتروني",
+    "submit": "إرسال",
+    "successMessage": "تم إرسال تعليمات إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد الخاص بك.",
+    "errors": {
+      "emailRequired": "الرجاء إدخال البريد الإلكتروني الخاص بك",
+      "emailInvalid": "الرجاء إدخال عنوان بريد إلكتروني صحيح",
+      "serverError": "حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى لاحقًا."
+    }
+  },
+  "common": {
+    "back": "العودة"
+  }
 }

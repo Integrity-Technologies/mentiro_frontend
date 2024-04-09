@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/authActions";
 import { useTranslation } from "react-i18next";
-import validationRules from "../locals/ValidationRules.json"; // Import validation rules JSON
 const logoImage = "/assets/icon.jpg";
 
 const Login = () => {
@@ -24,18 +23,17 @@ const Login = () => {
       password: formData.get("password"),
     };
     const newErrors = {};
-    Object.keys(validationRules.login).forEach((field) => {
-      const rules = validationRules.login[field];
-      if (rules.required && !userData[field]) {
-        newErrors[field] = rules.errorMessage;
-      } else if (
-        rules.format === "email" &&
-        userData[field] &&
-        !validateEmail(userData[field])
-      ) {
-        newErrors[field] = rules.errorMessage;
-      }
-    });
+
+    // Define validation rules directly here
+    if (!userData.email) {
+      newErrors.email = t("login.errors.emailRequired");
+    } else if (!validateEmail(userData.email)) {
+      newErrors.email = t("login.errors.emailInvalid");
+    }
+
+    if (!userData.password) {
+      newErrors.password = t("login.errors.passwordRequired");
+    }
     if (Object.keys(newErrors).length === 0) {
       try {
         dispatch(login(userData));
@@ -82,7 +80,7 @@ const Login = () => {
             className="border border-1 gap p-4 mt-5"
             onSubmit={handleSubmit}
           >
-            <h4 className="text-center">LOGIN</h4>
+            <h4 className="text-center">{t("login.title")}</h4>
             <div className="d-flex justify-content-center">
               <img
                 src={logoImage}
@@ -96,7 +94,7 @@ const Login = () => {
               <Form.Control
                 type="email"
                 name="email"
-                placeholder="Enter email"
+                placeholder={t("login.enterEmail")}
               />
               {errors.email && (
                 <Form.Text className="text-danger">{errors.email}</Form.Text>
@@ -107,20 +105,24 @@ const Login = () => {
               <Form.Control
                 type="password"
                 name="password"
-                placeholder="Password"
+                placeholder={t("login.enterPassword")}
               />
               {errors.password && (
                 <Form.Text className="text-danger">{errors.password}</Form.Text>
               )}
             </Form.Group>
             {authError && <p className="text-danger">{authError}</p>}
-            <NavLink to="/forget-password">Forgot Password?</NavLink> <br></br>
-            <br></br>
+            <NavLink to="/forget-password">
+              {t("login.forgotPassword")}
+            </NavLink>{" "}
+            <br />
+            <br />
             <p>
-              Don't have an account? <NavLink to="/signup">Sign Up</NavLink>
+              {t("login.noAccount")}{" "}
+              <NavLink to="/signup">{t("login.signUp")}</NavLink>
             </p>
             <Button variant="primary" type="submit">
-              Submit
+              {t("login.submit")}
             </Button>
           </Form>
         </div>

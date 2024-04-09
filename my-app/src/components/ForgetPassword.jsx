@@ -5,10 +5,9 @@ import Button from "react-bootstrap/Button";
 import { forgotPassword } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import validationRules from "../locals/ValidationRules.json"
 
 const ForgetPassword = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
@@ -21,14 +20,11 @@ const ForgetPassword = () => {
       email: formData.get("email"),
     };
     const newErrors = {};
-    Object.keys(validationRules.forgetPassword).forEach((field) => {
-      const rules = validationRules.forgetPassword[field];
-      if (rules.required && !userData[field]) {
-        newErrors[field] = rules.errorMessage;
-      } else if (rules.format === "email" && userData[field] && !validateEmail(userData[field])) {
-        newErrors[field] = rules.errorMessage;
-      }
-    });
+    if (!userData.email) {
+      newErrors.email = t("forgetPassword.errors.emailRequired");
+    } else if (!validateEmail(userData.email)) {
+      newErrors.email = t("forgetPassword.errors.emailInvalid");
+    }
 
     if (Object.keys(newErrors).length === 0) {
       try {
@@ -37,7 +33,7 @@ const ForgetPassword = () => {
         console.log(isSubmitted);
       } catch (error) {
         console.error("Password reset failed:", error);
-        setErrors({ server: "An error occurred while processing your request." });
+        setErrors({ server: t("forgetPassword.errors.serverError") });
       }
     } else {
       setErrors(newErrors);
@@ -53,30 +49,43 @@ const ForgetPassword = () => {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <Form className="border border-1 gap p-4 mt-5" onSubmit={handleSubmit}>
-            <h4 className="text-center">RESET PASSWORD</h4>
+          <Form
+            className="border border-1 gap p-4 mt-5"
+            onSubmit={handleSubmit}
+          >
+            <h4 className="text-center">{t("forgetPassword.title")}</h4>
             {!isSubmitted && (
               <>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>{t("login.email")}</Form.Label>
-                  <Form.Control type="email" name="email" placeholder="Enter email" />
-                  {errors.email && <Form.Text className="text-danger">{errors.email}</Form.Text>}
+                  <Form.Label>{t("forgetPassword.email")}</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    placeholder={t("forgetPassword.enterEmail")}
+                  />
+                  {errors.email && (
+                    <Form.Text className="text-danger">
+                      {errors.email}
+                    </Form.Text>
+                  )}
                 </Form.Group>
                 {authError && <p className="text-danger">{authError}</p>}
-                {errors.server && <p className="text-danger">{errors.server}</p>}
+                {errors.server && (
+                  <p className="text-danger">{errors.server}</p>
+                )}
                 <Button className="text-center" variant="primary" type="submit">
-                  Submit
+                  {t("forgetPassword.submit")}
                 </Button>
               </>
             )}
             {isSubmitted && (
               <p className="text-success">
-                Password reset instructions have been sent to your email. Please check your inbox.
+                {t("forgetPassword.successMessage")}
               </p>
             )}
             <div className="text-center mt-3">
               <NavLink to="/" className="btn btn-link">
-                Back
+                {t("common.back")}
               </NavLink>
             </div>
           </Form>

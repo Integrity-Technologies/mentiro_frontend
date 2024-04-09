@@ -1,12 +1,63 @@
 {
-    "login.email": "Email",            
-    "login.password": "Password",
-    "signup.firstname": "First Name",
-    "signup.lastname": "Last Name",
-    "signup.email": "Email",
-    "signup.password": "Password",
-    "signup.phone": "Phone",
-    "signup.companyName": "Company Name",
-    "ForgetPassword.email": "Email"
+  "signup": {
+    "title": "Sign Up",
+    "firstname": "First Name",
+    "enterFirstName": "Enter first name",
+    "enterLastName": "Enter last name",
+    "lastname": "Last Name",
+    "email": "Email",
+    "enterEmail": "Enter email",
+    "phone": "Phone",
+    "enterPhone": "Enter phone number",
+    "password": "Password",
+    "enterPassword": "Enter password",
+    "companyName": "Company Name",
+    "enterCompanyName": "Enter company name",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log in",
+    "submit": "Submit",
+    "errors": {
+      "firstNameRequired": "Please enter your first name",
+      "lastNameRequired": "Please enter your last name",
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Please enter a valid email address",
+      "phoneRequired": "Please enter your phone number",
+      "passwordRequired": "Please enter your password",
+      "passwordLength": "Password must be at least 6 characters long",
+      "companyNameRequired": "Please enter your company name"
+    }
+  },
 
+  "login": {
+    "title": "LOGIN",
+    "email": "Email",
+    "enterEmail": "Enter email",
+    "password": "Password",
+    "enterPassword": "Enter password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up",
+    "submit": "Submit",
+    "errors": {
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Please enter your password"
+    }
+  },
+
+  "forgetPassword": {
+    "title": "RESET PASSWORD",
+    "email": "Email",
+    "enterEmail": "Enter email",
+    "submit": "Submit",
+    "successMessage": "Password reset instructions have been sent to your email. Please check your inbox.",
+    "errors": {
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Please enter a valid email address",
+      "serverError": "An error occurred while processing your request. Please try again later."
+    }
+  },
+  "common": {
+    "back": "Back"
+  }
 }
