@@ -57,7 +57,7 @@ const SignUp = () => {
     <div className="col-md-6">
 <Form className='border border-1 gap p-4 mt-5'  onSubmit={handleSubmit}>
 <Form.Group className="mb-3" controlId="formBasicSignUp">
-        <h2>SignUp</h2>
+        <h2 className="text-center">SignUp</h2>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicFirstName">
         <Form.Label>{t("signup.firstname")}</Form.Label>
