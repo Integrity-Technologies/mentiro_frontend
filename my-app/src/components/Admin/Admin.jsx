@@ -7,6 +7,7 @@ import { Container, Navbar, Nav, NavLink, Row, Col } from "react-bootstrap";
 import Tests from "./Tests";
 import Users from "./Users";
 import Category from "./Categories";
+import Candidates from "./Candidates";
 // import Categories from "./Categories";
 // import Candidates from "./Candidates";
 // import ViewTestResult from "./ViewTestResult";
@@ -25,7 +26,7 @@ const Dashboard = () => {
     "/Tests": <Tests />,
     "/Users": <Users />,
    "/Categories": <Category />,
-    // "/candidates": <Candidates />,
+  "/Candidates": <Candidates />,
     // "/view-test-result": <ViewTestResult />,
     // "/view-customer-account": <ViewCustomerAccount />,
   };
@@ -59,6 +60,15 @@ const Dashboard = () => {
                 </NavLink>
 ))}
 
+{/* <NavLink
+                to="/view-test-result"
+                className={`nav-link ${
+                  activeLink === "/view-test-result" ? "bg-dark text-light" : ""
+                } mb-3`}
+                onClick={() => handleClick("/view-test-result")}
+              >
+                Candidates
+              </NavLink> */}
 
               <NavLink
                 to="/view-test-result"
