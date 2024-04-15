@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import ForgetPassword from "./components/ForgetPassword";
-import AdminDashboard from "./components/AdminDashboard";
+import Admin from "./components/Admin/Admin";
 
 import translationEN from './locals/en.json';
 import translationAR from './locals/ar.json';
@@ -33,7 +33,7 @@ function App() {
     <Route path="/" element={<Login />} />
     <Route path="/Signup" element={<SignUp />} />
     <Route path="/forget-password" element={<ForgetPassword />} />
-    <Route path="/admin-dashboard" element={<AdminDashboard />} />
+    <Route path="/admin-dashboard" element={<Admin />} />
 
 
      

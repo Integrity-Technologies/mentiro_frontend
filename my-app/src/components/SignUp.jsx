@@ -38,6 +38,8 @@ const SignUp = () => {
     }
     if (!userData.phone) {
       newErrors.phone = t("signup.errors.phoneRequired");
+    } else if (!validatePhoneNumber(userData.phone)) {
+      newErrors.phone = t("signup.errors.phoneInvalid");
     }
     if (!userData.password) {
       newErrors.password = t("signup.errors.passwordRequired");
@@ -60,7 +62,11 @@ const SignUp = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
-
+  const validatePhoneNumber = (phone) => {
+    // Use regex to check if the phone number contains only numbers
+    const phoneRegex = /^[0-9]+$/;
+    return phoneRegex.test(phone);
+  };
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -115,11 +121,12 @@ const SignUp = () => {
                 <Form.Text className="text-danger">{errors.email}</Form.Text>
               )}
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPhone">
+            <Form.Group className="mb-3" controlId="formPhone">
               <Form.Label>{t("signup.phone")}</Form.Label>
               <Form.Control
                 type="phone"
                 name="phone"
+                pattern="[0-9]*"
                 placeholder={t("signup.enterPhone")}
               />
               {errors.phone && (
@@ -137,20 +144,7 @@ const SignUp = () => {
                 <Form.Text className="text-danger">{errors.password}</Form.Text>
               )}
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCompanyName">
-              <Form.Label>{t("signup.companyName")}</Form.Label>
-              <Form.Control
-                type="text"
-                name="companyName"
-                placeholder={t("signup.enterCompanyName")}
-              />
-              {errors.companyName && (
-                <Form.Text className="text-danger">
-                  {errors.companyName}
-                </Form.Text>
-              )}
-            </Form.Group>
-            {authError && <p className="text-danger">{authError}</p>}
+           
             <p>
               {t("signup.alreadyHaveAccount")}{" "}
               <NavLink to="/">{t("signup.login")}</NavLink>
