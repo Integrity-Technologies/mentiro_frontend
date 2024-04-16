@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Alert from "react-bootstrap/Alert";
 const logoImage = "/assets/icon.jpg";
 
 const SignUp = () => {
@@ -12,24 +13,26 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState(false); // State variable to track success
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const userData = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
+      first_name: formData.get("firstName"),
+      last_name: formData.get("lastName"),
       email: formData.get("email"),
       phone: formData.get("phone"),
       password: formData.get("password"),
-      companyName: formData.get("companyName"),
     };
     const newErrors = {};
-    if (!userData.firstName) {
+    if (!userData.first_name) {
       newErrors.firstName = t("signup.errors.firstNameRequired");
     }
-    if (!userData.lastName) {
+    if (!userData.last_name) {
       newErrors.lastName = t("signup.errors.lastNameRequired");
+    } else if (!validatePhoneNumber(userData.phone)) {
+      newErrors.phone = t("signup.errors.phoneInvalid");
     }
     if (!userData.email) {
       newErrors.email = t("signup.errors.emailRequired");
@@ -38,20 +41,20 @@ const SignUp = () => {
     }
     if (!userData.phone) {
       newErrors.phone = t("signup.errors.phoneRequired");
-    } else if (!validatePhoneNumber(userData.phone)) {
-      newErrors.phone = t("signup.errors.phoneInvalid");
     }
+
     if (!userData.password) {
       newErrors.password = t("signup.errors.passwordRequired");
     } else if (userData.password.length < 6) {
       newErrors.password = t("signup.errors.passwordLength");
     }
-    if (!userData.companyName) {
-      newErrors.companyName = t("signup.errors.companyNameRequired");
-    }
 
     if (Object.keys(newErrors).length === 0) {
       dispatch(signUp(userData));
+      setSuccess(true); // Set success state to true on successful signup
+      setTimeout(() => {
+        setSuccess(false); // Reset success state after 3 seconds
+      }, 5000);
       console.log(userData);
     } else {
       setErrors(newErrors);
@@ -71,6 +74,15 @@ const SignUp = () => {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
+          {success && (
+            <Alert
+              variant="success"
+              onClose={() => setSuccess(false)}
+              dismissible
+            >
+              Signup successful! You can now login.
+            </Alert>
+          )}
           <Form
             className="border border-1 gap p-4 mt-5"
             onSubmit={handleSubmit}
@@ -87,27 +99,29 @@ const SignUp = () => {
               </div>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicFirstName">
-              <Form.Label>{t("signup.firstname")}</Form.Label>
+              <Form.Label>{t("signup.first_name")}</Form.Label>
               <Form.Control
                 type="text"
                 name="firstName"
                 placeholder={t("signup.enterFirstName")}
               />
-              {errors.firstName && (
+              {errors.first_name && (
                 <Form.Text className="text-danger">
-                  {errors.firstName}
+                  {errors.first_name}
                 </Form.Text>
               )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicLastName">
-              <Form.Label>{t("signup.lastname")}</Form.Label>
+              <Form.Label>{t("signup.last_name")}</Form.Label>
               <Form.Control
                 type="text"
                 name="lastName"
                 placeholder={t("signup.enterLastName")}
               />
-              {errors.lastName && (
-                <Form.Text className="text-danger">{errors.lastName}</Form.Text>
+              {errors.last_name && (
+                <Form.Text className="text-danger">
+                  {errors.last_name}
+                </Form.Text>
               )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -126,7 +140,6 @@ const SignUp = () => {
               <Form.Control
                 type="phone"
                 name="phone"
-                pattern="[0-9]*"
                 placeholder={t("signup.enterPhone")}
               />
               {errors.phone && (
@@ -144,7 +157,10 @@ const SignUp = () => {
                 <Form.Text className="text-danger">{errors.password}</Form.Text>
               )}
             </Form.Group>
-           
+            {authError && authError.general && (
+              <p className="text-danger">{authError.general}</p>
+            )}
+
             <p>
               {t("signup.alreadyHaveAccount")}{" "}
               <NavLink to="/">{t("signup.login")}</NavLink>

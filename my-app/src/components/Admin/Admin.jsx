@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from "react";
-import { Container, Navbar, Nav, NavLink, Row, Col } from "react-bootstrap";
+import { Container, Nav, NavLink, Row, Col } from "react-bootstrap";
 
 // Import the components for different sections
 // import Home from "./Home";
@@ -10,7 +10,8 @@ import Category from "./Categories";
 import Candidates from "./Candidates";
 // import Categories from "./Categories";
 // import Candidates from "./Candidates";
-// import ViewTestResult from "./ViewTestResult";
+import ViewTestResult from "./ViewTestResult";
+import Company from "./Company";
 // import ViewCustomerAccount from "./ViewCustomerAccount";
 
 const Dashboard = () => {
@@ -23,12 +24,12 @@ const Dashboard = () => {
   // Define components for different sections
   const sections = {
     // "/": <Home />,
-    "/Tests": <Tests />,
     "/Users": <Users />,
-   "/Categories": <Category />,
-  "/Candidates": <Candidates />,
-    // "/view-test-result": <ViewTestResult />,
-    // "/view-customer-account": <ViewCustomerAccount />,
+    "/Tests": <Tests />,
+    "/Categories": <Category />,
+    "/Candidates": <Candidates />,
+    "/View-Test-Result": <ViewTestResult />,
+    "/View-Customer-Account": <Company />,
   };
 
   return (
@@ -58,9 +59,9 @@ const Dashboard = () => {
                 >
                   {link === "/Users" ? "Users" : link.replace("/", "")}
                 </NavLink>
-))}
+              ))}
 
-{/* <NavLink
+              {/* <NavLink
                 to="/view-test-result"
                 className={`nav-link ${
                   activeLink === "/view-test-result" ? "bg-dark text-light" : ""
@@ -70,7 +71,7 @@ const Dashboard = () => {
                 Candidates
               </NavLink> */}
 
-              <NavLink
+              {/* <NavLink
                 to="/view-test-result"
                 className={`nav-link ${
                   activeLink === "/view-test-result" ? "bg-dark text-light" : ""
@@ -78,8 +79,8 @@ const Dashboard = () => {
                 onClick={() => handleClick("/view-test-result")}
               >
                 View Test Result (Candidates)
-              </NavLink>
-              <NavLink
+              </NavLink> */}
+              {/* <NavLink
                 to="/view-customer-account"
                 className={`nav-link ${
                   activeLink === "/view-customer-account"
@@ -89,7 +90,7 @@ const Dashboard = () => {
                 onClick={() => handleClick("/view-customer-account")}
               >
                 View Customer Account (Company)
-              </NavLink>
+              </NavLink> */}
             </Nav>
           </Col>
 

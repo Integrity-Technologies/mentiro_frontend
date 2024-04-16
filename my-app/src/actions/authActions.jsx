@@ -11,22 +11,33 @@ const baseURL = "http://localhost:5000/api";
 export const signUp = (userData) => async (dispatch) => {
   try {
     const res = await axios.post(`${baseURL}/users/signup`, userData);
-    console.log("🚀 ~ signUp ~ res:", res)
+    console.log("~ signUp ~ res:", res);
     dispatch({
       type: SIGNUP_SUCCESS,
       payload: res.data, // Assuming the backend returns user data and JWT token upon successful signup
     });
   } catch (error) {
-    dispatch({
-      type: AUTH_ERROR,
-      payload: error.response.data.message, // Assuming the backend returns error message in case of failure
-    });
+    if (
+      error.response.status === 409 &&
+      error.response.data.message === "Email already exists"
+    ) {
+      dispatch({
+        type: AUTH_ERROR,
+        payload: "Email is already registered. Please use a different email.",
+      });
+    } else {
+      dispatch({
+        type: AUTH_ERROR,
+        payload: error.response.data.message,
+      });
+    }
   }
 };
 
 export const login = (userData) => async (dispatch) => {
   try {
-    const res = await axios.post(`${baseURL}/api/login`, userData);
+    const res = await axios.post(`${baseURL}/users/login`, userData);
+
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data, // Assuming the backend returns user data and JWT token upon successful login

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import { Redirect } from "protected-react-router";
 import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/authActions";
 import { useTranslation } from "react-i18next";
+import Alert from "react-bootstrap/Alert";
 const logoImage = "/assets/icon.jpg";
 
 const Login = () => {
@@ -13,7 +14,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
-  const [redirectTo, setRedirectTo] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,60 +24,32 @@ const Login = () => {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    const newErrors = {};
 
-    // Define validation rules directly here
-    if (!userData.email) {
-      newErrors.email = t("login.errors.emailRequired");
-    } else if (!validateEmail(userData.email)) {
-      newErrors.email = t("login.errors.emailInvalid");
-    }
-
-    if (!userData.password) {
-      newErrors.password = t("login.errors.passwordRequired");
-    }
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        dispatch(login(userData));
-        console.log(userData);
-
-        const isAdmin = false; // Assuming it's set to false, change to true if the user is an admin
-
-        if (isAdmin) {
-          setRedirectTo("/admin-dashboard");
-        } else {
-          setRedirectTo("/customer-dashboard");
-        }
-        // we puse usthis for another logic if response give error
-        //   // Assuming the backend response contains user role information
-        //   const userRole = res.payload.user.role;
-        //   if (userRole === "admin") {
-        //     setRedirectTo("/admin-dashboard");
-        //   } else if (userRole === "customer") {
-        //     setRedirectTo("/customer-dashboard");
-        //   }
-      } catch (error) {
-        // Handle login failure
-        setErrors({ login: "Login failed. Please try again." });
-      }
-    } else {
-      setErrors(newErrors);
+    try {
+      dispatch(login(userData));
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 5000);
+      navigate("/admin-dashboard");
+    } catch (error) {
+      setErrors({ general: "Login failed. Please try again." });
     }
   };
-  const validateEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(email);
-  };
-
-  // Redirect if redirectTo is set
-  if (redirectTo) {
-    return <Redirect to={redirectTo} />;
-  }
 
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
+          {success && (
+            <Alert
+              variant="success"
+              onClose={() => setSuccess(false)}
+              dismissible
+            >
+              Login successfully!
+            </Alert>
+          )}
           <Form
             className="border border-1 gap p-4 mt-5"
             onSubmit={handleSubmit}
@@ -111,12 +85,11 @@ const Login = () => {
                 <Form.Text className="text-danger">{errors.password}</Form.Text>
               )}
             </Form.Group>
-            {authError && <p className="text-danger">{authError}</p>}
-            <NavLink to="/forget-password">
-              {t("login.forgotPassword")}
-            </NavLink>{" "}
-            <br />
-            <br />
+            {authError && authError.general && (
+              <p className="text-danger">{authError.general}</p>
+            )}
+            <NavLink to="/forget-password">{t("login.forgotPassword")}</NavLink>{" "}
+            <br /> <br />
             <p>
               {t("login.noAccount")}{" "}
               <NavLink to="/signup">{t("login.signUp")}</NavLink>

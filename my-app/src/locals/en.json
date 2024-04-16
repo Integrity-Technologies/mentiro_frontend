@@ -1,14 +1,14 @@
 {
   "signup": {
     "title": "Sign Up",
-    "firstname": "First Name",
+    "first_name": "First Name",
     "enterFirstName": "Enter first name",
     "enterLastName": "Enter last name",
-    "lastname": "Last Name",
+    "last_name": "Last Name",
     "email": "Email",
-    "enterEmail": "Enter email",
+    "enterEmail": "example@gmail.com",
     "phone": "Phone",
-    "enterPhone": "Enter phone number",
+    "enterPhone": "(XXX) XXX-XXXX",
     "password": "Password",
     "enterPassword": "Enter password",
     "companyName": "Company Name",
@@ -22,6 +22,7 @@
       "emailRequired": "Please enter your email",
       "emailInvalid": "Please enter a valid email address",
       "phoneRequired": "Please enter your phone number",
+      "phoneInvalid": "Please enter a valid phone number using digits only",
       "passwordRequired": "Please enter your password",
       "passwordLength": "Password must be at least 6 characters long",
       "companyNameRequired": "Please enter your company name"
