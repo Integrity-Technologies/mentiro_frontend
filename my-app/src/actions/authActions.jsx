@@ -12,6 +12,7 @@ export const signUp = (userData) => async (dispatch) => {
   try {
     const res = await axios.post(`${baseURL}/users/signup`, userData);
     dispatch({ type: SIGNUP_SUCCESS, payload: res.data });
+    return { success: true, data: res.data };
   } catch (error) {
     console.log(
       JSON.stringify(error.response.data.error) + " from AUTH_ACTION"
@@ -19,6 +20,7 @@ export const signUp = (userData) => async (dispatch) => {
     const errorMessage = JSON.stringify(error.response.data.error);
     console.log(errorMessage);
     dispatch({ type: AUTH_ERROR, payload: errorMessage });
+    return { success: false, error: errorMessage };
   }
 };
 
