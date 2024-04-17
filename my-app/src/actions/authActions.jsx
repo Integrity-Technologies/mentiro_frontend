@@ -30,6 +30,7 @@ export const login = (userData) => async (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data, // Assuming the backend returns user data and JWT token upon successful login
     });
+    return res.data;
   } catch (error) {
     const errorMessage = JSON.stringify(error.response.data.error);
     console.log(errorMessage);
@@ -37,6 +38,7 @@ export const login = (userData) => async (dispatch) => {
       type: AUTH_ERROR,
       payload: errorMessage, // Assuming the backend returns error message in case of failure
     });
+    throw error;
   }
 };
 
