@@ -88,7 +88,7 @@ const Candidates = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </Form>
-          <Button variant="success" onClick={handleShowAddModal}>Add User</Button>
+          <Button variant="success" onClick={handleShowAddModal}>Add Candidate</Button>
           <Table striped bordered hover>
             <thead>
               <tr>

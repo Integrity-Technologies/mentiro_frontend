@@ -13,48 +13,33 @@ const Login = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
+  console.log("🚀 ~ Login ~ authError:", authError)
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  // const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const email = formData.get("email");
-    const password = formData.get("password");
-  
-    const newErrors = {};
-  
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!validateEmail(email)) {
-      newErrors.email = "Invalid email format";
-    }
-  
-    if (!password.trim()) {
-      newErrors.password = "Password is required";
-    }
-  
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
-      setErrors({});
-      try {
-        dispatch(login({ email, password }));
-        setSuccess(true);
-        setTimeout(() => {
-          setSuccess(false);
-        }, 5000);
-      } catch (error) {
-        setErrors({ general: "Login failed. Please try again." });
-      }
+    const userData = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
+    try {
+      await dispatch(login(userData));
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+        navigate("/admin-dashboard"); // Navigate after showing the alert message
+        setErrors({});
+      }, 1000);
+    } catch (error) {
+      setErrors({ general: "Login failed. Please try again." });
     }
   };
-  const validateEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(email);
-  };
-  
+
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -107,19 +92,19 @@ const Login = () => {
               {t("login.submit")}
             </Button>
           </Form>
-          {success && (
+          {showAlert && (
             <Alert
-              variant="success"
-              onClose={() => setSuccess(false)}
+              variant={authError ? "danger" : "success"}
+              onClose={() => setShowAlert(false)}
               dismissible
             >
-              Login successfully!
+              {authError ? authError : "User Login Successfully"}
             </Alert>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

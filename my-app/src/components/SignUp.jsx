@@ -6,6 +6,7 @@ import { signUp } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Alert from "react-bootstrap/Alert";
+import { useNavigate } from "react-router-dom";
 const logoImage = "/assets/icon.jpg";
 
 const SignUp = () => {
@@ -14,9 +15,9 @@ const SignUp = () => {
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const userData = {
@@ -43,26 +44,25 @@ const SignUp = () => {
     } else if (!validatePhoneNumber(userData.phone)) {
       newErrors.phone = t("signup.errors.phoneInvalid");
     }
-  
+
     if (!userData.password) {
       newErrors.password = t("signup.errors.passwordRequired");
     } else if (userData.password.length < 6) {
       newErrors.password = t("signup.errors.passwordLength");
     }
-  
+
     if (Object.keys(newErrors).length === 0) {
       dispatch(signUp(userData));
       setShowAlert(true);
       setErrors({}); // Clear errors on successful form submission
       setTimeout(() => {
         setShowAlert(false);
+        navigate("/"); // Navigate after showing the alert message
       }, 2000);
     } else {
       setErrors(newErrors);
     }
   };
-  
-
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
