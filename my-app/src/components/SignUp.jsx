@@ -17,7 +17,7 @@ const SignUp = () => {
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const userData = {
@@ -27,42 +27,60 @@ const SignUp = () => {
       phone: formData.get("phone"),
       password: formData.get("password"),
     };
-    const newErrors = {};
+
+    // Initialize the error object
+    let newErrors = {};
+
+    // Check for first name
     if (!userData.first_name) {
       newErrors.first_name = t("signup.errors.firstNameRequired");
     }
+
+    // Check for last name
     if (!userData.last_name) {
       newErrors.last_name = t("signup.errors.lastNameRequired");
     }
+
+    // Email checks
     if (!userData.email) {
       newErrors.email = t("signup.errors.emailRequired");
     } else if (!validateEmail(userData.email)) {
       newErrors.email = t("signup.errors.emailInvalid");
     }
+
+    // Phone checks
     if (!userData.phone) {
       newErrors.phone = t("signup.errors.phoneRequired");
     } else if (!validatePhoneNumber(userData.phone)) {
       newErrors.phone = t("signup.errors.phoneInvalid");
     }
 
+    // Password checks
     if (!userData.password) {
       newErrors.password = t("signup.errors.passwordRequired");
     } else if (userData.password.length < 6) {
       newErrors.password = t("signup.errors.passwordLength");
     }
 
+    // Update errors state
+    setErrors(newErrors);
+
+    // proceed
     if (Object.keys(newErrors).length === 0) {
-      dispatch(signUp(userData));
-      setShowAlert(true);
-      setErrors({}); // Clear errors on successful form submission
-      setTimeout(() => {
-        setShowAlert(false);
-        navigate("/"); // Navigate after showing the alert message
-      }, 2000);
-    } else {
-      setErrors(newErrors);
+      try {
+        setShowAlert(true);
+        const result = await dispatch(signUp(userData));
+        console.log("🚀 ~ handleSubmit ~ result:", result);
+        if (result?.success) {
+          navigate("/");
+        }
+        setTimeout(() => setShowAlert(false), 2000); // success
+      } catch (error) {
+        setTimeout(() => setShowAlert(false), 2000); // error
+      }
     }
   };
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
