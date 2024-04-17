@@ -19,24 +19,32 @@ const Login = () => {
   // const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const userData = {
-      email: formData.get("email"),
-      password: formData.get("password"),
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    // Validate inputs
+    const errors = {
+      ...(email ? {} : { email: t("login.errors.emailRequired") }),
+      ...(password ? {} : { password: t("login.errors.passwordRequired") }),
     };
 
-    try {
-      await dispatch(login(userData));
-      setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-        navigate("/admin-dashboard"); // Navigate after showing the alert message
-        setErrors({});
-      }, 1000);
-    } catch (error) {
-      setErrors({ general: "Login failed. Please try again." });
+    setErrors(errors);
+
+    // Proceed
+    if (Object.keys(errors).length === 0) {
+      try {
+        setShowAlert(true);
+        const result = await dispatch(login({ email, password }));
+        if (result?.success) {
+          navigate("/admin-dashboard");
+        }
+        setTimeout(() => setShowAlert(false), 2000); // success
+      } catch (error) {
+        setTimeout(() => setShowAlert(false), 2000); // error
+      }
     }
   };
 
