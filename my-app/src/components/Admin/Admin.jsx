@@ -1,5 +1,6 @@
 import { useState } from "react";
 import React from "react";
+import LanguageToggleButton from "./Togglebutton";
 import { Container, Nav, NavLink, Row, Col } from "react-bootstrap";
 
 // Import the components for different sections
@@ -12,15 +13,26 @@ import Candidates from "./Candidates";
 // import Candidates from "./Candidates";
 import ViewTestResult from "./ViewTestResult";
 import Company from "./Company";
+
 // import ViewCustomerAccount from "./ViewCustomerAccount";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState("");
+  const [language, setLanguage] = useState("english");
 
   const handleClick = (link) => {
     setActiveLink(link);
   };
 
+  const handleLanguageChange = (newLanguage) => {
+    setLanguage(newLanguage);
+    console.log("New language:", newLanguage);
+    // You can add logic here to change the language in your application
+  };
+
+  const handleLogout = () => {
+    // Add logout logic here
+  };
   // Define components for different sections
   const sections = {
     // "/": <Home />,
@@ -33,7 +45,7 @@ const Dashboard = () => {
   };
 
   return (
-    <>
+    <div>
       <Container fluid>
         <Row>
           {/* Sidebar */}
@@ -96,11 +108,16 @@ const Dashboard = () => {
 
           {/* Main Section */}
           <Col md={9} className="pt-3">
+            <LanguageToggleButton
+              language={language} // Pass the language state directly
+              onLanguageChange={handleLanguageChange}
+              onLogout={handleLogout}
+            />
             {sections[activeLink]}
           </Col>
         </Row>
       </Container>
-    </>
+    </div>
   );
 };
 

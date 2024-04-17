@@ -57,5 +57,51 @@
   },
   "common": {
     "back": "العودة"
+  },
+
+
+  "users": {
+    "title": "المستخدمين",
+    "searchPlaceholder": "البحث حسب الاسم",
+    "addUserButton": "إضافة مستخدم",
+    "tableHeaders": {
+      "id": "المعرف",
+      "firstName": "الاسم الأول",
+      "lastName": "الاسم الأخير",
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "dateJoined": "تاريخ الانضمام",
+      "actions": "الإجراءات"
+    },
+    "modals": {
+      "addUser": {
+        "title": "إضافة مستخدم",
+        "formLabels": {
+          "firstName": "الاسم الأول",
+          "lastName": "الاسم الأخير",
+          "phone": "الهاتف",
+          "email": "البريد الإلكتروني",
+          "dateJoined": "تاريخ الانضمام"
+        },
+        "buttons": {
+          "close": "إغلاق",
+          "addUser": "إضافة مستخدم"
+        }
+      },
+      "editUser": {
+        "title": "تحرير المستخدم",
+        "formLabels": {
+          "firstName": "الاسم الأول",
+          "lastName": "الاسم الأخير",
+          "phone": "الهاتف",
+          "email": "البريد الإلكتروني",
+          "dateJoined": "تاريخ الانضمام"
+        },
+        "buttons": {
+          "close": "إغلاق",
+          "saveChanges": "حفظ التغييرات"
+        }
+      }
+    }
   }
 }

@@ -61,5 +61,51 @@
   },
   "common": {
     "back": "Back"
+  },
+
+
+  "users": {
+    "title": "Users",
+    "searchPlaceholder": "Search by name",
+    "addUserButton": "Add User",
+    "tableHeaders": {
+      "id": "ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone",
+      "email": "Email",
+      "dateJoined": "Date Joined",
+      "actions": "Actions"
+    },
+    "modals": {
+      "addUser": {
+        "title": "Add User",
+        "formLabels": {
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "phone": "Phone",
+          "email": "Email",
+          "dateJoined": "Date Joined"
+        },
+        "buttons": {
+          "close": "Close",
+          "addUser": "Add User"
+        }
+      },
+      "editUser": {
+        "title": "Edit User",
+        "formLabels": {
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "phone": "Phone",
+          "email": "Email",
+          "dateJoined": "Date Joined"
+        },
+        "buttons": {
+          "close": "Close",
+          "saveChanges": "Save Changes"
+        }
+      }
+    }
   }
 }
