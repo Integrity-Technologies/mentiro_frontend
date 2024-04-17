@@ -17,27 +17,27 @@ export const signUp = (userData) => async (dispatch) => {
       payload: res.data, // Assuming the backend returns user data and JWT token upon successful signup
     });
   } catch (error) {
-    if (
-      error.response.status === 409 &&
-      error.response.data.message === "Email already exists"
-    ) {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: "Email is already registered. Please use a different email.",
-      });
-    } else {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: error.response.data.message,
-      });
-    }
+    // if (
+    //   error.response.status === 409 &&
+    //   error.response.data.message === "Email already exists"
+    // ) {
+    console.log(error + "from AUTH_ACTION");
+    dispatch({
+      type: AUTH_ERROR,
+      payload: "Email is already registered. Please use a different email.",
+    });
+    // } else {
+    //   dispatch({
+    //     type: AUTH_ERROR,
+    //     payload: error.response.data.message,
+    //   });
   }
 };
 
 export const login = (userData) => async (dispatch) => {
   try {
     const res = await axios.post(`${baseURL}/users/login`, userData);
-
+    console.log("~ login ~ res:", res);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data, // Assuming the backend returns user data and JWT token upon successful login

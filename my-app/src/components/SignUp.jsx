@@ -14,6 +14,7 @@ const SignUp = () => {
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false); // State variable to track success
+  // const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,12 +28,10 @@ const SignUp = () => {
     };
     const newErrors = {};
     if (!userData.first_name) {
-      newErrors.firstName = t("signup.errors.firstNameRequired");
+      newErrors.first_name = t("signup.errors.firstNameRequired");
     }
     if (!userData.last_name) {
-      newErrors.lastName = t("signup.errors.lastNameRequired");
-    } else if (!validatePhoneNumber(userData.phone)) {
-      newErrors.phone = t("signup.errors.phoneInvalid");
+      newErrors.last_name = t("signup.errors.lastNameRequired");
     }
     if (!userData.email) {
       newErrors.email = t("signup.errors.emailRequired");
@@ -41,6 +40,8 @@ const SignUp = () => {
     }
     if (!userData.phone) {
       newErrors.phone = t("signup.errors.phoneRequired");
+    } else if (!validatePhoneNumber(userData.phone)) {
+      newErrors.phone = t("signup.errors.phoneInvalid");
     }
 
     if (!userData.password) {
@@ -74,15 +75,6 @@ const SignUp = () => {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          {success && (
-            <Alert
-              variant="success"
-              onClose={() => setSuccess(false)}
-              dismissible
-            >
-              Signup successful! You can now login.
-            </Alert>
-          )}
           <Form
             className="border border-1 gap p-4 mt-5"
             onSubmit={handleSubmit}
@@ -157,9 +149,6 @@ const SignUp = () => {
                 <Form.Text className="text-danger">{errors.password}</Form.Text>
               )}
             </Form.Group>
-            {authError && authError.general && (
-              <p className="text-danger">{authError.general}</p>
-            )}
 
             <p>
               {t("signup.alreadyHaveAccount")}{" "}
@@ -169,6 +158,15 @@ const SignUp = () => {
               {t("signup.submit")}
             </Button>
           </Form>
+          {success && (
+            <Alert
+              variant="success"
+              onClose={() => setSuccess(false)}
+              dismissible
+            >
+              Signup successful! You can now login.
+            </Alert>
+          )}
         </div>
       </div>
     </div>

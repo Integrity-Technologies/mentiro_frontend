@@ -31,7 +31,6 @@ const Login = () => {
       setTimeout(() => {
         setSuccess(false);
       }, 5000);
-      navigate("/admin-dashboard");
     } catch (error) {
       setErrors({ general: "Login failed. Please try again." });
     }
@@ -41,15 +40,6 @@ const Login = () => {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          {success && (
-            <Alert
-              variant="success"
-              onClose={() => setSuccess(false)}
-              dismissible
-            >
-              Login successfully!
-            </Alert>
-          )}
           <Form
             className="border border-1 gap p-4 mt-5"
             onSubmit={handleSubmit}
@@ -98,6 +88,15 @@ const Login = () => {
               {t("login.submit")}
             </Button>
           </Form>
+          {success && (
+            <Alert
+              variant="success"
+              onClose={() => setSuccess(false)}
+              dismissible
+            >
+              Login successfully!
+            </Alert>
+          )}
         </div>
       </div>
     </div>
