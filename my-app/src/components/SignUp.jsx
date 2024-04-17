@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false); // State variable to track success
+  const [showAlert, setShowAlert] = useState(false);
   // const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -43,24 +43,25 @@ const SignUp = () => {
     } else if (!validatePhoneNumber(userData.phone)) {
       newErrors.phone = t("signup.errors.phoneInvalid");
     }
-
+  
     if (!userData.password) {
       newErrors.password = t("signup.errors.passwordRequired");
     } else if (userData.password.length < 6) {
       newErrors.password = t("signup.errors.passwordLength");
     }
-
+  
     if (Object.keys(newErrors).length === 0) {
       dispatch(signUp(userData));
-      setSuccess(true); // Set success state to true on successful signup
+      setShowAlert(true);
+      setErrors({}); // Clear errors on successful form submission
       setTimeout(() => {
-        setSuccess(false); // Reset success state after 3 seconds
-      }, 5000);
-      console.log(userData);
+        setShowAlert(false);
+      }, 2000);
     } else {
       setErrors(newErrors);
     }
   };
+  
 
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -158,15 +159,16 @@ const SignUp = () => {
               {t("signup.submit")}
             </Button>
           </Form>
-          {success && (
-            <Alert
-              variant="success"
-              onClose={() => setSuccess(false)}
-              dismissible
-            >
-              Signup successful! You can now login.
-            </Alert>
-          )}
+          {showAlert &&
+            ((authError && (
+              <Alert variant="danger" className="mt-3">
+                {authError}
+              </Alert>
+            )) || (
+              <Alert variant="success" className="mt-3">
+                {t("signup.successmessage")}
+              </Alert>
+            ))}
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@
     "alreadyHaveAccount": "Already have an account?",
     "login": "Log in",
     "submit": "Submit",
+    "successmessage": "User Signup Sucessfully",
     "errors": {
       "firstNameRequired": "Please enter your first name",
       "lastNameRequired": "Please enter your last name",

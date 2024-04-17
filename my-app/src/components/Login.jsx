@@ -20,22 +20,41 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const userData = {
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
-
-    try {
-      dispatch(login(userData));
-      setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-      }, 5000);
-    } catch (error) {
-      setErrors({ general: "Login failed. Please try again." });
+    const email = formData.get("email");
+    const password = formData.get("password");
+  
+    const newErrors = {};
+  
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Invalid email format";
+    }
+  
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      setErrors({});
+      try {
+        dispatch(login({ email, password }));
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+        }, 5000);
+      } catch (error) {
+        setErrors({ general: "Login failed. Please try again." });
+      }
     }
   };
-
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+  
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -101,6 +120,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Login;
