@@ -33,7 +33,7 @@ const ForgetPassword = () => {
         console.log(isSubmitted);
       } catch (error) {
         console.error("Password reset failed:", error);
-        setErrors({ server: t("forgetPassword.errors.serverError") });
+        // setErrors({ server: t("forgetPassword.errors.serverError") });
       }
     } else {
       setErrors(newErrors);

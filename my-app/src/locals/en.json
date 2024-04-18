@@ -48,7 +48,7 @@
   },
 
   "forgetPassword": {
-    "title": "RESET PASSWORD",
+    "title": "FORGET PASSWORD",
     "email": "Email",
     "enterEmail": "Enter email",
     "submit": "Submit",

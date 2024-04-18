@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route } from "react-router-dom";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,10 +6,15 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import ForgetPassword from "./components/ForgetPassword";
 import Admin from "./components/Admin/Admin";
+import ResetPasswordForm from './components/ResetPasswordForm';
+
 
 import translationEN from './locals/en.json';
 import translationAR from './locals/ar.json';
 import Customer from "./components/Customer/Customer";
+import Logout from "./components/Logout";
+
+
 
 function App() {
 
@@ -34,8 +39,11 @@ function App() {
     <Route path="/" element={<Login />} />
     <Route path="/Signup" element={<SignUp />} />
     <Route path="/forget-password" element={<ForgetPassword />} />
+    <Route path="/logout" element={<Logout />} />
     <Route path="/admin-dashboard" element={<Admin />} />
     <Route path="/customer-dashboard" element={<Customer />} />
+    <Route path="/user/password/reset"element={<ResetPasswordForm />} />
+     
 
 
      

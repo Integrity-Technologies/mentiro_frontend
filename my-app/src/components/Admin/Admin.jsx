@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Nav, NavLink, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import  LanguageToggleButton  from "./Togglebutton"
+import LanguageToggleButton from "./Togglebutton";
 import Users from "./Users"; // Import the Users component
 import Tests from "./Tests";
 import Category from "./Categories";
@@ -24,8 +24,18 @@ const Dashboard = () => {
   };
 
   const sections = {
-    "/Users": <Users language={selectedLanguage} onLanguageChange={handleLanguageChange} />, // Pass language and onLanguageChange props to Users component
-    "/Tests": <Tests language={selectedLanguage} onLanguageChange={handleLanguageChange} />,
+    "/Users": (
+      <Users
+        language={selectedLanguage}
+        onLanguageChange={handleLanguageChange}
+      />
+    ), // Pass language and onLanguageChange props to Users component
+    "/Tests": (
+      <Tests
+        language={selectedLanguage}
+        onLanguageChange={handleLanguageChange}
+      />
+    ),
     "/Categories": <Category />,
     "/Candidates": <Candidates />,
     "/View-Test-Result": <ViewTestResult />,
@@ -48,7 +58,6 @@ const Dashboard = () => {
                   onClick={() => handleClick(link)}
                 >
                   {link === "/Users" ? t("users.title") : link.replace("/", "")}
-
                 </NavLink>
               ))}
             </Nav>
