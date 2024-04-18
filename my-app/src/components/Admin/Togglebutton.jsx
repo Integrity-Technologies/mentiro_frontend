@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-const LanguageToggleButton = ({ currentLanguage, onLanguageChange, onLogout }) => {
-  const [isEnglish, setIsEnglish] = useState(currentLanguage === 'english');
+const LanguageToggleButton = ({ onLanguageChange }) => {
+  const { i18n } = useTranslation();
 
-  const toggleLanguage = () => {
-    setIsEnglish(prevState => !prevState); // Toggle the isEnglish state correctly
-  const newLanguage = isEnglish ? 'arabic' : 'english'; // Use the updated isEnglish state
-  onLanguageChange(newLanguage);
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    onLanguageChange(lng);
+  };
+
+  const handleLogout = () => {
+    // Handle logout logic here
   };
 
   return (
     <div>
-      <ButtonGroup className="mb-2">
-      <Button onClick={toggleLanguage}>
-        {isEnglish ? 'Switch to Arabic' : 'Switch to English'}
-      </Button>
-      <Button onClick={onLogout}>Logout</Button>
-    </ButtonGroup>
+      <button onClick={() => changeLanguage("en")}>English</button>
+      <button onClick={() => changeLanguage("ar")}>العربية</button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };

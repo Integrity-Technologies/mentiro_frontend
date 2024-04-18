@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Tests = () => {
+  const { t, i18n } = useTranslation(); // Use useTranslation hook here
   const [tests, setTests] = useState([
     {
       id: 1,
@@ -42,7 +44,7 @@ const Tests = () => {
   const handleShowEditModal = (test) => {
     setShowEditModal(true);
     setEditTest(test);
-    setNewTest(test); 
+    setNewTest(test);
   };
 
   const handleAddTest = () => {
@@ -70,34 +72,36 @@ const Tests = () => {
     setTests(tests.filter((test) => test.id !== id));
   };
 
-  const filteredTests = tests.filter(test => {
+  const filteredTests = tests.filter((test) => {
     const fullName = `${test.testName} ${test.testDescription}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   return (
     <div>
-      <h1>Tests</h1>
+      <h1>{t("tests.title")}</h1>
       <Form inline className="mb-3">
         <FormControl
           type="text"
-          placeholder="Search by name"
+          placeholder={t("tests.searchPlaceholder")}
           className="mr-sm-2 w-25 text-left"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </Form>
-      <Button variant="success" onClick={handleShowAddModal}>Add Test</Button>
+      <Button variant="success" onClick={handleShowAddModal}>
+        {t("tests.addTestButton")}
+      </Button>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Test Name</th>
-            <th>Test Description</th>
-            <th>Test Categories</th>
-            <th>Test Level</th>
-            <th>Company Name</th>
-            <th>Actions</th>
+            <th>{t("tests.tableHeaders.testName")}</th>
+            <th>{t("tests.tableHeaders.testDescription")}</th>
+            <th>{t("tests.tableHeaders.testCategories")}</th>
+            <th>{t("tests.tableHeaders.testLevel")}</th>
+            <th>{t("tests.tableHeaders.companyName")}</th>
+            <th>{t("tests.tableHeaders.actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -110,8 +114,20 @@ const Tests = () => {
               <td>{test.testLevel}</td>
               <td>{test.companyName}</td>
               <td>
-                <Button variant="primary" size="sm" onClick={() => handleShowEditModal(test)}>Edit</Button>{" "}
-                <Button variant="danger" size="sm" onClick={() => handleDeleteTest(test.id)}>Delete</Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => handleShowEditModal(test)}
+                >
+                  Edit
+                </Button>{" "}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeleteTest(test.id)}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
@@ -121,70 +137,162 @@ const Tests = () => {
       {/* Add Test Modal */}
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Test</Modal.Title>
+          <Modal.Title>{t("tests.modals.addTest.title")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group controlId="formTestName">
-              <Form.Label>Test Name</Form.Label>
-              <Form.Control type="text" value={newTest.testName} onChange={(e) => setNewTest({ ...newTest, testName: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.addTest.formLabels.testName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testName}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testName: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formTestDescription">
-              <Form.Label>Test Description</Form.Label>
-              <Form.Control type="text" value={newTest.testDescription} onChange={(e) => setNewTest({ ...newTest, testDescription: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.addTest.formLabels.testDescription")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testDescription}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testDescription: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formTestCategories">
-              <Form.Label>Test Categories</Form.Label>
-              <Form.Control type="text" value={newTest.testCategories} onChange={(e) => setNewTest({ ...newTest, testCategories: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.addTest.formLabels.testCategories")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testCategories}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testCategories: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formTestLevel">
-              <Form.Label>Test Level</Form.Label>
-              <Form.Control type="text" value={newTest.testLevel} onChange={(e) => setNewTest({ ...newTest, testLevel: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.addTest.formLabels.testLevel")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testLevel}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testLevel: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formCompanyName">
-              <Form.Label>Company Name</Form.Label>
-              <Form.Control type="text" value={newTest.companyName} onChange={(e) => setNewTest({ ...newTest, companyName: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.addTest.formLabels.companyName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.companyName}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, companyName: e.target.value })
+                }
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal}>Close</Button>
-          <Button variant="primary" onClick={handleAddTest} className="text-left">Add Test</Button>
+          <Button variant="secondary" onClick={handleCloseAddModal}>
+            {t("tests.modals.addTest.buttons.close")}
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleAddTest}
+            className="text-left"
+          >
+            {t("tests.modals.addTest.buttons.addTest")}
+          </Button>
         </Modal.Footer>
       </Modal>
 
       {/* Edit Test Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Test</Modal.Title>
+          <Modal.Title>{t("tests.modals.editTest.title")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group controlId="formTestName">
-              <Form.Label>Test Name</Form.Label>
-              <Form.Control type="text" value={newTest.testName} onChange={(e) => setNewTest({ ...newTest, testName: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.editTest.formLabels.testName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testName}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testName: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formTestDescription">
-              <Form.Label>Test Description</Form.Label>
-              <Form.Control type="text" value={newTest.testDescription} onChange={(e) => setNewTest({ ...newTest, testDescription: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.editTest.formLabels.testDescription")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testDescription}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testDescription: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formTestCategories">
-              <Form.Label>Test Categories</Form.Label>
-              <Form.Control type="text" value={newTest.testCategories} onChange={(e) => setNewTest({ ...newTest, testCategories: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.editTest.formLabels.testCategories")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testCategories}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testCategories: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formTestLevel">
-              <Form.Label>Test Level</Form.Label>
-              <Form.Control type="text" value={newTest.testLevel} onChange={(e) => setNewTest({ ...newTest, testLevel: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.editTest.formLabels.testLevel")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.testLevel}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, testLevel: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formCompanyName">
-              <Form.Label>Company Name</Form.Label>
-              <Form.Control type="text" value={newTest.companyName} onChange={(e) => setNewTest({ ...newTest, companyName: e.target.value })} />
+              <Form.Label>
+                {t("tests.modals.editTest.formLabels.companyName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newTest.companyName}
+                onChange={(e) =>
+                  setNewTest({ ...newTest, companyName: e.target.value })
+                }
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseEditModal}>Close</Button>
-          <Button variant="primary" onClick={handleEditTest}>Save Changes</Button>
+          <Button variant="secondary" onClick={handleCloseEditModal}>
+            {t("tests.modals.editTest.buttons.close")}
+          </Button>
+          <Button variant="primary" onClick={handleEditTest}>
+            {t("tests.modals.editTest.buttons.saveChanges")}
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

@@ -63,7 +63,6 @@
     "back": "Back"
   },
 
-
   "users": {
     "title": "Users",
     "searchPlaceholder": "Search by name",
@@ -100,6 +99,51 @@
           "phone": "Phone",
           "email": "Email",
           "dateJoined": "Date Joined"
+        },
+        "buttons": {
+          "close": "Close",
+          "saveChanges": "Save Changes"
+        }
+      }
+    }
+  },
+
+  "tests": {
+    "title": "Tests",
+    "searchPlaceholder": "Search by name",
+    "addTestButton": "Add Test",
+    "tableHeaders": {
+      "id": "ID",
+      "testName": "Test Name",
+      "testDescription": "Test Description",
+      "testCategories": "Test Categories",
+      "testLevel": "Test Level",
+      "companyName": "Company Name",
+      "actions": "Actions"
+    },
+    "modals": {
+      "addTest": {
+        "title": "Add Test",
+        "formLabels": {
+          "testName": "Test Name",
+          "testDescription": "Test Description",
+          "testCategories": "Test Categories",
+          "testLevel": "Test Level",
+          "companyName": "Company Name"
+        },
+        "buttons": {
+          "close": "Close",
+          "addTest": "Add Test"
+        }
+      },
+      "editTest": {
+        "title": "Edit Test",
+        "formLabels": {
+          "testName": "Test Name",
+          "testDescription": "Test Description",
+          "testCategories": "Test Categories",
+          "testLevel": "Test Level",
+          "companyName": "Company Name"
         },
         "buttons": {
           "close": "Close",

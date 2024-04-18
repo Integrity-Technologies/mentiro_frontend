@@ -59,7 +59,6 @@
     "back": "العودة"
   },
 
-
   "users": {
     "title": "المستخدمين",
     "searchPlaceholder": "البحث حسب الاسم",
@@ -96,6 +95,51 @@
           "phone": "الهاتف",
           "email": "البريد الإلكتروني",
           "dateJoined": "تاريخ الانضمام"
+        },
+        "buttons": {
+          "close": "إغلاق",
+          "saveChanges": "حفظ التغييرات"
+        }
+      }
+    }
+  },
+
+  "tests": {
+    "title": "الاختبارات",
+    "searchPlaceholder": "البحث حسب الاسم",
+    "addTestButton": "إضافة اختبار",
+    "tableHeaders": {
+      "id": "المعرف",
+      "testName": "اسم الاختبار",
+      "testDescription": "وصف الاختبار",
+      "testCategories": "فئات الاختبار",
+      "testLevel": "مستوى الاختبار",
+      "companyName": "اسم الشركة",
+      "actions": "الإجراءات"
+    },
+    "modals": {
+      "addTest": {
+        "title": "إضافة اختبار",
+        "formLabels": {
+          "testName": "اسم الاختبار",
+          "testDescription": "وصف الاختبار",
+          "testCategories": "فئات الاختبار",
+          "testLevel": "مستوى الاختبار",
+          "companyName": "اسم الشركة"
+        },
+        "buttons": {
+          "close": "إغلاق",
+          "addTest": "إضافة اختبار"
+        }
+      },
+      "editTest": {
+        "title": "تحرير الاختبار",
+        "formLabels": {
+          "testName": "اسم الاختبار",
+          "testDescription": "وصف الاختبار",
+          "testCategories": "فئات الاختبار",
+          "testLevel": "مستوى الاختبار",
+          "companyName": "اسم الشركة"
         },
         "buttons": {
           "close": "إغلاق",

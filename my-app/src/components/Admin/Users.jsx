@@ -4,9 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const Users = () => {
   const { t, i18n } = useTranslation(); // Use useTranslation hook here
-  
 
-  
   const [users, setUsers] = useState([
     {
       id: 1,
@@ -25,8 +23,6 @@ const Users = () => {
       dateJoined: "2024-04-16",
     },
   ]);
- 
-
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -49,7 +45,7 @@ const Users = () => {
   const handleShowEditModal = (user) => {
     setShowEditModal(true);
     setEditUser(user);
-    setNewUser(user); 
+    setNewUser(user);
   };
 
   const handleAddUser = () => {
@@ -77,14 +73,13 @@ const Users = () => {
     setUsers(users.filter((user) => user.id !== id));
   };
 
-  const filteredUsers = users.filter(user => {
+  const filteredUsers = users.filter((user) => {
     const fullName = `${user.firstName} ${user.lastName}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   return (
     <div>
-      
       <h1>{t("users.title")}</h1>
       <Form inline className="mb-3">
         <FormControl
@@ -95,7 +90,10 @@ const Users = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </Form>
-      <Button variant="success" onClick={handleShowAddModal}>{t("users.addUserButton")}</Button>
+      <Button variant="success" onClick={handleShowAddModal}>
+        {t("users.addUserButton")}
+      </Button>
+
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -118,13 +116,24 @@ const Users = () => {
               <td>{user.email}</td>
               <td>{user.dateJoined}</td>
               <td>
-                <Button variant="primary" size="sm" onClick={() => handleShowEditModal(user)}>Edit</Button>{" "}
-                <Button variant="danger" size="sm" onClick={() => handleDeleteUser(user.id)}>Delete</Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => handleShowEditModal(user)}
+                >
+                  Edit
+                </Button>{" "}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeleteUser(user.id)}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
-
       </Table>
 
       {/* Add User Modal */}
@@ -135,30 +144,78 @@ const Users = () => {
         <Modal.Body>
           <Form>
             <Form.Group controlId="formFirstName">
-              <Form.Label>{t("users.modals.addUser.formLabels.firstName")}</Form.Label>
-              <Form.Control type="text" value={newUser.firstName} onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.addUser.formLabels.firstName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newUser.firstName}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, firstName: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formLastName">
-              <Form.Label>{t("users.modals.addUser.formLabels.lastName")}</Form.Label>
-              <Form.Control type="text" value={newUser.lastName} onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.addUser.formLabels.lastName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newUser.lastName}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, lastName: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formPhone">
-              <Form.Label>{t("users.modals.addUser.formLabels.phone")}</Form.Label>
-              <Form.Control type="text" value={newUser.phone} onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.addUser.formLabels.phone")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newUser.phone}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, phone: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formEmail">
-              <Form.Label>{t("users.modals.addUser.formLabels.email")}</Form.Label>
-              <Form.Control type="email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.addUser.formLabels.email")}
+              </Form.Label>
+              <Form.Control
+                type="email"
+                value={newUser.email}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, email: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formDateJoined">
-              <Form.Label>{t("users.modals.addUser.formLabels.dateJoined")}</Form.Label>
-              <Form.Control type="date" value={newUser.dateJoined} onChange={(e) => setNewUser({ ...newUser, dateJoined: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.addUser.formLabels.dateJoined")}
+              </Form.Label>
+              <Form.Control
+                type="date"
+                value={newUser.dateJoined}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, dateJoined: e.target.value })
+                }
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal} >{t("users.modals.addUser.buttons.close")}</Button>
-          <Button variant="primary" onClick={handleAddUser} className="text-left">{t("users.modals.addUser.buttons.addUser")}</Button>
+          <Button variant="secondary" onClick={handleCloseAddModal}>
+            {t("users.modals.addUser.buttons.close")}
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleAddUser}
+            className="text-left"
+          >
+            {t("users.modals.addUser.buttons.addUser")}
+          </Button>
         </Modal.Footer>
       </Modal>
 
@@ -170,30 +227,74 @@ const Users = () => {
         <Modal.Body>
           <Form>
             <Form.Group controlId="formFirstName">
-              <Form.Label>{t("users.modals.editUser.formLabels.firstName")}</Form.Label>
-              <Form.Control type="text" value={newUser.firstName} onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.editUser.formLabels.firstName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newUser.firstName}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, firstName: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formLastName">
-              <Form.Label>{t("users.modals.editUser.formLabels.lastName")}</Form.Label>
-              <Form.Control type="text" value={newUser.lastName} onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.editUser.formLabels.lastName")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newUser.lastName}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, lastName: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formPhone">
-              <Form.Label>{t("users.modals.editUser.formLabels.phone")}</Form.Label>
-              <Form.Control type="text" value={newUser.phone} onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.editUser.formLabels.phone")}
+              </Form.Label>
+              <Form.Control
+                type="text"
+                value={newUser.phone}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, phone: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formEmail">
-              <Form.Label>{t("users.modals.editUser.formLabels.email")}</Form.Label>
-              <Form.Control type="email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.editUser.formLabels.email")}
+              </Form.Label>
+              <Form.Control
+                type="email"
+                value={newUser.email}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, email: e.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formDateJoined">
-              <Form.Label>{t("users.modals.editUser.formLabels.dateJoined")}</Form.Label>
-              <Form.Control type="date" value={newUser.dateJoined} onChange={(e) => setNewUser({ ...newUser, dateJoined: e.target.value })} />
+              <Form.Label>
+                {t("users.modals.editUser.formLabels.dateJoined")}
+              </Form.Label>
+              <Form.Control
+                type="date"
+                value={newUser.dateJoined}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, dateJoined: e.target.value })
+                }
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseEditModal}>{t("users.modals.editUser.buttons.close")}</Button>
-          <Button variant="primary" onClick={handleEditUser}>{t("users.modals.editUser.buttons.saveChanges")}</Button>
+          <Button variant="secondary" onClick={handleCloseEditModal}>
+            {t("users.modals.editUser.buttons.close")}
+          </Button>
+          <Button variant="primary" onClick={handleEditUser}>
+            {t("users.modals.editUser.buttons.saveChanges")}
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

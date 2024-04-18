@@ -13,13 +13,13 @@ const Login = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
-  console.log("🚀 ~ Login ~ authError:", authError)
+  console.log("🚀 ~ Login ~ authError:", authError);
   const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   // const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const email = formData.get("email");
@@ -39,7 +39,12 @@ const handleSubmit = async (e) => {
         setShowAlert(true);
         const result = await dispatch(login({ email, password }));
         if (result?.success) {
-          navigate("/admin-dashboard");
+          // Check if the email and password match admin credentials
+          if (email === "admin@gmail.com" && password === "admin123") {
+            navigate("/admin-dashboard");
+          } else {
+            navigate("/customer-dashboard");
+          }
         }
         setTimeout(() => setShowAlert(false), 2000); // success
       } catch (error) {

@@ -9,6 +9,7 @@ import Admin from "./components/Admin/Admin";
 
 import translationEN from './locals/en.json';
 import translationAR from './locals/ar.json';
+import Customer from "./components/Customer/Customer";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
     <Route path="/Signup" element={<SignUp />} />
     <Route path="/forget-password" element={<ForgetPassword />} />
     <Route path="/admin-dashboard" element={<Admin />} />
+    <Route path="/customer-dashboard" element={<Customer />} />
 
 
      
