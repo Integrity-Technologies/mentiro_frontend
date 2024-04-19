@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Nav, NavLink, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import LanguageToggleButton from "./Togglebutton";
+import LanguageToggleButton from "../Togglebutton";
 import Users from "./Users"; // Import the Users component
 import Tests from "./Tests";
 import Category from "./Categories";
@@ -62,10 +62,12 @@ const Dashboard = () => {
               ))}
             </Nav>
             <LanguageToggleButton onLanguageChange={handleLanguageChange} />
+            
           </Col>
           <Col md={9} className="pt-3">
             {sections[activeLink]}
           </Col>
+          
         </Row>
       </Container>
     </div>
