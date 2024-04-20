@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {BrowserRouter, Routes, Route } from "react-router-dom";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSelector, useDispatch } from "react-redux";
 import Login from './components/Login';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './routes/ProtectedRoute';
 import SignUp from './components/SignUp';
 import ForgetPassword from "./components/ForgetPassword";
 import Admin from "./components/Admin/Admin";
@@ -15,12 +16,26 @@ import translationEN from './locals/en.json';
 import translationAR from './locals/ar.json';
 import Customer from "./components/Customer/Customer";
 import Logout from "./components/Logout";
+import Assessment from "./components/Customer/Assesment";
+import { fetchUser } from "./reducers/fetchUser";
 
 
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // State for authentication status
-  const [user, setUser] = useState(null); 
+  const { user, token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Fetch user information when the component mounts
+    dispatch(fetchUser());
+  }, [dispatch]);
+
+  console.log("User:", user);
+  console.log("Token:", token);
+
+
+
+
 
   i18n
   .use(initReactI18next) // Bind react-i18next to i18next
@@ -44,8 +59,23 @@ function App() {
     <Route path="/Signup" element={<SignUp />} />
     <Route path="/forget-password" element={<ForgetPassword />} />
     <Route path="/logout" element={<Logout />} />
-    <Route path="/admin-dashboard" element={<Admin />} />
-    <Route path="/customer-dashboard" element={<Customer />} />
+    <Route path="/assesment" element={<Assessment />} />
+     <Route path="/admin-dashboard" element={<Admin />} />
+    <Route path="/customer-dashboard" element={<Customer />} /> 
+
+    <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute
+                user={user}
+                token={token}
+                adminComponent={<Admin />}
+                userComponent={<Customer />}
+              />
+            }
+          />
+          
+  
     {/* <Route
           path="/admin-dashboard"
           element={<ProtectedRoute component={<Admin />} isAuthenticated={isAuthenticated} user={user} />}

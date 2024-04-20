@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Container, Nav, NavLink, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import LanguageToggleButton from "../Togglebutton";
-// import CompanyProfile from "./CompanyProfile";
+import Assesment from "./Assesment";
+import TestSelection from "./TestSelection";
+import Question from "./Question";
 // import Tests from "./Tests";
 // import Category from "./Categories";
 // import Candidates from "./Candidates";
@@ -24,9 +26,10 @@ const Customer = () => {
   };
 
   const sections = {
-    // "/CompanyProfile": <CompanyProfile />,
-    "/Assessment": <></>,
-    "/Question": <></>,
+    "/CompanyProfile": <></>,
+    "/Assessment": <Assesment />,
+    "/TestSelection": <TestSelection />,
+    "/Question": <Question />,
   };
 
   // Define customer menu options
@@ -40,18 +43,21 @@ const Customer = () => {
     <div>
       <Container fluid>
         <Row>
-          <Col md={3} className="bg-light border-end vh-100">
-            <Nav className="flex-column">
-              {customerMenuOptions.map((option) => (
+          <Col xs={2} id="sidebar" className="bg-white shadow vh-100">
+            {/* <Image src="" alt="Logo" className="logo" /> Replace "path_to_your_logo" with the actual path */}
+            <Nav className="flex-column mt-3">
+              {Object.keys(sections).map((link) => (
                 <NavLink
-                  key={option.link}
-                  to={option.link}
+                  key={link}
+                  to={link}
                   className={`nav-link ${
-                    activeLink === option.link ? "bg-dark text-light" : ""
+                    activeLink === link ? "bg-dark text-light" : ""
                   } mb-3`}
-                  onClick={() => handleClick(option.link)}
+                  onClick={() => handleClick(link)}
                 >
-                  {option.label}
+                  {link === "/Assesment"
+                    ? t("users.title")
+                    : link.replace("/", "")}
                 </NavLink>
               ))}
             </Nav>

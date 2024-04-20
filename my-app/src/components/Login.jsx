@@ -38,15 +38,10 @@ const Login = () => {
       try {
         setShowAlert(true);
         const result = await dispatch(login({ email, password }));
-        if (result?.success) {
-          // Check if the email and password match admin credentials
-          if (email === "admin@gmail.com" && password === "admin123") {
-            navigate("/admin-dashboard");
-          } else {
-            navigate("/customer-dashboard");
-          }
-        }
+        console.log(result)
+       
         setTimeout(() => setShowAlert(false), 2000); // success
+        navigate("/customer-dashboard")
       } catch (error) {
         setTimeout(() => setShowAlert(false), 2000); // error
       }
