@@ -22,13 +22,15 @@ import { fetchUser } from "./reducers/fetchUser";
 
 
 function App() {
+  // const [user, setUser] = useState({})
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Fetch user information when the component mounts
-    dispatch(fetchUser());
-  }, [dispatch]);
+  // useEffect( async () => {
+  //   // Fetch user information when the component mounts
+  //   const result = await dispatch(fetchUser());
+  //   console.log(result);
+  // }, [dispatch]);
 
   console.log("User:", user);
   console.log("Token:", token);
@@ -60,7 +62,7 @@ function App() {
     <Route path="/forget-password" element={<ForgetPassword />} />
     <Route path="/logout" element={<Logout />} />
     <Route path="/assesment" element={<Assessment />} />
-     <Route path="/admin-dashboard" element={<Admin />} />
+     {/* <Route path="/admin-dashboard" element={<Admin />} /> */}
     <Route path="/customer-dashboard" element={<Customer />} /> 
 
     <Route
