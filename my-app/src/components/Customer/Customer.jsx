@@ -3,8 +3,7 @@ import { Container, Nav, NavLink, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import LanguageToggleButton from "../Togglebutton";
 import Assesment from "./Assesment";
-import TestSelection from "./TestSelection";
-import Question from "./Question";
+
 // import Tests from "./Tests";
 // import Category from "./Categories";
 // import Candidates from "./Candidates";
@@ -27,16 +26,13 @@ const Customer = () => {
 
   const sections = {
     "/CompanyProfile": <></>,
-    "/Assessment": <Assesment />,
-    "/TestSelection": <TestSelection />,
-    "/Question": <Question />,
+    "/Assesments": <Assesment />,
   };
 
   // Define customer menu options
   const customerMenuOptions = [
     { label: "Company Profile", link: "/customer/option1" },
     { label: "Assessment", link: "/customer/option2" },
-    { label: "Question", link: "/customer/option3" },
   ];
 
   return (

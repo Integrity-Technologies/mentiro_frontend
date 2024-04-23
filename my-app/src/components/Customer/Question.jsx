@@ -1,11 +1,15 @@
-import React from "react";
-import { Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Preview from "./Preview"; // Import the Preview component
 
 const Question = ({ handleBackButtonClick }) => {
-  const handleNextButtonClick = () => {
-    // Logic for next button click
+  const [showPreview, setShowPreview] = useState(false); // State to manage preview visibility
+
+  // Function to handle preview button click
+  const handlePreviewButtonClick = () => {
+    setShowPreview(true);
   };
 
   const questionType = "MCQs"; // Question type
@@ -14,103 +18,63 @@ const Question = ({ handleBackButtonClick }) => {
 
   return (
     <div>
-      <h2 className="text-center mb-4">Question</h2>
+      {showPreview ? (
+        <Preview
+          handleBackButtonClick={() => setShowPreview(false)}
+          // Pass necessary data to the Preview component if needed
+        />
+      ) : (
+        <>
+          {/* Card for question */}
+          <h2 className="text-center mb-4">Question</h2>
 
-      {/* First Card */}
-      <Row className="justify-content-center align-items-center">
-        <Card style={{ width: "18rem" }} className="mb-3">
-          <Card.Body>
-            <Card.Title>Question 1</Card.Title>
-            <Card.Text>
-              Question: What is SEO?
-              <br />
-              Question Type: {questionType}
-              <br />
-              Difficulty Level: {difficultyLevel}
-              <br />
-              Category Name: {categoryName}
-              <br />
-              Options:
-              <br />
-              - Search Optimization
-              <br />
-              - Search Engine
-              <br />
-              - Search Engine Optimization
-              <br />- Search Engine
-            </Card.Text>
-            <Button variant="primary" onClick={handleNextButtonClick}>
-              Next
+          <Row className="justify-content-center align-items-center">
+            <Col md={6}>
+              <Card style={{ width: "18rem" }} className="mb-3">
+                <Card.Body>
+                  <Card.Title>Question 1</Card.Title>
+                  <Card.Text>
+                    Question: What is SEO?
+                    <br />
+                    Question Type: {questionType}
+                    <br />
+                    Difficulty Level: {difficultyLevel}
+                    <br />
+                    Category Name: {categoryName}
+                    <br />
+                    Options:
+                    <br />
+                    - Search Optimization
+                    <br />
+                    - Search Engine
+                    <br />
+                    - Search Engine Optimization
+                    <br />- Search Engine
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          {/* Preview Button */}
+          <div className="text-center mb-3">
+            <Button variant="primary" onClick={handlePreviewButtonClick}>
+              Preview
             </Button>
-          </Card.Body>
-        </Card>
+          </div>
 
-        {/* Second Card */}
-        <Card style={{ width: "18rem" }} className="mb-3">
-          <Card.Body>
-            <Card.Title>Question 2</Card.Title>
-            <Card.Text>
-              Question: What is HTML?
-              <br />
-              Question Type: {questionType}
-              <br />
-              Difficulty Level: {difficultyLevel}
-              <br />
-              Category Name: {categoryName}
-              <br />
-              Options:
-              <br />
-              - Hyper Text Markup Language
-              <br />
-              - Hypertext Markup Language
-              <br />
-              - Hyper Text Markup Level
-              <br />- Hyper Text Markup Linguistics
-            </Card.Text>
-            <Button variant="primary" onClick={handleNextButtonClick}>
-              Next
+          {/* Back Button */}
+          <div className="text-center mt-4">
+            <Button
+              variant="outline-primary"
+              size="lg"
+              onClick={handleBackButtonClick}
+            >
+              Back
             </Button>
-          </Card.Body>
-        </Card>
-
-        {/* Third Card */}
-        <Card style={{ width: "18rem" }} className="mb-3">
-          <Card.Body>
-            <Card.Title>Question 3</Card.Title>
-            <Card.Text>
-              Question: What is CSS?
-              <br />
-              Question Type: {questionType}
-              <br />
-              Difficulty Level: {difficultyLevel}
-              <br />
-              Category Name: {categoryName}
-              <br />
-              Options:
-              <br />
-              - Cascading Style Sheets
-              <br />
-              - Creative Style Sheets
-              <br />
-              - Computer Style Sheets
-              <br />- Colorful Style Sheets
-            </Card.Text>
-            <Button variant="primary" onClick={handleNextButtonClick}>
-              Next
-            </Button>
-          </Card.Body>
-        </Card>
-      </Row>
-
-      <div className="text-center mt-4">
-        <Button
-          variant="outline-primary"
-          size="lg"
-          onClick={handleBackButtonClick}
-        >
-          Back
-        </Button>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

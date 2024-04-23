@@ -18,6 +18,7 @@ import Customer from "./components/Customer/Customer";
 import Logout from "./components/Logout";
 import Assessment from "./components/Customer/Assesment";
 import { fetchUser } from "./reducers/fetchUser";
+import Candidates from "./components/Candidates/Candidate.jsx";
 
 
 
@@ -62,6 +63,7 @@ function App() {
     <Route path="/forget-password" element={<ForgetPassword />} />
     <Route path="/logout" element={<Logout />} />
     <Route path="/assesment" element={<Assessment />} />
+    <Route path="/candidates" element={<Candidates />} />
      {/* <Route path="/admin-dashboard" element={<Admin />} /> */}
     <Route path="/customer-dashboard" element={<Customer />} /> 
 

@@ -94,89 +94,87 @@ const SignUp = () => {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <Form
-            className="border border-1 gap p-4 mt-5"
-            onSubmit={handleSubmit}
-          >
-            <Form.Group className="mb-3" controlId="formBasicSignUp">
-              <h2 className="text-center">{t("signup.title")}</h2>
-              <div className="d-flex justify-content-center">
-                <img
-                  src={logoImage}
-                  alt="Logo"
-                  className="rounded-circle img-fluid"
-                  width="100"
-                />
-              </div>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicFirstName">
-              <Form.Label>{t("signup.first_name")}</Form.Label>
-              <Form.Control
-                type="text"
-                name="firstName"
-                placeholder={t("signup.enterFirstName")}
-              />
-              {errors.first_name && (
-                <Form.Text className="text-danger">
-                  {errors.first_name}
-                </Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicLastName">
-              <Form.Label>{t("signup.last_name")}</Form.Label>
-              <Form.Control
-                type="text"
-                name="lastName"
-                placeholder={t("signup.enterLastName")}
-              />
-              {errors.last_name && (
-                <Form.Text className="text-danger">
-                  {errors.last_name}
-                </Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>{t("signup.email")}</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder={t("signup.enterEmail")}
-              />
-              {errors.email && (
-                <Form.Text className="text-danger">{errors.email}</Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formPhone">
-              <Form.Label>{t("signup.phone")}</Form.Label>
-              <Form.Control
-                type="phone"
-                name="phone"
-                placeholder={t("signup.enterPhone")}
-              />
-              {errors.phone && (
-                <Form.Text className="text-danger">{errors.phone}</Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>{t("signup.password")}</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder={t("signup.enterPassword")}
-              />
-              {errors.password && (
-                <Form.Text className="text-danger">{errors.password}</Form.Text>
-              )}
-            </Form.Group>
+        <Form className="border border-1 gap p-4 mt-5" onSubmit={handleSubmit}>
+  <Form.Group className="mb-3" controlId="formBasicSignUp">
+    <h2 className="text-center">{t("signup.title")}</h2>
+    <div className="d-flex justify-content-center">
+      <img
+        src={logoImage}
+        alt="Logo"
+        className="rounded-circle img-fluid"
+        width="100"
+      />
+    </div>
+  </Form.Group>
+  {/* Group for first name and last name */}
+  <div className="d-flex mb-3">
+    <Form.Group className="me-3 flex-grow-1" controlId="formBasicFirstName">
+      <Form.Label>{t("signup.first_name")}</Form.Label>
+      <Form.Control
+        type="text"
+        name="firstName"
+        placeholder={t("signup.enterFirstName")}
+      />
+      {errors.first_name && (
+        <Form.Text className="text-danger">{errors.first_name}</Form.Text>
+      )}
+    </Form.Group>
+    <Form.Group className="flex-grow-1" controlId="formBasicLastName">
+      <Form.Label>{t("signup.last_name")}</Form.Label>
+      <Form.Control
+        type="text"
+        name="lastName"
+        placeholder={t("signup.enterLastName")}
+      />
+      {errors.last_name && (
+        <Form.Text className="text-danger">{errors.last_name}</Form.Text>
+      )}
+    </Form.Group>
+  </div>
+  {/* Remaining inputs */}
+  <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Label>{t("signup.email")}</Form.Label>
+    <Form.Control
+      type="email"
+      name="email"
+      placeholder={t("signup.enterEmail")}
+    />
+    {errors.email && (
+      <Form.Text className="text-danger">{errors.email}</Form.Text>
+    )}
+  </Form.Group>
+  <Form.Group className="mb-3" controlId="formPhone">
+    <Form.Label>{t("signup.phone")}</Form.Label>
+    <Form.Control
+      type="phone"
+      name="phone"
+      placeholder={t("signup.enterPhone")}
+    />
+    {errors.phone && (
+      <Form.Text className="text-danger">{errors.phone}</Form.Text>
+    )}
+  </Form.Group>
+  <Form.Group className="mb-3" controlId="formBasicPassword">
+    <Form.Label>{t("signup.password")}</Form.Label>
+    <Form.Control
+      type="password"
+      name="password"
+      placeholder={t("signup.enterPassword")}
+    />
+    {errors.password && (
+      <Form.Text className="text-danger">{errors.password}</Form.Text>
+    )}
+  </Form.Group>
 
-            <p>
-              {t("signup.alreadyHaveAccount")}{" "}
-              <NavLink to="/">{t("signup.login")}</NavLink>
-            </p>
-            <Button variant="primary" type="submit">
-              {t("signup.submit")}
-            </Button>
-          </Form>
+  
+  <Button variant="dark" type="submit" className="w-100">
+    {t("signup.submit")}
+  </Button>
+  <p className="text-center mt-1">
+    {t("signup.alreadyHaveAccount")}{" "}
+    <NavLink to="/">{t("signup.login")}</NavLink>
+  </p>
+</Form>
           {showAlert &&
             ((authError && (
               <Alert variant="danger" className="mt-3">
