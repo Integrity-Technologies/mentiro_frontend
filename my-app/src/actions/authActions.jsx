@@ -26,25 +26,36 @@ export const signUp = (userData) => async (dispatch) => {
   }
 };
 
+// authAction.jsx
+
 export const login = (userData) => async (dispatch) => {
   try {
     const res = await axios.post(`${baseURL}/users/login`, userData);
     console.log("~ login ~ res:", res);
+
+    // Assuming the backend response contains both user data and token
+    const { user, token } = res.data;
+
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: res.data, // Assuming the backend returns user data and JWT token upon successful login
+      payload: {
+        user, // Include user data in the payload
+        token, // Include token in the payload
+      },
     });
+
     return res.data;
   } catch (error) {
     const errorMessage = JSON.stringify(error.response.data.error);
     console.log(errorMessage);
     dispatch({
       type: AUTH_ERROR,
-      payload: errorMessage, // Assuming the backend returns error message in case of failure
+      payload: errorMessage,
     });
     throw error;
   }
 };
+
 
 export const logout = () => async (dispatch) => {
   try {

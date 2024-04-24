@@ -83,7 +83,7 @@ function ResetPasswordForm() {
                 required
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="dark" type="submit">
               Reset Password
             </Button>
           </Form>

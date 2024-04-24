@@ -1,8 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Button } from "react-bootstrap";
+import Questions from "./Questions";
 
 const TestTime = () => {
+    const [showQuestions, setShowQuestion] = useState(false);
+
+  const handleSubmitButtonClick = () => {
+    setShowQuestion(true);
+}
   return (
+    <div>
+        {showQuestions ? (
+        <Questions />
+      ) : (
+        <div>
     <Container
       className="d-flex flex-column justify-content-center align-items-center"
       style={{ height: "100vh" }}
@@ -19,7 +30,7 @@ const TestTime = () => {
           <strong>Instructions:</strong>
         </p>
         <div className="mt-4">
-          <Button variant="dark" className="mb-2 w-100">
+          <Button variant="dark" className="mb-2 w-100" onClick={handleSubmitButtonClick}>
             Start Test
           </Button>
           <br />
@@ -29,6 +40,9 @@ const TestTime = () => {
         </div>
       </div>
     </Container>
+    </div>
+      )}
+      </div>
   );
 };
 

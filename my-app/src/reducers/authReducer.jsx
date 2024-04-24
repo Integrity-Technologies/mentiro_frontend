@@ -1,3 +1,5 @@
+// authReducer.jsx
+
 import {
   SIGNUP_SUCCESS,
   LOGIN_SUCCESS,
@@ -5,6 +7,7 @@ import {
   AUTH_ERROR,
 } from "../actions/authActions";
 
+// Import initialState here or define it if not imported
 const initialState = {
   user: null,
   token: null,
@@ -15,7 +18,7 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGNUP_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", action.payload.token); // Store JWT token in local storage
+      localStorage.setItem("token", action.payload.token);
       return {
         ...state,
         user: action.payload.user,
@@ -26,6 +29,7 @@ const authReducer = (state = initialState, action) => {
       localStorage.removeItem("token");
       return {
         ...state,
+        user: null,
         error: null,
       };
     case AUTH_ERROR:

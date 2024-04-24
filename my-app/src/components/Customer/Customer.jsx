@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Container, Nav, NavLink, Row, Col } from "react-bootstrap";
+import { Container, Nav, NavLink, Row, Col, Image } from "react-bootstrap"; // Import Image component
 import { useTranslation } from "react-i18next";
 import LanguageToggleButton from "../Togglebutton";
 import Assesment from "./Assesment";
+const logoImage = "/assets/icon.jpg";
+
 
 // import Tests from "./Tests";
 // import Category from "./Categories";
@@ -40,8 +42,10 @@ const Customer = () => {
       <Container fluid>
         <Row>
           <Col xs={2} id="sidebar" className="bg-white shadow vh-100">
-            {/* <Image src="" alt="Logo" className="logo" /> Replace "path_to_your_logo" with the actual path */}
-            <Nav className="flex-column mt-3">
+            <div className="text-center mb-3"> {/* Center the logo */}
+              <Image src={logoImage} alt="Logo" className="rounded-circle img-fluid w-50 mt-5" />
+            </div>
+            <Nav className="flex-column">
               {Object.keys(sections).map((link) => (
                 <NavLink
                   key={link}

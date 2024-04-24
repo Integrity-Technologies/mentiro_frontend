@@ -91,14 +91,16 @@ const Login = () => {
               <p className="text-danger">{authError.general}</p>
             )}
             <NavLink to="/forget-password">{t("login.forgotPassword")}</NavLink>{" "}
+            
+            <br /> <br />
+            <Button variant="dark" className="w-100" type="submit">
+              {t("login.submit")}
+            </Button>
             <br /> <br />
             <p>
               {t("login.noAccount")}{" "}
               <NavLink to="/signup">{t("login.signUp")}</NavLink>
             </p>
-            <Button variant="primary" type="submit">
-              {t("login.submit")}
-            </Button>
           </Form>
           {showAlert && (
             <Alert

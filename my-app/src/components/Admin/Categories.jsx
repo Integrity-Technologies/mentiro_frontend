@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
+import { fetchCategories } from "../../actions/categoryAction";
+import { addCategory } from "../../actions/categoryAction";
+import { useSelector } from "react-redux";
 
 const Category = () => {
+  const { token } = useSelector((state) => state.auth);
   const [categories, setCategories] = useState([
     {
       id: 1,
-      categoryName: "Category A",
+      category_name: "Category A",
       categoryDescription: "Description for Category A",
     },
     {
       id: 2,
-      categoryName: "Category B",
+      category_name: "Category B",
       categoryDescription: "Description for Category B",
     },
   ]);
@@ -20,11 +24,19 @@ const Category = () => {
   const [editCategory, setEditCategory] = useState(null);
   const [newCategory, setNewCategory] = useState({
     id: "",
-    categoryName: "",
-    categoryDescription: "",
+    category_name: "",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchCategories();
+      setCategories(data);
+    };
+    fetchData();
+  }, []);
 
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
@@ -37,15 +49,19 @@ const Category = () => {
   };
 
   const handleAddCategory = () => {
-    const id = categories.length > 0 ? categories[categories.length - 1].id + 1 : 1; // Generate a unique ID
-    const newCategoryWithId = { ...newCategory, id }; // Add ID to the new category object
-    setCategories([...categories, newCategoryWithId]);
-    setNewCategory({
-      id: "",
-      categoryName: "",
-      categoryDescription: "",
-    });
-    handleCloseAddModal();
+    try {
+      const response =  addCategory(newCategory, token);
+      if (response) {
+        // Assuming your backend returns the added category data,
+        // you can update the categories state with the response data
+        setCategories([...categories, response]);
+        handleCloseAddModal();
+      } else {
+        console.error('Failed to add category');
+      }
+    } catch (error) {
+      console.error('Error adding category:', error);
+    }
   };
 
   const handleEditCategory = () => {
@@ -59,7 +75,7 @@ const Category = () => {
   };
 
   const filteredCategories = categories.filter((category) => {
-    const fullName = `${category.categoryName} ${category.categoryDescription}`;
+    const fullName = `${category.category_name} ${category.categoryDescription}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -83,7 +99,6 @@ const Category = () => {
           <tr>
             <th>ID</th>
             <th>Category Name</th>
-            <th>Category Description</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -91,8 +106,7 @@ const Category = () => {
           {filteredCategories.map((category) => (
             <tr key={category.id}>
               <td>{category.id}</td>
-              <td>{category.categoryName}</td>
-              <td>{category.categoryDescription}</td>
+              <td>{category.category_name}</td>
               <td>
                 <Button variant="primary" size="sm" onClick={() => handleShowEditModal(category)}>
                   Edit
@@ -117,18 +131,11 @@ const Category = () => {
               <Form.Label>Category Name</Form.Label>
               <Form.Control
                 type="text"
-                value={newCategory.categoryName}
-                onChange={(e) => setNewCategory({ ...newCategory, categoryName: e.target.value })}
+                value={newCategory.category_name}
+                onChange={(e) => setNewCategory({ ...newCategory, category_name: e.target.value })}
               />
             </Form.Group>
-            <Form.Group controlId="formCategoryDescription">
-              <Form.Label>Category Description</Form.Label>
-              <Form.Control
-                type="text"
-                value={newCategory.categoryDescription}
-                onChange={(e) => setNewCategory({ ...newCategory, categoryDescription: e.target.value })}
-              />
-            </Form.Group>
+            
           </Form>
         </Modal.Body>
         <Modal.Footer>

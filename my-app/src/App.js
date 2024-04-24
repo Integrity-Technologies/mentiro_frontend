@@ -3,7 +3,6 @@ import {BrowserRouter, Routes, Route } from "react-router-dom";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useSelector, useDispatch } from "react-redux";
 import Login from './components/Login';
 import ProtectedRoute from './routes/ProtectedRoute';
 import SignUp from './components/SignUp';
@@ -19,22 +18,26 @@ import Logout from "./components/Logout";
 import Assessment from "./components/Customer/Assesment";
 import { fetchUser } from "./reducers/fetchUser";
 import Candidates from "./components/Candidates/Candidate.jsx";
+import { useSelector, useDispatch } from "react-redux";
+
 
 
 
 function App() {
-  // const [user, setUser] = useState({})
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  // useEffect( async () => {
-  //   // Fetch user information when the component mounts
-  //   const result = await dispatch(fetchUser());
-  //   console.log(result);
-  // }, [dispatch]);
+  useEffect(() => {
+    // Fetch user information when the component mounts
+    dispatch(fetchUser());
+  }, [dispatch]); // Run this effect only once on component mount
 
   console.log("User:", user);
   console.log("Token:", token);
+
+  // Add conditional rendering to handle the scenario when user is not yet fetched
+  
+
 
 
 
@@ -64,7 +67,7 @@ function App() {
     <Route path="/logout" element={<Logout />} />
     <Route path="/assesment" element={<Assessment />} />
     <Route path="/candidates" element={<Candidates />} />
-     {/* <Route path="/admin-dashboard" element={<Admin />} /> */}
+     <Route path="/admin-dashboard" element={<Admin />} />
     <Route path="/customer-dashboard" element={<Customer />} /> 
 
     <Route

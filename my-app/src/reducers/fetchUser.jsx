@@ -34,7 +34,6 @@ export const fetchUser = () => {
       .then((response) => {
         // If the request is successful, dispatch fetchUserSuccess action with user data
         dispatch(fetchUserSuccess(response.data));
-        console.log(response.data + "from fetch user function")
       })
       .catch((error) => {
         // If there's an error, dispatch fetchUserFailure action with the error message

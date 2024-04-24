@@ -73,7 +73,7 @@ const ForgetPassword = () => {
                 {errors.server && (
                   <p className="text-danger">{errors.server}</p>
                 )}
-                <Button className="text-center" variant="primary" type="submit">
+                <Button className="text-center w-100" variant="dark" type="submit">
                   {t("forgetPassword.submit")}
                 </Button>
               </>
@@ -84,7 +84,7 @@ const ForgetPassword = () => {
               </p>
             )}
             <div className="text-center mt-3">
-              <NavLink to="/" className="btn btn-link">
+              <NavLink to="/" className="btn">
                 {t("common.back")}
               </NavLink>
             </div>

@@ -30,12 +30,16 @@ const LanguageToggleButton = ({ onLanguageChange }) => {
     <div>
       <Button onClick={() => changeLanguage("en")}>English</Button>
       <Button onClick={() => changeLanguage("ar")}>العربية</Button>
-      <Button onClick={handleLogout}>Logout</Button>
-      {showAlert && (
-        <Alert variant="success" className="mt-3">
-          Logout successful.
-        </Alert>
-      )}
+      <div className="fixed-bottom ml-md-5">
+       
+          {showAlert && (
+            <Alert variant="danger" className="w-25">
+              Logout successful.
+            </Alert>
+          )}
+          <Button onClick={handleLogout} variant="danger" className="ml-md-25">Logout</Button>
+        </div>
+      
     </div>
   );
 };

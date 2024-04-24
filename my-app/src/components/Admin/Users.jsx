@@ -1,42 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { fetchUsers } from '../../actions/userAction'; // Import actions
 
 const Users = () => {
   const { t, i18n } = useTranslation(); // Use useTranslation hook here
 
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      phone: "123-456-7890",
-      email: "john@example.com",
-      dateJoined: "2024-04-15",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Doe",
-      phone: "987-654-3210",
-      email: "jane@example.com",
-      dateJoined: "2024-04-16",
-    },
-  ]);
-
+  const [users, setUsers] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editUser, setEditUser] = useState(null);
   const [newUser, setNewUser] = useState({
     id: "",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     phone: "",
     email: "",
-    dateJoined: "",
+    created_at: "",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchUsers();
+      setUsers(data);
+    };
+    fetchData();
+  }, []);
+
 
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
@@ -54,11 +46,11 @@ const Users = () => {
     setUsers([...users, newUserWithId]);
     setNewUser({
       id: "",
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       phone: "",
       email: "",
-      dateJoined: "",
+      created_at: "",
     });
     handleCloseAddModal();
   };
@@ -74,7 +66,7 @@ const Users = () => {
   };
 
   const filteredUsers = users.filter((user) => {
-    const fullName = `${user.firstName} ${user.lastName}`;
+    const fullName = `${user.first_name} ${user.last_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -110,11 +102,11 @@ const Users = () => {
           {filteredUsers.map((user) => (
             <tr key={user.id}>
               <td>{user.id}</td>
-              <td>{user.firstName}</td>
-              <td>{user.lastName}</td>
+              <td>{user.first_name}</td>
+              <td>{user.last_name}</td>
               <td>{user.phone}</td>
               <td>{user.email}</td>
-              <td>{user.dateJoined}</td>
+              <td>{user.created_at}</td>
               <td>
                 <Button
                   variant="primary"

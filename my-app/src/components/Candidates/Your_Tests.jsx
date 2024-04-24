@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container, Button, Card } from "react-bootstrap";
 import TestTime from "./TestTime";
 
 const YourTests = () => {
@@ -14,13 +14,13 @@ const YourTests = () => {
       {showTime ? (
         <TestTime />
       ) : (
-        <div>
-          <Container className="text-center" style={{ height: "100vh" }}>
-            <h1 className="mb-4">Your Tests</h1>
+        <Container className="text-center" style={{ height: "100vh" }}>
+          <h1 className="mb-4">Your Tests</h1>
 
-            {/* First test */}
-            <div className="mb-3">
-              <h4 className="d-inline-block mr-3 mb-0">SEO Basics:</h4>
+          {/* First test */}
+          <Card className="mb-3 p-3 w-50 mx-auto">
+            <div className="d-flex align-items-center justify-content-between">
+              <h4 className="mb-0">SEO Basics:</h4>
               <Button
                 variant="dark"
                 className="w-25"
@@ -29,32 +29,38 @@ const YourTests = () => {
                 Start
               </Button>
             </div>
+          </Card>
 
-            {/* Second test */}
-            <div className="mb-3">
-              <h4 className="d-inline-block mr-3 mb-0">SEO Basics:</h4>
+          {/* Second test */}
+          <Card className="mb-3 p-3 w-50 mx-auto">
+            <div className="d-flex align-items-center justify-content-between">
+              <h4 className="mb-0">Engish:</h4>
               <Button variant="dark" className="w-25">
                 Start
               </Button>
             </div>
+          </Card>
 
-            {/* Third test */}
-            <div className="mb-3">
-              <h4 className="d-inline-block mr-3 mb-0">SEO Basics:</h4>
+          {/* Third test */}
+          <Card className="mb-3 p-3 w-50 mx-auto">
+            <div className="d-flex align-items-center justify-content-between">
+              <h4 className="mb-0">Html:</h4>
               <Button variant="dark" className="w-25">
                 Start
               </Button>
             </div>
+          </Card>
 
-            {/* Fourth test */}
-            <div className="mb-3">
-              <h4 className="d-inline-block mr-3 mb-0">SEO Basics:</h4>
+          {/* Fourth test */}
+          <Card className="mb-3 p-3 w-50 mx-auto">
+            <div className="d-flex align-items-center justify-content-between">
+              <h4 className="mb-0">SEO Basics:</h4>
               <Button variant="dark" className="w-25">
                 Start
               </Button>
             </div>
-          </Container>
-        </div>
+          </Card>
+        </Container>
       )}
     </div>
   );
