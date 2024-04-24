@@ -24,16 +24,20 @@ import { useSelector, useDispatch } from "react-redux";
 
 
 function App() {
-  const { user, token } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-
+  let token
   useEffect(() => {
-    // Fetch user information when the component mounts
-    dispatch(fetchUser());
-  }, [dispatch]); // Run this effect only once on component mount
+   token = localStorage.getItem("token")
+  })
+  // const { user, token } = useSelector((state) => state.auth);
+  // const dispatch = useDispatch();
 
-  console.log("User:", user);
-  console.log("Token:", token);
+  // useEffect(() => {
+  //   // Fetch user information when the component mounts
+  //   dispatch(fetchUser());
+  // }, [dispatch]); // Run this effect only once on component mount
+
+  // console.log("User:", user);
+  // console.log("Token:", token);
 
   // Add conditional rendering to handle the scenario when user is not yet fetched
   
@@ -74,7 +78,7 @@ function App() {
             path="/admin-dashboard"
             element={
               <ProtectedRoute
-                user={user}
+                // user={user}
                 token={token}
                 adminComponent={<Admin />}
                 userComponent={<Customer />}

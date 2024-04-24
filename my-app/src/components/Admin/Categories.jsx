@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
-import { fetchCategories } from "../../actions/categoryAction";
-import { addCategory } from "../../actions/categoryAction";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllCategories, addCategory,  deleteCategory } from "../../actions/categoryAction"; // Correct import statement
 
 const Category = () => {
-  const { token } = useSelector((state) => state.auth);
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      category_name: "Category A",
-      categoryDescription: "Description for Category A",
-    },
-    {
-      id: 2,
-      category_name: "Category B",
-      categoryDescription: "Description for Category B",
-    },
-  ]);
+  const categories = useSelector((state) => state.category.categories); // Get categories from state
+  const dispatch = useDispatch(); // Initialize dispatch
+  
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -32,11 +21,14 @@ const Category = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchCategories();
-      setCategories(data);
+      try {
+        await dispatch(getAllCategories()); // Dispatch action to fetch categories
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
@@ -48,30 +40,36 @@ const Category = () => {
     setNewCategory(category);
   };
 
-  const handleAddCategory = () => {
+  const handleAddCategory = async () => {
     try {
-      const response =  addCategory(newCategory, token);
-      if (response) {
-        // Assuming your backend returns the added category data,
-        // you can update the categories state with the response data
-        setCategories([...categories, response]);
-        handleCloseAddModal();
-      } else {
-        console.error('Failed to add category');
-      }
+      const { responseData, token } = await dispatch(addCategory(newCategory)); // Dispatch action to add category
+      
+      // Use responseData and token as needed
+      console.log(responseData);
+      console.log(token);
+  
+      handleCloseAddModal();
     } catch (error) {
       console.error('Error adding category:', error);
     }
   };
+  
 
-  const handleEditCategory = () => {
-    setCategories(categories.map((category) => (category.id === editCategory.id ? newCategory : category)));
-    setEditCategory(null);
-    handleCloseEditModal();
+  const handleEditCategory = async () => {
+    try {
+      await dispatch(editCategory(editCategory.id, newCategory)); // Dispatch action to edit category
+      handleCloseEditModal();
+    } catch (error) {
+      console.error('Error editing category:', error);
+    }
   };
 
-  const handleDeleteCategory = (id) => {
-    setCategories(categories.filter((category) => category.id !== id));
+  const handleDeleteCategory = async (id) => {
+    try {
+      await dispatch(deleteCategory(id)); // Dispatch action to delete category
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
   };
 
   const filteredCategories = categories.filter((category) => {
