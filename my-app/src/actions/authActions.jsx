@@ -9,6 +9,11 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const AUTH_ERROR = "AUTH_ERROR";
 const baseURL = "http://localhost:5000/api";
 
+
+export const getToken = () => {
+  return localStorage.getItem("token");
+};
+
 // Action creators
 export const signUp = (userData) => async (dispatch) => {
   try {
@@ -28,18 +33,24 @@ export const signUp = (userData) => async (dispatch) => {
 
 // authAction.jsx
 
+
+
 export const login = (userData) => async (dispatch) => {
   try {
     const res = await axios.post(`${baseURL}/users/login`, userData);
     console.log("~ login ~ res:", res);
 
-    // Assuming the backend response contains both user data and token
-    const { user, token } = res.data;
+    // Extract user data and token from the response
+    const { result, token } = res.data;
+console.log(result.permissions)
+    // Store user data and token in localStorage
+    localStorage.setItem("user",result.permissions);
+    localStorage.setItem("token", token);
 
     dispatch({
       type: LOGIN_SUCCESS,
       payload: {
-        user, // Include user data in the payload
+        user: result, // Include user data in the payload
         token, // Include token in the payload
       },
     });

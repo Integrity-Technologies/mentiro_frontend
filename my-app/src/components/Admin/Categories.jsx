@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllCategories, addCategory,  deleteCategory } from "../../actions/categoryAction"; // Correct import statement
+import { getAllCategories, addCategory, deleteCategory} from "../../actions/categoryAction"; // Correct import statement
+import { editCategory } from "../../actions/categoryAction";
+import { getToken } from "../../actions/authActions"; // Import getToken function
+
 
 const Category = () => {
   const categories = useSelector((state) => state.category.categories); // Get categories from state
   const dispatch = useDispatch(); // Initialize dispatch
   
-
+const [newCategoryId, setnewCategoryId] = useState("")
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editCategory, setEditCategory] = useState(null);
-  const [newCategory, setNewCategory] = useState({
-    id: "",
-    category_name: "",
-  });
+  // const [editCategory, setEditCategory] = useState(null);
+  const [newCategory, setNewCategory] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
+  const token = useSelector(getToken); // Get token from Redux store
+
 
 
   useEffect(() => {
@@ -36,39 +38,50 @@ const Category = () => {
   const handleCloseEditModal = () => setShowEditModal(false);
   const handleShowEditModal = (category) => {
     setShowEditModal(true);
-    setEditCategory(category);
-    setNewCategory(category);
+    // setEditCategory(category);
+    console.log(category[2]  + "from handleShowEditModal ");
+    setNewCategory(category[2]);
+    setnewCategoryId(category.id)
+    handleEditCategory(category.id, category[2]);
   };
 
   const handleAddCategory = async () => {
     try {
-      const { responseData, token } = await dispatch(addCategory(newCategory)); // Dispatch action to add category
-      
-      // Use responseData and token as needed
+      const responseData = await dispatch(addCategory(newCategory));
       console.log(responseData);
-      console.log(token);
-  
+      console.log(token); // Console log the token
       handleCloseAddModal();
+      
+      // Dispatch action to fetch all categories again
+      await dispatch(getAllCategories());
     } catch (error) {
       console.error('Error adding category:', error);
     }
   };
   
 
-  const handleEditCategory = async () => {
+  const handleEditCategory = async (categoryId, updatedCategoryData) => {
     try {
-      await dispatch(editCategory(editCategory.id, newCategory)); // Dispatch action to edit category
-      handleCloseEditModal();
+      console.log(newCategoryId, newCategory );
+      await dispatch(editCategory(categoryId, updatedCategoryData));
+      // Handle success or update UI
+      await dispatch(getAllCategories());
+
     } catch (error) {
       console.error('Error editing category:', error);
+      // Handle error or display error message
     }
   };
 
-  const handleDeleteCategory = async (id) => {
+  const handleDeleteCategory = async (categoryId) => {
     try {
-      await dispatch(deleteCategory(id)); // Dispatch action to delete category
+      await dispatch(deleteCategory(categoryId));
+      // Handle success or update UI
+
+      await dispatch(getAllCategories());
     } catch (error) {
       console.error('Error deleting category:', error);
+      // Handle error or display error message
     }
   };
 
@@ -129,8 +142,8 @@ const Category = () => {
               <Form.Label>Category Name</Form.Label>
               <Form.Control
                 type="text"
-                value={newCategory.category_name}
-                onChange={(e) => setNewCategory({ ...newCategory, category_name: e.target.value })}
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
               />
             </Form.Group>
             
@@ -157,18 +170,11 @@ const Category = () => {
               <Form.Label>Category Name</Form.Label>
               <Form.Control
                 type="text"
-                value={newCategory.categoryName}
-                onChange={(e) => setNewCategory({ ...newCategory, categoryName: e.target.value })}
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="formCategoryDescription">
-              <Form.Label>Category Description</Form.Label>
-              <Form.Control
-                type="text"
-                value={newCategory.categoryDescription}
-                onChange={(e) => setNewCategory({ ...newCategory, categoryDescription: e.target.value })}
-              />
-            </Form.Group>
+            
           </Form>
         </Modal.Body>
         <Modal.Footer>

@@ -13,10 +13,9 @@ const Login = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
-  console.log("🚀 ~ Login ~ authError:", authError);
+
   const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
-  // const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,7 +24,6 @@ const Login = () => {
     const email = formData.get("email");
     const password = formData.get("password");
 
-    // Validate inputs
     const errors = {
       ...(email ? {} : { email: t("login.errors.emailRequired") }),
       ...(password ? {} : { password: t("login.errors.passwordRequired") }),
@@ -33,17 +31,15 @@ const Login = () => {
 
     setErrors(errors);
 
-    // Proceed
     if (Object.keys(errors).length === 0) {
       try {
         setShowAlert(true);
         const result = await dispatch(login({ email, password }));
-        console.log(result)
-       
-        setTimeout(() => setShowAlert(false), 2000); // success
-        navigate("/customer-dashboard")
+        console.log(result);
+        setTimeout(() => setShowAlert(false), 3000); // success
+        navigate("/customer-dashboard");
       } catch (error) {
-        setTimeout(() => setShowAlert(false), 2000); // error
+        setTimeout(() => setShowAlert(false), 3000); // error
       }
     }
   };
@@ -91,7 +87,6 @@ const Login = () => {
               <p className="text-danger">{authError.general}</p>
             )}
             <NavLink to="/forget-password">{t("login.forgotPassword")}</NavLink>{" "}
-            
             <br /> <br />
             <Button variant="dark" className="w-100" type="submit">
               {t("login.submit")}
@@ -111,6 +106,7 @@ const Login = () => {
               {authError ? authError : "User Login Successfully"}
             </Alert>
           )}
+        
         </div>
       </div>
     </div>

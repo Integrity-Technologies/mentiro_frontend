@@ -1,4 +1,3 @@
-// categoryReducer.js
 import {
     GET_ALL_CATEGORIES_SUCCESS,
     ADD_CATEGORY_SUCCESS,
