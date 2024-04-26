@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
+import { Table, Button, Modal, Form, FormControl, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllCategories, addCategory, deleteCategory} from "../../actions/categoryAction"; // Correct import statement
+import { getAllCategories, addCategory, deleteCategory } from "../../actions/categoryAction"; // Correct import statement
 import { editCategory } from "../../actions/categoryAction";
 import { getToken } from "../../actions/authActions"; // Import getToken function
 
@@ -10,16 +10,13 @@ const Category = () => {
   const categories = useSelector((state) => state.category.categories); // Get categories from state
   const dispatch = useDispatch(); // Initialize dispatch
   
-const [categoryId, setCategoryId] = useState("")
+  const [categoryId, setCategoryId] = useState("")
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  // const [editCategory, setEditCategory] = useState(null);
   const [newCategory, setNewCategory] = useState("");
-
   const [searchTerm, setSearchTerm] = useState("");
+  const [categoryNameError, setCategoryNameError] = useState(""); // State for category name validation error
   const token = useSelector(getToken); // Get token from Redux store
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,33 +29,18 @@ const [categoryId, setCategoryId] = useState("")
     fetchData();
   }, [dispatch]);
 
-  const handleCloseAddModal = () => setShowAddModal(false);
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    setCategoryNameError(""); // Clear category name error when modal closes
+    setNewCategory(""); // Clear category name input when modal closes
+  };
+
   const handleShowAddModal = () => setShowAddModal(true);
 
-  const handleCloseEditModal = () => setShowEditModal(false);
-  // const handleShowEditModal = (category) => {
-  //   setShowEditModal(true);
-  //   // setEditCategory(category);
-  //   console.log(category[2]  + "from handleShowEditModal ");
-  //   setNewCategory(category[2]);
-  //   setnewCategoryId(category.id)
-  //   handleEditCategory(category.id, category[2]);
-  // };
-
-  const handleAddCategory = async () => {
-    try {
-      const responseData = await dispatch(addCategory(newCategory));
-      console.log(responseData);
-      console.log(token); // Console log the token
-      handleCloseAddModal();
-      
-      // Dispatch action to fetch all categories again
-      await dispatch(getAllCategories());
-    } catch (error) {
-      console.error('Error adding category:', error);
-    }
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setCategoryNameError(""); // Clear category name error when modal closes
   };
-  
 
   const handleShowEditModal = (category) => {
     setShowEditModal(true);
@@ -66,34 +48,42 @@ const [categoryId, setCategoryId] = useState("")
     setCategoryId(category.id); // Set the category ID
   };
 
-  const handleEditCategory = async () => {
+  const handleAddCategory = async () => {
     try {
-      // Validate newCategory
       if (!newCategory.trim()) {
-        console.error('Category name is required');
+        setCategoryNameError("Category name is required");
         return;
       }
-  
-      // Dispatch editCategory action with category ID and updated category name
-      await dispatch(editCategory(categoryId, newCategory));
-
+      const responseData = await dispatch(addCategory(newCategory));
+      console.log(responseData);
+      console.log(token); // Console log the token
+      handleCloseAddModal();
       await dispatch(getAllCategories());
+    } catch (error) {
+      console.error('Error adding category:', error);
+    }
+  };
 
+  const handleEditCategory = async () => {
+    try {
+      if (!newCategory.trim()) {
+        setCategoryNameError("Category name is required");
+        return;
+      }
+      await dispatch(editCategory(categoryId, newCategory));
+      await dispatch(getAllCategories());
       handleCloseEditModal();
-
     } catch (error) {
       console.error('Error editing category:', error);
     }
   };
+
   const handleDeleteCategory = async (categoryId) => {
     try {
       await dispatch(deleteCategory(categoryId));
-      // Handle success or update UI
-
       await dispatch(getAllCategories());
     } catch (error) {
       console.error('Error deleting category:', error);
-      // Handle error or display error message
     }
   };
 
@@ -155,10 +145,13 @@ const [categoryId, setCategoryId] = useState("")
               <Form.Control
                 type="text"
                 value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
+                onChange={(e) => {
+                  setNewCategory(e.target.value);
+                  setCategoryNameError(""); // Clear error when user starts typing
+                }}
               />
+              {categoryNameError && <Alert variant="danger">{categoryNameError}</Alert>}
             </Form.Group>
-            
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -183,10 +176,13 @@ const [categoryId, setCategoryId] = useState("")
               <Form.Control
                 type="text"
                 value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
+                onChange={(e) => {
+                  setNewCategory(e.target.value);
+                  setCategoryNameError(""); // Clear error when user starts typing
+                }}
               />
+              {categoryNameError && <Alert variant="danger">{categoryNameError}</Alert>}
             </Form.Group>
-            
           </Form>
         </Modal.Body>
         <Modal.Footer>

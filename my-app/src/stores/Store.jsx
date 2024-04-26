@@ -5,11 +5,15 @@ import authReducer from '../reducers/authReducer';
 import {thunk} from "redux-thunk"
 import categoryReducer from '../reducers/categoryReducer';
 import userReducer from '../reducers/userReducer';
+import testReducer from '../reducers/testReducer';
+import companyReducer from '../reducers/companyReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   category: categoryReducer,
-  user: userReducer
+  user: userReducer,
+  test: testReducer,
+  company: companyReducer,
   // Add other reducers here if needed
 });
 

@@ -73,6 +73,7 @@
       "lastName": "Last Name",
       "phone": "Phone",
       "email": "Email",
+      "password": "Password",
       "dateJoined": "Date Joined",
       "actions": "Actions"
     },
@@ -84,6 +85,7 @@
           "lastName": "Last Name",
           "phone": "Phone",
           "email": "Email",
+          "password": "Password",
           "dateJoined": "Date Joined"
         },
         "buttons": {
@@ -98,6 +100,7 @@
           "lastName": "Last Name",
           "phone": "Phone",
           "email": "Email",
+          "password": "Password",
           "dateJoined": "Date Joined"
         },
         "buttons": {

@@ -10,13 +10,23 @@ export const USER_ERROR = "USER_ERROR";
 
 export const getAllUsers = () => async (dispatch) => {
   try {
+    // Fetch users data from the API
     const res = await axios.get("http://localhost:5000/api/users/Allusers");
-    console.log(res.data);
-    dispatch({ type: FETCH_USERS_SUCCESS, payload: res.data });
-    return res.data;
+
+    // Format created_at field for each user
+    const formattedUsers = res.data.map((user) => ({
+      ...user,
+      created_at: user.created_at.split("T")[0], // Extract date part only
+    }));
+
+    // Dispatch the action with formatted user data
+    dispatch({ type: FETCH_USERS_SUCCESS, payload: formattedUsers });
+
+    // Return the formatted user data
+    return formattedUsers;
   } catch (error) {
-    const errorMessage = JSON.stringify(error.response.data.error);
-    console.log(errorMessage);
+    // Handle errors and dispatch an error action
+    const errorMessage = error.response?.data?.error || "Error fetching users";
     dispatch({ type: USER_ERROR, payload: errorMessage });
     throw error;
   }
@@ -36,11 +46,8 @@ export const getAllUsers = () => async (dispatch) => {
 // };
 export const addUser = newUser => async dispatch => {
   try {
-    const response = await fetch("http://localhost:5000/api/users/Allusers", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+    console.log(newUser.created_at + "from user action");
+    const response = await axios.post("http://localhost:5000/api/users/add", {
       body: JSON.stringify(newUser)
     });
     const data = await response.json();
@@ -52,6 +59,7 @@ export const addUser = newUser => async dispatch => {
     return null;
   }
 };
+
 
 export const editUser = (userId, updatedUser) => async dispatch => {
   console.log(updatedUser);

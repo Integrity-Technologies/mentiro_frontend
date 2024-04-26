@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { getAllUsers, deleteUser, editUser } from '../../actions/userAction'; // Import actions
+import { getAllUsers, deleteUser, editUser, addUser } from '../../actions/userAction'; // Import actions
 import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch hook
 
 
@@ -45,10 +45,17 @@ const Users = () => {
     setNewUser(user);
   };
 
-  const handleAddUser = () => {
-    // Logic to add a new user
-    handleCloseAddModal();
-  };
+  const handleAddUser = async () => {
+    try {
+      const addedUser = await dispatch(addUser(newUser)); // Dispatch addUser action
+      if (addedUser) {
+        handleCloseAddModal();
+      }
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
+  };   
+
 
   const handleEditUser = async () =>  {
     try {

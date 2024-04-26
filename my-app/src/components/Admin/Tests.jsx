@@ -1,75 +1,70 @@
-import React, { useState } from "react";
-import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Table, Button, Modal, Form, FormControl, Alert } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { fetchTests, addTest, deleteTest, editTest } from "../../actions/testAction";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Tests = () => {
-  const { t, i18n } = useTranslation(); // Use useTranslation hook here
-  const [tests, setTests] = useState([
-    {
-      id: 1,
-      testName: "Test 1",
-      testDescription: "Description for Test 1",
-      testCategories: "Category A",
-      testLevel: "Beginner",
-      companyName: "Company A",
-    },
-    {
-      id: 2,
-      testName: "Test 2",
-      testDescription: "Description for Test 2",
-      testCategories: "Category B",
-      testLevel: "Intermediate",
-      companyName: "Company B",
-    },
-  ]);
-
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
+  const tests = useSelector((state) => state.test.tests);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editTest, setEditTest] = useState(null);
+  const [neweditTest, setNewEditTest] = useState(null);
   const [newTest, setNewTest] = useState({
-    id: "",
-    testName: "",
-    testDescription: "",
-    testCategories: "",
-    testLevel: "",
-    companyName: "",
+    test_name: "",
+    test_description: "",
+    category_names: [],
+    company_name: "",
   });
-
   const [searchTerm, setSearchTerm] = useState("");
+  const [validationError, setValidationError] = useState(""); // State for validation error
 
-  const handleCloseAddModal = () => setShowAddModal(false);
+  useEffect(() => {
+    dispatch(fetchTests());
+  }, [dispatch]);
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    setValidationError(""); // Clear validation error when modal closes
+  };
   const handleShowAddModal = () => setShowAddModal(true);
 
-  const handleCloseEditModal = () => setShowEditModal(false);
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setValidationError(""); // Clear validation error when modal closes
+  };
   const handleShowEditModal = (test) => {
     setShowEditModal(true);
-    setEditTest(test);
+    setNewEditTest(test);
     setNewTest(test);
   };
 
-  const handleAddTest = () => {
-    const id = tests.length > 0 ? tests[tests.length - 1].id + 1 : 1; // Generate a unique ID
-    const newTestWithId = { ...newTest, id }; // Add ID to the new test object
-    setTests([...tests, newTestWithId]);
-    setNewTest({
-      id: "",
-      testName: "",
-      testDescription: "",
-      testCategories: "",
-      testLevel: "",
-      companyName: "",
-    });
+  const handleAddTest = async () => {
+    if (!newTest.test_name || !newTest.test_description || !newTest.categories || !newTest.company_id) {
+      setValidationError("All fields are required");
+      return;
+    }
+   await dispatch(addTest(newTest));
+
+   await dispatch(fetchTests());
     handleCloseAddModal();
   };
 
-  const handleEditTest = () => {
-    setTests(tests.map((test) => (test.id === editTest.id ? newTest : test)));
-    setEditTest(null);
+  const handleEditTest = async () => {
+    if (!newTest.test_name || !newTest.test_description || !newTest.category_names || !newTest.company_name) {
+      setValidationError("All fields are required");
+      return;
+    }
+    await dispatch(editTest(editTest.id, newTest));
+
+    await dispatch(fetchTests());
     handleCloseEditModal();
   };
 
   const handleDeleteTest = (id) => {
-    setTests(tests.filter((test) => test.id !== id));
+    dispatch(deleteTest(id));
   };
 
   const filteredTests = tests.filter((test) => {
@@ -99,7 +94,6 @@ const Tests = () => {
             <th>{t("tests.tableHeaders.testName")}</th>
             <th>{t("tests.tableHeaders.testDescription")}</th>
             <th>{t("tests.tableHeaders.testCategories")}</th>
-            <th>{t("tests.tableHeaders.testLevel")}</th>
             <th>{t("tests.tableHeaders.companyName")}</th>
             <th>{t("tests.tableHeaders.actions")}</th>
           </tr>
@@ -108,11 +102,10 @@ const Tests = () => {
           {filteredTests.map((test) => (
             <tr key={test.id}>
               <td>{test.id}</td>
-              <td>{test.testName}</td>
-              <td>{test.testDescription}</td>
-              <td>{test.testCategories}</td>
-              <td>{test.testLevel}</td>
-              <td>{test.companyName}</td>
+              <td>{test.test_name}</td>
+              <td>{test.test_description}</td>
+              <td>{test.categories}</td>
+              <td>{test.company_id}</td>
               <td>
                 <Button
                   variant="primary"
@@ -147,9 +140,9 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.testName}
+                value={newTest.test_name}
                 onChange={(e) =>
-                  setNewTest({ ...newTest, testName: e.target.value })
+                  setNewTest({ ...newTest, test_name: e.target.value })
                 }
               />
             </Form.Group>
@@ -159,9 +152,9 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.testDescription}
+                value={newTest.test_description}
                 onChange={(e) =>
-                  setNewTest({ ...newTest, testDescription: e.target.value })
+                  setNewTest({ ...newTest, test_description: e.target.value })
                 }
               />
             </Form.Group>
@@ -171,22 +164,13 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.testCategories}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, testCategories: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group controlId="formTestLevel">
-              <Form.Label>
-                {t("tests.modals.addTest.formLabels.testLevel")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newTest.testLevel}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, testLevel: e.target.value })
-                }
+                value={newTest.category_names}
+                onChange={(e) => {
+                  // Split the input value by comma to extract individual category names
+                  const categoryNamesArray = e.target.value.split(',');
+                  // Update the category_names state with the array of category names
+                  setNewTest({ ...newTest, category_names: categoryNamesArray });
+                }}
               />
             </Form.Group>
             <Form.Group controlId="formCompanyName">
@@ -195,12 +179,13 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.companyName}
+                value={newTest.company_name}
                 onChange={(e) =>
-                  setNewTest({ ...newTest, companyName: e.target.value })
+                  setNewTest({ ...newTest, company_name: e.target.value })
                 }
               />
             </Form.Group>
+            {validationError && <Alert variant="danger">{validationError}</Alert>}
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -230,9 +215,9 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.testName}
+                value={newTest.test_name}
                 onChange={(e) =>
-                  setNewTest({ ...newTest, testName: e.target.value })
+                  setNewTest({ ...newTest, test_name: e.target.value })
                 }
               />
             </Form.Group>
@@ -242,9 +227,9 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.testDescription}
+                value={newTest.test_description}
                 onChange={(e) =>
-                  setNewTest({ ...newTest, testDescription: e.target.value })
+                  setNewTest({ ...newTest, test_description: e.target.value })
                 }
               />
             </Form.Group>
@@ -254,22 +239,13 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.testCategories}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, testCategories: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group controlId="formTestLevel">
-              <Form.Label>
-                {t("tests.modals.editTest.formLabels.testLevel")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newTest.testLevel}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, testLevel: e.target.value })
-                }
+                value={newTest.category_names}
+                onChange={(e) => {
+                  // Split the input value by comma to extract individual category names
+                  const categoryNamesArray = e.target.value.split(',');
+                  // Update the category_names state with the array of category names
+                  setNewTest({ ...newTest, category_names: categoryNamesArray });
+                }}
               />
             </Form.Group>
             <Form.Group controlId="formCompanyName">
@@ -278,12 +254,13 @@ const Tests = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newTest.companyName}
+                value={newTest.company_name}
                 onChange={(e) =>
-                  setNewTest({ ...newTest, companyName: e.target.value })
+                  setNewTest({ ...newTest, company_name: e.target.value })
                 }
               />
             </Form.Group>
+            {validationError && <Alert variant="danger">{validationError}</Alert>}
           </Form>
         </Modal.Body>
         <Modal.Footer>
