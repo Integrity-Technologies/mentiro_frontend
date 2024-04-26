@@ -14,6 +14,9 @@ function ResetPasswordForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Debugging code to log the current location
+  console.log("Current Location:", location.pathname);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,16 +26,19 @@ function ResetPasswordForm() {
       return;
     }
 
-    // Dispatch the resetPassword action
+    // Extract token from URL query parameters
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get("token");
+
+    // Dispatch the resetPassword action
     const result = await dispatch(
       resetPassword({ token, newPassword, confirmPassword })
     );
 
     if (result.success) {
       setAlert({ variant: "success", message: "Password reset successful" });
-      navigate("/");
+      setTimeout(() => navigate("/"), 2000); // success
+      // navigate("/");
     } else {
       setAlert({
         variant: "danger",
@@ -40,7 +46,6 @@ function ResetPasswordForm() {
       });
     }
   };
-
   return (
     <div className="container">
       <div className="row justify-content-center">

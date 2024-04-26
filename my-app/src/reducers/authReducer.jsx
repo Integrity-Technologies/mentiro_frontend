@@ -1,6 +1,6 @@
 // authReducer.js
 
-import { SIGNUP_SUCCESS, LOGIN_SUCCESS, FORGOT_PASSWORD_SUCCESS, AUTH_ERROR, LOGOUT_SUCCESS } from '../actions/authActions';
+import { SIGNUP_SUCCESS, LOGIN_SUCCESS, FORGOT_PASSWORD_SUCCESS, AUTH_ERROR, LOGOUT_SUCCESS, RESET_PASSWORD_SUCCESS } from '../actions/authActions';
 
 const initialState = {
   user: null,
@@ -13,7 +13,7 @@ const authReducer = (state = initialState, action) => {
     case SIGNUP_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
-      localStorage.setItem("user", action.payload.user.result.permissions);
+      localStorage.setItem("user", action.payload.user);
       return {
         ...state,
         user: action.payload.user,
@@ -27,6 +27,12 @@ const authReducer = (state = initialState, action) => {
         user: null,
         error: null,
       };
+      case RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        user: null,
+        error: null,
+      } 
     case AUTH_ERROR:
       return {
         ...state,

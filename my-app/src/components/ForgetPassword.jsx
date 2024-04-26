@@ -5,11 +5,12 @@ import Button from "react-bootstrap/Button";
 import { forgotPassword } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Alert from "react-bootstrap/Alert";
 
 const ForgetPassword = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const authError = useSelector((state) => state.auth.error);
+  const authError = useSelector((state) => state.auth.error); // Retrieve error from Redux state
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -69,9 +70,9 @@ const ForgetPassword = () => {
                     </Form.Text>
                   )}
                 </Form.Group>
-                {authError && <p className="text-danger">{authError}</p>}
+                {authError && <Alert variant="danger">{authError}</Alert>} {/* Display error in Alert component */}
                 {errors.server && (
-                  <p className="text-danger">{errors.server}</p>
+                  <Alert variant="danger">{errors.server}</Alert>
                 )}
                 <Button className="text-center w-100" variant="dark" type="submit">
                   {t("forgetPassword.submit")}

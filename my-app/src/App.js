@@ -57,8 +57,9 @@ console.log(user, token + "from local storage")
           <Route path="/logout" element={<Logout />} />
           <Route path="/assesment" element={<Assessment />} />
           <Route path="/candidates" element={<Candidates />} />
-          {/* <Route path="/admin-dashboard" element={<Admin />} /> */}
+          <Route path="/admin-dashboard" element={<Admin />} />
           <Route path="/customer-dashboard" element={<Customer />} /> 
+          <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
 
           <Route
             path="/admin-dashboard"
@@ -71,7 +72,6 @@ console.log(user, token + "from local storage")
               />
             }
           />
-          <Route path="/user/password/reset" element={<ResetPasswordForm />} />
         </Routes>
       </BrowserRouter>
     </>

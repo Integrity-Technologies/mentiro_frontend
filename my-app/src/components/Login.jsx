@@ -34,8 +34,8 @@ const Login = () => {
     if (Object.keys(errors).length === 0) {
       try {
         setShowAlert(true);
-        const result = await dispatch(login({ email, password }));
-        console.log(result);
+        const newresult = await dispatch(login({ email, password }));
+        console.log(newresult);
         setTimeout(() => setShowAlert(false), 3000); // success
         navigate("/customer-dashboard");
       } catch (error) {

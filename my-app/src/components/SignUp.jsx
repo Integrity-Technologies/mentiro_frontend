@@ -3,9 +3,10 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Alert from "react-bootstrap/Alert";
+
 import { useNavigate } from "react-router-dom";
 const logoImage = "/assets/icon.jpg";
 
@@ -17,7 +18,7 @@ const SignUp = () => {
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
-   const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const userData = {
@@ -27,51 +28,51 @@ const SignUp = () => {
       phone: formData.get("phone"),
       password: formData.get("password"),
     };
-
+  
     // Initialize the error object
     let newErrors = {};
-
+  
     // Check for first name
     if (!userData.first_name) {
       newErrors.first_name = t("signup.errors.firstNameRequired");
     }
-
+  
     // Check for last name
     if (!userData.last_name) {
       newErrors.last_name = t("signup.errors.lastNameRequired");
     }
-
+  
     // Email checks
     if (!userData.email) {
       newErrors.email = t("signup.errors.emailRequired");
     } else if (!validateEmail(userData.email)) {
       newErrors.email = t("signup.errors.emailInvalid");
     }
-
+  
     // Phone checks
     if (!userData.phone) {
       newErrors.phone = t("signup.errors.phoneRequired");
     } else if (!validatePhoneNumber(userData.phone)) {
       newErrors.phone = t("signup.errors.phoneInvalid");
     }
-
+  
     // Password checks
     if (!userData.password) {
       newErrors.password = t("signup.errors.passwordRequired");
     } else if (userData.password.length < 6) {
       newErrors.password = t("signup.errors.passwordLength");
     }
-
+  
     // Update errors state
     setErrors(newErrors);
-
-    // proceed
+  
+    // Proceed only if there are no errors
     if (Object.keys(newErrors).length === 0) {
       try {
         setShowAlert(true);
-        const result = await dispatch(signUp(userData));
-        console.log("🚀 ~ handleSubmit ~ result:", result);
-        if (result?.success) {
+        const newresult = await dispatch(signUp(userData));
+        console.log(newresult, userData);
+        if (newresult?.success) {
           navigate("/");
         }
         setTimeout(() => setShowAlert(false), 2000); // success
@@ -80,6 +81,7 @@ const SignUp = () => {
       }
     }
   };
+  
 
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

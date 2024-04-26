@@ -10,7 +10,7 @@ const Category = () => {
   const categories = useSelector((state) => state.category.categories); // Get categories from state
   const dispatch = useDispatch(); // Initialize dispatch
   
-const [newCategoryId, setnewCategoryId] = useState("")
+const [categoryId, setCategoryId] = useState("")
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   // const [editCategory, setEditCategory] = useState(null);
@@ -36,14 +36,14 @@ const [newCategoryId, setnewCategoryId] = useState("")
   const handleShowAddModal = () => setShowAddModal(true);
 
   const handleCloseEditModal = () => setShowEditModal(false);
-  const handleShowEditModal = (category) => {
-    setShowEditModal(true);
-    // setEditCategory(category);
-    console.log(category[2]  + "from handleShowEditModal ");
-    setNewCategory(category[2]);
-    setnewCategoryId(category.id)
-    handleEditCategory(category.id, category[2]);
-  };
+  // const handleShowEditModal = (category) => {
+  //   setShowEditModal(true);
+  //   // setEditCategory(category);
+  //   console.log(category[2]  + "from handleShowEditModal ");
+  //   setNewCategory(category[2]);
+  //   setnewCategoryId(category.id)
+  //   handleEditCategory(category.id, category[2]);
+  // };
 
   const handleAddCategory = async () => {
     try {
@@ -60,19 +60,31 @@ const [newCategoryId, setnewCategoryId] = useState("")
   };
   
 
-  const handleEditCategory = async (categoryId, updatedCategoryData) => {
+  const handleShowEditModal = (category) => {
+    setShowEditModal(true);
+    setNewCategory(category.category_name); // Set the initial value of the category name in the modal
+    setCategoryId(category.id); // Set the category ID
+  };
+
+  const handleEditCategory = async () => {
     try {
-      console.log(newCategoryId, newCategory );
-      await dispatch(editCategory(categoryId, updatedCategoryData));
-      // Handle success or update UI
+      // Validate newCategory
+      if (!newCategory.trim()) {
+        console.error('Category name is required');
+        return;
+      }
+  
+      // Dispatch editCategory action with category ID and updated category name
+      await dispatch(editCategory(categoryId, newCategory));
+
       await dispatch(getAllCategories());
+
+      handleCloseEditModal();
 
     } catch (error) {
       console.error('Error editing category:', error);
-      // Handle error or display error message
     }
   };
-
   const handleDeleteCategory = async (categoryId) => {
     try {
       await dispatch(deleteCategory(categoryId));

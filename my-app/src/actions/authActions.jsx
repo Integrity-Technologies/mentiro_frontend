@@ -109,6 +109,7 @@ export const forgotPassword = (userData) => async (dispatch) => {
 export const resetPassword = (passwordData) => async (dispatch) => {
   try {
     const { token, newPassword, confirmPassword } = passwordData; // Destructure passwordData object
+    console.log(token);
     const res = await axios.put(`${baseURL}/users/password/reset/:token`, {
       newPassword,
       confirmPassword,

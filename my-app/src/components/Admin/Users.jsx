@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { fetchUsers } from '../../actions/userAction'; // Import actions
+import { getAllUsers, deleteUser, editUser } from '../../actions/userAction'; // Import actions
+import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch hook
+
 
 const Users = () => {
-  const { t, i18n } = useTranslation(); // Use useTranslation hook here
-
-  const [users, setUsers] = useState([]);
+  const { t } = useTranslation(); // Use useTranslation hook here
+  const dispatch = useDispatch();
+  const users = useSelector(state => state.user.users); // Assuming your Redux store has a slice called 'users'
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editUser, setEditUser] = useState(null);
+  // const [editUser, setEditUser] = useState(null);
   const [newUser, setNewUser] = useState({
     id: "",
     first_name: "",
     last_name: "",
     phone: "",
     email: "",
+    password: "",
     created_at: "",
   });
 
@@ -23,12 +26,14 @@ const Users = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchUsers();
-      setUsers(data);
+      try {
+        await dispatch(getAllUsers()); // Dispatch action to fetch categories
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
     };
     fetchData();
-  }, []);
-
+  }, [dispatch]);
 
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
@@ -36,39 +41,43 @@ const Users = () => {
   const handleCloseEditModal = () => setShowEditModal(false);
   const handleShowEditModal = (user) => {
     setShowEditModal(true);
-    setEditUser(user);
+    // setEditUser(users);
     setNewUser(user);
   };
 
   const handleAddUser = () => {
-    const id = users.length > 0 ? users[users.length - 1].id + 1 : 1; // Generate a unique ID
-    const newUserWithId = { ...newUser, id }; // Add ID to the new user object
-    setUsers([...users, newUserWithId]);
-    setNewUser({
-      id: "",
-      first_name: "",
-      last_name: "",
-      phone: "",
-      email: "",
-      created_at: "",
-    });
+    // Logic to add a new user
     handleCloseAddModal();
   };
 
-  const handleEditUser = () => {
-    setUsers(users.map((user) => (user.id === editUser.id ? newUser : user)));
-    setEditUser(null);
-    handleCloseEditModal();
+  const handleEditUser = async () =>  {
+    try {
+    await dispatch(editUser(newUser.id, newUser));
+
+    await dispatch(getAllUsers()); 
+       handleCloseEditModal();
+    } catch (error) {
+      console.error('Error editing user:', error);
+    }
   };
 
-  const handleDeleteUser = (id) => {
-    setUsers(users.filter((user) => user.id !== id));
+  const handleDeleteUser = async (id) => {
+    try {
+      await dispatch(deleteUser(id)); // Dispatch deleteUser action
+
+      await dispatch(getAllUsers()); 
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      // Handle error if needed
+    }
   };
+
+  
 
   const filteredUsers = users.filter((user) => {
     const fullName = `${user.first_name} ${user.last_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  })
 
   return (
     <div>
@@ -85,7 +94,7 @@ const Users = () => {
       <Button variant="success" onClick={handleShowAddModal}>
         {t("users.addUserButton")}
       </Button>
-
+      <div className="table-responsive">
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -94,6 +103,7 @@ const Users = () => {
             <th>{t("users.tableHeaders.lastName")}</th>
             <th>{t("users.tableHeaders.phone")}</th>
             <th>{t("users.tableHeaders.email")}</th>
+            <th>{t("users.tableHeaders.password")}</th>
             <th>{t("users.tableHeaders.dateJoined")}</th>
             <th>{t("users.tableHeaders.actions")}</th>
           </tr>
@@ -106,6 +116,7 @@ const Users = () => {
               <td>{user.last_name}</td>
               <td>{user.phone}</td>
               <td>{user.email}</td>
+              <td>{user.password}</td>
               <td>{user.created_at}</td>
               <td>
                 <Button
@@ -127,6 +138,7 @@ const Users = () => {
           ))}
         </tbody>
       </Table>
+      </div>
 
       {/* Add User Modal */}
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
@@ -141,9 +153,9 @@ const Users = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newUser.firstName}
+                value={newUser.first_name}
                 onChange={(e) =>
-                  setNewUser({ ...newUser, firstName: e.target.value })
+                  setNewUser({ ...newUser, first_name: e.target.value })
                 }
               />
             </Form.Group>
@@ -153,9 +165,9 @@ const Users = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newUser.lastName}
+                value={newUser.last_name}
                 onChange={(e) =>
-                  setNewUser({ ...newUser, lastName: e.target.value })
+                  setNewUser({ ...newUser, last_name: e.target.value })
                 }
               />
             </Form.Group>
@@ -180,6 +192,18 @@ const Users = () => {
                 value={newUser.email}
                 onChange={(e) =>
                   setNewUser({ ...newUser, email: e.target.value })
+                }
+              />
+            </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label>
+                {t("users.modals.addUser.formLabels.password")}
+              </Form.Label>
+              <Form.Control
+                type="password"
+                value={newUser.password}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, password: e.target.value })
                 }
               />
             </Form.Group>
@@ -224,9 +248,9 @@ const Users = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newUser.firstName}
+                value={newUser.first_name}
                 onChange={(e) =>
-                  setNewUser({ ...newUser, firstName: e.target.value })
+                  setNewUser({ ...newUser, first_name: e.target.value })
                 }
               />
             </Form.Group>
@@ -236,9 +260,9 @@ const Users = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                value={newUser.lastName}
+                value={newUser.last_name}
                 onChange={(e) =>
-                  setNewUser({ ...newUser, lastName: e.target.value })
+                  setNewUser({ ...newUser, last_name: e.target.value })
                 }
               />
             </Form.Group>
@@ -263,6 +287,18 @@ const Users = () => {
                 value={newUser.email}
                 onChange={(e) =>
                   setNewUser({ ...newUser, email: e.target.value })
+                }
+              />
+            </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label>
+                {t("users.modals.editUser.formLabels.password")}
+              </Form.Label>
+              <Form.Control
+                type="password"
+                value={newUser.password}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, password: e.target.value })
                 }
               />
             </Form.Group>

@@ -40,8 +40,9 @@ export const addCategory = (categoryData) => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
+    console.log(token);
    
-    const res = await axios.post(`${baseURL}/category/create`, categoryData, axiosConfig);
+    const res = await axios.post(`${baseURL}/category/create`, { category_name: categoryData }, axiosConfig);
     console.log(res, token)
     dispatch({ type: ADD_CATEGORY_SUCCESS, payload: res.data });
     return res.data;
@@ -54,17 +55,10 @@ export const addCategory = (categoryData) => async (dispatch) => {
 };
 export const editCategory = (categoryId, categoryData) => async (dispatch) => {
   try {
-    const token = getToken(); // Retrieve token from local storage
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${token}` // Set authorization header
-      }
-    };
-    const res = await axios.put(`${baseURL}/category/edit/${categoryId}`, categoryData, axiosConfig);
+    const res = await axios.put(`${baseURL}/category/edit/${categoryId}`, { category_name: categoryData });
     if (res.status >= 200 && res.status < 300) {
       dispatch({ type: EDIT_CATEGORY_SUCCESS, payload: categoryId });
     } else {
-      // Handle unexpected status codes (optional)
       console.error('Unexpected status code:', res.status);
     }
     return res.data;
