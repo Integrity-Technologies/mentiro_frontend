@@ -44,7 +44,7 @@ export const login = (userData) => async (dispatch) => {
     const { result, token } = res.data;
 console.log(result.email)
     // Store user data and token in localStorage
-    localStorage.setItem("user",result.email);
+    localStorage.setItem("user",result);
     localStorage.setItem("token", token);
 
     dispatch({

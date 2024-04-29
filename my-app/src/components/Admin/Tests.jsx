@@ -42,7 +42,7 @@ const Tests = () => {
   };
 
   const handleAddTest = async () => {
-    if (!newTest.test_name || !newTest.test_description || !newTest.categories || !newTest.company_id) {
+    if (!newTest.test_name || !newTest.test_description || !newTest.category_names || !newTest.company_id) {
       setValidationError("All fields are required");
       return;
     }
