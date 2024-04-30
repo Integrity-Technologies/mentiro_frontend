@@ -32,25 +32,25 @@ export const getAllUsers = () => async (dispatch) => {
   }
 };
 
-// export const fetchUsers = () => async (dispatch) => {
+// export const addCandidate = (newCandidate) => async (dispatch) => {
 //   try {
-//     const response = await axios.get("http://localhost:5000/api/users/Allusers");
-//     const data = response.data; // Access the data property of the response
-//     dispatch({ type: FETCH_USERS_SUCCESS, payload: data });
-//     return res.data;
+//     const response = await axios.post("http://localhost:5000/api/candidate/create", newCandidate);
+//     const data = response.data;
+//     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: data });
+//     return data;
 //   } catch (error) {
-//     console.error("Error fetching users:", error);
-//     dispatch({ type: USER_ERROR, payload: error.message });
-//     throw error;
+//     console.error("Error adding candidate:", error);
+//     dispatch({ type: CANDIDATE_ERROR, payload: error.message });
+//     return null;
 //   }
 // };
-export const addUser = newUser => async dispatch => {
+
+
+export const addUser = (newUser) => async (dispatch) => {
   try {
-    console.log(newUser.created_at + "from user action");
-    const response = await axios.post("http://localhost:5000/api/users/add", {
-      body: JSON.stringify(newUser)
-    });
-    const data = await response.json();
+    console.log(newUser);
+    const response = await axios.post("http://localhost:5000/api/users/add", newUser);
+    const data =  response.data;
     dispatch({ type: ADD_USER_SUCCESS, payload: data });
     return data;
   } catch (error) {

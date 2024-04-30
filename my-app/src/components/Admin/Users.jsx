@@ -49,6 +49,7 @@ const Users = () => {
     try {
       const addedUser = await dispatch(addUser(newUser)); // Dispatch addUser action
       if (addedUser) {
+        await dispatch(getAllUsers());
         handleCloseAddModal();
       }
     } catch (error) {

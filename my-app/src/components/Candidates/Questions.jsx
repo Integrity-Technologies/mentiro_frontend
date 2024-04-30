@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Card, Form, Button } from 'react-bootstrap';
 
 const Questions = () => {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   // Array of questions and options
@@ -18,21 +18,17 @@ const Questions = () => {
     // Add more questions here as needed
   ];
 
-  // Function to handle checkbox selection
+  // Function to handle radio option selection
   const handleOptionSelect = (option) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((item) => item !== option));
-    } else {
-      setSelectedOptions([...selectedOptions, option]);
-    }
+    setSelectedOption(option);
   };
 
   // Function to handle clicking the "Next" button
   const handleNext = () => {
     // Implement logic to proceed to the next question
-    console.log("Selected Options:", selectedOptions);
-    // Reset selected options for the next question
-    setSelectedOptions([]);
+    console.log("Selected Option:", selectedOption);
+    // Reset selected option for the next question
+    setSelectedOption(null);
     // Move to the next question
     setCurrentQuestionIndex(currentQuestionIndex + 1);
   };
@@ -45,10 +41,11 @@ const Questions = () => {
           {questions[currentQuestionIndex].options.map((option, index) => (
             <div key={index} className="mb-2">
               <Form.Check
-                type="checkbox"
+                type="radio"
+                name="options"
                 id={`option${index}`}
                 label={option}
-                checked={selectedOptions.includes(`option${index}`)}
+                checked={selectedOption === `option${index}`}
                 onChange={() => handleOptionSelect(`option${index}`)}
               />
             </div>

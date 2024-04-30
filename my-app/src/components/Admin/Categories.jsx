@@ -17,6 +17,16 @@ const Category = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryNameError, setCategoryNameError] = useState(""); // State for category name validation error
   const token = useSelector(getToken); // Get token from Redux store
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
+
+  const handleShowDeleteModal = (categoryId) => {
+    setCategoryIdToDelete(categoryId);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -194,6 +204,9 @@ const Category = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+
+      
     </div>
   );
 };
