@@ -14,6 +14,7 @@ export const getAllCandidates = () => async (dispatch) => {
     const formattedUsers = res.data.map((user) => ({
         ...user,
         created_at: user.created_at.split("T")[0], // Extract date part only
+        password: "*****",
       }));
 
     dispatch({ type: FETCH_CANDIDATES_SUCCESS, payload: formattedUsers });

@@ -19,18 +19,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "./reducers/fetchUser";
 
 function App() {
-  // const { user, token } = useSelector((state) => state.auth);
-  // const dispatch = useDispatch();
+  const { user, token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   // Fetch user information when the component mounts
-  //   dispatch(fetchUser());
-  // }, [dispatch]); // Run this effect only once on component mount
+  useEffect(() => {
+    // Fetch user information when the component mounts
+    dispatch(fetchUser());
+  }, [dispatch]); // Run this effect only once on component mount
 
-  // console.log("User:", user);
-  // console.log("Token:", token);
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("user");
+  console.log("User:", user);
+  console.log("Token:", token);
+  
 
 console.log(user, token + "from local storage")
 
@@ -57,7 +56,7 @@ console.log(user, token + "from local storage")
           <Route path="/logout" element={<Logout />} />
           <Route path="/assesment" element={<Assessment />} />
           <Route path="/candidates" element={<Candidates />} />
-          <Route path="/admin-dashboard" element={<Admin />} />
+          {/* <Route path="/admin-dashboard" element={<Admin />} /> */}
           <Route path="/customer-dashboard" element={<Customer />} /> 
           <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
 

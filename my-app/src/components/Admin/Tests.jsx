@@ -253,6 +253,7 @@ const Tests = () => {
                     ...newTest,
                     category_names: categoryNamesArray,
                   });
+                  setCategoryNamesError("")
                 }}
               />
               {categoryNamesError && (

@@ -28,6 +28,7 @@
       "phoneInvalid": "Please enter a valid phone number using digits only",
       "passwordRequired": "Please enter your password",
       "passwordLength": "Password must be at least 6 characters long",
+      "confirmPasswordRequired":"Please enter your confirm password",
       "companyNameRequired": "Please enter your company name"
     }
   },

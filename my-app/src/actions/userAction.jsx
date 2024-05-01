@@ -17,6 +17,8 @@ export const getAllUsers = () => async (dispatch) => {
     const formattedUsers = res.data.map((user) => ({
       ...user,
       created_at: user.created_at.split("T")[0], // Extract date part only
+      // Omit the password field
+      password: "*****",
     }));
 
     // Dispatch the action with formatted user data
@@ -32,18 +34,8 @@ export const getAllUsers = () => async (dispatch) => {
   }
 };
 
-// export const addCandidate = (newCandidate) => async (dispatch) => {
-//   try {
-//     const response = await axios.post("http://localhost:5000/api/candidate/create", newCandidate);
-//     const data = response.data;
-//     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: data });
-//     return data;
-//   } catch (error) {
-//     console.error("Error adding candidate:", error);
-//     dispatch({ type: CANDIDATE_ERROR, payload: error.message });
-//     return null;
-//   }
-// };
+
+
 
 
 export const addUser = (newUser) => async (dispatch) => {

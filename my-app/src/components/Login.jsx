@@ -37,7 +37,14 @@ const Login = () => {
         const newresult = await dispatch(login({ email, password }));
         console.log(newresult);
         setTimeout(() => setShowAlert(false), 3000); // success
-        navigate("/customer-dashboard");
+        // navigate("/customer-dashboard");
+     const permissions = localStorage.getItem("user")
+     console.log(permissions);
+     if (permissions === "true") {
+      navigate("/admin-dashboard")
+     } else {
+      navigate("/customer-dashboard")
+     }
       } catch (error) {
         setTimeout(() => setShowAlert(false), 3000); // error
       }
