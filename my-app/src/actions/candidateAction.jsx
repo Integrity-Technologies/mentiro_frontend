@@ -8,7 +8,7 @@ export const CANDIDATE_ERROR = "CANDIDATE_ERROR";
 
 export const getAllCandidates = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://localhost:5000/api/candidate/all");
+    const res = await axios.get("http://localhost:5000/api/candidate/allCandidate");
     console.log(res);
 
     const formattedUsers = res.data.map((user) => ({

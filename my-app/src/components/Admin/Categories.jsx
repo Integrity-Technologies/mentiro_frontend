@@ -19,6 +19,11 @@ const Category = () => {
   const token = useSelector(getToken); // Get token from Redux store
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleShowDeleteModal = (categoryId) => {
     setCategoryIdToDelete(categoryId);
@@ -160,7 +165,7 @@ const Category = () => {
                   setCategoryNameError(""); // Clear error when user starts typing
                 }}
               />
-              {categoryNameError && <Alert variant="danger">{categoryNameError}</Alert>}
+        {categoryNameError && <div className="text-danger">{categoryNameError}</div>}
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -191,7 +196,7 @@ const Category = () => {
                   setCategoryNameError(""); // Clear error when user starts typing
                 }}
               />
-              {categoryNameError && <Alert variant="danger">{categoryNameError}</Alert>}
+        {categoryNameError && <div className="text-danger">{categoryNameError}</div>}
             </Form.Group>
           </Form>
         </Modal.Body>

@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCandidates, addCandidate, editCandidate, deleteCandidate } from "../../actions/candidateAction";
+import {
+  getAllCandidates,
+  addCandidate,
+  editCandidate,
+  deleteCandidate,
+} from "../../actions/candidateAction";
 
 const Candidates = () => {
   const dispatch = useDispatch();
@@ -18,54 +23,117 @@ const Candidates = () => {
     created_at: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     dispatch(getAllCandidates());
   }, [dispatch]);
 
-  const handleCloseAddModal = () => setShowAddModal(false);
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    resetForm();
+  };
+
   const handleShowAddModal = () => setShowAddModal(true);
 
-  const handleCloseEditModal = () => setShowEditModal(false);
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    resetForm();
+  };
+
   const handleShowEditModal = (candidate) => {
     setShowEditModal(true);
     setEditCandidateData(candidate);
-    setNewCandidateData(candidate); 
+    setNewCandidateData(candidate);
   };
 
-  const handleAddCandidate = () => {
+  const handleAddCandidate = async () => {
+    let hasError = false;
+
+    if (!newCandidateData.first_name.trim()) {
+      setFirstNameError("First name is required");
+      hasError = true;
+    } else {
+      setFirstNameError("");
+    }
+    if (!newCandidateData.last_name.trim()) {
+      setLastNameError("Last name is required");
+      hasError = true;
+    } else {
+      setLastNameError("");
+    }
+    if (!newCandidateData.phone.trim()) {
+      setPhoneError("Phone number is required");
+      hasError = true;
+    } else {
+      setPhoneError("");
+    }
+    if (!newCandidateData.email.trim()) {
+      setEmailError("Email is required");
+      hasError = true;
+    } else {
+      setEmailError("");
+    }
+    if (!newCandidateData.password.trim()) {
+      setPasswordError("Password is required");
+      hasError = true;
+    } else {
+      setPasswordError("");
+    }
+
+    if (hasError) {
+      return;
+    }
+    const duplicateEmail = candidates.some((user) => user.email === newCandidateData.email);
+    if (duplicateEmail) {
+      setEmailError("User with this email already registered");
+      return;
+    }
+
     dispatch(addCandidate(newCandidateData)).then(() => {
-      setNewCandidateData({
-        first_name: "",
-        last_name: "",
-        phone: "",
-        email: "",
-        password: "",
-        created_at: "",
-      });
+      resetForm();
+
+      dispatch(getAllCandidates());
       handleCloseAddModal();
     });
   };
 
   const handleEditCandidate = () => {
     dispatch(editCandidate(editCandidateData.id, newCandidateData)).then(() => {
-
-     dispatch(getAllCandidates());
+      dispatch(getAllCandidates());
       handleCloseEditModal();
     });
   };
 
   const handleDeleteCandidate = async (id) => {
-   await dispatch(deleteCandidate(id));
-
-   await dispatch(getAllCandidates());
-
+    await dispatch(deleteCandidate(id));
+    await dispatch(getAllCandidates());
   };
 
-  const filteredCandidates = candidates.filter(candidate => {
+  const filteredCandidates = candidates.filter((candidate) => {
     const fullName = `${candidate.firstName} ${candidate.lastName}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
+
+  const resetForm = () => {
+    setNewCandidateData({
+      first_name: "",
+      last_name: "",
+      phone: "",
+      email: "",
+      password: "",
+      created_at: "",
+    });
+    setFirstNameError("");
+    setLastNameError("");
+    setPhoneError("");
+    setEmailError("");
+    setPasswordError("");
+  };
 
   return (
     <div>
@@ -79,7 +147,9 @@ const Candidates = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </Form>
-      <Button variant="success" onClick={handleShowAddModal}>Add Candidate</Button>
+      <Button variant="success" onClick={handleShowAddModal}>
+        Add Candidate
+      </Button>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -104,14 +174,25 @@ const Candidates = () => {
               <td>{candidate.password}</td>
               <td>{candidate.created_at}</td>
               <td>
-                <Button variant="primary" size="sm" onClick={() => handleShowEditModal(candidate)}>Edit</Button>{" "}
-                <Button variant="danger" size="sm" onClick={() => handleDeleteCandidate(candidate.id)}>Delete</Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => handleShowEditModal(candidate)}
+                >
+                  Edit
+                </Button>{" "}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeleteCandidate(candidate.id)}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
-      {/* Add Candidate Modal */}
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Candidate</Modal.Title>
@@ -120,36 +201,100 @@ const Candidates = () => {
           <Form>
             <Form.Group controlId="formFirstName">
               <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" value={newCandidateData.first_name} onChange={(e) => setNewCandidateData({ ...newCandidateData, first_name: e.target.value })} />
+              <Form.Control
+                type="text"
+                value={newCandidateData.first_name}
+                onChange={(e) => {
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    first_name: e.target.value,
+                  });
+                  setFirstNameError("");
+                }}
+              />
+              {firstNameError && (
+                <div className="text-danger">{firstNameError}</div>
+              )}
             </Form.Group>
             <Form.Group controlId="formLastName">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" value={newCandidateData.last_name} onChange={(e) => setNewCandidateData({ ...newCandidateData, last_name: e.target.value })} />
+              <Form.Control
+                type="text"
+                value={newCandidateData.last_name}
+                onChange={(e) => {
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    last_name: e.target.value,
+                  });
+                  setLastNameError("");
+                }}
+              />
+              {lastNameError && (
+                <div className="text-danger">{lastNameError}</div>
+              )}
             </Form.Group>
             <Form.Group controlId="formPhone">
               <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" value={newCandidateData.phone} onChange={(e) => setNewCandidateData({ ...newCandidateData, phone: e.target.value })} />
+              <Form.Control
+                type="text"
+                value={newCandidateData.phone}
+                onChange={(e) => {
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    phone: e.target.value,
+                  });
+                  setPhoneError("");
+                }}
+              />
+              {phoneError && <div className="text-danger">{phoneError}</div>}
             </Form.Group>
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" value={newCandidateData.email} onChange={(e) => setNewCandidateData({ ...newCandidateData, email: e.target.value })} />
+              <Form.Control
+                type="email"
+                value={newCandidateData.email}
+                onChange={(e) => {
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    email: e.target.value,
+                  });
+                  setEmailError("");
+                }}
+              />
+              {emailError && <div className="text-danger">{emailError}</div>}
             </Form.Group>
             <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" value={newCandidateData.password} onChange={(e) => setNewCandidateData({ ...newCandidateData, password: e.target.value })} />
-            </Form.Group>
-            <Form.Group controlId="formDateJoined">
-              <Form.Label>Date Joined</Form.Label>
-              <Form.Control type="date" value={newCandidateData.created_at} onChange={(e) => setNewCandidateData({ ...newCandidateData, dateJoined: e.target.value })} />
+              <Form.Control
+                type="password"
+                value={newCandidateData.password}
+                onChange={(e) => {
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    password: e.target.value,
+                  });
+                  setPasswordError("");
+                }}
+              />
+              {passwordError && (
+                <div className="text-danger">{passwordError}</div>
+              )}
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal} >Close</Button>
-          <Button variant="primary" onClick={handleAddCandidate} className="text-left">Add Candidate</Button>
+          <Button variant="secondary" onClick={handleCloseAddModal}>
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleAddCandidate}
+            className="text-left"
+          >
+            Add Candidate
+          </Button>
         </Modal.Footer>
       </Modal>
-      {/* Edit Candidate Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Candidate</Modal.Title>
@@ -158,37 +303,82 @@ const Candidates = () => {
           <Form>
             <Form.Group controlId="formFirstName">
               <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" value={newCandidateData.first_name} onChange={(e) => setNewCandidateData({ ...newCandidateData, first_name: e.target.value })} />
+              <Form.Control
+                type="text"
+                value={newCandidateData.first_name}
+                onChange={(e) =>
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    first_name: e.target.value,
+                  })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formLastName">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" value={newCandidateData.last_name} onChange={(e) => setNewCandidateData({ ...newCandidateData, last_name: e.target.value })} />
+              <Form.Control
+                type="text"
+                value={newCandidateData.last_name}
+                onChange={(e) =>
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    last_name: e.target.value,
+                  })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formPhone">
               <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" value={newCandidateData.phone} onChange={(e) => setNewCandidateData({ ...newCandidateData, phone: e.target.value })} />
+              <Form.Control
+                type="text"
+                value={newCandidateData.phone}
+                onChange={(e) =>
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    phone: e.target.value,
+                  })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" value={newCandidateData.email} onChange={(e) => setNewCandidateData({ ...newCandidateData, email: e.target.value })} />
+              <Form.Control
+                type="email"
+                value={newCandidateData.email}
+                onChange={(e) =>
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    email: e.target.value,
+                  })
+                }
+              />
             </Form.Group>
             <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" value={newCandidateData.password} onChange={(e) => setNewCandidateData({ ...newCandidateData, password: e.target.value })} />
-            </Form.Group>
-            <Form.Group controlId="formDateJoined">
-              <Form.Label>Date Joined</Form.Label>
-              <Form.Control type="date" value={newCandidateData.dateJoined} onChange={(e) => setNewCandidateData({ ...newCandidateData, dateJoined: e.target.value })} />
+              <Form.Control
+                type="password"
+                value={newCandidateData.password}
+                onChange={(e) =>
+                  setNewCandidateData({
+                    ...newCandidateData,
+                    password: e.target.value,
+                  })
+                }
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseEditModal}>Close</Button>
-          <Button variant="primary" onClick={handleEditCandidate}>Save Changes</Button>
+          <Button variant="secondary" onClick={handleCloseEditModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleEditCandidate}>
+            Save Changes
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>
   );
-}
+};
 
 export default Candidates;

@@ -28,8 +28,8 @@ const LanguageToggleButton = ({ onLanguageChange }) => {
 
   return (
     <div>
-      <Button onClick={() => changeLanguage("en")}>English</Button>
-      <Button onClick={() => changeLanguage("ar")}>العربية</Button>
+      {/* <Button onClick={() => changeLanguage("en")}>English</Button>
+      <Button onClick={() => changeLanguage("ar")}>العربية</Button> */}
       <div className="fixed-bottom ml-md-5">
        
           {showAlert && (

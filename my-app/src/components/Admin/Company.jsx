@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Table, Form, FormControl, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addCompany, deleteCompany, editCompany, fetchCompanies} from "../../actions/companyAction";
+import {
+  addCompany,
+  deleteCompany,
+  editCompany,
+  fetchCompanies,
+} from "../../actions/companyAction";
 import { getToken } from "../../actions/authActions"; // Import getToken function
-
 
 const Company = () => {
   const dispatch = useDispatch();
@@ -15,6 +19,8 @@ const Company = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [newCompany, setNewCompany] = useState({ name: "", website: "" });
+  const [companyError, setCompanyError] = useState("");
+  const [websiteError, setWebsiteError] = useState("");
 
   useEffect(() => {
     dispatch(fetchCompanies());
@@ -37,7 +43,29 @@ const Company = () => {
 
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
-   await dispatch(addCompany(newCompany));
+
+
+
+    let hasError = false;
+
+    if (!newCompany.name.trim()) {
+      setCompanyError("Company name is required");
+      hasError = true;
+    } else {
+      setCompanyError("");
+    }
+    if (!newCompany.website.trim()) {
+      setWebsiteError("Website is required");
+      hasError = true;
+    } else {
+      setWebsiteError("");
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    await dispatch(addCompany(newCompany));
     setNewCompany({ name: "", website: "" });
     console.log(token);
     await dispatch(fetchCompanies()); // Add this line to fetch updated company data
@@ -46,12 +74,11 @@ const Company = () => {
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
-   await dispatch(editCompany(selectedCompany.id, newCompany));
+    await dispatch(editCompany(selectedCompany.id, newCompany));
     setNewCompany({ name: "", website: "" }); // Remove this line
-   await dispatch(fetchCompanies()); // Add this line to fetch updated company data
+    await dispatch(fetchCompanies()); // Add this line to fetch updated company data
     handleCloseEditModal();
   };
-  
 
   const handleDelete = () => {
     dispatch(deleteCompany(selectedCompany.id));
@@ -75,7 +102,9 @@ const Company = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </Form>
-      <Button variant="success" onClick={handleShowAddModal}>Add Company</Button>
+      <Button variant="success" onClick={handleShowAddModal}>
+        Add Company
+      </Button>
 
       <Table striped bordered hover>
         <thead>
@@ -93,8 +122,20 @@ const Company = () => {
               <td>{company.name}</td>
               <td>{company.website}</td>
               <td>
-                <Button variant="primary" size="sm" onClick={() => handleShowEditModal(company)}>Edit</Button>{' '}
-                <Button variant="danger" size="sm" onClick={() => handleShowDeleteModal(company)}>Delete</Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => handleShowEditModal(company)}
+                >
+                  Edit
+                </Button>{" "}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleShowDeleteModal(company)}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
@@ -114,8 +155,14 @@ const Company = () => {
                 type="text"
                 placeholder="Enter company name"
                 value={newCompany.name}
-                onChange={(e) => setNewCompany({ ...newCompany, name: e.target.value })}
+                onChange={(e) => {
+                  setNewCompany({ ...newCompany, name: e.target.value });
+                  setCompanyError("");
+                }}
               />
+              {companyError && (
+                <div className="text-danger">{companyError}</div>
+              )}
             </Form.Group>
             <Form.Group controlId="formCompanyWebsite">
               <Form.Label>Website</Form.Label>
@@ -123,8 +170,14 @@ const Company = () => {
                 type="text"
                 placeholder="Enter website"
                 value={newCompany.website}
-                onChange={(e) => setNewCompany({ ...newCompany, website: e.target.value })}
+                onChange={(e) => {
+                  setNewCompany({ ...newCompany, website: e.target.value });
+                  setWebsiteError("")
+                }}
               />
+              {websiteError && (
+                <div className="text-danger">{websiteError}</div>
+              )}
             </Form.Group>
             <Button variant="primary" type="submit">
               Add
@@ -146,7 +199,9 @@ const Company = () => {
                 type="text"
                 placeholder="Enter company name"
                 value={newCompany.name}
-                onChange={(e) => setNewCompany({ ...newCompany, name: e.target.value })}
+                onChange={(e) =>
+                  setNewCompany({ ...newCompany, name: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group controlId="formEditCompanyWebsite">
@@ -155,7 +210,9 @@ const Company = () => {
                 type="text"
                 placeholder="Enter website"
                 value={newCompany.website}
-                onChange={(e) => setNewCompany({ ...newCompany, website: e.target.value })}
+                onChange={(e) =>
+                  setNewCompany({ ...newCompany, website: e.target.value })
+                }
               />
             </Form.Group>
             <Button variant="primary" type="submit">
@@ -171,8 +228,13 @@ const Company = () => {
           <Modal.Title>Delete Company</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to delete {selectedCompany && selectedCompany.name}?</p>
-          <Button variant="danger" onClick={handleDelete}>Delete</Button>
+          <p>
+            Are you sure you want to delete{" "}
+            {selectedCompany && selectedCompany.name}?
+          </p>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
         </Modal.Body>
       </Modal>
     </div>

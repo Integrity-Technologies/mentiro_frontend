@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Form, FormControl, Alert } from "react-bootstrap";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  FormControl,
+  Alert,
+} from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { fetchTests, addTest, deleteTest, editTest } from "../../actions/testAction";
+import {
+  fetchTests,
+  addTest,
+  deleteTest,
+  editTest,
+} from "../../actions/testAction";
 import { useDispatch, useSelector } from "react-redux";
-
 
 const Tests = () => {
   const dispatch = useDispatch();
@@ -20,6 +31,10 @@ const Tests = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [validationError, setValidationError] = useState(""); // State for validation error
+  const [testNameError, setTestNameError] = useState("");
+  const [testDescriptionError, setTestDescriptionError] = useState("");
+  const [categoryNamesError, setCategoryNamesError] = useState("");
+  const [companyNameError, setCompanyNameError] = useState("");
 
   useEffect(() => {
     dispatch(fetchTests());
@@ -42,21 +57,76 @@ const Tests = () => {
   };
 
   const handleAddTest = async () => {
-    if (!newTest.test_name || !newTest.test_description || !newTest.category_names || !newTest.company_id) {
-      setValidationError("All fields are required");
+    // Validation checks
+    let hasError = false;
+
+    if (!newTest.test_name.trim()) {
+      setTestNameError("Test name is required");
+      hasError = true;
+    } else {
+      setTestNameError("");
+    }
+    if (!newTest.test_description.trim()) {
+      setTestDescriptionError("Test description is required");
+      hasError = true;
+    } else {
+      setTestDescriptionError("");
+    }
+    // if (!newTest.category_names.trim()) {
+    //   setCategoryNamesError("Test categories are required");
+    //   hasError = true;
+    // } else {
+    //   setCategoryNamesError("");
+    // }
+    if (!newTest.company_name.trim()) {
+      setCompanyNameError("Company name is required");
+      hasError = true;
+    } else {
+      setCompanyNameError("");
+    }
+
+    if (hasError) {
       return;
     }
-   await dispatch(addTest(newTest));
 
-   await dispatch(fetchTests());
+    await dispatch(addTest(newTest));
+    await dispatch(fetchTests());
     handleCloseAddModal();
   };
 
   const handleEditTest = async () => {
-    if (!newTest.test_name || !newTest.test_description || !newTest.category_names || !newTest.company_name) {
-      setValidationError("All fields are required");
+    let hasError = false;
+
+    if (!newTest.test_name.trim()) {
+      setTestNameError("Test name is required");
+      hasError = true;
+    } else {
+      setTestNameError("");
+    }
+    if (!newTest.test_description.trim()) {
+      setTestDescriptionError("Test description is required");
+      hasError = true;
+    } else {
+      setTestDescriptionError("");
+    }
+    // if (!newTest.category_names.trim()) {
+    //   setCategoryNamesError("Test categories are required");
+    //   hasError = true;
+    // } else {
+    //   setCategoryNamesError("");
+    // }
+    if (!newTest.company_name.trim()) {
+      setCompanyNameError("Company name is required");
+      hasError = true;
+    } else {
+      setCompanyNameError("");
+    }
+
+    if (hasError) {
       return;
     }
+
+
     await dispatch(editTest(editTest.id, newTest));
 
     await dispatch(fetchTests());
@@ -105,7 +175,7 @@ const Tests = () => {
               <td>{test.test_name}</td>
               <td>{test.test_description}</td>
               <td>{test.categories}</td>
-              <td>{test.company_id}</td>
+              <td>{test.company}</td>
               <td>
                 <Button
                   variant="primary"
@@ -141,11 +211,16 @@ const Tests = () => {
               <Form.Control
                 type="text"
                 value={newTest.test_name}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, test_name: e.target.value })
-                }
+                onChange={(e) => {
+                  setNewTest({ ...newTest, test_name: e.target.value });
+                  setTestNameError("")
+                }}
               />
+              {testNameError && (
+                <div className="text-danger">{testNameError}</div>
+              )}
             </Form.Group>
+
             <Form.Group controlId="formTestDescription">
               <Form.Label>
                 {t("tests.modals.addTest.formLabels.testDescription")}
@@ -153,11 +228,16 @@ const Tests = () => {
               <Form.Control
                 type="text"
                 value={newTest.test_description}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, test_description: e.target.value })
-                }
+                onChange={(e) => {
+                  setNewTest({ ...newTest, test_description: e.target.value });
+                  setTestDescriptionError("")
+                }}
               />
+              {testDescriptionError && (
+                <div className="text-danger">{testDescriptionError}</div>
+              )}
             </Form.Group>
+
             <Form.Group controlId="formTestCategories">
               <Form.Label>
                 {t("tests.modals.addTest.formLabels.testCategories")}
@@ -167,12 +247,19 @@ const Tests = () => {
                 value={newTest.category_names}
                 onChange={(e) => {
                   // Split the input value by comma to extract individual category names
-                  const categoryNamesArray = e.target.value.split(',');
+                  const categoryNamesArray = e.target.value.split(",");
                   // Update the category_names state with the array of category names
-                  setNewTest({ ...newTest, category_names: categoryNamesArray });
+                  setNewTest({
+                    ...newTest,
+                    category_names: categoryNamesArray,
+                  });
                 }}
               />
+              {categoryNamesError && (
+                <div className="text-danger">{categoryNamesError}</div>
+              )}
             </Form.Group>
+
             <Form.Group controlId="formCompanyName">
               <Form.Label>
                 {t("tests.modals.addTest.formLabels.companyName")}
@@ -180,12 +267,15 @@ const Tests = () => {
               <Form.Control
                 type="text"
                 value={newTest.company_name}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, company_name: e.target.value })
-                }
+                onChange={(e) => {
+                  setNewTest({ ...newTest, company_name: e.target.value });
+                  setCompanyNameError("")
+                }}
               />
+              {companyNameError && (
+                <div className="text-danger">{companyNameError}</div>
+              )}
             </Form.Group>
-            {validationError && <Alert variant="danger">{validationError}</Alert>}
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -216,10 +306,14 @@ const Tests = () => {
               <Form.Control
                 type="text"
                 value={newTest.test_name}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, test_name: e.target.value })
-                }
+                onChange={(e) => {
+                  setNewTest({ ...newTest, test_name: e.target.value });
+                  setTestNameError("")
+                }}
               />
+               {testNameError && (
+                <div className="text-danger">{testNameError}</div>
+              )}
             </Form.Group>
             <Form.Group controlId="formTestDescription">
               <Form.Label>
@@ -228,10 +322,14 @@ const Tests = () => {
               <Form.Control
                 type="text"
                 value={newTest.test_description}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, test_description: e.target.value })
-                }
+                onChange={(e) => {
+                  setNewTest({ ...newTest, test_description: e.target.value });
+                  setTestDescriptionError("")
+                }}
               />
+               {testDescriptionError && (
+                <div className="text-danger">{testDescriptionError}</div>
+              )}
             </Form.Group>
             <Form.Group controlId="formTestCategories">
               <Form.Label>
@@ -242,9 +340,12 @@ const Tests = () => {
                 value={newTest.category_names}
                 onChange={(e) => {
                   // Split the input value by comma to extract individual category names
-                  const categoryNamesArray = e.target.value.split(',');
+                  const categoryNamesArray = e.target.value.split(",");
                   // Update the category_names state with the array of category names
-                  setNewTest({ ...newTest, category_names: categoryNamesArray });
+                  setNewTest({
+                    ...newTest,
+                    category_names: categoryNamesArray,
+                  });
                 }}
               />
             </Form.Group>
@@ -255,12 +356,18 @@ const Tests = () => {
               <Form.Control
                 type="text"
                 value={newTest.company_name}
-                onChange={(e) =>
-                  setNewTest({ ...newTest, company_name: e.target.value })
-                }
+                onChange={(e) => {
+                  setNewTest({ ...newTest, company_name: e.target.value });
+                  setCompanyNameError("")
+                }}
               />
+               {companyNameError && (
+                <div className="text-danger">{companyNameError}</div>
+              )}
             </Form.Group>
-            {validationError && <Alert variant="danger">{validationError}</Alert>}
+            {validationError && (
+              <Alert variant="danger">{validationError}</Alert>
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>
