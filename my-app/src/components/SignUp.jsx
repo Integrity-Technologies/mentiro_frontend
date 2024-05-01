@@ -6,6 +6,7 @@ import { signUp } from "../actions/authActions";
 import { NavLink, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Alert from "react-bootstrap/Alert";
+import countries from "./../data/countries";
 
 import { useNavigate } from "react-router-dom";
 const logoImage = "/assets/icon.jpg";
@@ -19,8 +20,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [countryCode, setCountryCode] = useState("+1"); // Default country code
-
+  const [countryCode, setCountryCode] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,10 +29,11 @@ const SignUp = () => {
       first_name: formData.get("firstName"),
       last_name: formData.get("lastName"),
       email: formData.get("email"),
-      phone: formData.get("phone"), // Concatenate country code and phone number
+      phone: `+${countryCode}${formData.get("phone")}`,
       password: formData.get("password"),
       confirm_password: formData.get("confirm_password"),
     };
+    console.log("🚀 ~ handleSubmit ~ phone:", userData);
 
     // Initialize the error object
     let newErrors = {};
@@ -101,7 +102,7 @@ const SignUp = () => {
   };
   const validatePhoneNumber = (phone) => {
     // Use regex to check if the phone number contains only numbers
-    const phoneRegex = /^[0-9]+$/;
+    const phoneRegex = /^\+?[0-9]+$/;
     return phoneRegex.test(phone);
   };
 
@@ -199,8 +200,11 @@ const SignUp = () => {
                     onChange={handleCountryCodeChange}
                     className="me-2"
                   >
-                    <option value="+1">+1</option>
-                    <option value="+91">+91</option>
+                    {countries?.map((country, index) => (
+                      <option key={index} value={country.country_phone_code}>
+                        {`+${country.country_phone_code} (${country.country_name})`}
+                      </option>
+                    ))}
                   </Form.Control>
                   <Form.Control
                     type="phone"
@@ -208,7 +212,9 @@ const SignUp = () => {
                     placeholder={t("signup.enterPhone")}
                   />
                 </div>
-               
+                {errors.phone && (
+                  <Form.Text className="text-danger">{errors.phone}</Form.Text>
+                )}
               </div>
             </Form.Group>
 

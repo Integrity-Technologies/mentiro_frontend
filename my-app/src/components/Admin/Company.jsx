@@ -44,8 +44,6 @@ const Company = () => {
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
 
-
-
     let hasError = false;
 
     if (!newCompany.name.trim()) {
@@ -86,7 +84,7 @@ const Company = () => {
   };
 
   const filteredCompany = companies.filter((company) => {
-    const fullName = `${company.name} ${company.website}`;
+    const fullName = `${company.name} ${company.website} ${company.created_By}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -112,6 +110,7 @@ const Company = () => {
             <th>ID</th>
             <th>Company Name</th>
             <th>Website</th>
+            <th>Created By</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -121,6 +120,7 @@ const Company = () => {
               <td>{company.id}</td>
               <td>{company.name}</td>
               <td>{company.website}</td>
+              <td>{company.created_by}</td>
               <td>
                 <Button
                   variant="primary"

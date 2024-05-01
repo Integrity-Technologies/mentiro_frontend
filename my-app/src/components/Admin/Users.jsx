@@ -15,7 +15,7 @@ const Users = () => {
   const users = useSelector((state) => state.user.users); // Assuming your Redux store has a slice called 'users'
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  // const [editUser, setEditUser] = useState(null);
+  const [newEditUser, setNewEditUser] = useState(null);
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -51,7 +51,7 @@ const Users = () => {
   const handleCloseEditModal = () => setShowEditModal(false);
   const handleShowEditModal = (user) => {
     setShowEditModal(true);
-    // setEditUser(users);
+    setNewEditUser(users);
     setNewUser(user);
   };
 
