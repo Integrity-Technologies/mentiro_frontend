@@ -95,12 +95,12 @@ const Tests = () => {
     } else {
       setTestDescriptionError("");
     }
-    // if (!newTest.category_names.trim()) {
-    //   setCategoryNamesError("Test categories are required");
-    //   hasError = true;
-    // } else {
-    //   setCategoryNamesError("");
-    // }
+    if (!newTest.category_names.join().trim()) {
+      setCategoryNamesError("Test categories are required");
+      hasError = true;
+    } else {
+      setCategoryNamesError("");
+    }
     if (!newTest.company_name.trim()) {
       setCompanyNameError("Company name is required");
       hasError = true;
