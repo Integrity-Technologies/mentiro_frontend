@@ -63,7 +63,7 @@ const ViewTestResult = () => {
               <td>{candidate.candidate_name}</td>
               <td>{candidate.assessment_name}</td>
               <td>{candidate.test_name}</td>
-              <td>{candidate.score}</td>
+              <td>{candidate.score}--</td>
             </tr>
           ))}
         </tbody>

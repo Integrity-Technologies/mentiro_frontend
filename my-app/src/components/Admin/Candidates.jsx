@@ -17,9 +17,9 @@ const Candidates = () => {
   const [newCandidateData, setNewCandidateData] = useState({
     first_name: "",
     last_name: "",
-    phone: "",
+    // phone: "",
     email: "",
-    password: "",
+    // password: "",
     created_at: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,24 +66,24 @@ const Candidates = () => {
     } else {
       setLastNameError("");
     }
-    if (!newCandidateData.phone.trim()) {
-      setPhoneError("Phone number is required");
-      hasError = true;
-    } else {
-      setPhoneError("");
-    }
+    // if (!newCandidateData.phone.trim()) {
+    //   setPhoneError("Phone number is required");
+    //   hasError = true;
+    // } else {
+    //   setPhoneError("");
+    // }
     if (!newCandidateData.email.trim()) {
       setEmailError("Email is required");
       hasError = true;
     } else {
       setEmailError("");
     }
-    if (!newCandidateData.password.trim()) {
-      setPasswordError("Password is required");
-      hasError = true;
-    } else {
-      setPasswordError("");
-    }
+    // if (!newCandidateData.password.trim()) {
+    //   setPasswordError("Password is required");
+    //   hasError = true;
+    // } else {
+    //   setPasswordError("");
+    // }
 
     if (hasError) {
       return;
@@ -115,7 +115,7 @@ const Candidates = () => {
   };
 
   const filteredCandidates = candidates.filter((candidate) => {
-    const fullName = `${candidate.firstName} ${candidate.lastName}`;
+    const fullName = `${candidate.first_name} ${candidate.last_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -123,9 +123,9 @@ const Candidates = () => {
     setNewCandidateData({
       first_name: "",
       last_name: "",
-      phone: "",
+      // phone: "",
       email: "",
-      password: "",
+      // password: "",
       created_at: "",
     });
     setFirstNameError("");
@@ -156,9 +156,9 @@ const Candidates = () => {
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Phone</th>
+            {/* <th>Phone</th> */}
             <th>Email</th>
-            <th>password</th>
+            {/* <th>password</th> */}
             <th>Date Joined</th>
             <th>Actions</th>
           </tr>
@@ -169,9 +169,9 @@ const Candidates = () => {
               <td>{candidate.id}</td>
               <td>{candidate.first_name}</td>
               <td>{candidate.last_name}</td>
-              <td>{candidate.phone}</td>
+              {/* <td>{candidate.phone}</td> */}
               <td>{candidate.email}</td>
-              <td>{candidate.password}</td>
+              {/* <td>{candidate.password}</td> */}
               <td>{candidate.created_at}</td>
               <td>
                 <Button
@@ -233,7 +233,7 @@ const Candidates = () => {
                 <div className="text-danger">{lastNameError}</div>
               )}
             </Form.Group>
-            <Form.Group controlId="formPhone">
+            {/* <Form.Group controlId="formPhone">
               <Form.Label>Phone</Form.Label>
               <Form.Control
                 type="text"
@@ -247,7 +247,7 @@ const Candidates = () => {
                 }}
               />
               {phoneError && <div className="text-danger">{phoneError}</div>}
-            </Form.Group>
+            </Form.Group> */}
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -263,7 +263,7 @@ const Candidates = () => {
               />
               {emailError && <div className="text-danger">{emailError}</div>}
             </Form.Group>
-            <Form.Group controlId="formPassword">
+            {/* <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
@@ -279,7 +279,7 @@ const Candidates = () => {
               {passwordError && (
                 <div className="text-danger">{passwordError}</div>
               )}
-            </Form.Group>
+            </Form.Group> */}
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -327,7 +327,7 @@ const Candidates = () => {
                 }
               />
             </Form.Group>
-            <Form.Group controlId="formPhone">
+            {/* <Form.Group controlId="formPhone">
               <Form.Label>Phone</Form.Label>
               <Form.Control
                 type="text"
@@ -339,7 +339,7 @@ const Candidates = () => {
                   })
                 }
               />
-            </Form.Group>
+            </Form.Group> */}
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -353,7 +353,7 @@ const Candidates = () => {
                 }
               />
             </Form.Group>
-            <Form.Group controlId="formPassword">
+            {/* <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
@@ -365,7 +365,7 @@ const Candidates = () => {
                   })
                 }
               />
-            </Form.Group>
+            </Form.Group> */}
           </Form>
         </Modal.Body>
         <Modal.Footer>

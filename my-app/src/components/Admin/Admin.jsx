@@ -40,8 +40,8 @@ const Dashboard = () => {
     ),
     "/Categories": <Category />,
     "/Candidates": <Candidates />,
-    "/View-Test-Result": <ViewTestResult />,
-    "/View-Customer-Account": <Company />,
+    "/Test Result": <ViewTestResult />,
+    "/Customer Company": <Company />,
   };
 
   return (

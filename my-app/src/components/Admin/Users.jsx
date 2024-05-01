@@ -109,6 +109,7 @@ const Users = () => {
       if (addedUser) {
         await dispatch(getAllUsers());
         handleCloseAddModal();
+        resetForm(); // Reset form after successful addition
       }
     } catch (error) {
       console.error("Error adding user:", error);
@@ -169,6 +170,8 @@ const Users = () => {
 
       await dispatch(getAllUsers());
       handleCloseEditModal();
+      resetForm(); // Reset form after successful editing
+
     } catch (error) {
       console.error("Error editing user:", error);
     }
@@ -189,6 +192,23 @@ const Users = () => {
     const fullName = `${user.first_name} ${user.last_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
+
+  const resetForm = () => {
+    setNewUser({
+      first_name: "",
+      last_name: "",
+      phone: "",
+      email: "",
+      password: "",
+      created_at: "",
+    });
+    setFirstNameError("");
+    setLastNameError("");
+    setPhoneError("");
+    setEmailError("");
+    setPasswordError("");
+  };
+
 
   return (
     <div>

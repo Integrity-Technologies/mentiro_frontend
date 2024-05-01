@@ -19,16 +19,20 @@ const Category = () => {
   const token = useSelector(getToken); // Get token from Redux store
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
-  const [firstNameError, setFirstNameError] = useState("");
-  const [lastNameError, setLastNameError] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+ 
+
+  const resetForm = () => {
+    setNewCategory("");
+    setCategoryNameError("");
+  };
 
   const handleShowDeleteModal = (categoryId) => {
     setCategoryIdToDelete(categoryId);
     setShowDeleteModal(true);
   };
+
+  
+
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
@@ -48,13 +52,18 @@ const Category = () => {
     setShowAddModal(false);
     setCategoryNameError(""); // Clear category name error when modal closes
     setNewCategory(""); // Clear category name input when modal closes
+    resetForm(); 
   };
 
-  const handleShowAddModal = () => setShowAddModal(true);
+  const handleShowAddModal = () => {
+    setShowAddModal(true);
+    resetForm(); // Clear category name input and error state when modal opens
+  };
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setCategoryNameError(""); // Clear category name error when modal closes
+    resetForm();
   };
 
   const handleShowEditModal = (category) => {
@@ -103,7 +112,7 @@ const Category = () => {
   };
 
   const filteredCategories = categories.filter((category) => {
-    const fullName = `${category.category_name} ${category.categoryDescription}`;
+    const fullName = `${category.category_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 

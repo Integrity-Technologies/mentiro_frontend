@@ -31,6 +31,7 @@ const Company = () => {
 
   const handleShowEditModal = (company) => {
     setSelectedCompany(company);
+    setNewCompany({ name: company.name, website: company.website }); // Set initial state with company values
     setShowEditModal(true);
   };
   const handleCloseEditModal = () => setShowEditModal(false);

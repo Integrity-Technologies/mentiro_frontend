@@ -66,13 +66,14 @@ export const fetchTests = () => async (dispatch) => {
   export const editTest = (id, updatedTest) => async (dispatch) => {
     console.log(updatedTest, id + "From edit test action");
     try {
-      const response = await axios.put(`http://localhost:5000/api/test/edit/test/${updatedTest.id}`, updatedTest);
+      const response = await axios.put(`http://localhost:5000/api/test/edit/test/${id}`, updatedTest);
       dispatch(editTestSuccess(response.data));
       console.log(response.data);
     } catch (error) {
       dispatch(testError(error.message));
     }
   };
+  
   
   export const deleteTest = (id) => async (dispatch) => {
     try {

@@ -44,7 +44,10 @@ const Tests = () => {
     setShowAddModal(false);
     setValidationError(""); // Clear validation error when modal closes
   };
-  const handleShowAddModal = () => setShowAddModal(true);
+  const handleShowAddModal = () => {
+    setShowAddModal(true);
+    resetForm();
+  }
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
@@ -53,8 +56,28 @@ const Tests = () => {
   const handleShowEditModal = (test) => {
     setShowEditModal(true);
     setNewEditTest(test);
-    setNewTest(test);
+    setNewTest({
+      test_name: test.test_name,
+      test_description: test.test_description,
+      category_names: test.categories, // Assuming this is an array
+      company_name: test.company,
+    });
   };
+
+  const resetForm = () => {
+    setNewTest({
+      test_name: "",
+      test_description: "",
+      category_names: [],
+      company_name: "",
+    });
+    setTestNameError("");
+    setTestDescriptionError("");
+    setCategoryNamesError("");
+    setCompanyNameError("");
+    setValidationError("");
+  };
+
 
   const handleAddTest = async () => {
     // Validation checks
@@ -92,11 +115,12 @@ const Tests = () => {
     await dispatch(addTest(newTest));
     await dispatch(fetchTests());
     handleCloseAddModal();
+    resetForm()
   };
 
   const handleEditTest = async () => {
     let hasError = false;
-
+  
     if (!newTest.test_name.trim()) {
       setTestNameError("Test name is required");
       hasError = true;
@@ -109,36 +133,37 @@ const Tests = () => {
     } else {
       setTestDescriptionError("");
     }
-    // if (!newTest.category_names.trim()) {
-    //   setCategoryNamesError("Test categories are required");
-    //   hasError = true;
-    // } else {
-    //   setCategoryNamesError("");
-    // }
-    if (!newTest.company_name.trim()) {
+    if (!newTest.company_name.trim()) { // Updated to newTest.company_name
       setCompanyNameError("Company name is required");
       hasError = true;
     } else {
       setCompanyNameError("");
     }
-
+  
     if (hasError) {
       return;
     }
-
-
-    await dispatch(editTest(editTest.id, newTest));
-
+  
+    // Ensure that newEditTest is not null or undefined
+    if (!neweditTest) {
+      console.error("Error: newEditTest is undefined");
+      return;
+    }
+  
+    // Dispatch editTest action with the correct test id and newTest object
+    await dispatch(editTest(neweditTest.id, newTest)); // Use newEditTest.id instead of editTest.id
+  
     await dispatch(fetchTests());
     handleCloseEditModal();
   };
+  
 
   const handleDeleteTest = (id) => {
     dispatch(deleteTest(id));
   };
 
   const filteredTests = tests.filter((test) => {
-    const fullName = `${test.testName} ${test.testDescription}`;
+    const fullName = `${test.test_name} ${test.testDescription}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 

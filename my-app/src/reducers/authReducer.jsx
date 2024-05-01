@@ -13,10 +13,10 @@ const authReducer = (state = initialState, action) => {
     case SIGNUP_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
-      localStorage.setItem("user", action.payload.user.permissions);
+      localStorage.setItem("user", action.payload.user);
       return {
         ...state,
-        user: action.payload.user.permissions,
+        user: action.payload.user,
         token: action.payload.token,
         error: null,
       };
