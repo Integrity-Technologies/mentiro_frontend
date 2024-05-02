@@ -41,7 +41,7 @@ const Dashboard = () => {
     "/Categories": <Category />,
     "/Candidates": <Candidates />,
     "/Test Result": <ViewTestResult />,
-    "/Customer Company": <Company />,
+    "/Company": <Company />,
   };
 
   return (

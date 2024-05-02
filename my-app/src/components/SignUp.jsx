@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Alert from "react-bootstrap/Alert";
 import countries from "./../data/countries";
@@ -85,7 +85,7 @@ const SignUp = () => {
       try {
         setShowAlert(true);
         const newresult = await dispatch(signUp(userData));
-        console.log(newresult, userData);
+        console.log(newresult);
         if (newresult?.success) {
           navigate("/");
         }

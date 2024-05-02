@@ -29,6 +29,14 @@ const Candidates = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+
+  const validateEmail = (email) => {
+    // Regular expression for email validation
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+
   useEffect(() => {
     dispatch(getAllCandidates());
   }, [dispatch]);
@@ -72,12 +80,14 @@ const Candidates = () => {
     // } else {
     //   setPhoneError("");
     // }
-    if (!newCandidateData.email.trim()) {
-      setEmailError("Email is required");
+    if (!newCandidateData.email.trim() || !validateEmail(newCandidateData.email.trim())) {
+      setEmailError("Please enter a valid email address");
       hasError = true;
     } else {
       setEmailError("");
     }
+
+
     // if (!newCandidateData.password.trim()) {
     //   setPasswordError("Password is required");
     //   hasError = true;

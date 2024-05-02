@@ -121,7 +121,7 @@ const Company = () => {
               <td>{company.id}</td>
               <td>{company.name}</td>
               <td>{company.website}</td>
-              <td>{company.created_by}</td>
+              <td>{company.created_by_user}</td>
               <td>
                 <Button
                   variant="primary"

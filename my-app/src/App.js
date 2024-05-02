@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -59,8 +59,13 @@ console.log(user, token + "from local storage")
           <Route path="/admin-dashboard" element={<Admin />} />
           <Route path="/customer-dashboard" element={<Customer />} /> 
           <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
-
-          <Route
+          {/* Admin Dashboard Route
+        {token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />} */}
+        {/* Customer Dashboard Route */}
+        {/* {token && user === "false" && <Route path="/customer-dashboard" element={<Customer />} />} */}
+        {/* Redirect Unauthenticated Users to Login */}
+        {/* {!token && <Route path="*" element={<Navigate to="/" />} />} */}
+          {/* <Route
             path="/admin-dashboard"
             element={
               <ProtectedRoute
@@ -70,7 +75,7 @@ console.log(user, token + "from local storage")
                 userComponent={<Customer />}
               />
             }
-          />
+          /> */}
         </Routes>
       </BrowserRouter>
     </>

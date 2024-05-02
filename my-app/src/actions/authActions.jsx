@@ -38,20 +38,17 @@ export const signUp = (userData) => async (dispatch) => {
 export const login = (userData) => async (dispatch) => {
   try {
     const res = await axios.post(`${baseURL}/users/login`, userData);
-    console.log("~ login ~ res:", res);
-
-    // Extract user data and token from the response
     const { result, token } = res.data;
-console.log(result.email)
-    // Store user data and token in localStorage
-    localStorage.setItem("user",result);
+
+    // Store user data as a string in localStorage
+    localStorage.setItem("user", JSON.stringify(result));
     localStorage.setItem("token", token);
 
     dispatch({
       type: LOGIN_SUCCESS,
       payload: {
-        user: result, // Include user data in the payload
-        token, // Include token in the payload
+        user: result,
+        token,
       },
     });
 

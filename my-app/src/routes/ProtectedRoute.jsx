@@ -1,4 +1,3 @@
-// Updated ProtectedRoute.jsx
 import React from "react";
 import { Navigate } from "react-router-dom";
 
@@ -8,11 +7,14 @@ const ProtectedRoute = ({ user, token, adminComponent, userComponent }) => {
     return <Navigate to="/" />;
   }
 
- else if (user === "true") {
-    // If user role is admin, render admin component
+  // Check user permissions
+  const isAdmin = user === "true";
+
+  if (isAdmin) {
+    // If user is admin, render admin component
     return adminComponent;
-  } else if (user === "false") {
-    // If user role is customer, render customer component
+  } else {
+    // If user is not admin, render user component
     return userComponent;
   }
 };

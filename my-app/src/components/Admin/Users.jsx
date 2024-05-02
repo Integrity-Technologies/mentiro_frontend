@@ -32,6 +32,13 @@ const Users = () => {
     created_at: "",
   });
 
+
+  const validateEmail = (email) => {
+    // Regular expression for email validation
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -78,12 +85,13 @@ const Users = () => {
     } else {
       setPhoneError("");
     }
-    if (!newUser.email.trim()) {
-      setEmailError("Email is required");
-      hasError = true;
-    } else {
-      setEmailError("");
-    }
+    if (!newUser.email.trim() || !validateEmail(newUser.email.trim())) {
+        setEmailError("Please enter a valid email address");
+        hasError = true;
+      } else {
+        setEmailError("");
+      }
+
     if (!newUser.password.trim()) {
       setPasswordError("Password is required");
       hasError = true;
