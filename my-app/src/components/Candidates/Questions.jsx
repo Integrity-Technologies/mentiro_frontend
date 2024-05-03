@@ -4,6 +4,7 @@ import { Container, Card, Form, Button } from 'react-bootstrap';
 const Questions = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showThankYou, setShowThankYou] = useState(false);
 
   // Array of questions and options
   const questions = [
@@ -25,36 +26,43 @@ const Questions = () => {
 
   // Function to handle clicking the "Next" button
   const handleNext = () => {
-    // Implement logic to proceed to the next question
-    console.log("Selected Option:", selectedOption);
-    // Reset selected option for the next question
-    setSelectedOption(null);
-    // Move to the next question
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    if (currentQuestionIndex < questions.length - 1) {
+      // If it's not the last question, proceed to the next question
+      console.log("Selected Option:", selectedOption);
+      // Reset selected option for the next question
+      setSelectedOption(null);
+      // Move to the next question
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      // If it's the last question, show the "Thank you" message
+      setShowThankYou(true);
+    }
   };
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
       <Card className="p-4 w-50">
-        <h2 className="mb-4">{questions[currentQuestionIndex].question}</h2>
-        <Form>
-          {questions[currentQuestionIndex].options.map((option, index) => (
-            <div key={index} className="mb-2">
-              <Form.Check
-                type="radio"
-                name="options"
-                id={`option${index}`}
-                label={option}
-                checked={selectedOption === `option${index}`}
-                onChange={() => handleOptionSelect(`option${index}`)}
-              />
-            </div>
-          ))}
-        </Form>
-        {currentQuestionIndex < questions.length - 1 ? (
-          <Button variant="dark" onClick={handleNext}>Next</Button>
+        {!showThankYou ? (
+          <>
+            <h2 className="mb-4">{questions[currentQuestionIndex].question}</h2>
+            <Form>
+              {questions[currentQuestionIndex].options.map((option, index) => (
+                <div key={index} className="mb-2">
+                  <Form.Check
+                    type="radio"
+                    name="options"
+                    id={`option${index}`}
+                    label={option}
+                    checked={selectedOption === `option${index}`}
+                    onChange={() => handleOptionSelect(`option${index}`)}
+                  />
+                </div>
+              ))}
+            </Form>
+            <Button variant="dark" onClick={handleNext}>Next</Button>
+          </>
         ) : (
-          <Button variant="dark">Next</Button>
+          <h2>Thank you!</h2>
         )}
       </Card>
     </Container>

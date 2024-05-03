@@ -25,7 +25,7 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
             style={{ height: "100vh" }}
           >
             <h1 className="text-center mb-4">Invite Candidate via Email</h1>
-            <Button variant="primary" onClick={handleSubmitButtonClick}>
+            <Button variant="primary">
               Invite
             </Button>
           </Container>

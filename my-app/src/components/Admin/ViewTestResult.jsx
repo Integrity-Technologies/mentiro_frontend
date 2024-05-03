@@ -3,31 +3,19 @@ import { Table, Form, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchResults } from "../../actions/resultAction";
 
-
 const ViewTestResult = () => {
   const dispatch = useDispatch();
   const { results, error } = useSelector((state) => state.results);
-
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     dispatch(fetchResults()); // Dispatch the fetchResults action when component mounts
   }, [dispatch]);
 
-
-
-
-  // const filteredCandidates = results.filter((result) => {
-  //   const fullName = `${candidate.candidate_id} ${test.testDescription}`;
-  //   return fullName.toLowerCase().includes(searchTerm.toLowerCase());
-  // });
-
-
-  // Check if results is an array before filtering
-  // const filteredCandidates = Array.isArray(results) ? 
-  //   results.filter((candidate) => 
-  //     candidate.candidateName.toLowerCase().includes(searchTerm.toLowerCase())
-  //   ) : [];
+  // Filter candidates based on search term
+  const filteredCandidates = results.filter((candidate) =>
+    candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Handle error state
   if (error) {
@@ -57,7 +45,7 @@ const ViewTestResult = () => {
           </tr>
         </thead>
         <tbody>
-          {results.map((candidate) => (
+          {filteredCandidates.map((candidate) => (
             <tr key={candidate.id}>
               <td>{candidate.id}</td>
               <td>{candidate.candidate_name}</td>

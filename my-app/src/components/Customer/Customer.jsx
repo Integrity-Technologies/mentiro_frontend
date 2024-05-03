@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Nav, NavLink, Row, Col, Image } from "react-bootstrap"; // Import Image component
+import { Container, Nav, NavLink, Row, Col, Image, Button } from "react-bootstrap"; // Import Image component
 import { useTranslation } from "react-i18next";
 import LanguageToggleButton from "../Togglebutton";
 import Assesment from "./Assesment";
@@ -37,6 +37,8 @@ const Customer = () => {
     { label: "Assessment", link: "/customer/option2" },
   ];
 
+
+
   return (
     <div>
       <Container fluid>
@@ -62,12 +64,15 @@ const Customer = () => {
               ))}
             </Nav>
             <LanguageToggleButton onLanguageChange={handleLanguageChange} />
+            <Button>English</Button>
+      <Button>العربية</Button>
           </Col>
           <Col md={9} className="pt-3">
             {sections[activeLink]}
           </Col>
         </Row>
       </Container>
+      
     </div>
   );
 };

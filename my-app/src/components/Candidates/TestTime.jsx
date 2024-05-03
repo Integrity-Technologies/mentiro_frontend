@@ -35,7 +35,7 @@ const TestTime = () => {
           </Button>
           <br />
           <Button variant="outline-warning" className="w-100 mb-2">
-            Light
+            Back
           </Button>{" "}
         </div>
       </div>
