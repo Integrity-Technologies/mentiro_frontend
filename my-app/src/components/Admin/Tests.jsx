@@ -36,6 +36,9 @@ const Tests = () => {
   const [categoryNamesError, setCategoryNamesError] = useState("");
   const [companyNameError, setCompanyNameError] = useState("");
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [testToDelete, setTestToDelete] = useState(null);
+
   useEffect(() => {
     dispatch(fetchTests());
   }, [dispatch]);
@@ -47,7 +50,7 @@ const Tests = () => {
   const handleShowAddModal = () => {
     setShowAddModal(true);
     resetForm();
-  }
+  };
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
@@ -64,6 +67,16 @@ const Tests = () => {
     });
   };
 
+  const handleShowDeleteModal = (test) => {
+    setTestToDelete(test);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setTestToDelete(null);
+    setShowDeleteModal(false);
+  };
+
   const resetForm = () => {
     setNewTest({
       test_name: "",
@@ -77,7 +90,6 @@ const Tests = () => {
     setCompanyNameError("");
     setValidationError("");
   };
-
 
   const handleAddTest = async () => {
     // Validation checks
@@ -115,12 +127,12 @@ const Tests = () => {
     await dispatch(addTest(newTest));
     await dispatch(fetchTests());
     handleCloseAddModal();
-    resetForm()
+    resetForm();
   };
 
   const handleEditTest = async () => {
     let hasError = false;
-  
+
     if (!newTest.test_name.trim()) {
       setTestNameError("Test name is required");
       hasError = true;
@@ -133,30 +145,30 @@ const Tests = () => {
     } else {
       setTestDescriptionError("");
     }
-    if (!newTest.company_name.trim()) { // Updated to newTest.company_name
+    if (!newTest.company_name.trim()) {
+      // Updated to newTest.company_name
       setCompanyNameError("Company name is required");
       hasError = true;
     } else {
       setCompanyNameError("");
     }
-  
+
     if (hasError) {
       return;
     }
-  
+
     // Ensure that newEditTest is not null or undefined
     if (!neweditTest) {
       console.error("Error: newEditTest is undefined");
       return;
     }
-  
+
     // Dispatch editTest action with the correct test id and newTest object
     await dispatch(editTest(neweditTest.id, newTest)); // Use newEditTest.id instead of editTest.id
-  
+
     await dispatch(fetchTests());
     handleCloseEditModal();
   };
-  
 
   const handleDeleteTest = (id) => {
     dispatch(deleteTest(id));
@@ -189,7 +201,6 @@ const Tests = () => {
             <th>{t("tests.tableHeaders.testName")}</th>
             <th>{t("tests.tableHeaders.testDescription")}</th>
             <th>{t("tests.tableHeaders.testCategories")}</th>
-            <th>{t("tests.tableHeaders.companyName")}</th>
             <th>{t("tests.tableHeaders.actions")}</th>
           </tr>
         </thead>
@@ -200,7 +211,6 @@ const Tests = () => {
               <td>{test.test_name}</td>
               <td>{test.test_description}</td>
               <td>{test.categories}</td>
-              <td>{test.company}</td>
               <td>
                 <Button
                   variant="primary"
@@ -212,7 +222,7 @@ const Tests = () => {
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => handleDeleteTest(test.id)}
+                  onClick={() => handleShowDeleteModal(test)}
                 >
                   Delete
                 </Button>
@@ -238,7 +248,7 @@ const Tests = () => {
                 value={newTest.test_name}
                 onChange={(e) => {
                   setNewTest({ ...newTest, test_name: e.target.value });
-                  setTestNameError("")
+                  setTestNameError("");
                 }}
               />
               {testNameError && (
@@ -255,7 +265,7 @@ const Tests = () => {
                 value={newTest.test_description}
                 onChange={(e) => {
                   setNewTest({ ...newTest, test_description: e.target.value });
-                  setTestDescriptionError("")
+                  setTestDescriptionError("");
                 }}
               />
               {testDescriptionError && (
@@ -278,7 +288,7 @@ const Tests = () => {
                     ...newTest,
                     category_names: categoryNamesArray,
                   });
-                  setCategoryNamesError("")
+                  setCategoryNamesError("");
                 }}
               />
               {categoryNamesError && (
@@ -295,7 +305,7 @@ const Tests = () => {
                 value={newTest.company_name}
                 onChange={(e) => {
                   setNewTest({ ...newTest, company_name: e.target.value });
-                  setCompanyNameError("")
+                  setCompanyNameError("");
                 }}
               />
               {companyNameError && (
@@ -334,10 +344,10 @@ const Tests = () => {
                 value={newTest.test_name}
                 onChange={(e) => {
                   setNewTest({ ...newTest, test_name: e.target.value });
-                  setTestNameError("")
+                  setTestNameError("");
                 }}
               />
-               {testNameError && (
+              {testNameError && (
                 <div className="text-danger">{testNameError}</div>
               )}
             </Form.Group>
@@ -350,10 +360,10 @@ const Tests = () => {
                 value={newTest.test_description}
                 onChange={(e) => {
                   setNewTest({ ...newTest, test_description: e.target.value });
-                  setTestDescriptionError("")
+                  setTestDescriptionError("");
                 }}
               />
-               {testDescriptionError && (
+              {testDescriptionError && (
                 <div className="text-danger">{testDescriptionError}</div>
               )}
             </Form.Group>
@@ -384,10 +394,10 @@ const Tests = () => {
                 value={newTest.company_name}
                 onChange={(e) => {
                   setNewTest({ ...newTest, company_name: e.target.value });
-                  setCompanyNameError("")
+                  setCompanyNameError("");
                 }}
               />
-               {companyNameError && (
+              {companyNameError && (
                 <div className="text-danger">{companyNameError}</div>
               )}
             </Form.Group>
@@ -402,6 +412,27 @@ const Tests = () => {
           </Button>
           <Button variant="primary" onClick={handleEditTest}>
             {t("tests.modals.editTest.buttons.saveChanges")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Test</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this test?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              handleDeleteTest(testToDelete.id);
+              handleCloseDeleteModal();
+            }}
+          >
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>

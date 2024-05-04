@@ -8,6 +8,7 @@ import Category from "./Categories";
 import Candidates from "./Candidates";
 import ViewTestResult from "./ViewTestResult";
 import Company from "./Company";
+import Question from "./Question";
 const logoImage = "/assets/icon.jpg";
 
 
@@ -39,6 +40,7 @@ const Dashboard = () => {
       />
     ),
     "/Categories": <Category />,
+    "/Questions": <Question />,
     "/Candidates": <Candidates />,
     "/Test Result": <ViewTestResult />,
     "/Company": <Company />,

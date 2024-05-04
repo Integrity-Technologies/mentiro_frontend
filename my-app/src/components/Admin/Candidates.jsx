@@ -29,13 +29,14 @@ const Candidates = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [candidateIdToDelete, setCandidateIdToDelete] = useState(null);
 
   const validateEmail = (email) => {
     // Regular expression for email validation
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   };
-
 
   useEffect(() => {
     dispatch(getAllCandidates());
@@ -59,6 +60,13 @@ const Candidates = () => {
     setNewCandidateData(candidate);
   };
 
+  const handleShowDeleteModal = (candidateId) => {
+    setCandidateIdToDelete(candidateId);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+
   const handleAddCandidate = async () => {
     let hasError = false;
 
@@ -80,13 +88,15 @@ const Candidates = () => {
     // } else {
     //   setPhoneError("");
     // }
-    if (!newCandidateData.email.trim() || !validateEmail(newCandidateData.email.trim())) {
+    if (
+      !newCandidateData.email.trim() ||
+      !validateEmail(newCandidateData.email.trim())
+    ) {
       setEmailError("Please enter a valid email address");
       hasError = true;
     } else {
       setEmailError("");
     }
-
 
     // if (!newCandidateData.password.trim()) {
     //   setPasswordError("Password is required");
@@ -98,7 +108,9 @@ const Candidates = () => {
     if (hasError) {
       return;
     }
-    const duplicateEmail = candidates.some((user) => user.email === newCandidateData.email);
+    const duplicateEmail = candidates.some(
+      (user) => user.email === newCandidateData.email
+    );
     if (duplicateEmail) {
       setEmailError("User with this email already registered");
       return;
@@ -121,6 +133,7 @@ const Candidates = () => {
 
   const handleDeleteCandidate = async (id) => {
     await dispatch(deleteCandidate(id));
+    setShowDeleteModal(false)
     await dispatch(getAllCandidates());
   };
 
@@ -194,7 +207,7 @@ const Candidates = () => {
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => handleDeleteCandidate(candidate.id)}
+                  onClick={() => handleShowDeleteModal(candidate.id)}
                 >
                   Delete
                 </Button>
@@ -384,6 +397,24 @@ const Candidates = () => {
           </Button>
           <Button variant="primary" onClick={handleEditCandidate}>
             Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Candidate</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this candidate?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => handleDeleteCandidate(candidateIdToDelete)}
+          >
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>

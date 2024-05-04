@@ -32,6 +32,9 @@ const Users = () => {
     created_at: "",
   });
 
+   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
 
   const validateEmail = (email) => {
     // Regular expression for email validation
@@ -165,12 +168,12 @@ const Users = () => {
       return; // Exit function if any error occurred
     }
 
-    // Check for duplicate email
-    const duplicateEmail = users.some((user) => user.email === newUser.email);
-    if (duplicateEmail) {
-      setEmailError("User with this email already registered");
-      return;
-    }
+    // // Check for duplicate email
+    // const duplicateEmail = users.some((user) => user.email === newUser.email);
+    // if (duplicateEmail) {
+    //   setEmailError("User with this email already registered");
+    //   return;
+    // }
 
 
 
@@ -186,14 +189,25 @@ const Users = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    try {
-      await dispatch(deleteUser(id)); // Dispatch deleteUser action
+    // Show delete confirmation modal
+    const user = users.find(user => user.id === id);
+    setUserToDelete(user);
+    setShowDeleteConfirmationModal(true);
+  };
 
+  const confirmDeleteUser = async () => {
+    try {
+      await dispatch(deleteUser(userToDelete.id));
       await dispatch(getAllUsers());
+      setShowDeleteConfirmationModal(false);
     } catch (error) {
       console.error("Error deleting user:", error);
-      // Handle error if needed
     }
+  };
+
+  const cancelDeleteUser = () => {
+    setShowDeleteConfirmationModal(false);
+    setUserToDelete(null);
   };
 
   const filteredUsers = users.filter((user) => {
@@ -242,7 +256,6 @@ const Users = () => {
               <th>{t("users.tableHeaders.lastName")}</th>
               <th>{t("users.tableHeaders.phone")}</th>
               <th>{t("users.tableHeaders.email")}</th>
-              <th>{t("users.tableHeaders.password")}</th>
               <th>{t("users.tableHeaders.dateJoined")}</th>
               <th>{t("users.tableHeaders.actions")}</th>
             </tr>
@@ -255,7 +268,6 @@ const Users = () => {
                 <td>{user.last_name}</td>
                 <td>{user.phone}</td>
                 <td>{user.email}</td>
-                <td>{user.password}</td>
                 <td>{user.created_at}</td>
                 <td>
                   <Button
@@ -502,6 +514,23 @@ const Users = () => {
           </Button>
           <Button variant="primary" onClick={handleEditUser}>
             {t("users.modals.editUser.buttons.saveChanges")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDeleteConfirmationModal} onHide={cancelDeleteUser}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this user?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelDeleteUser}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteUser}>
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>

@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Form, FormControl, Alert } from "react-bootstrap";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  FormControl,
+  Alert,
+} from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllCategories, addCategory, deleteCategory } from "../../actions/categoryAction"; // Correct import statement
+import {
+  getAllCategories,
+  addCategory,
+  deleteCategory,
+} from "../../actions/categoryAction"; // Correct import statement
 import { editCategory } from "../../actions/categoryAction";
 import { getToken } from "../../actions/authActions"; // Import getToken function
-
 
 const Category = () => {
   const categories = useSelector((state) => state.category.categories); // Get categories from state
   const dispatch = useDispatch(); // Initialize dispatch
-  
-  const [categoryId, setCategoryId] = useState("")
+
+  const [categoryId, setCategoryId] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [newCategory, setNewCategory] = useState("");
@@ -19,7 +29,6 @@ const Category = () => {
   const token = useSelector(getToken); // Get token from Redux store
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
- 
 
   const resetForm = () => {
     setNewCategory("");
@@ -31,18 +40,14 @@ const Category = () => {
     setShowDeleteModal(true);
   };
 
-  
-
-
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await dispatch(getAllCategories()); // Dispatch action to fetch categories
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       }
     };
     fetchData();
@@ -52,7 +57,7 @@ const Category = () => {
     setShowAddModal(false);
     setCategoryNameError(""); // Clear category name error when modal closes
     setNewCategory(""); // Clear category name input when modal closes
-    resetForm(); 
+    resetForm();
   };
 
   const handleShowAddModal = () => {
@@ -70,6 +75,7 @@ const Category = () => {
     setShowEditModal(true);
     setNewCategory(category.category_name); // Set the initial value of the category name in the modal
     setCategoryId(category.id); // Set the category ID
+    resetForm();
   };
 
   const handleAddCategory = async () => {
@@ -84,7 +90,7 @@ const Category = () => {
       handleCloseAddModal();
       await dispatch(getAllCategories());
     } catch (error) {
-      console.error('Error adding category:', error);
+      console.error("Error adding category:", error);
     }
   };
 
@@ -98,7 +104,7 @@ const Category = () => {
       await dispatch(getAllCategories());
       handleCloseEditModal();
     } catch (error) {
-      console.error('Error editing category:', error);
+      console.error("Error editing category:", error);
     }
   };
 
@@ -106,10 +112,12 @@ const Category = () => {
     try {
       await dispatch(deleteCategory(categoryId));
       await dispatch(getAllCategories());
+      setShowDeleteModal(false); // Close the delete modal after deletion
     } catch (error) {
-      console.error('Error deleting category:', error);
+      console.error("Error deleting category:", error);
     }
   };
+  
 
   const filteredCategories = categories.filter((category) => {
     const fullName = `${category.category_name}`;
@@ -145,10 +153,18 @@ const Category = () => {
               <td>{category.id}</td>
               <td>{category.category_name}</td>
               <td>
-                <Button variant="primary" size="sm" onClick={() => handleShowEditModal(category)}>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => handleShowEditModal(category)}
+                >
                   Edit
                 </Button>{" "}
-                <Button variant="danger" size="sm" onClick={() => handleDeleteCategory(category.id)}>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleShowDeleteModal(category.id)}
+                >
                   Delete
                 </Button>
               </td>
@@ -174,7 +190,9 @@ const Category = () => {
                   setCategoryNameError(""); // Clear error when user starts typing
                 }}
               />
-        {categoryNameError && <div className="text-danger">{categoryNameError}</div>}
+              {categoryNameError && (
+                <div className="text-danger">{categoryNameError}</div>
+              )}
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -182,7 +200,11 @@ const Category = () => {
           <Button variant="secondary" onClick={handleCloseAddModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleAddCategory} className="text-left">
+          <Button
+            variant="primary"
+            onClick={handleAddCategory}
+            className="text-left"
+          >
             Add Category
           </Button>
         </Modal.Footer>
@@ -205,7 +227,9 @@ const Category = () => {
                   setCategoryNameError(""); // Clear error when user starts typing
                 }}
               />
-        {categoryNameError && <div className="text-danger">{categoryNameError}</div>}
+              {categoryNameError && (
+                <div className="text-danger">{categoryNameError}</div>
+              )}
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -219,8 +243,21 @@ const Category = () => {
         </Modal.Footer>
       </Modal>
 
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+  <Modal.Header closeButton>
+    <Modal.Title>Delete Category</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>Are you sure you want to delete this category?</Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleCloseDeleteModal}>
+      Cancel
+    </Button>
+    <Button variant="danger" onClick={() => handleDeleteCategory(categoryIdToDelete)}>
+      Delete
+    </Button>
+  </Modal.Footer>
+</Modal>
 
-      
     </div>
   );
 };
