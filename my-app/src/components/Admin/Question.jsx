@@ -90,13 +90,16 @@ const Question = () => {
     handleCloseEditModal();
   }
 
-  const DeleteQuestion = async (Id) => {
-    try {
-      console.log(Id);
-      await dispatch(deleteQuestion(Id));
+  const handleDeleteModal = (question) => {
+    setSelectedQuestion(question);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteQuestion = async () => {
+    if (selectedQuestion) {
+      await dispatch(deleteQuestion(selectedQuestion.id));
       await dispatch(getQuestions());
-    } catch (error) {
-      console.error("Error deleting question:", error);
+      setShowDeleteModal(false);
     }
   };
 
@@ -149,9 +152,8 @@ const Question = () => {
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => {
-                    DeleteQuestion(question.id);
-                  }}
+                  onClick={() => handleDeleteModal(question)}
+
                 >
                   Delete
                 </Button>
@@ -318,6 +320,23 @@ const Question = () => {
             </Button>
           </Form>
         </Modal.Body>
+      </Modal>
+
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Question</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this question?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteQuestion}>
+            Delete
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
