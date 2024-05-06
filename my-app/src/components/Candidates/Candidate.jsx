@@ -22,8 +22,13 @@ const Candidate = () => {
               <h1 className="text-center mb-4">Candidate Registration</h1>
 
               <Form.Group controlId="formName" className="mb-3">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter your name" />
+                <Form.Label>First Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter your first name" />
+              </Form.Group>
+
+              <Form.Group controlId="formName" className="mb-3">
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter your last name" />
               </Form.Group>
 
               <Form.Group controlId="formEmail" className="mb-3">

@@ -9,6 +9,7 @@ import Alert from "react-bootstrap/Alert";
 import countries from "./../data/countries";
 
 import { useNavigate } from "react-router-dom";
+import { NavbarComp } from "./NavbarComp";
 const logoImage = "/assets/icon.jpg";
 
 const SignUp = () => {
@@ -118,6 +119,7 @@ const SignUp = () => {
   };
 
   return (
+    <>
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6">
@@ -270,6 +272,7 @@ const SignUp = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

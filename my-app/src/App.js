@@ -4,6 +4,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './components/Login';
+import Home from './components/Home.jsx'
 import ProtectedRoute from './routes/ProtectedRoute';
 import SignUp from './components/SignUp';
 import ForgetPassword from "./components/ForgetPassword";
@@ -50,6 +51,7 @@ console.log(user, token + "from local storage")
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/home" element={<Home />} />
           <Route path="/" element={<Login />} />
           <Route path="/Signup" element={<SignUp />} />
           <Route path="/forget-password" element={<ForgetPassword />} />

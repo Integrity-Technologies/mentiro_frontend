@@ -60,6 +60,8 @@ const Questions = () => {
               ))}
             </Form>
             <Button variant="dark" onClick={handleNext}>Next</Button>
+            <br />
+            <Button variant="dark">Skip</Button>
           </>
         ) : (
           <h2>Thank you!</h2>
