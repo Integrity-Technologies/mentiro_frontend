@@ -44,32 +44,39 @@ const Company = () => {
 
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
-
+  
     let hasError = false;
-
-    if (!newCompany.name.trim()) {
+  
+    // Check if the company with the same name already exists
+    const isCompanyExists = companies.some(company => company.name.toLowerCase() === newCompany.name.toLowerCase());
+  
+    if (isCompanyExists) {
+      setCompanyError("Company with this name already exists");
+      hasError = true;
+    } else if (!newCompany.name.trim()) {
       setCompanyError("Company name is required");
       hasError = true;
     } else {
       setCompanyError("");
     }
+    
     if (!newCompany.website.trim()) {
       setWebsiteError("Website is required");
       hasError = true;
     } else {
       setWebsiteError("");
     }
-
+  
     if (hasError) {
       return;
     }
-
+  
     await dispatch(addCompany(newCompany));
     setNewCompany({ name: "", website: "" });
-    console.log(token);
     await dispatch(fetchCompanies()); // Add this line to fetch updated company data
     handleCloseAddModal();
   };
+  
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault();

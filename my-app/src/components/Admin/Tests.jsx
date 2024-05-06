@@ -20,13 +20,15 @@ const Tests = () => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const tests = useSelector((state) => state.test.tests);
+  const categories = useSelector((state) => state.category.categories); // Get categories from Redux store
+  const companies = useSelector((state) => state.company.companies);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [neweditTest, setNewEditTest] = useState(null);
   const [newTest, setNewTest] = useState({
     test_name: "",
     test_description: "",
-    category_names: [],
+    category_names: [], // Change to array for storing selected categories
     company_name: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,10 +40,15 @@ const Tests = () => {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [testToDelete, setTestToDelete] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [categorySuggestions, setCategorySuggestions] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     dispatch(fetchTests());
-  }, [dispatch]);
+    // Save selected categories from Redux store to state
+    setSelectedCategories(categories.map((category) => category.category_name));
+  }, [dispatch, categories]);
 
   const handleCloseAddModal = () => {
     setShowAddModal(false);
@@ -50,6 +57,25 @@ const Tests = () => {
   const handleShowAddModal = () => {
     setShowAddModal(true);
     resetForm();
+  };
+
+  // Add function to handle category selection
+  const handleCategorySelect = (categoryName) => {
+    setSelectedCategory(categoryName);
+    setCategorySuggestions([]); // Clear suggestions after selection
+    if (!newTest.category_names.includes(categoryName)) {
+      setNewTest({
+        ...newTest,
+        category_names: [...newTest.category_names, categoryName],
+      });
+    }
+  };
+
+  const handleCompanySelect = (companyName) => {
+    setNewTest({
+      ...newTest,
+      company_name: companyName,
+    });
   };
 
   const handleCloseEditModal = () => {
@@ -124,6 +150,14 @@ const Tests = () => {
       return;
     }
 
+    const existingTest = tests.find(
+      (test) => test.test_name.toLowerCase() === newTest.test_name.toLowerCase()
+    );
+    if (existingTest) {
+      setTestNameError("Test already registered");
+      return;
+    }
+
     await dispatch(addTest(newTest));
     await dispatch(fetchTests());
     handleCloseAddModal();
@@ -146,7 +180,6 @@ const Tests = () => {
       setTestDescriptionError("");
     }
     if (!newTest.company_name.trim()) {
-      // Updated to newTest.company_name
       setCompanyNameError("Company name is required");
       hasError = true;
     } else {
@@ -157,14 +190,12 @@ const Tests = () => {
       return;
     }
 
-    // Ensure that newEditTest is not null or undefined
     if (!neweditTest) {
       console.error("Error: newEditTest is undefined");
       return;
     }
 
-    // Dispatch editTest action with the correct test id and newTest object
-    await dispatch(editTest(neweditTest.id, newTest)); // Use newEditTest.id instead of editTest.id
+    await dispatch(editTest(neweditTest.id, newTest));
 
     await dispatch(fetchTests());
     handleCloseEditModal();
@@ -173,6 +204,21 @@ const Tests = () => {
   const handleDeleteTest = (id) => {
     dispatch(deleteTest(id));
   };
+
+  // const handleCategorySelect = (categoryName) => {
+  //   setSelectedCategory(categoryName);
+  //   setCategorySuggestions([]); // Clear suggestions after selection
+  // };
+
+  // Filter categories based on input value
+  useEffect(() => {
+    const filteredCategories = categories.filter((category) =>
+      category.category_name
+        .toLowerCase()
+        .includes(selectedCategory.toLowerCase())
+    );
+    setCategorySuggestions(filteredCategories);
+  }, [selectedCategory, categories]);
 
   const filteredTests = tests.filter((test) => {
     const fullName = `${test.test_name} ${test.testDescription}`;
@@ -232,7 +278,6 @@ const Tests = () => {
         </tbody>
       </Table>
 
-      {/* Add Test Modal */}
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
           <Modal.Title>{t("tests.modals.addTest.title")}</Modal.Title>
@@ -277,20 +322,38 @@ const Tests = () => {
               <Form.Label>
                 {t("tests.modals.addTest.formLabels.testCategories")}
               </Form.Label>
-              <Form.Control
+              <FormControl
                 type="text"
-                value={newTest.category_names}
-                onChange={(e) => {
-                  // Split the input value by comma to extract individual category names
-                  const categoryNamesArray = e.target.value.split(",");
-                  // Update the category_names state with the array of category names
-                  setNewTest({
-                    ...newTest,
-                    category_names: categoryNamesArray,
-                  });
-                  setCategoryNamesError("");
-                }}
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                placeholder="Type to search categories"
               />
+              {selectedCategory && (
+                <div>
+                  {categorySuggestions.map((category) => (
+                    <div
+                      key={category.id}
+                      onClick={() =>
+                        handleCategorySelect(category.category_name)
+                      }
+                      className={`p-2 ${
+                        selectedCategory === category.category_name
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor:
+                          selectedCategory === category.category_name
+                            ? "blue"
+                            : "transparent",
+                      }}
+                    >
+                      {category.category_name}
+                    </div>
+                  ))}
+                </div>
+              )}
               {categoryNamesError && (
                 <div className="text-danger">{categoryNamesError}</div>
               )}
@@ -301,13 +364,17 @@ const Tests = () => {
                 {t("tests.modals.addTest.formLabels.companyName")}
               </Form.Label>
               <Form.Control
-                type="text"
+                as="select"
                 value={newTest.company_name}
-                onChange={(e) => {
-                  setNewTest({ ...newTest, company_name: e.target.value });
-                  setCompanyNameError("");
-                }}
-              />
+                onChange={(e) => handleCompanySelect(e.target.value)}
+              >
+                <option value="">Select Company</option>
+                {companies.map((company) => (
+                  <option key={company.id} value={company.name}>
+                    {company.name}
+                  </option>
+                ))}
+              </Form.Control>
               {companyNameError && (
                 <div className="text-danger">{companyNameError}</div>
               )}
@@ -371,32 +438,44 @@ const Tests = () => {
               <Form.Label>
                 {t("tests.modals.editTest.formLabels.testCategories")}
               </Form.Label>
-              <Form.Control
-                type="text"
+              <FormControl
+                as="select"
+                multiple
                 value={newTest.category_names}
                 onChange={(e) => {
-                  // Split the input value by comma to extract individual category names
-                  const categoryNamesArray = e.target.value.split(",");
-                  // Update the category_names state with the array of category names
+                  const selectedOptions = Array.from(
+                    e.target.selectedOptions,
+                    (option) => option.value
+                  );
                   setNewTest({
                     ...newTest,
-                    category_names: categoryNamesArray,
+                    category_names: selectedOptions,
                   });
                 }}
-              />
+              >
+                {categories.map((category) => (
+                  <option key={category.id} value={category.category_name}>
+                    {category.category_name}
+                  </option>
+                ))}
+              </FormControl>
             </Form.Group>
             <Form.Group controlId="formCompanyName">
               <Form.Label>
                 {t("tests.modals.editTest.formLabels.companyName")}
               </Form.Label>
               <Form.Control
-                type="text"
+                as="select"
                 value={newTest.company_name}
-                onChange={(e) => {
-                  setNewTest({ ...newTest, company_name: e.target.value });
-                  setCompanyNameError("");
-                }}
-              />
+                onChange={(e) => handleCompanySelect(e.target.value)}
+              >
+                <option value="">Select Company</option>
+                {companies.map((company) => (
+                  <option key={company.id} value={company.name}>
+                    {company.name}
+                  </option>
+                ))}
+              </Form.Control>
               {companyNameError && (
                 <div className="text-danger">{companyNameError}</div>
               )}

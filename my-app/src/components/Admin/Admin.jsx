@@ -32,7 +32,9 @@ const Dashboard = () => {
         language={selectedLanguage}
         onLanguageChange={handleLanguageChange}
       />
-    ), // Pass language and onLanguageChange props to Users component
+    ),
+    "/Questions": <Question />,
+    // Pass language and onLanguageChange props to Users component
     "/Tests": (
       <Tests
         language={selectedLanguage}
@@ -40,7 +42,6 @@ const Dashboard = () => {
       />
     ),
     "/Categories": <Category />,
-    "/Questions": <Question />,
     "/Candidates": <Candidates />,
     "/Test Result": <ViewTestResult />,
     "/Company": <Company />,

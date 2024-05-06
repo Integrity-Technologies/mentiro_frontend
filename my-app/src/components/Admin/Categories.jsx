@@ -78,12 +78,22 @@ const Category = () => {
     resetForm();
   };
 
+
+
   const handleAddCategory = async () => {
     try {
       if (!newCategory.trim()) {
         setCategoryNameError("Category name is required");
         return;
       }
+  
+      // Check if category already exists
+      const existingCategory = categories.find(category => category.category_name.toLowerCase() === newCategory.toLowerCase());
+      if (existingCategory) {
+        setCategoryNameError("Category already exists");
+        return;
+      }
+  
       const responseData = await dispatch(addCategory(newCategory));
       console.log(responseData);
       console.log(token); // Console log the token
@@ -93,6 +103,7 @@ const Category = () => {
       console.error("Error adding category:", error);
     }
   };
+  
 
   const handleEditCategory = async () => {
     try {
