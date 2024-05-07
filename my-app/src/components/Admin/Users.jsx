@@ -8,6 +8,7 @@ import {
   addUser,
 } from "../../actions/userAction"; // Import actions
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch hook
+import TablePagination from "./TablePagination";
 
 const Users = () => {
   const { t } = useTranslation(); // Use useTranslation hook here
@@ -215,6 +216,17 @@ const Users = () => {
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // Number of users per page
+    // Pagination logic
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    const indexOfLastUser = currentPage * itemsPerPage;
+    const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  
+    const handlePageChange = (page) => setCurrentPage(page);  
+
   const resetForm = () => {
     setNewUser({
       first_name: "",
@@ -261,7 +273,7 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((user) => (
+            {currentUsers.map((user) => (
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.first_name}</td>
@@ -289,6 +301,12 @@ const Users = () => {
             ))}
           </tbody>
         </Table>
+        {/* Pagination */}
+        <TablePagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
 
       {/* Add User Modal */}
