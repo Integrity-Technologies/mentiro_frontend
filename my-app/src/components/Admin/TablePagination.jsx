@@ -1,27 +1,40 @@
 import React from "react";
-import { Pagination } from "react-bootstrap";
 
 const TablePagination = ({ totalPages, currentPage, onPageChange }) => {
   return (
-    <Pagination>
-      <Pagination.Prev
+    <nav className="flex items-center justify-center my-4">
+      <button
         onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
         disabled={currentPage === 1}
-      />
-      {[...Array(totalPages)].map((_, index) => (
-        <Pagination.Item
-          key={index + 1}
-          active={index + 1 === currentPage}
-          onClick={() => onPageChange(index + 1)}
-        >
-          {index + 1}
-        </Pagination.Item>
-      ))}
-      <Pagination.Next
+        className={`px-3 py-1 mr-2 bg-gray-200 text-gray-700 rounded ${
+          currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        }`}
+      >
+        Prev
+      </button>
+      <div className="flex">
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => onPageChange(index + 1)}
+            className={`px-3 py-1 mx-1 bg-gray-200 text-gray-700 rounded ${
+              index + 1 === currentPage ? "bg-blue-500 text-white" : ""
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+      <button
         onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
         disabled={currentPage === totalPages}
-      />
-    </Pagination>
+        className={`px-3 py-1 ml-2 bg-gray-200 text-gray-700 rounded ${
+          currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        }`}
+      >
+        Next
+      </button>
+    </nav>
   );
 };
 

@@ -28,6 +28,7 @@ const Users = () => {
     first_name: "",
     last_name: "",
     phone: "",
+    countryCode: "",
     email: "",
     password: "",
     created_at: "",
@@ -114,10 +115,11 @@ const Users = () => {
       setEmailError("User with this email already registered");
       return;
     }
+    const phone = `+${newUser.countryCode}${newUser.phone}`;
 
 
       // Dispatch addUser action if all fields are filled and email is unique
-      const addedUser = await dispatch(addUser(newUser));
+      const addedUser = await dispatch(addUser(newUser, phone ));
       if (addedUser) {
         await dispatch(getAllUsers());
         handleCloseAddModal();
@@ -211,6 +213,10 @@ const Users = () => {
     setUserToDelete(null);
   };
 
+  const handleCountryCodeChange = (e) => {
+    setNewUser({ ...newUser, countryCode: e.target.value });
+  };
+
   const filteredUsers = users.filter((user) => {
     const fullName = `${user.first_name} ${user.last_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -245,313 +251,364 @@ const Users = () => {
 
 
   return (
-    <div>
-      <h1>{t("users.title")}</h1>
-      <Form inline className="mb-3">
-        <FormControl
-          type="text"
-          placeholder={t("users.searchPlaceholder")}
-          className="mr-sm-2 w-25 text-left"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </Form>
-      <Button variant="success" onClick={handleShowAddModal}>
-        {t("users.addUserButton")}
-      </Button>
-      <div className="table-responsive">
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>{t("users.tableHeaders.firstName")}</th>
-              <th>{t("users.tableHeaders.lastName")}</th>
-              <th>{t("users.tableHeaders.phone")}</th>
-              <th>{t("users.tableHeaders.email")}</th>
-              <th>{t("users.tableHeaders.dateJoined")}</th>
-              <th>{t("users.tableHeaders.actions")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentUsers.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.first_name}</td>
-                <td>{user.last_name}</td>
-                <td>{user.phone}</td>
-                <td>{user.email}</td>
-                <td>{user.created_at}</td>
-                <td>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => handleShowEditModal(user)}
-                  >
-                    Edit
-                  </Button>{" "}
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => handleDeleteUser(user.id)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        {/* Pagination */}
-        <TablePagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
+    <div className="p-4">
+    <h1 className="text-4xl mb-4">{t("users.title")}</h1>
+    <div className="items-center justify-between mb-4">
+    <div className="items-center">
+      <input
+        type="text"
+        placeholder={t("users.searchPlaceholder")}
+        className="p-2 border border-gray-300 rounded mr-4"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
       </div>
+      </div>
+      <button
+        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        onClick={handleShowAddModal}
+      >
+        {t("users.addUserButton")}
+      </button>
+  
+    <div className="overflow-x-auto mt-2">
+      <table className="table-auto w-full">
+        <thead>
+          <tr>
+            <th className="border px-4 py-2">{t("users.tableHeaders.firstName")}</th>
+            <th className="border px-4 py-2">{t("users.tableHeaders.lastName")}</th>
+            <th className="border px-4 py-2">{t("users.tableHeaders.phone")}</th>
+            <th className="border px-4 py-2">{t("users.tableHeaders.email")}</th>
+            <th className="border px-4 py-2">{t("users.tableHeaders.dateJoined")}</th>
+            <th className="border px-4 py-2">{t("users.tableHeaders.actions")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentUsers.map((user) => (
+            <tr key={user.id}>
+              <td className="border px-4 py-2">{user.first_name}</td>
+              <td className="border px-4 py-2">{user.last_name}</td>
+              <td className="border px-4 py-2">{user.phone}</td>
+              <td className="border px-4 py-2">{user.email}</td>
+              <td className="border px-4 py-2">{user.created_at}</td>
+              <td className="border flex px-4 py-3">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
+                  onClick={() => handleShowEditModal(user)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                  onClick={() => handleDeleteUser(user.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <TablePagination
+      totalPages={totalPages}
+      currentPage={currentPage}
+      onPageChange={handlePageChange}
+    />
+      
 
       {/* Add User Modal */}
-      <Modal show={showAddModal} onHide={handleCloseAddModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{t("users.modals.addUser.title")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formFirstName">
-              <Form.Label>
-                {t("users.modals.addUser.formLabels.firstName")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newUser.first_name}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, first_name: e.target.value });
-                  setFirstNameError(""); // Clear error when user starts typing
-                }}
-              />
-              {firstNameError && (
-                <div className="text-danger">{firstNameError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="formLastName">
-              <Form.Label>
-                {t("users.modals.addUser.formLabels.lastName")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newUser.last_name}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, last_name: e.target.value });
-                  setLastNameError(""); // Clear error when user starts typing
-                }}
-              />
-               {lastNameError && (
-                <div className="text-danger">{lastNameError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="formPhone">
-              <Form.Label>
-                {t("users.modals.addUser.formLabels.phone")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newUser.phone}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, phone: e.target.value })
-                  setPhoneError(""); // Clear error when user starts typing
-                }}
-              />
-              {phoneError && (
-                <div className="text-danger">{phoneError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="formEmail">
-              <Form.Label>
-                {t("users.modals.addUser.formLabels.email")}
-              </Form.Label>
-              <Form.Control
-                type="email"
-                value={newUser.email}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, email: e.target.value })
-                  setEmailError(""); // Clear error when user starts typing
-
-                }}
-              />
-              {emailError && (
-                <div className="text-danger">{emailError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>
-                {t("users.modals.addUser.formLabels.password")}
-              </Form.Label>
-              <Form.Control
-                type="password"
-                value={newUser.password}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, password: e.target.value })
-                  setPasswordError(""); // Clear error when user starts typing
-                }}
-              />
-              {passwordError && (
-                <div className="text-danger">{passwordError}</div>
-              )}
-            </Form.Group>
-            {/* <Form.Group controlId="formDateJoined">
-              <Form.Label>
-                {t("users.modals.addUser.formLabels.dateJoined")}
-              </Form.Label>
-              <Form.Control
-                type="date"
-                value={newUser.dateJoined}
-                onChange={(e) =>
-                  setNewUser({ ...newUser, dateJoined: e.target.value })
-                }
-              />
-            </Form.Group> */}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal}>
-            {t("users.modals.addUser.buttons.close")}
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleAddUser}
-            className="text-left"
-          >
-            {t("users.modals.addUser.buttons.addUser")}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Modal show={showAddModal} onHide={handleCloseAddModal} className="fixed inset-0 flex items-center justify-center">
+  <div className="bg-white rounded-lg w-76 p-8">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-2xl font-semibold">{t("users.modals.addUser.title")}</h2>
+      <button onClick={handleCloseAddModal}>
+        <svg
+          className="w-6 h-6 text-gray-600 hover:text-gray-700 cursor-pointer"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <form>
+      <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.addUser.formLabels.firstName")}
+        </label>
+        <input
+          type="text"
+          value={newUser.first_name}
+          onChange={(e) => {
+            setNewUser({ ...newUser, first_name: e.target.value });
+            setFirstNameError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {firstNameError && (
+          <div className="text-red-500">{firstNameError}</div>
+        )}
+      </div>
+      <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.addUser.formLabels.lastName")}
+        </label>
+        <input
+          type="text"
+          value={newUser.last_name}
+          onChange={(e) => {
+            setNewUser({ ...newUser, last_name: e.target.value });
+            setLastNameError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {lastNameError && (
+          <div className="text-red-500">{lastNameError}</div>
+        )}
+      </div>
+      <div className="mb-4 flex">
+        <select
+          value={newUser.countryCode}
+          onChange={handleCountryCodeChange}
+          className="border border-gray-300 rounded px-3 py-2 mr-2"
+        >
+        </select>
+        <input
+          type="phone"
+          name="phone"
+          value={newUser.phone}
+          onChange={(e) => {
+            setNewUser({ ...newUser, phone: e.target.value });
+            setPhoneError(""); // Clear error when user starts typing
+          }}
+          placeholder={t("signup.enterPhone")}
+          className="border border-gray-300 rounded px-3 py-2 w-full"
+        />
+        {phoneError && (
+          <div className="text-red-500">{phoneError}</div>
+        )}
+      </div>
+      <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.addUser.formLabels.email")}
+        </label>
+        <input
+          type="email"
+          value={newUser.email}
+          onChange={(e) => {
+            setNewUser({ ...newUser, email: e.target.value });
+            setEmailError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {emailError && (
+          <div className="text-red-500">{emailError}</div>
+        )}
+      </div>
+      <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.addUser.formLabels.password")}
+        </label>
+        <input
+          type="password"
+          value={newUser.password}
+          onChange={(e) => {
+            setNewUser({ ...newUser, password: e.target.value });
+            setPasswordError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {passwordError && (
+          <div className="text-red-500">{passwordError}</div>
+        )}
+      </div>
+    </form>
+    <div className="flex justify-end mt-6">
+      <button
+        className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded"
+        onClick={handleAddUser}
+      >
+        {t("users.modals.addUser.buttons.addUser")}
+      </button>
+      <button
+        className="text-gray-500 hover:text-gray-600 ml-4"
+        onClick={handleCloseAddModal}
+      >
+        {t("users.modals.addUser.buttons.close")}
+      </button>
+    </div>
+  </div>
+</Modal>
 
       {/* Edit User Modal */}
-      <Modal show={showEditModal} onHide={handleCloseEditModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{t("users.modals.editUser.title")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formFirstName">
-              <Form.Label>
-                {t("users.modals.editUser.formLabels.firstName")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newUser.first_name}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, first_name: e.target.value })
-                  setFirstNameError(""); // Clear error when user starts typing
-                }}
-              />
-              {firstNameError && (
-                <div className="text-danger">{firstNameError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="formLastName">
-              <Form.Label>
-                {t("users.modals.editUser.formLabels.lastName")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newUser.last_name}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, last_name: e.target.value })
-                  setLastNameError("")
-                }}
-              />
-               {lastNameError && (
-                <div className="text-danger">{lastNameError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="formPhone">
-              <Form.Label>
-                {t("users.modals.editUser.formLabels.phone")}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                value={newUser.phone}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, phone: e.target.value });
-                  setPasswordError("")
-                }}
-              />
-              {phoneError && (
-                <div className="text-danger">{phoneError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="formEmail">
-              <Form.Label>
-                {t("users.modals.editUser.formLabels.email")}
-              </Form.Label>
-              <Form.Control
-                type="email"
-                value={newUser.email}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, email: e.target.value });
-                  setEmailError("");
-                }}
-              />
-               {emailError && (
-                <div className="text-danger">{emailError}</div>
-              )}
-            </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>
-                {t("users.modals.editUser.formLabels.password")}
-              </Form.Label>
-              <Form.Control
-                type="password"
-                value={newUser.password}
-                onChange={(e) => {
-                  setNewUser({ ...newUser, password: e.target.value });
-                  setPasswordError("")
-                }}
-              />
-               {passwordError && (
-                <div className="text-danger">{passwordError}</div>
-              )}
-            </Form.Group>
-            {/* <Form.Group controlId="formDateJoined">
-              <Form.Label>
-                {t("users.modals.editUser.formLabels.dateJoined")}
-              </Form.Label>
-              <Form.Control
-                type="date"
-                value={newUser.dateJoined}
-                onChange={(e) =>
-                  setNewUser({ ...newUser, dateJoined: e.target.value })
-                }
-              />
-            </Form.Group> */}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseEditModal}>
-            {t("users.modals.editUser.buttons.close")}
-          </Button>
-          <Button variant="primary" onClick={handleEditUser}>
-            {t("users.modals.editUser.buttons.saveChanges")}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Modal show={showEditModal} onHide={handleCloseEditModal} className="fixed inset-0 flex items-center justify-center">
+  <div className="bg-white rounded-lg w-76 p-8">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-2xl font-semibold">{t("users.modals.editUser.title")}</h2>
+      <button onClick={handleCloseEditModal}>
+        <svg
+          className="w-6 h-6 text-gray-600 hover:text-gray-700 cursor-pointer"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <form>
+      <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.editUser.formLabels.firstName")}
+        </label>
+        <input
+          type="text"
+          value={newUser.first_name}
+          onChange={(e) => {
+            setNewUser({ ...newUser, first_name: e.target.value });
+            setFirstNameError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {firstNameError && (
+          <div className="text-red-500">{firstNameError}</div>
+        )}
+      </div>
+      <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.editUser.formLabels.lastName")}
+        </label>
+        <input
+          type="text"
+          value={newUser.last_name}
+          onChange={(e) => {
+            setNewUser({ ...newUser, last_name: e.target.value });
+            setLastNameError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {lastNameError && (
+          <div className="text-red-500">{lastNameError}</div>
+        )}
+      </div>
+      <div className="mb-4 flex">
+        <select
+          value={newUser.countryCode}
+          onChange={handleCountryCodeChange}
+          className="border border-gray-300 rounded px-3 py-2 mr-2"
+        >
+        </select>
+        <input
+          type="phone"
+          name="phone"
+          value={newUser.phone}
+          onChange={(e) => {
+            setNewUser({ ...newUser, phone: e.target.value });
+            setPhoneError(""); // Clear error when user starts typing
+          }}
+          placeholder={t("signup.enterPhone")}
+          className="border border-gray-300 rounded px-3 py-2 w-full"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.editUser.formLabels.email")}
+        </label>
+        <input
+          type="email"
+          value={newUser.email}
+          onChange={(e) => {
+            setNewUser({ ...newUser, email: e.target.value });
+            setEmailError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {emailError && (
+          <div className="text-red-500">{emailError}</div>
+        )}
+      </div>
+      {/* <div className="mb-4">
+        <label className="block mb-1">
+          {t("users.modals.editUser.formLabels.password")}
+        </label>
+        <input
+          type="password"
+          value={newUser.password}
+          onChange={(e) => {
+            setNewUser({ ...newUser, password: e.target.value });
+            setPasswordError(""); // Clear error when user starts typing
+          }}
+          className="border border-gray-300 rounded w-full px-3 py-2"
+        />
+        {passwordError && (
+          <div className="text-red-500">{passwordError}</div>
+        )}
+      </div> */}
+    </form>
+    <div className="flex justify-end mt-6">
+      <button
+        className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded"
+        onClick={handleEditUser}
+      >
+        {t("users.modals.editUser.buttons.saveChanges")}
+      </button>
+      <button
+        className="text-gray-500 hover:text-gray-600 ml-4"
+        onClick={handleCloseEditModal}
+      >
+        {t("users.modals.editUser.buttons.close")}
+      </button>
+    </div>
+  </div>
+</Modal>
 
-      <Modal show={showDeleteConfirmationModal} onHide={cancelDeleteUser}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete User</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this user?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={cancelDeleteUser}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={confirmDeleteUser}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
+
+<Modal show={showDeleteConfirmationModal} onHide={cancelDeleteUser} className="fixed inset-0 flex items-center justify-center">
+  <div className="bg-white rounded-lg w-76 p-8">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-lg font-semibold">Delete User</h2>
+      <button onClick={cancelDeleteUser}>
+        <svg
+          className="w-6 h-6 text-gray-600 hover:text-gray-700 cursor-pointer"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div className="text-gray-700 mb-6">
+      <p>Are you sure you want to delete this user?</p>
+    </div>
+    <div className="flex justify-end">
+      <button
+        className="text-gray-500 hover:text-gray-600 mr-4"
+        onClick={cancelDeleteUser}
+      >
+        Cancel
+      </button>
+      <button
+        className="text-white bg-red-500 hover:bg-red-600 py-2 px-4 rounded"
+        onClick={confirmDeleteUser}
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</Modal>
     </div>
   );
 };
