@@ -8,6 +8,7 @@ import {
   deleteQuestion,
   editQuestion,
 } from "../../actions/QuestionAction"; // Import action functions
+import TablePagination from "./TablePagination"; // Import your TablePagination component
 
 const Question = () => {
   const dispatch = useDispatch();
@@ -108,6 +109,19 @@ const Question = () => {
     return fullQuestion.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of users per page
+  // Pagination logic
+  const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentQuestions = filteredQuestions.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const handlePageChange = (page) => setCurrentPage(page);
+
   return (
     <div>
       <h1>Questions</h1>
@@ -135,7 +149,7 @@ const Question = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredQuestions.map((question) => (
+          {currentQuestions.map((question) => (
             <tr key={question.id}>
               <td>{question.id}</td>
               <td>{question.question_text}</td>
@@ -162,6 +176,7 @@ const Question = () => {
           ))}
         </tbody>
       </Table>
+      <TablePagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
 
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
