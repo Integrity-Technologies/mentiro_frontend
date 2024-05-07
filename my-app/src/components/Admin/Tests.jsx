@@ -15,6 +15,7 @@ import {
   editTest,
 } from "../../actions/testAction";
 import { useDispatch, useSelector } from "react-redux";
+import TablePagination from "./TablePagination"; // Import your TablePagination component
 
 const Tests = () => {
   const dispatch = useDispatch();
@@ -225,6 +226,16 @@ const Tests = () => {
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of users per page
+  // Pagination logic
+  const totalPages = Math.ceil(filteredTests.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentTests = filteredTests.slice(indexOfFirstItem, indexOfLastItem);
+  const handlePageChange = (page) => setCurrentPage(page);
+
   return (
     <div>
       <h1>{t("tests.title")}</h1>
@@ -251,7 +262,7 @@ const Tests = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredTests.map((test) => (
+          {currentTests.map((test) => (
             <tr key={test.id}>
               <td>{test.id}</td>
               <td>{test.test_name}</td>
@@ -277,6 +288,12 @@ const Tests = () => {
           ))}
         </tbody>
       </Table>
+     {/* Pagination */}
+      <TablePagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
 
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
