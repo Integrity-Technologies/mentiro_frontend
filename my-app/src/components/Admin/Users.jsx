@@ -9,6 +9,7 @@ import {
 } from "../../actions/userAction"; // Import actions
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch hook
 import TablePagination from "./TablePagination";
+import countries from "../../data/countries";
 
 const Users = () => {
   const { t } = useTranslation(); // Use useTranslation hook here
@@ -376,8 +377,13 @@ const Users = () => {
         <select
           value={newUser.countryCode}
           onChange={handleCountryCodeChange}
-          className="border border-gray-300 rounded px-3 py-2 mr-2"
+          className="border border-gray-300 rounded px-1 py-1 mr-1 w-20"
         >
+          {countries?.map((country, index) => (
+                    <option key={index} value={country.country_phone_code}>
+                      {`+${country.country_phone_code} (${country.country_name})`}
+                    </option>
+                  ))}
         </select>
         <input
           type="phone"
@@ -504,8 +510,13 @@ const Users = () => {
         <select
           value={newUser.countryCode}
           onChange={handleCountryCodeChange}
-          className="border border-gray-300 rounded px-3 py-2 mr-2"
+          className="border border-gray-300 rounded px-1 py-1 mr-1 w-20"
         >
+           {countries?.map((country, index) => (
+                    <option key={index} value={country.country_phone_code}>
+                      {`+${country.country_phone_code} (${country.country_name})`}
+                    </option>
+                  ))}
         </select>
         <input
           type="phone"
