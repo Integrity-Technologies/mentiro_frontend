@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Form, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchResults } from "../../actions/resultAction";
+import TablePagination from "./TablePagination";
 
 const ViewTestResult = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,17 @@ const ViewTestResult = () => {
   const filteredCandidates = results.filter((candidate) =>
     candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of users per page
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCandidates = filteredCandidates.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (page) => setCurrentPage(page);
 
   // Handle error state
   if (error) {
@@ -45,7 +57,7 @@ const ViewTestResult = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCandidates.map((candidate) => (
+          {currentCandidates.map((candidate) => (
             <tr key={candidate.id}>
               <td>{candidate.id}</td>
               <td>{candidate.candidate_name}</td>
@@ -56,6 +68,7 @@ const ViewTestResult = () => {
           ))}
         </tbody>
       </Table>
+      <TablePagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
     </div>
   );
 };
