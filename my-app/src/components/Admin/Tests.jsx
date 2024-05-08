@@ -278,7 +278,7 @@ const Tests = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredTests.map((test) => (
+          {currentTests.map((test) => (
             <tr key={test.id}>
               <td className="border border-gray-400 px-4 py-2">{test.id}</td>
               <td className="border border-gray-400 px-4 py-2">
