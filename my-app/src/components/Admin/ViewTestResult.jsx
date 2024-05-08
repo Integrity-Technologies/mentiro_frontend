@@ -12,8 +12,8 @@ const ViewTestResult = () => {
     dispatch(fetchResults()); // Dispatch the fetchResults action when component mounts
   }, [dispatch]);
 
-  // Filter candidates based on search term
-  const filteredCandidates = results.filter((candidate) =>
+  // Filter results based on search term
+  const filteredResults = results.filter((candidate) =>
     candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -21,10 +21,10 @@ const ViewTestResult = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of users per page
   // Pagination logic
-  const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentCandidates = filteredCandidates.slice(indexOfFirstItem, indexOfLastItem);
+  const currentResults = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (page) => setCurrentPage(page);
 
@@ -56,7 +56,7 @@ const ViewTestResult = () => {
           </tr>
         </thead>
         <tbody>
-          {currentCandidates.map((candidate) => (
+          {currentResults.map((candidate) => (
             <tr key={candidate.id}>
               <td className="border border-gray-400 px-4 py-2">{candidate.id}</td>
               <td className="border border-gray-400 px-4 py-2">{candidate.candidate_name}</td>
