@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Table, Form, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
