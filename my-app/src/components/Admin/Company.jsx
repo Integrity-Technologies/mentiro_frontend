@@ -141,7 +141,7 @@ const Company = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCompany.map((company) => (
+          {currentCompanies.map((company) => (
             <tr key={company.id}>
               <td className="border px-4 py-2">{company.id}</td>
               <td className="border px-4 py-2">{company.name}</td>
