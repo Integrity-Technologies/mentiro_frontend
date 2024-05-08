@@ -23,6 +23,7 @@ const Users = () => {
   const [phoneError, setPhoneError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const [newUser, setNewUser] = useState({
     id: "",
@@ -125,6 +126,13 @@ const Users = () => {
         await dispatch(getAllUsers());
         handleCloseAddModal();
         resetForm(); // Reset form after successful addition
+         // Set success message
+        setSuccessMessage("User Saved Changes");
+
+        // Clear success message after 1 minute
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 2000);
       }
     } catch (error) {
       console.error("Error adding user:", error);
@@ -186,6 +194,13 @@ const Users = () => {
       await dispatch(getAllUsers());
       handleCloseEditModal();
       resetForm(); // Reset form after successful editing
+      // Set success message
+      setSuccessMessage("User Saved Changes");
+
+      // Clear success message after 1 minute
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 2000);
 
     } catch (error) {
       console.error("Error editing user:", error);
@@ -271,7 +286,13 @@ const Users = () => {
       >
         {t("users.addUserButton")}
       </button>
-  
+
+  {successMessage && (
+      <Alert variant="success" className="mt-3">
+        {successMessage}
+      </Alert>
+    )}
+      
     <div className="overflow-x-auto mt-2">
       <table className="table-auto w-full">
         <thead>
