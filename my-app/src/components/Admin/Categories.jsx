@@ -8,6 +8,7 @@ import {
 } from "../../actions/categoryAction"; // Correct import statement
 import { editCategory } from "../../actions/categoryAction";
 import { getToken } from "../../actions/authActions"; // Import getToken function
+import TablePagination from "./TablePagination"; // Import your TablePagination component
 
 const Category = () => {
   const categories = useSelector((state) => state.category.categories); // Get categories from state
@@ -127,6 +128,19 @@ const Category = () => {
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of users per page
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCategories = filteredCategories.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const handlePageChange = (page) => setCurrentPage(page);
+  
   return (
     <div>
       <h1 className="text-3xl font-bold my-4">Categories</h1>
@@ -154,7 +168,7 @@ const Category = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCategories.map((category) => (
+          {currentCategories.map((category) => (
             <tr key={category.id}>
               <td className="border px-4 py-2">{category.id}</td>
               <td className="border px-4 py-2">{category.category_name}</td>
@@ -176,6 +190,11 @@ const Category = () => {
           ))}
         </tbody>
       </table>
+      <TablePagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
 
       {/* Add Category Modal */}
       <Modal
