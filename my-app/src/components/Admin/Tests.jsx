@@ -65,7 +65,6 @@ const Tests = () => {
 
   // Add function to handle category selection
   const handleCategorySelect = (categoryName) => {
-    setSelectedCategory(categoryName);
     setNewTest({
       ...newTest,
       category_names: [categoryName], // Set the selected category in the input field
@@ -227,10 +226,6 @@ const Tests = () => {
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  const toggleCategoryDropdown = () => {
-    setShowCategoryDropdown(!showCategoryDropdown);
-  };
-
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of users per page
@@ -354,31 +349,27 @@ const Tests = () => {
               )}
             </Form.Group>
 
-   <Form.Group controlId="formTestCategories">
-  <Form.Label>{t("tests.modals.editTest.formLabels.testCategories")}</Form.Label>
-  <FormControl
-    as="input"
-    value={selectedCategories.join(", ")}
-    placeholder="Select Categories"
-    onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-    readOnly
-  />
-  <div className={`dropdown-menu${showCategoryDropdown ? " show" : ""}`}>
-    {categories.map((category) => (
-      <div
-        key={category.id}
-        className="dropdown-item"
-        onClick={() => handleCategorySelect(category.category_name)}
-      >
-        {category.category_name}
-      </div>
-    ))}
-  </div>
-  {categoryNameError && (
-    <div className="text-danger">{categoryNameError}</div>
-  )}
-</Form.Group>
+            <Form.Group controlId="formTestCategories">
+              <Form.Label>
+                {t("tests.modals.editTest.formLabels.testCategories")}
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={newTest.category_names}
+                onChange={(e) => handleCategorySelect(e.target.value)}
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.category_name}>
+                    {category.category_name}
+                  </option>
+                ))}
+              </Form.Control>
 
+              {categoryNameError && (
+                <div className="text-danger">{categoryNameError}</div>
+              )}
+            </Form.Group>
 
             <Form.Group controlId="formCompanyName">
               <Form.Label>
@@ -457,23 +448,18 @@ const Tests = () => {
             </Form.Group>
             <Form.Group controlId="formTestCategories">
               <Form.Label>Test Categories</Form.Label>
-              <Dropdown>
-                <Dropdown.Toggle variant="primary" id="dropdown-category">
-                  {selectedCategory || "Select Category"}
-                </Dropdown.Toggle>
-                <Dropdown.Menu show={showCategoryDropdown}>
-                  {categories.map((category) => (
-                    <Dropdown.Item
-                      key={category.id}
-                      onSelect={() =>
-                        handleCategorySelect(category.category_name)
-                      }
-                    >
-                      {category.category_name}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
+              <Form.Control
+                as="select"
+                value={newTest.category_names}
+                onChange={(e) => handleCategorySelect(e.target.value)}
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.category_name}>
+                    {category.category_name}
+                  </option>
+                ))}
+              </Form.Control>
               {categoryNameError && (
                 <div className="text-danger">{categoryNameError}</div>
               )}
