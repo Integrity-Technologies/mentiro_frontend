@@ -124,58 +124,58 @@ const Question = () => {
 
   return (
     <div>
-      <h1>Questions</h1>
-      <Form inline className="mb-3">
-        <FormControl
+      <h1 className="text-3xl font-bold mb-4">Questions</h1>
+      <div className="mb-3">
+        <input
           type="text"
           placeholder="Search by question text"
-          className="mr-sm-2 w-25"
+          className="border border-gray-300 rounded px-3 py-1 w-1/4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </Form>
-      <Button variant="success" onClick={handleShowAddModal}>
+      </div>
+      <button
+        className="bg-green-500 text-white px-4 py-2 rounded mb-4"
+        onClick={handleShowAddModal}
+      >
         Add Question
-      </Button>
+      </button>
 
-      <Table striped bordered hover>
+      <table className="border-collapse w-full mb-4">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Question Text</th>
-            <th>Difficulty Level</th>
-            <th>Categories</th>
-            <th>Actions</th>
+            <th className="border border-gray-400 px-4 py-2">ID</th>
+            <th className="border border-gray-400 px-4 py-2">Question Text</th>
+            <th className="border border-gray-400 px-4 py-2">Difficulty Level</th>
+            <th className="border border-gray-400 px-4 py-2">Categories</th>
+            <th className="border border-gray-400 px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentQuestions.map((question) => (
             <tr key={question.id}>
-              <td>{question.id}</td>
-              <td>{question.question_text}</td>
-              <td>{question.difficulty_level}</td>
-              <td>{question.categories}</td>
-              <td>
-                <Button
-                  variant="primary"
-                  size="sm"
+              <td className="border border-gray-400 px-4 py-2">{question.id}</td>
+              <td className="border border-gray-400 px-4 py-2">{question.question_text}</td>
+              <td className="border border-gray-400 px-4 py-2">{question.difficulty_level}</td>
+              <td className="border border-gray-400 px-4 py-2">{question.categories}</td>
+              <td className="border border-gray-400 px-4 py-2">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
                   onClick={() => handleShowEditModal(question)}
                 >
                   Edit
-                </Button>{" "}
-                <Button
-                  variant="danger"
-                  size="sm"
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
                   onClick={() => handleDeleteModal(question)}
-
                 >
                   Delete
-                </Button>
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       <TablePagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
 
       <Modal show={showAddModal} onHide={handleCloseAddModal}>

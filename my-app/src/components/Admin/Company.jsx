@@ -44,12 +44,14 @@ const Company = () => {
 
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
-  
+
     let hasError = false;
-  
+
     // Check if the company with the same name already exists
-    const isCompanyExists = companies.some(company => company.name.toLowerCase() === newCompany.name.toLowerCase());
-  
+    const isCompanyExists = companies.some(
+      (company) => company.name.toLowerCase() === newCompany.name.toLowerCase()
+    );
+
     if (isCompanyExists) {
       setCompanyError("Company with this name already exists");
       hasError = true;
@@ -59,24 +61,23 @@ const Company = () => {
     } else {
       setCompanyError("");
     }
-    
+
     if (!newCompany.website.trim()) {
       setWebsiteError("Website is required");
       hasError = true;
     } else {
       setWebsiteError("");
     }
-  
+
     if (hasError) {
       return;
     }
-  
+
     await dispatch(addCompany(newCompany));
     setNewCompany({ name: "", website: "" });
     await dispatch(fetchCompanies()); // Add this line to fetch updated company data
     handleCloseAddModal();
   };
-  
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
@@ -97,61 +98,66 @@ const Company = () => {
   });
 
   return (
-    <div>
-      <h1>Companies</h1>
-      <Form inline className="mb-3">
-        <FormControl
+    <div className="p-4">
+      <h1 className="text-3xl font-semibold mb-4">Companies</h1>
+      <div className="mb-4">
+        <input
           type="text"
           placeholder="Search by name"
-          className="mr-sm-2 w-25"
+          className="border border-gray-300 rounded px-3 py-1 w-1/4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </Form>
-      <Button variant="success" onClick={handleShowAddModal}>
+      </div>
+      <button
+        className="bg-green-500 text-white px-4 py-2 rounded mr-4"
+        onClick={handleShowAddModal}
+      >
         Add Company
-      </Button>
+      </button>
 
-      <Table striped bordered hover>
+      <table className="table-auto w-full mt-2">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Company Name</th>
-            <th>Website</th>
-            <th>Created By</th>
-            <th>Actions</th>
+            <th className="border px-4 py-2">ID</th>
+            <th className="border px-4 py-2">Company Name</th>
+            <th className="border px-4 py-2">Website</th>
+            <th className="border px-4 py-2">Created By</th>
+            <th className="border px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredCompany.map((company) => (
             <tr key={company.id}>
-              <td>{company.id}</td>
-              <td>{company.name}</td>
-              <td>{company.website}</td>
-              <td>{company.created_by_user}</td>
-              <td>
-                <Button
-                  variant="primary"
-                  size="sm"
+              <td className="border px-4 py-2">{company.id}</td>
+              <td className="border px-4 py-2">{company.name}</td>
+              <td className="border px-4 py-2">{company.website}</td>
+              <td className="border px-4 py-2">{company.created_by_user}</td>
+              <td className="border px-4 py-2">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
                   onClick={() => handleShowEditModal(company)}
                 >
                   Edit
-                </Button>{" "}
-                <Button
-                  variant="danger"
-                  size="sm"
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
                   onClick={() => handleShowDeleteModal(company)}
                 >
                   Delete
-                </Button>
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
-
+      </table>
       {/* Add Company Modal */}
-      <Modal show={showAddModal} onHide={handleCloseAddModal}>
+      <Modal
+        show={showAddModal}
+        onHide={handleCloseAddModal}
+        className="fixed inset-0 flex items-center justify-center"
+      >
+        
         <Modal.Header closeButton>
           <Modal.Title>Add Company</Modal.Title>
         </Modal.Header>
@@ -180,7 +186,7 @@ const Company = () => {
                 value={newCompany.website}
                 onChange={(e) => {
                   setNewCompany({ ...newCompany, website: e.target.value });
-                  setWebsiteError("")
+                  setWebsiteError("");
                 }}
               />
               {websiteError && (

@@ -6,6 +6,7 @@ import {
   Form,
   FormControl,
   Alert,
+  Dropdown,
 } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import {
@@ -44,6 +45,8 @@ const Tests = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [categorySuggestions, setCategorySuggestions] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [categoryNameError, setCategoryNameError] = useState("");
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); // State for showing category dropdown
 
   useEffect(() => {
     dispatch(fetchTests());
@@ -63,13 +66,11 @@ const Tests = () => {
   // Add function to handle category selection
   const handleCategorySelect = (categoryName) => {
     setSelectedCategory(categoryName);
+    setNewTest({
+      ...newTest,
+      category_names: [categoryName], // Set the selected category in the input field
+    });
     setCategorySuggestions([]); // Clear suggestions after selection
-    if (!newTest.category_names.includes(categoryName)) {
-      setNewTest({
-        ...newTest,
-        category_names: [...newTest.category_names, categoryName],
-      });
-    }
   };
 
   const handleCompanySelect = (companyName) => {
@@ -226,6 +227,10 @@ const Tests = () => {
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  const toggleCategoryDropdown = () => {
+    setShowCategoryDropdown(!showCategoryDropdown);
+  };
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of users per page
@@ -239,58 +244,72 @@ const Tests = () => {
   return (
     <div>
       <h1>{t("tests.title")}</h1>
-      <Form inline className="mb-3">
-        <FormControl
+      <div className="mb-3">
+        <input
           type="text"
           placeholder={t("tests.searchPlaceholder")}
-          className="mr-sm-2 w-25 text-left"
+          className="border border-gray-300 rounded px-3 py-1 w-1/4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </Form>
-      <Button variant="success" onClick={handleShowAddModal}>
+      </div>
+      <button
+        className="bg-green-500 text-white px-4 py-2 rounded mb-4"
+        onClick={handleShowAddModal}
+      >
         {t("tests.addTestButton")}
-      </Button>
-      <Table striped bordered hover>
+      </button>
+      <table className="border-collapse w-full mb-4">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>{t("tests.tableHeaders.testName")}</th>
-            <th>{t("tests.tableHeaders.testDescription")}</th>
-            <th>{t("tests.tableHeaders.testCategories")}</th>
-            <th>{t("tests.tableHeaders.actions")}</th>
+            <th className="border border-gray-400 px-4 py-2">ID</th>
+            <th className="border border-gray-400 px-4 py-2">
+              {t("tests.tableHeaders.testName")}
+            </th>
+            <th className="border border-gray-400 px-4 py-2">
+              {t("tests.tableHeaders.testDescription")}
+            </th>
+            <th className="border border-gray-400 px-4 py-2">
+              {t("tests.tableHeaders.testCategories")}
+            </th>
+            <th className="border border-gray-400 px-4 py-2">
+              {t("tests.tableHeaders.actions")}
+            </th>
           </tr>
         </thead>
         <tbody>
-          {currentTests.map((test) => (
+          {filteredTests.map((test) => (
             <tr key={test.id}>
-              <td>{test.id}</td>
-              <td>{test.test_name}</td>
-              <td>{test.test_description}</td>
-              <td>{test.categories}</td>
-              <td>
-                <Button
-                  variant="primary"
-                  size="sm"
+              <td className="border border-gray-400 px-4 py-2">{test.id}</td>
+              <td className="border border-gray-400 px-4 py-2">
+                {test.test_name}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                {test.test_description}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                {test.categories}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
                   onClick={() => handleShowEditModal(test)}
                 >
                   Edit
-                </Button>{" "}
-                <Button
-                  variant="danger"
-                  size="sm"
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
                   onClick={() => handleShowDeleteModal(test)}
                 >
                   Delete
-                </Button>
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
-     {/* Pagination */}
+      </table>
       <TablePagination
-        totalPages={totalPages}
+        totalPages={Math.ceil(tests.length / itemsPerPage)}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
@@ -335,46 +354,31 @@ const Tests = () => {
               )}
             </Form.Group>
 
-            <Form.Group controlId="formTestCategories">
-              <Form.Label>
-                {t("tests.modals.addTest.formLabels.testCategories")}
-              </Form.Label>
-              <FormControl
-                type="text"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                placeholder="Type to search categories"
-              />
-              {selectedCategory && (
-                <div>
-                  {categorySuggestions.map((category) => (
-                    <div
-                      key={category.id}
-                      onClick={() =>
-                        handleCategorySelect(category.category_name)
-                      }
-                      className={`p-2 ${
-                        selectedCategory === category.category_name
-                          ? "bg-primary text-white"
-                          : ""
-                      }`}
-                      style={{
-                        cursor: "pointer",
-                        backgroundColor:
-                          selectedCategory === category.category_name
-                            ? "blue"
-                            : "transparent",
-                      }}
-                    >
-                      {category.category_name}
-                    </div>
-                  ))}
-                </div>
-              )}
-              {categoryNamesError && (
-                <div className="text-danger">{categoryNamesError}</div>
-              )}
-            </Form.Group>
+   <Form.Group controlId="formTestCategories">
+  <Form.Label>{t("tests.modals.editTest.formLabels.testCategories")}</Form.Label>
+  <FormControl
+    as="input"
+    value={selectedCategories.join(", ")}
+    placeholder="Select Categories"
+    onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+    readOnly
+  />
+  <div className={`dropdown-menu${showCategoryDropdown ? " show" : ""}`}>
+    {categories.map((category) => (
+      <div
+        key={category.id}
+        className="dropdown-item"
+        onClick={() => handleCategorySelect(category.category_name)}
+      >
+        {category.category_name}
+      </div>
+    ))}
+  </div>
+  {categoryNameError && (
+    <div className="text-danger">{categoryNameError}</div>
+  )}
+</Form.Group>
+
 
             <Form.Group controlId="formCompanyName">
               <Form.Label>
@@ -452,30 +456,27 @@ const Tests = () => {
               )}
             </Form.Group>
             <Form.Group controlId="formTestCategories">
-              <Form.Label>
-                {t("tests.modals.editTest.formLabels.testCategories")}
-              </Form.Label>
-              <FormControl
-                as="select"
-                multiple
-                value={newTest.category_names}
-                onChange={(e) => {
-                  const selectedOptions = Array.from(
-                    e.target.selectedOptions,
-                    (option) => option.value
-                  );
-                  setNewTest({
-                    ...newTest,
-                    category_names: selectedOptions,
-                  });
-                }}
-              >
-                {categories.map((category) => (
-                  <option key={category.id} value={category.category_name}>
-                    {category.category_name}
-                  </option>
-                ))}
-              </FormControl>
+              <Form.Label>Test Categories</Form.Label>
+              <Dropdown>
+                <Dropdown.Toggle variant="primary" id="dropdown-category">
+                  {selectedCategory || "Select Category"}
+                </Dropdown.Toggle>
+                <Dropdown.Menu show={showCategoryDropdown}>
+                  {categories.map((category) => (
+                    <Dropdown.Item
+                      key={category.id}
+                      onSelect={() =>
+                        handleCategorySelect(category.category_name)
+                      }
+                    >
+                      {category.category_name}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+              {categoryNameError && (
+                <div className="text-danger">{categoryNameError}</div>
+              )}
             </Form.Group>
             <Form.Group controlId="formCompanyName">
               <Form.Label>

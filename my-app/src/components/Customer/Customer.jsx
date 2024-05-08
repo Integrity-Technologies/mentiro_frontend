@@ -1,16 +1,8 @@
 import React, { useState } from "react";
-import { Container, Nav, NavLink, Row, Col, Image, Button } from "react-bootstrap"; // Import Image component
 import { useTranslation } from "react-i18next";
 import LanguageToggleButton from "../Togglebutton";
 import Assesment from "./Assesment";
 const logoImage = "/assets/icon.jpg";
-
-
-// import Tests from "./Tests";
-// import Category from "./Categories";
-// import Candidates from "./Candidates";
-// import ViewTestResult from "./ViewTestResult";
-// import Company from "./Company";
 
 const Customer = () => {
   const { t, i18n } = useTranslation();
@@ -37,42 +29,38 @@ const Customer = () => {
     { label: "Assessment", link: "/customer/option2" },
   ];
 
-
-
   return (
-    <div>
-      <Container fluid>
-        <Row>
-          <Col xs={2} id="sidebar" className="bg-white shadow vh-100">
-            <div className="text-center mb-3"> {/* Center the logo */}
-              <Image src={logoImage} alt="Logo" className="rounded-circle img-fluid w-50 mt-5" />
-            </div>
-            <Nav className="flex-column">
-              {Object.keys(sections).map((link) => (
-                <NavLink
-                  key={link}
-                  to={link}
-                  className={`nav-link ${
-                    activeLink === link ? "bg-dark text-light" : ""
-                  } mb-3`}
-                  onClick={() => handleClick(link)}
-                >
-                  {link === "/Assesment"
-                    ? t("users.title")
-                    : link.replace("/", "")}
-                </NavLink>
-              ))}
-            </Nav>
-            <LanguageToggleButton onLanguageChange={handleLanguageChange} />
-            <Button>English</Button>
-      <Button>العربية</Button>
-          </Col>
-          <Col md={9} className="pt-3">
-            {sections[activeLink]}
-          </Col>
-        </Row>
-      </Container>
-      
+    <div className="flex">
+      <div className="w-1/5 bg-white shadow h-screen">
+        <div className="text-center mb-3">
+          <img src={logoImage} alt="Logo" className="rounded-full w-32 mt-5 mx-auto" />
+        </div>
+        <nav className="mt-10">
+          {Object.keys(sections).map((link) => (
+            <button
+              key={link}
+              className={`block px-20 py-2 mr-20 ${
+                activeLink === link ? "bg-teal-400 text-white" : ""
+              } mb-3`}
+              onClick={() => handleClick(link)}
+            >
+              {link === "/Assesments" ? "Assesment" : link.replace("/", "")}
+            </button>
+          ))}
+        </nav>
+        <LanguageToggleButton onLanguageChange={handleLanguageChange} />
+        <div className="flex justify-around mt-10">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            English
+          </button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            العربية
+          </button>
+        </div>
+      </div>
+      <div className="w-4/5 bg-gray-100 p-10">
+        {sections[activeLink]}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Table, Form, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
@@ -37,37 +36,37 @@ const ViewTestResult = () => {
   return (
     <div>
       <h1>Candidates Result</h1>
-      <Form inline className="mb-3">
-        <FormControl
+      <div className="mb-3">
+        <input
           type="text"
           placeholder="Search by candidate name"
-          className="mr-sm-2 w-25"
+          className="border border-gray-300 rounded px-3 py-1 w-1/4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </Form>
-      <Table striped bordered hover>
+      </div>
+      <table className="border-collapse w-full mb-4">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Candidate Name</th>
-            <th>Assessment Name</th>
-            <th>Test Name</th>
-            <th>Score</th>
+            <th className="border border-gray-400 px-4 py-2">ID</th>
+            <th className="border border-gray-400 px-4 py-2">Candidate Name</th>
+            <th className="border border-gray-400 px-4 py-2">Assessment Name</th>
+            <th className="border border-gray-400 px-4 py-2">Test Name</th>
+            <th className="border border-gray-400 px-4 py-2">Score</th>
           </tr>
         </thead>
         <tbody>
           {currentCandidates.map((candidate) => (
             <tr key={candidate.id}>
-              <td>{candidate.id}</td>
-              <td>{candidate.candidate_name}</td>
-              <td>{candidate.assessment_name}</td>
-              <td>{candidate.test_name}</td>
-              <td>{candidate.score}--</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.id}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.candidate_name}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.assessment_name}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.test_name}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.score}--</td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       <TablePagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
     </div>
   );

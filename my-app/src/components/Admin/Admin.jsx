@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Nav, NavLink, Row, Col, Image } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import LanguageToggleButton from "../Togglebutton";
 import Users from "./Users"; // Import the Users component
@@ -10,7 +10,6 @@ import ViewTestResult from "./ViewTestResult";
 import Company from "./Company";
 import Question from "./Question";
 const logoImage = "/assets/icon.jpg";
-
 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
@@ -34,7 +33,6 @@ const Dashboard = () => {
       />
     ),
     "/Questions": <Question />,
-    // Pass language and onLanguageChange props to Users component
     "/Tests": (
       <Tests
         language={selectedLanguage}
@@ -43,41 +41,39 @@ const Dashboard = () => {
     ),
     "/Categories": <Category />,
     "/Candidates": <Candidates />,
-    "/Test Result": <ViewTestResult />,
+    "/TestResult": <ViewTestResult />,
     "/Company": <Company />,
   };
 
   return (
-    <div>
-      <Container fluid>
-        <Row>
-          <Col md={3} className="bg-light shadow border-end vh-100">
-          <div className="text-center mb-3"> {/* Center the logo */}
-              <Image src={logoImage} alt="Logo" className="rounded-circle img-fluid w-25 mt-2" />
-            </div>
-            <Nav className="flex-column">
-              {Object.keys(sections).map((link) => (
-                <NavLink
-                  key={link}
-                  to={link}
-                  className={`nav-link ${
-                    activeLink === link ? "bg-dark text-light" : ""
-                  } mb-3`}
-                  onClick={() => handleClick(link)}
-                >
-                  {link === "/Users" ? t("users.title") : link.replace("/", "")}
-                </NavLink>
-              ))}
-            </Nav>
-            <LanguageToggleButton onLanguageChange={handleLanguageChange} />
-            
-          </Col>
-          <Col md={9} className="pt-3">
-            {sections[activeLink]}
-          </Col>
-          
-        </Row>
-      </Container>
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      {/* Sidebar */}
+      <aside className="bg-gray-200 lg:w-64 border-r border-gray-300">
+        <div className="p-4 text-center">
+          <Image src={logoImage} alt="Logo" className="rounded-full w-20 h-20 mx-auto mb-4" />
+        </div>
+        <nav className="flex flex-col">
+          {Object.keys(sections).map((link) => (
+            <button
+              key={link}
+              onClick={() => handleClick(link)}
+              className={`p-4 text-left hover:bg-gray-300 focus:bg-gray-300 ${
+                activeLink === link ? "bg-gray-300" : ""
+              }`}
+            >
+              {link === "/Users" ? t("users.title") : link.replace("/", "")}
+            </button>
+          ))}
+        </nav>
+        <div className="p-4 mt-auto">
+          <LanguageToggleButton onLanguageChange={handleLanguageChange} />
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 p-4">
+        {sections[activeLink]}
+      </main>
     </div>
   );
 };

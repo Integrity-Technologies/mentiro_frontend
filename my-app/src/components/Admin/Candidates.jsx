@@ -160,62 +160,59 @@ const Candidates = () => {
 
   return (
     <div>
-      <h1>Candidates</h1>
-      <Form inline className="mb-3">
-        <FormControl
+      <h1 className="text-2xl font-bold mb-4">Candidates</h1>
+      <div className="mb-3">
+        <input
           type="text"
           placeholder="Search by name"
-          className="mr-sm-2 w-25 text-left"
+          className="border border-gray-300 rounded px-3 py-1 w-1/4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </Form>
-      <Button variant="success" onClick={handleShowAddModal}>
+      </div>
+      <button
+        className="bg-green-500 text-white px-4 py-2 rounded mb-4"
+        onClick={handleShowAddModal}
+      >
         Add Candidate
-      </Button>
-      <Table striped bordered hover>
+      </button>
+      <table className="border-collapse w-full mb-4">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            {/* <th>Phone</th> */}
-            <th>Email</th>
-            {/* <th>password</th> */}
-            <th>Date Joined</th>
-            <th>Actions</th>
+            <th className="border border-gray-400 px-4 py-2">ID</th>
+            <th className="border border-gray-400 px-4 py-2">First Name</th>
+            <th className="border border-gray-400 px-4 py-2">Last Name</th>
+            <th className="border border-gray-400 px-4 py-2">Email</th>
+            <th className="border border-gray-400 px-4 py-2">Date Joined</th>
+            <th className="border border-gray-400 px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredCandidates.map((candidate) => (
             <tr key={candidate.id}>
-              <td>{candidate.id}</td>
-              <td>{candidate.first_name}</td>
-              <td>{candidate.last_name}</td>
-              {/* <td>{candidate.phone}</td> */}
-              <td>{candidate.email}</td>
-              {/* <td>{candidate.password}</td> */}
-              <td>{candidate.created_at}</td>
-              <td>
-                <Button
-                  variant="primary"
-                  size="sm"
+              <td className="border border-gray-400 px-4 py-2">{candidate.id}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.first_name}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.last_name}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.email}</td>
+              <td className="border border-gray-400 px-4 py-2">{candidate.created_at}</td>
+              <td className="border border-gray-400 px-4 py-2">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
                   onClick={() => handleShowEditModal(candidate)}
                 >
                   Edit
-                </Button>{" "}
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleShowDeleteModal(candidate.id)}
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                  onClick={() => handleDeleteCandidate(candidate.id)}
                 >
                   Delete
-                </Button>
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Candidate</Modal.Title>
