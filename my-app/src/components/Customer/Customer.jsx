@@ -61,7 +61,7 @@ const Customer = () => {
         </div>
       </div>
       <div className="w-4/5 bg-gray-100 p-10">
-        <Graph data={[1, 2, 3, 4, 5]} /> 
+        {sections[activeLink]}
       </div>
     </div>
   );
