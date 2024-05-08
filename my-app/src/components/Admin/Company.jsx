@@ -8,6 +8,7 @@ import {
   fetchCompanies,
 } from "../../actions/companyAction";
 import { getToken } from "../../actions/authActions"; // Import getToken function
+import TablePagination from "./TablePagination"; // Import your TablePagination component
 
 const Company = () => {
   const dispatch = useDispatch();
@@ -97,6 +98,19 @@ const Company = () => {
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of users per page
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCompany.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCompanies = filteredCompany.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const handlePageChange = (page) => setCurrentPage(page);
+  
   return (
     <div className="p-4">
       <h1 className="text-3xl font-semibold mb-4">Companies</h1>
@@ -151,6 +165,12 @@ const Company = () => {
           ))}
         </tbody>
       </table>
+      <TablePagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
+
       {/* Add Company Modal */}
       <Modal
         show={showAddModal}
