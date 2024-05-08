@@ -120,158 +120,97 @@ const SignUp = () => {
 
   return (
     <>
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <Form
-            className="border border-1 gap p-4 mt-5"
-            onSubmit={handleSubmit}
-          >
-            <Form.Group className="mb-3" controlId="formBasicSignUp">
-              <h2 className="text-center">{t("signup.title")}</h2>
-              <div className="d-flex justify-content-center">
-                <img
-                  src={logoImage}
-                  alt="Logo"
-                  className="rounded-circle img-fluid"
-                  width="100"
-                />
-              </div>
-            </Form.Group>
-            {/* Group for first name and last name */}
-            <div className="d-flex mb-3">
-              <Form.Group
-                className="me-3 flex-grow-1"
-                controlId="formBasicFirstName"
-              >
-                <Form.Label>
-                  {t("signup.first_name")}
-                  <span className="text-danger">*</span>
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  name="firstName"
-                  placeholder={t("signup.enterFirstName")}
-                />
-                {errors.first_name && (
-                  <Form.Text className="text-danger">
-                    {errors.first_name}
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="flex-grow-1" controlId="formBasicLastName">
-                <Form.Label>
-                  {t("signup.last_name")} <span className="text-danger">*</span>
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  name="lastName"
-                  placeholder={t("signup.enterLastName")}
-                />
-                {errors.last_name && (
-                  <Form.Text className="text-danger">
-                    {errors.last_name}
-                  </Form.Text>
-                )}
-              </Form.Group>
+     <section className="flex justify-center items-center h-screen bg-gray-50 dark:bg-gray-900 h-100">
+        <div className="w-full max-w-md bg-white rounded-lg shadow md:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <div className="text-center">
+              <img className="w-24 h-24 mx-auto mb-4 rounded-circle" src={logoImage} alt="logo" />
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                {t("signup.title")}
+              </h1>
             </div>
-            {/* Remaining inputs */}
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>
-                {t("signup.email")} <span className="text-danger">*</span>
-              </Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder={t("signup.enterEmail")}
-              />
-              {errors.email && (
-                <Form.Text className="text-danger">{errors.email}</Form.Text>
-              )}
-            </Form.Group>
-
-            <Form.Group className="mb-3 d-flex" controlId="formPhone">
-              <div className="me-3 flex-grow-1">
-                <Form.Label>
-                  {t("signup.phone")} <span className="text-danger">*</span>
-                </Form.Label>
-                <div className="d-flex">
-                  <Form.Control
-                    as="select"
-                    value={countryCode}
-                    onChange={handleCountryCodeChange}
-                    className="me-2"
-                  >
-                    {countries?.map((country, index) => (
-                      <option key={index} value={country.country_phone_code}>
-                        {`+${country.country_phone_code} (${country.country_name})`}
-                      </option>
-                    ))}
-                  </Form.Control>
-                  <Form.Control
-                    type="phone"
-                    name="phone"
-                    placeholder={t("signup.enterPhone")}
-                  />
-                </div>
-                {errors.phone && (
-                  <Form.Text className="text-danger">{errors.phone}</Form.Text>
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                <div className="d-flex mb-3">
+                  <div className="me-3 flex-grow-1">
+                    <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{t("signup.first_name")}<span className="text-danger">*</span></label>
+                    <input type="text" name="firstName" id="firstName" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={t("signup.enterFirstName")} />
+                    {errors.first_name && (
+                  <span className="text-danger text-sm">{errors.first_name}</span>
                 )}
-              </div>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>
-                {t("signup.password")} <span className="text-danger">*</span>
-              </Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder={t("signup.enterPassword")}
-                onChange={handlePasswordChange}
-              />
-              {errors.password && (
-                <Form.Text className="text-danger">{errors.password}</Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-              <Form.Label>
-                {t("signup.confirm_password")}{" "}
-                <span className="text-danger">*</span>
-              </Form.Label>
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                placeholder={t("signup.enterConfirmPassword")}
-                onChange={handleConfirmPasswordChange}
-              />
-              {errors.confirmPassword && (
-                <Form.Text className="text-danger">
-                  {errors.confirmPassword}
-                </Form.Text>
-              )}
-            </Form.Group>
-            <Button variant="dark" type="submit" className="w-100">
-              {t("signup.submit")}
-            </Button>
-            <p className="text-center mt-1">
-              {t("signup.alreadyHaveAccount")}{" "}
-              <NavLink to="/">{t("signup.login")}</NavLink>
-            </p>
-          </Form>
-          {showAlert &&
-            ((authError && (
-              <Alert variant="danger" className="mt-3">
-                {authError}
-              </Alert>
-            )) || (
-              <Alert variant="success" className="mt-3">
-                {t("signup.successmessage")}
-              </Alert>
-            ))}
-        </div>
-      </div>
-    </div>
+                  </div>
+                  <div className="flex-grow-1">
+                    <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{t("signup.last_name")} <span className="text-danger">*</span></label>
+                    <input type="text" name="lastName" id="lastName" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={t("signup.enterLastName")} />
+                    {errors.last_name && (
+                      <span className="text-danger text-sm">{errors.last_name}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{t("signup.email")} <span className="text-danger">*</span></label>
+                  <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={t("signup.enterEmail")}  />
+                  {errors.email && (
+                    <span className="text-danger text-sm">{errors.email}</span>
+                  )}
+                </div>
+                <div className="mb-3 d-flex" controlId="formPhone">
+                  <div className="me-3 flex-grow-1">
+                    <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{t("signup.phone")} <span className="text-danger">*</span></label>
+                    <div className="d-flex">
+                      <select value={countryCode} onChange={handleCountryCodeChange} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-36">
+                        {countries?.map((country, index) => (
+                          <option key={index} value={country.country_phone_code}>
+                            {`+${country.country_phone_code} (${country.country_name})`}
+                          </option>
+                        ))}
+                      </select>
+                      <input type="phone" name="phone" placeholder={t("signup.enterPhone")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+                    </div>
+                    {errors.phone && (
+                      <span className="text-danger text-sm">{errors.phone}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{t("signup.password")} <span className="text-danger">*</span></label>
+                  <input type="password" name="password" id="password" onChange={handlePasswordChange} placeholder={t("signup.enterPassword")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  {errors.password && (
+                    <span className="text-danger text-sm">{errors.password}</span>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{t("signup.confirm_password")} <span className="text-danger">*</span></label>
+                  <input type="password" name="confirmPassword" id="confirmPassword" onChange={handleConfirmPasswordChange} placeholder={t("signup.enterConfirmPassword")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  {errors.confirmPassword && (
+                    <span className="text-danger text-sm">{errors.confirmPassword}</span>
+                  )}
+                </div>
+                <div className="flex items-start mb-3">
+                  <div className="flex items-center h-5">
+                    <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label htmlFor="terms" className="font-light text-gray-500 dark:text-gray-300">I accept the <a className="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">Terms and Conditions</a></label>
+                  </div>
+                </div>
+                <button type="submit" className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">{t("signup.submit")}</button>
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  {t("signup.alreadyHaveAccount")} <NavLink to="/">{t("signup.login")}</NavLink>
+                </p>
+              </form>
+              {showAlert &&
+                ((authError && (
+                  <div className="mt-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg" role="alert">
+                    <strong className="font-bold">Error:</strong> {authError}
+                  </div>
+                )) || (
+                  <div className="mt-3 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg" role="alert">
+                    <strong className="font-bold">Success:</strong> Your account has been created successfully.
+                  </div>
+                ))}
+            </div>
+          </div>
+      </section>
     </>
   );
 };

@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "react-bootstrap/Button";
 import { forgotPassword } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Alert from "react-bootstrap/Alert";
 
 const ForgetPassword = () => {
   const { t } = useTranslation();
@@ -13,6 +10,7 @@ const ForgetPassword = () => {
   const authError = useSelector((state) => state.auth.error); // Retrieve error from Redux state
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [resetMessage, setResetMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +29,7 @@ const ForgetPassword = () => {
       try {
         await dispatch(forgotPassword(userData));
         setIsSubmitted(true);
-        console.log(isSubmitted);
+        setResetMessage("Password reset instructions have been sent to your email. Please check your inbox.");
       } catch (error) {
         console.error("Password reset failed:", error);
         // setErrors({ server: t("forgetPassword.errors.serverError") });
@@ -47,52 +45,52 @@ const ForgetPassword = () => {
   };
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <Form
-            className="border border-1 gap p-4 mt-5"
-            onSubmit={handleSubmit}
-          >
-            <h4 className="text-center">{t("forgetPassword.title")}</h4>
-            {!isSubmitted && (
-              <>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>{t("forgetPassword.email")}</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder={t("forgetPassword.enterEmail")}
-                  />
-                  {errors.email && (
-                    <Form.Text className="text-danger">
-                      {errors.email}
-                    </Form.Text>
-                  )}
-                </Form.Group>
-                {authError && <Alert variant="danger">{authError}</Alert>} {/* Display error in Alert component */}
-                {errors.server && (
-                  <Alert variant="danger">{errors.server}</Alert>
+    <section className="bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto h-screen flex justify-center items-center">
+        <div className="max-w-md w-full">
+          {!isSubmitted && (
+            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+              <h4 className="text-center font-bold text-xl mb-4">
+                {t("forgetPassword.title")}
+              </h4>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                  {t("forgetPassword.email")}
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder={t("forgetPassword.enterEmail")}
+                  className={` appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-xs italic">{errors.email}</p>
                 )}
-                <Button className="text-center w-100" variant="dark" type="submit">
+              </div>
+              {authError && <p className="text-red-500 text-xs italic">{authError}</p>} {/* Display error message */}
+              <div className="flex items-center justify-between">
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
                   {t("forgetPassword.submit")}
-                </Button>
-              </>
-            )}
-            {isSubmitted && (
-              <p className="text-success">
-                {t("forgetPassword.successMessage")}
-              </p>
-            )}
-            <div className="text-center mt-3">
-              <NavLink to="/" className="btn">
-                {t("common.back")}
-              </NavLink>
+                </button>
+              </div>
+            </form>
+          )}
+          {isSubmitted && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4" role="alert">
+              <p className="text-center">{resetMessage}</p>
             </div>
-          </Form>
+          )}
+          <div className="text-center mt-4">
+            <NavLink to="/" className="text-sm font-bold text-blue-500 hover:text-blue-800">
+              {t("common.back")}
+            </NavLink>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
