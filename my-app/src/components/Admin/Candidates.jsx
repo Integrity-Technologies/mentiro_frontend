@@ -7,6 +7,7 @@ import {
   editCandidate,
   deleteCandidate,
 } from "../../actions/candidateAction";
+import TablePagination from "./TablePagination"; // Import your TablePagination component
 
 const Candidates = () => {
   const dispatch = useDispatch();
@@ -141,7 +142,20 @@ const Candidates = () => {
     const fullName = `${candidate.first_name} ${candidate.last_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
-
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of users per page
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCandidates = filteredCandidates.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const handlePageChange = (page) => setCurrentPage(page);
+  
   const resetForm = () => {
     setNewCandidateData({
       first_name: "",
@@ -188,7 +202,7 @@ const Candidates = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCandidates.map((candidate) => (
+          {currentCandidates.map((candidate) => (
             <tr key={candidate.id}>
               <td className="border border-gray-400 px-4 py-2">{candidate.id}</td>
               <td className="border border-gray-400 px-4 py-2">{candidate.first_name}</td>
@@ -213,6 +227,11 @@ const Candidates = () => {
           ))}
         </tbody>
       </table>
+      <TablePagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Candidate</Modal.Title>
