@@ -7,6 +7,8 @@ import {
   editUser,
   addUser,
 } from "../../actions/userAction"; // Import actions
+import { getToken } from "../../actions/authActions"; // Import getToken function
+
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch hook
 import TablePagination from "./TablePagination";
 import countries from "../../data/countries";
@@ -16,6 +18,7 @@ const Users = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users); // Assuming your Redux store has a slice called 'users'
   const [showAddModal, setShowAddModal] = useState(false);
+  const token = useSelector(getToken); // Get token from Redux store
   const [showEditModal, setShowEditModal] = useState(false);
   const [newEditUser, setNewEditUser] = useState(null);
   const [firstNameError, setFirstNameError] = useState("");

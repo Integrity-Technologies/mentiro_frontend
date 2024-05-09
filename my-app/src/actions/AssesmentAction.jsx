@@ -9,26 +9,26 @@ export const DELETE_ASSESSMENT_SUCCESS = "DELETE_ASSESSMENT_SUCCESS";
 export const ASSESSMENT_ERROR = "ASSESSMENT_ERROR";
 
 export const getAllAssessments = () => async (dispatch) => {
-  try {
-    const token = getToken(); // Retrieve token from local storage
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${token}` // Set authorization header
-      }
-    };
-    const res = await axios.get("http://localhost:5000/api/Assessments", axiosConfig);
-    console.log(res, token);
-    dispatch({
-      type: GET_ALL_ASSESSMENTS_SUCCESS,
-      payload: res.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: ASSESSMENT_ERROR,
-      payload: error.response.data.error,
-    });
-  }
-};
+    try {
+      const token = getToken(); // Retrieve token from local storage
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}` // Set authorization header
+        }
+      };
+      const res = await axios.get("http://localhost:5000/api/Assessments/my/assessments", axiosConfig);
+      console.log(res, token);
+      dispatch({
+        type: GET_ALL_ASSESSMENTS_SUCCESS,
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ASSESSMENT_ERROR,
+        payload: error.response.data.error,
+      });
+    }
+  };
 
 export const addAssessment = (assessmentData) => async (dispatch) => {
   try {

@@ -69,9 +69,16 @@ export const addCompany = (companyData) => async (dispatch) => {
 // Async action creator for editing a company
 export const editCompany = (companyId, updatedCompanyData) => async (dispatch) => {
   try {
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    console.log(token);
     const response = await axios.put(
       `http://localhost:5000/api/company/update/company/${companyId}`,
-      updatedCompanyData
+      updatedCompanyData, axiosConfig
     );
     dispatch(editCompanySuccess(companyId, response.data));
   } catch (error) {

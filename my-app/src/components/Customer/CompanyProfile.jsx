@@ -51,40 +51,48 @@ const CompanyProfile = () => {
     <div className="container mx-auto p-4">
       {user ? (
         <div>
-          <h2 className="text-2xl mb-4">Welcome, {user.first_name}!</h2>
+          <h2 className="text-3xl font-semibold mb-4">Welcome, {user.first_name}!</h2>
           {/* Display other user details */}
-          <p>Last Name: {user.last_name}</p>
-          <p>Email: {user.email}</p>
-          <p>Phone: {user.phone}</p>
+          <div className="bg-gray-100 p-6 rounded-lg mb-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-lg font-semibold">Last Name:</p>
+                <p>{user.last_name}</p>
+              </div>
+              <div>
+                <p className="text-lg font-semibold">Email:</p>
+                <p>{user.email}</p>
+              </div>
+              <div>
+                <p className="text-lg font-semibold">Phone:</p>
+                <p>{user.phone}</p>
+              </div>
+            </div>
+          </div>
 
           {/* Display company list */}
-          <h3 className="text-lg font-semibold mt-6">Companies:</h3>
-          <ul className="list-disc pl-6 mt-2">
+          <h3 className="text-2xl font-semibold mt-6 mb-4">Company List</h3>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* List each company */}
             {companyList.map(company => (
-              <li key={company.id} className="flex items-center justify-between py-2 border-b">
-                <span>{company.name}</span>
+              <li key={company.id} className="bg-white shadow-md rounded-md p-4">
+                <p className="text-lg font-semibold">{company.name}</p>
                 {/* Render activate button for each company */}
                 <button 
                   onClick={() => handleActivateCompany(company)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-400"
+                  className={`mt-2 w-full px-4 py-2 rounded focus:outline-none 
+                  ${activeCompany && activeCompany.id === company.id ? 
+                  'bg-green-500 text-white hover:bg-green-600 focus:ring focus:ring-green-400' : 
+                  'bg-blue-500 text-white hover:bg-blue-600 focus:ring focus:ring-blue-400'}`}
                 >
-                  Activate
+                  {activeCompany && activeCompany.id === company.id ? 'Activated' : 'Activate'}
                 </button>
               </li>
             ))}
           </ul>
-
-          {/* Display active company if exists */}
-          {activeCompany && (
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold">Active Company:</h3>
-              <p>{activeCompany.name}</p>
-            </div>
-          )}
         </div>
       ) : (
-        <p>Please login to view your profile.</p>
+        <p className="text-lg font-semibold text-center">Please login to view your profile.</p>
       )}
     </div>
   );

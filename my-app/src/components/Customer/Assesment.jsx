@@ -15,9 +15,12 @@ import {
 const Assessment = () => {
   const [assessmentName, setAssessmentName] = useState("");
   const [showTestSelection, setShowTestSelection] = useState(false);
-  const assessments = useSelector((state) => state.assessment.assessments);
+  
+  // Set assessments default state to an empty array to prevent errors
+  const assessments = useSelector((state) => state.assessment.assessments || []);
   const token = useSelector(getToken); // Get token from Redux store
   const dispatch = useDispatch();
+  console.log("🚀 ~ Assessment ~ assessments:", assessments)
 
   useEffect(() => {
     dispatch(getAllAssessments());
@@ -90,27 +93,34 @@ const Assessment = () => {
               </tr>
             </thead>
             <tbody>
-              {assessments.map((assessment) => (
-                <tr key={assessment._id}>
-                  <td>{assessment._id}</td>
-                  <td>{assessment.assessment_name}</td>
-                  <td>
-                    <Button
-                      variant="primary"
-                      onClick={() => handleEditAssessment(assessment._id)}
-                    >
-                      Edit
-                    </Button>{" "}
-                    <Button
-                      variant="danger"
-                      onClick={() => handleDeleteAssessment(assessment._id)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {assessments.length > 0 ? (
+    assessments.map((assessment) => (
+      <tr key={assessment.id}>
+        <td>{assessment.id}</td>
+        <td>{assessment.assessment_name}</td>
+        <td>
+          <Button
+            variant="primary"
+            onClick={() => handleEditAssessment(assessment.id)} // Change _id to id
+          >
+            Edit
+          </Button>{" "}
+          <Button
+            variant="danger"
+            onClick={() => handleDeleteAssessment(assessment.id)} // Change _id to id
+          >
+            Delete
+          </Button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="3">No assessments found</td>
+    </tr>
+  )}
+</tbody>
+
           </Table>
 
           <div className="text-center mb-2">

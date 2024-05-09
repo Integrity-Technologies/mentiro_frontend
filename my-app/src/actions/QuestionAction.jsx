@@ -90,20 +90,21 @@ export const deleteQuestion = (Id) => async (dispatch) => {
   
   
   // Action to edit a question
-  export const editQuestion = (questionId, updatedQuestion) => async (dispatch) => {
+  export const editQuestion = (Id, updatedQuestion) => async (dispatch) => {
     try {
-        console.log(updatedQuestion);
         const token = getToken();
         const axiosConfig = {
           headers: {
             Authorization: `Bearer ${token}`
           }
         };
+        console.log(updatedQuestion);
+
       // Make an API request to update the question
-      const res = await axios.put(`http://localhost:5000/api/question/update/${questionId}`, updatedQuestion, axiosConfig); // Adjust the endpoint according to your API
+      const res = await axios.put(`http://localhost:5000/api/question/update/${Id}`, updatedQuestion, axiosConfig); // Adjust the endpoint according to your API
       dispatch({
         type: EDIT_QUESTION,
-        payload: { id: questionId, updatedQuestion: res.data } // Send the updated question object to the reducer
+        payload: { Id, updatedQuestion: res.data } // Send the updated question object to the reducer
       });
     } catch (error) {
       // Handle error if any

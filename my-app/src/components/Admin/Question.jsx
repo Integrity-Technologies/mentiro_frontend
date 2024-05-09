@@ -9,7 +9,6 @@ import {
   editQuestion,
 } from "../../actions/QuestionAction"; // Import action functions
 import TablePagination from "./TablePagination"; // Import your TablePagination component
-
 const Question = () => {
   const dispatch = useDispatch();
   const questions = useSelector((state) => state.question.questions);
@@ -34,26 +33,20 @@ const Question = () => {
   const [typeError, setTypeError] = useState("");
   const [levelError, setLevelError] = useState("");
   const [categoriesError, setCategoriesError] = useState("");
-
-
   useEffect(() => {
     dispatch(getQuestions());
   }, [dispatch]);
-
   const handleOptionChange = (text, index) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index].option_text = text;
     setNewQuestion({ ...newQuestion, options: updatedOptions });
   };
-
   const handleCorrectChange = (checked, index) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index].is_correct = checked;
     setNewQuestion({ ...newQuestion, options: updatedOptions });
   };
-
   const MAX_OPTIONS = 4; // Maximum number of options
-
   const addOption = () => {
     if (newQuestion.options.length < MAX_OPTIONS) {
       setNewQuestion({
@@ -65,7 +58,6 @@ const Question = () => {
       });
     }
   };
-
   const handleAddQuestion = async () => {
     if (newQuestion.options.some((option) => option.option_text !== "")) {
       // Only add question if there are options
@@ -77,24 +69,27 @@ const Question = () => {
       console.error("Please add at least one option.");
     }
   };
-
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleCloseEditModal = () => setShowEditModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
-  const handleShowEditModal = () => setShowEditModal(true);
-
-
-  const EditQuestion = async (id) => {
-    await dispatch(editQuestion(id, newQuestion)); // Call editQuestion action
-    await dispatch(getQuestions());
-
+//   const handleShowEditModal = () => setShowEditModal(true);
+  const EditQuestion = async (newQuestion) => {
+    if(selectedQuestion){
+        console.log(selectedQuestion.id);
+        await dispatch(editQuestion(selectedQuestion.id, newQuestion)); // Call editQuestion action
+        await dispatch(getQuestions());
+    }
     handleCloseEditModal();
   }
-
-  const handleDeleteModal = (question) => {
+const handleShowEditModal = (question) => {
     setSelectedQuestion(question);
-    setShowDeleteModal(true);
-  };
+    setShowEditModal(true);
+}
+
+const handleDeleteModal = (question) => {
+  setSelectedQuestion(question);
+  setShowDeleteModal(true);
+};
 
   const handleDeleteQuestion = async () => {
     if (selectedQuestion) {
@@ -103,12 +98,10 @@ const Question = () => {
       setShowDeleteModal(false);
     }
   };
-
   const filteredQuestions = questions.filter((question) => {
     const fullQuestion = `${question.question_text} ${question.difficulty_level} ${question.categories}`;
     return fullQuestion.toLowerCase().includes(searchTerm.toLowerCase());
   });
-
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of users per page
@@ -121,7 +114,6 @@ const Question = () => {
     indexOfLastItem
   );
   const handlePageChange = (page) => setCurrentPage(page);
-
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4">Questions</h1>
@@ -177,7 +169,6 @@ const Question = () => {
         </tbody>
       </table>
       <TablePagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
-
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Question</Modal.Title>
@@ -256,7 +247,6 @@ const Question = () => {
           </Form>
         </Modal.Body>
       </Modal>
-
       {/* Edit Question Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header closeButton>
@@ -330,13 +320,12 @@ const Question = () => {
                 </Button>
               )}
             </Form.Group>
-            <Button variant="primary" onClick={() => EditQuestion(newQuestion.id)}>
+            <Button variant="primary" onClick={() => EditQuestion(newQuestion)}>
               Save Changes
             </Button>
           </Form>
         </Modal.Body>
       </Modal>
-
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Question</Modal.Title>
@@ -356,5 +345,9 @@ const Question = () => {
     </div>
   );
 };
-
 export default Question;
+
+
+
+
+

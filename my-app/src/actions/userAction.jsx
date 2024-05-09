@@ -1,5 +1,7 @@
 // userActions.js
 import axios from "axios";
+import { getToken } from "../actions/authActions"; // Import getToken function from authActions
+
 
 export const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
 export const ADD_USER_SUCCESS = "ADD_USER_SUCCESS";
@@ -56,8 +58,15 @@ export const addUser = (newUser) => async (dispatch) => {
 export const editUser = (userId, updatedUser) => async dispatch => {
   console.log(updatedUser);
   try {
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    console.log(token);
     const response = await axios.put(
-      `http://localhost:5000/api/users/update/${userId}`, { first_name: updatedUser.first_name, last_name: updatedUser.last_name, email: updatedUser.email, password: updatedUser.password, phone: updatedUser.phone }
+      `http://localhost:5000/api/users/update/${userId}`, { first_name: updatedUser.first_name, last_name: updatedUser.last_name, email: updatedUser.email, password: updatedUser.password, phone: updatedUser.phone }, axiosConfig
     );
     const data = response.data;
     dispatch({ type: EDIT_USER_SUCCESS, payload: data });
