@@ -93,34 +93,33 @@ const Assessment = () => {
               </tr>
             </thead>
             <tbody>
-  {assessments.length > 0 ? (
-    assessments.map((assessment) => (
-      <tr key={assessment.id}>
-        <td>{assessment.id}</td>
-        <td>{assessment.assessment_name}</td>
-        <td>
-          <Button
-            variant="primary"
-            onClick={() => handleEditAssessment(assessment.id)} // Change _id to id
-          >
-            Edit
-          </Button>{" "}
-          <Button
-            variant="danger"
-            onClick={() => handleDeleteAssessment(assessment.id)} // Change _id to id
-          >
-            Delete
-          </Button>
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="3">No assessments found</td>
-    </tr>
-  )}
-</tbody>
-
+              {assessments.assessments.length > 0 ? (
+                assessments.assessments.map((assessment) => (
+                  <tr key={assessment.id}>
+                    <td>{assessment.id}</td>
+                    <td>{assessment.assessment_name}</td>
+                    <td>
+                      <Button
+                        variant="primary"
+                        onClick={() => handleEditAssessment(assessment._id)}
+                      >
+                        Edit
+                      </Button>{" "}
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteAssessment(assessment._id)}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3">No assessments found</td>
+                </tr>
+              )}
+            </tbody>
           </Table>
 
           <div className="text-center mb-2">
@@ -133,8 +132,6 @@ const Assessment = () => {
             </Button>
           </div>
         </div>
-      )}
-    </div>
   );
 };
 
