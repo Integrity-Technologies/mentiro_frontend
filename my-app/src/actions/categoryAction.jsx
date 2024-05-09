@@ -55,7 +55,13 @@ export const addCategory = (categoryData) => async (dispatch) => {
 };
 export const editCategory = (categoryId, categoryData) => async (dispatch) => {
   try {
-    const res = await axios.put(`${baseURL}/category/edit/${categoryId}`, { category_name: categoryData });
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    const res = await axios.put(`${baseURL}/category/edit/${categoryId}`, { category_name: categoryData }, axiosConfig);
     if (res.status >= 200 && res.status < 300) {
       dispatch({ type: EDIT_CATEGORY_SUCCESS, payload: categoryId });
     } else {

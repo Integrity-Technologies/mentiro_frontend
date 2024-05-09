@@ -66,7 +66,13 @@ export const fetchTests = () => async (dispatch) => {
   export const editTest = (id, updatedTest) => async (dispatch) => {
     console.log(updatedTest, id + "From edit test action");
     try {
-      const response = await axios.put(`http://localhost:5000/api/test/edit/test/${id}`, updatedTest);
+      const token = getToken(); // Retrieve token from local storage
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}` // Set authorization header
+        }
+      };
+      const response = await axios.put(`http://localhost:5000/api/test/edit/test/${id}`, updatedTest, axiosConfig);
       dispatch(editTestSuccess(response.data));
       console.log(response.data);
     } catch (error) {
@@ -77,7 +83,13 @@ export const fetchTests = () => async (dispatch) => {
   
   export const deleteTest = (id) => async (dispatch) => {
     try {
-      await axios.delete(`http://localhost:5000/api/test/delete/test/${id}`);
+      const token = getToken(); // Retrieve token from local storage
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}` // Set authorization header
+        }
+      };
+      await axios.delete(`http://localhost:5000/api/test/delete/test/${id}`, axiosConfig);
       dispatch(deleteTestSuccess(id));
       console.log(id);
     } catch (error) {

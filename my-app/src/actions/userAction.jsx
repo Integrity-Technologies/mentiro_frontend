@@ -42,8 +42,15 @@ export const getAllUsers = () => async (dispatch) => {
 
 export const addUser = (newUser) => async (dispatch) => {
   try {
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    console.log(token);
     console.log(newUser);
-    const response = await axios.post("http://localhost:5000/api/users/add", newUser);
+    const response = await axios.post("http://localhost:5000/api/users/add", newUser, axiosConfig);
     const data =  response.data;
     dispatch({ type: ADD_USER_SUCCESS, payload: data });
     return data;
@@ -81,8 +88,15 @@ export const editUser = (userId, updatedUser) => async dispatch => {
 export const deleteUser = userId => async dispatch => {
   try {
     console.log(userId);
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    console.log(token);
     const response = await axios.delete(
-      `http://localhost:5000/api/users/delete/${userId}`,
+      `http://localhost:5000/api/users/delete/${userId}`, axiosConfig
     );
     const data = await response.json();
     dispatch({ type: DELETE_USER_SUCCESS, payload: response.data });

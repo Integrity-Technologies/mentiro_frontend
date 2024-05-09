@@ -89,7 +89,14 @@ export const editCompany = (companyId, updatedCompanyData) => async (dispatch) =
 // Async action creator for deleting a company
 export const deleteCompany = (companyId) => async (dispatch) => {
   try {
-    await axios.delete(`http://localhost:5000/api/company/delete/company/${companyId}`);
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    console.log(token);
+    await axios.delete(`http://localhost:5000/api/company/delete/company/${companyId}`, axiosConfig);
     dispatch(deleteCompanySuccess(companyId));
   } catch (error) {
     dispatch(companyError(error.message));

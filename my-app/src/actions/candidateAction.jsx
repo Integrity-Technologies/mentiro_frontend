@@ -1,4 +1,6 @@
 import axios from "axios";
+import { getToken } from "../actions/authActions"; // Import getToken function from authActions
+
 
 export const FETCH_CANDIDATES_SUCCESS = "FETCH_CANDIDATES_SUCCESS";
 export const ADD_CANDIDATE_SUCCESS = "ADD_CANDIDATE_SUCCESS";
@@ -29,7 +31,13 @@ export const getAllCandidates = () => async (dispatch) => {
 
 export const addCandidate = (newCandidate) => async (dispatch) => {
   try {
-    const response = await axios.post("http://localhost:5000/api/candidate/create", newCandidate);
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    const response = await axios.post("http://localhost:5000/api/candidate/create", newCandidate, axiosConfig);
     const data = response.data;
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: data });
     return data;
@@ -42,7 +50,13 @@ export const addCandidate = (newCandidate) => async (dispatch) => {
 
 export const editCandidate = (candidateId, updatedCandidate) => async (dispatch) => {
   try {
-    const response = await axios.put(`http://localhost:5000/api/candidate/edit/${candidateId}`, updatedCandidate);
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    const response = await axios.put(`http://localhost:5000/api/candidate/edit/${candidateId}`, updatedCandidate, axiosConfig);
     const data = response.data;
     dispatch({ type: EDIT_CANDIDATE_SUCCESS, payload: data });
     return data;
@@ -55,7 +69,13 @@ export const editCandidate = (candidateId, updatedCandidate) => async (dispatch)
 
 export const deleteCandidate = (candidateId) => async (dispatch) => {
   try {
-    const response = await axios.delete(`http://localhost:5000/api/candidate/delete/${candidateId}`);
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    const response = await axios.delete(`http://localhost:5000/api/candidate/delete/${candidateId}`, axiosConfig);
     console.log(candidateId);
     const data = response.data;
     dispatch({ type: DELETE_CANDIDATE_SUCCESS, payload: data });

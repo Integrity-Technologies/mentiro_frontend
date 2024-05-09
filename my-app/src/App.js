@@ -18,6 +18,8 @@ import Assessment from "./components/Customer/Assesment";
 import Candidates from "./components/Candidates/Candidate.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "./reducers/fetchUser";
+import Company from "./components/Admin/Company.jsx";
+import CompanyProfile from "./components/Customer/CompanyProfile.jsx";
 
 function App() {
   const { user, token } = useSelector((state) => state.auth);
@@ -51,7 +53,8 @@ console.log(user, token + "from local storage")
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/home" element={<Home />} />
+          
+          <Route path="/company-profile" element={<CompanyProfile />} />
           <Route path="/" element={<Login />} />
           <Route path="/Signup" element={<SignUp />} />
           <Route path="/forget-password" element={<ForgetPassword />} />

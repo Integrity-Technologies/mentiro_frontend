@@ -52,20 +52,26 @@ const CompanyProfile = () => {
       {user ? (
         <div>
           <h2 className="text-3xl font-semibold mb-4">Welcome, {user.first_name}!</h2>
-          {/* Display other user details */}
-          <div className="bg-gray-100 p-6 rounded-lg mb-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-lg font-semibold">Last Name:</p>
-                <p>{user.last_name}</p>
+          {/* Display user data in a card-like layout */}
+          <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mt-0 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 2a3 3 0 0 0-3 3v1a3 3 0 0 0 1 2.236v1.28a4 4 0 0 0-1.33 2.5l-.007.024A2.5 2.5 0 1 0 4 14h12a2.5 2.5 0 0 0-2.496-2.5l-.004-.028A4 4 0 0 0 13 9.516v-1.28A3 3 0 0 0 14 6V5a3 3 0 0 0-3-3zM6 15v-1h8v1H6z" clipRule="evenodd" />
+                </svg>
+                <p className="ml-2">{user.last_name}</p>
               </div>
-              <div>
-                <p className="text-lg font-semibold">Email:</p>
-                <p>{user.email}</p>
+              <div className="flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mt-0 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 3.293a1 1 0 0 1 1.414 0l10 10a1 1 0 0 1-1.414 1.414L10 12.414l-4.293 4.293a1 1 0 0 1-1.414-1.414l4-4a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-8-8a1 1 0 1 1 1.414-1.414L10 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414L11.414 12l4.293 4.293a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-1.414 0l-10-10a1 1 0 1 1 1.414-1.414L8 14.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l8-8a1 1 0 0 1 1.414 0z" clipRule="evenodd" />
+                </svg>
+                <p className="ml-2">{user.email}</p>
               </div>
-              <div>
-                <p className="text-lg font-semibold">Phone:</p>
-                <p>{user.phone}</p>
+              <div className="flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mt-0 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 2a3 3 0 0 0-3 3v1a3 3 0 0 0 1 2.236v1.28a4 4 0 0 0-1.33 2.5l-.007.024A2.5 2.5 0 1 0 4 14h12a2.5 2.5 0 0 0-2.496-2.5l-.004-.028A4 4 0 0 0 13 9.516v-1.28A3 3 0 0 0 14 6V5a3 3 0 0 0-3-3zM6 15v-1h8v1H6z" clipRule="evenodd" />
+                </svg>
+                <p className="ml-2">{user.phone}</p>
               </div>
             </div>
           </div>
