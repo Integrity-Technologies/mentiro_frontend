@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import LanguageToggleButton from "../Togglebutton";
 import Assesment from "./Assesment";
 import Graph from "./Graph";
+import CompanyProfile from "./CompanyProfile";
 const logoImage = "/assets/icon.jpg";
 
 const Customer = () => {
@@ -20,7 +21,7 @@ const Customer = () => {
   };
 
   const sections = {
-    "/CompanyProfile": <></>,
+    "/CompanyProfile": <CompanyProfile />,
     "/Assesments": <Assesment />,
   };
 

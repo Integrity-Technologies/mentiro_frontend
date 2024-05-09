@@ -1,67 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
+import { getToken } from "../../actions/authActions"; // Import getToken function
 import TestSelection from "./TestSelection";
+import {
+  getAllAssessments,
+  addAssessment,
+  editAssessment,
+  deleteAssessment,
+} from "../../actions/AssesmentAction";
 
 const Assessment = () => {
   const [assessmentName, setAssessmentName] = useState("");
-  const [assessments, setAssessments] = useState([]);
-  const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
-  const [showTestSelection, setShowTestSelection] = useState(false); // State to manage test selection visibility
+  const [showTestSelection, setShowTestSelection] = useState(false);
+  const assessments = useSelector((state) => state.assessment.assessments);
+  const token = useSelector(getToken); // Get token from Redux store
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllAssessments());
+  }, [dispatch]);
 
   const handleAssessmentNameChange = (e) => {
     setAssessmentName(e.target.value);
   };
 
-  const addAssessment = () => {
+  const handleAddAssessment = () => {
     if (assessmentName.trim() !== "") {
-      const newAssessment = {
-        id: assessments.length + 1,
-        name: assessmentName.trim(),
-      };
-      setAssessments([...assessments, newAssessment]);
+      dispatch(addAssessment({ assessment_name: assessmentName.trim() }));
+      console.log(token); // Console log the token
       setAssessmentName("");
     }
   };
 
-  const deleteAssessment = (id) => {
-    const updatedAssessments = assessments.filter(
-      (assessment) => assessment.id !== id
-    );
-    setAssessments(updatedAssessments);
+  const handleDeleteAssessment = (id) => {
+    dispatch(deleteAssessment(id));
   };
 
-  const editAssessment = (id) => {
-    const selectedAssessment = assessments.find(
-      (assessment) => assessment.id === id
-    );
-    if (selectedAssessment) {
-      setSelectedAssessmentId(id);
-      setAssessmentName(selectedAssessment.name);
-    }
-  };
-
-  const updateAssessment = () => {
-    if (assessmentName.trim() !== "") {
-      const updatedAssessments = assessments.map((assessment) => {
-        if (assessment.id === selectedAssessmentId) {
-          return { ...assessment, name: assessmentName.trim() };
-        }
-        return assessment;
-      });
-      setAssessments(updatedAssessments);
-      setAssessmentName("");
-      setSelectedAssessmentId(null);
+  const handleEditAssessment = (id) => {
+    const editedName = prompt("Enter new name for assessment:");
+    if (editedName !== null && editedName.trim() !== "") {
+      dispatch(editAssessment(id, { assessment_name: editedName.trim() }));
     }
   };
 
   const handleNextButtonClick = () => {
-    setShowTestSelection(true); // Show test selection when next button is clicked
+    setShowTestSelection(true);
   };
 
   const handleBackButtonClick = () => {
-    setShowTestSelection(false); // Hide test selection when back button is clicked
+    setShowTestSelection(false);
   };
 
   return (
@@ -86,7 +76,7 @@ const Assessment = () => {
               />
             </Form.Group>
 
-            <Button variant="primary" onClick={addAssessment}>
+            <Button variant="primary" onClick={handleAddAssessment}>
               Add Assessment
             </Button>
           </Form>
@@ -101,19 +91,19 @@ const Assessment = () => {
             </thead>
             <tbody>
               {assessments.map((assessment) => (
-                <tr key={assessment.id}>
-                  <td>{assessment.id}</td>
-                  <td>{assessment.name}</td>
+                <tr key={assessment._id}>
+                  <td>{assessment._id}</td>
+                  <td>{assessment.assessment_name}</td>
                   <td>
                     <Button
                       variant="primary"
-                      onClick={() => editAssessment(assessment.id)}
+                      onClick={() => handleEditAssessment(assessment._id)}
                     >
                       Edit
                     </Button>{" "}
                     <Button
                       variant="danger"
-                      onClick={() => deleteAssessment(assessment.id)}
+                      onClick={() => handleDeleteAssessment(assessment._id)}
                     >
                       Delete
                     </Button>

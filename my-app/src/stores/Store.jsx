@@ -10,6 +10,7 @@ import companyReducer from '../reducers/companyReducer';
 import candidateReducer from '../reducers/candidateReducer';
 import resultReducer from '../reducers/resultReducer';
 import QuestionReducer from '../reducers/QuestionReducer';
+import assessmentReducer from '../reducers/AssesmentReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   company: companyReducer,
   candidates: candidateReducer,
   results: resultReducer,
-  question: QuestionReducer
+  question: QuestionReducer,
+  assessment: assessmentReducer
   // Add other reducers here if needed
 });
 
