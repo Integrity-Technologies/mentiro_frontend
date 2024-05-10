@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import InviteCandidate from "./InviteCandidate"; // Import the InviteCandidate component
 
 const Preview = ({ handleBackButtonClick }) => {
@@ -31,58 +32,64 @@ const Preview = ({ handleBackButtonClick }) => {
   ];
 
   return (
-    <div>
-      {showInviteCandidate ? (
-        <InviteCandidate handleBackButtonClick={handleBackButtonClick} />
-      ) : (
-        <div>
-          <h2 className="text-center mb-4">Assessment Preview</h2>
-          {/* Display assessment name and details */}
-          <p>Assessment Name: {assessmentName}</p>
-          <p>Category: {categoryName}</p>
-          <p>Difficulty Level: {testDifficultyLevel}</p>
+    <div className="container mx-auto py-8">
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 className="text-3xl font-semibold text-center mb-8">Assessment Preview</h2>
 
-          {/* Display questions */}
-          <h3>Questions:</h3>
-          {questions.map((question, index) => (
-            <div key={index}>
-              <p>
-                Question {index + 1}: {question.question}
-              </p>
-              <ul>
-                {question.options.map((option, idx) => (
-                  <li key={idx}>{option}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        {/* Card for assessment details */}
+        <Card className="mb-4">
+          <Card.Body>
+            <Card.Title className="text-xl font-semibold">Assessment Details</Card.Title>
+            <Card.Text>
+              <p><strong>Assessment Name:</strong> {assessmentName}</p>
+              <p><strong>Category:</strong> {categoryName}</p>
+              <p><strong>Difficulty Level:</strong> {testDifficultyLevel}</p>
+            </Card.Text>
+          </Card.Body>
+        </Card>
 
-          {/* Submit Button */}
-          <div className="text-center mt-4">
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleSubmitButtonClick}
-            >
-              Submit
-            </Button>
+        {/* Display questions */}
+        <h3 className="text-2xl font-semibold mb-4">Questions:</h3>
+        {questions.map((question, index) => (
+          <div key={index} className="mb-4">
+            <p className="text-lg">
+              Question {index + 1}: {question.question}
+            </p>
+            <ul className="list-disc pl-6">
+              {question.options.map((option, idx) => (
+                <li key={idx} className="text-lg">{option}</li>
+              ))}
+            </ul>
           </div>
+        ))}
 
-          {/* Back Button */}
-          <div className="text-center mt-4">
-            <Button
-              variant="outline-primary"
-              size="lg"
-              onClick={handleBackButtonClick}
-            >
-              Back
-            </Button>
-          </div>
-
-          {/* Invite Candidate Component */}
-          {showInviteCandidate && <InviteCandidate />}
+        {/* Submit Button */}
+        <div className="text-center mt-8">
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={handleSubmitButtonClick}
+            className="w-full md:w-auto"
+          >
+            Submit
+          </Button>
         </div>
-      )}
+
+        {/* Back Button */}
+        <div className="text-center mt-8">
+          <Button
+            variant="outline-primary"
+            size="lg"
+            onClick={handleBackButtonClick}
+            className="w-full md:w-auto"
+          >
+            Back
+          </Button>
+        </div>
+
+        {/* Invite Candidate Component */}
+        {showInviteCandidate && <InviteCandidate />}
+      </div>
     </div>
   );
 };
