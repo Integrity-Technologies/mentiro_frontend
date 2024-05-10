@@ -8,7 +8,6 @@ import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
 import {
   getAllAssessments,
-  addAssessment,
   editAssessment,
   deleteAssessment,
 } from "../../actions/AssesmentAction";
@@ -22,6 +21,7 @@ const Assessment = () => {
   const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [showTestSelection, setShowTestSelection] = useState(false);
+  const [newAssessment, setNewAssessment] = useState(null); // New state to store the newly added assessment
 
   const assessments = useSelector((state) => state.assessment.assessments || []);
   const token = useSelector(getToken);
@@ -31,17 +31,27 @@ const Assessment = () => {
     dispatch(getAllAssessments());
   }, [dispatch]);
 
+  // Function to handle adding a new assessment
+  // Function to handle adding a new assessment
+const handleAddAssessment = () => {
+  if (assessmentName.trim() !== "") {
+    // Dispatch an action to add assessment here
+    // For now, let's assume we directly add the new assessment to the state
+    const newAssessment = { id: assessments.length + 1, assessment_name: assessmentName.trim() };
+    console.log(assessments);
+    // Update the assessments state with the new assessment included
+    setNewAssessment([...assessments, newAssessment]);
+    setAssessmentName("");
+    setShowAddModal(false);
+  }
+};
+
+
   const handleAssessmentNameChange = (e) => {
     setAssessmentName(e.target.value);
   };
 
-  const handleAddAssessment = () => {
-    if (assessmentName.trim() !== "") {
-      dispatch(addAssessment({ assessment_name: assessmentName.trim() }));
-      setAssessmentName("");
-      setShowAddModal(false);
-    }
-  };
+
 
   const handleDeleteAssessment = (id) => {
     setDeleteId(id);
@@ -100,7 +110,7 @@ const Assessment = () => {
             </thead>
             <tbody>
               {assessments?.assessments?.length > 0 ? (
-                assessments?.assessments.map((assessment) => (
+                assessments?.assessments?.map((assessment) => (
                   <tr key={assessment.id}>
                     <td className="border px-4 py-2">{assessment.id}</td>
                     <td className="border px-4 py-2">{assessment.assessment_name}</td>

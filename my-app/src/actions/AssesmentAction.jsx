@@ -30,32 +30,31 @@ export const getAllAssessments = () => async (dispatch) => {
     }
   };
 
-export const addAssessment = (assessmentData) => async (dispatch) => {
-  try {
-    console.log(assessmentData);
-    const token = getToken(); // Retrieve token from local storage
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${token}` // Set authorization header
-      }
-    };
-    console.log(token);
-    const res = await axios.post(
-      "http://localhost:5000/api/Assessments/create/assessment",
-      assessmentData, axiosConfig
-    );
-    console.log(assessmentData);
-    dispatch({
-      type: ADD_ASSESSMENT_SUCCESS,
-      payload: res.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: ASSESSMENT_ERROR,
-      payload: error.response.data.error,
-    });
-  }
-};
+  export const addAssessmentWithTests = (assessmentData) => async (dispatch) => {
+    try {
+      const token = getToken();
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+      const res = await axios.post(
+        "http://localhost:5000/api/Assessments/create/assessment",
+        assessmentData,
+        axiosConfig
+      );
+      dispatch({
+        type: ADD_ASSESSMENT_SUCCESS,
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: ASSESSMENT_ERROR,
+        payload: error.response.data.error,
+      });
+    }
+  };
+  
 
 export const editAssessment = (assessmentId, assessmentData) => async (
   dispatch
