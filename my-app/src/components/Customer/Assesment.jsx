@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
@@ -21,7 +20,7 @@ const Assessment = () => {
   const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [showTestSelection, setShowTestSelection] = useState(false);
-  const [newAssessment, setNewAssessment] = useState(null); // New state to store the newly added assessment
+  const [newAssessment, setNewAssessment] = useState(null);
 
   const assessments = useSelector((state) => state.assessment.assessments || []);
   const token = useSelector(getToken);
@@ -31,27 +30,19 @@ const Assessment = () => {
     dispatch(getAllAssessments());
   }, [dispatch]);
 
-  // Function to handle adding a new assessment
-  // Function to handle adding a new assessment
-const handleAddAssessment = () => {
-  if (assessmentName.trim() !== "") {
-    // Dispatch an action to add assessment here
-    // For now, let's assume we directly add the new assessment to the state
-    const newAssessment = { id: assessments.length + 1, assessment_name: assessmentName.trim() };
-    console.log(assessments);
-    // Update the assessments state with the new assessment included
-    setNewAssessment([...assessments, newAssessment]);
-    setAssessmentName("");
-    setShowAddModal(false);
-  }
-};
-
+  const handleAddAssessment = () => {
+    if (assessmentName.trim() !== "") {
+      const newAssessment = { id: Object.keys(assessments).length + 1, assessment_name: assessmentName.trim() };
+      localStorage.setItem("assessments", newAssessment.assessment_name);
+      setNewAssessment([...Object.values(assessments), newAssessment]);
+      setAssessmentName("");
+      setShowAddModal(false);
+    }
+  };
 
   const handleAssessmentNameChange = (e) => {
     setAssessmentName(e.target.value);
   };
-
-
 
   const handleDeleteAssessment = (id) => {
     setDeleteId(id);
@@ -71,8 +62,10 @@ const handleAddAssessment = () => {
     }
   };
 
-  const handleConfirmDelete = () => {
-    dispatch(deleteAssessment(deleteId));
+  const handleConfirmDelete = async () => {
+   await dispatch(deleteAssessment(deleteId));
+
+   await dispatch(getAllAssessments());
     setShowDeleteModal(false);
   };
 
@@ -85,7 +78,7 @@ const handleAddAssessment = () => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto p-4">
       {showTestSelection ? (
         <TestSelection
           assessments={assessments}
@@ -94,46 +87,46 @@ const handleAddAssessment = () => {
       ) : (
         <div>
           <div className="mb-4">
-            <h2 className="text-lg font-bold">Create New Assessment</h2>
+            <h2 className="text-3xl font-bold mb-6">Create New Assessment</h2>
             <Button onClick={() => setShowAddModal(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               Add Assessment
             </Button>
           </div>
 
-          <table className="table-auto w-100">
+          <table className="w-full border-collapse border border-gray-300">
             <thead>
-              <tr>
-                <th className="border px-4 py-2">ID</th>
-                <th className="border px-4 py-2">Assessment Name</th>
-                <th className="border px-4 py-2">Action</th>
+              <tr className="bg-gray-200">
+                <th className="border border-gray-300 px-4 py-2">ID</th>
+                <th className="border border-gray-300 px-4 py-2">Assessment Name</th>
+                <th className="border border-gray-300 px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
               {assessments?.assessments?.length > 0 ? (
-                assessments?.assessments?.map((assessment) => (
-                  <tr key={assessment.id}>
-                    <td className="border px-4 py-2">{assessment.id}</td>
-                    <td className="border px-4 py-2">{assessment.assessment_name}</td>
-                    <td className="border px-4 py-2">
-                      <button variant="primary" onClick={() => handleEditAssessment(assessment.id, assessment.assessment_name)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+               assessments?.assessments?.map((assessment) => (
+                  <tr key={assessment.id} className="bg-white">
+                    <td className="border border-gray-300 px-4 py-2">{assessment.id}</td>
+                    <td className="border border-gray-300 px-4 py-2">{assessment.assessment_name}</td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <button onClick={() => handleEditAssessment(assessment.id, assessment.assessment_name)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Edit
                       </button>
-                      <button variant="danger" onClick={() => handleDeleteAssessment(assessment.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                      <button onClick={() => handleDeleteAssessment(assessment.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">
                         Delete
                       </button>
                     </td>
                   </tr>
                 ))
               ) : (
-                <tr>
-                  <td colSpan="3" className="border px-4 py-2">No assessments found</td>
+                <tr className="bg-white">
+                  <td colSpan="3" className="border border-gray-300 px-4 py-2 text-center">No assessments found</td>
                 </tr>
               )}
             </tbody>
           </table>
 
-          <div className="text-center mb-2">
-            <button variant="outline-success" onClick={handleNextButtonClick} className="border-2 mt-5 border-green-500 text-green-500 hover:bg-green-500 hover:text-white font-bold py-2 px-4 rounded">
+          <div className="text-center mt-4">
+            <button onClick={handleNextButtonClick} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
               Next
             </button>
           </div>
@@ -158,10 +151,10 @@ const handleAddAssessment = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowAddModal(false)} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          <Button variant="secondary" onClick={() => setShowAddModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleAddAssessment} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Button variant="primary" onClick={handleAddAssessment}>
             Add Assessment
           </Button>
         </Modal.Footer>
@@ -184,10 +177,10 @@ const handleAddAssessment = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleEditSave} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Button variant="primary" onClick={handleEditSave}>
             Save
           </Button>
         </Modal.Footer>
@@ -201,10 +194,10 @@ const handleAddAssessment = () => {
           <p>Are you sure you want to delete this assessment?</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleConfirmDelete} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+          <Button variant="danger" onClick={handleConfirmDelete}>
             Delete
           </Button>
         </Modal.Footer>

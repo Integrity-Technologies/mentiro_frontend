@@ -15,7 +15,7 @@ const Preview = ({ handleBackButtonClick }) => {
   // Data to be displayed in the preview
   const assessmentName = "Sample Assessment"; // Replace with actual assessment name
   const categoryName = "SEO"; // Replace with actual category name
-  const testDifficultyLevel = "Medium"; // Replace with actual difficulty level
+  const testName = "coding test"; // Replace with actual difficulty level
 
   // Array of sample questions (replace with actual questions data)
   const questions = [
@@ -43,13 +43,13 @@ const Preview = ({ handleBackButtonClick }) => {
             <Card.Text>
               <p><strong>Assessment Name:</strong> {assessmentName}</p>
               <p><strong>Category:</strong> {categoryName}</p>
-              <p><strong>Difficulty Level:</strong> {testDifficultyLevel}</p>
+              <p><strong>Test Name</strong> {testName}</p>
             </Card.Text>
           </Card.Body>
         </Card>
 
         {/* Display questions */}
-        <h3 className="text-2xl font-semibold mb-4">Questions:</h3>
+        {/* <h3 className="text-2xl font-semibold mb-4">Questions:</h3>
         {questions.map((question, index) => (
           <div key={index} className="mb-4">
             <p className="text-lg">
@@ -61,7 +61,7 @@ const Preview = ({ handleBackButtonClick }) => {
               ))}
             </ul>
           </div>
-        ))}
+        ))} */}
 
         {/* Submit Button */}
         <div className="text-center mt-8">

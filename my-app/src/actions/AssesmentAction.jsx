@@ -50,7 +50,6 @@ export const getAllAssessments = () => async (dispatch) => {
     } catch (error) {
       dispatch({
         type: ASSESSMENT_ERROR,
-        payload: error.response.data.error,
       });
     }
   };
@@ -60,9 +59,15 @@ export const editAssessment = (assessmentId, assessmentData) => async (
   dispatch
 ) => {
   try {
+    const token = getToken();
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
     const res = await axios.put(
       `http://localhost:5000/api/Assessments/assessment/${assessmentId}`,
-      assessmentData
+      assessmentData, axiosConfig
     );
     dispatch({
       type: EDIT_ASSESSMENT_SUCCESS,
@@ -78,8 +83,15 @@ export const editAssessment = (assessmentId, assessmentData) => async (
 
 export const deleteAssessment = (assessmentId) => async (dispatch) => {
   try {
+    const token = getToken();
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
     await axios.delete(
-      `http://localhost:5000/api/Assessments/assessment/${assessmentId}`
+      `http://localhost:5000/api/Assessments/assessment/${assessmentId}` , axiosConfig
     );
     dispatch({
       type: DELETE_ASSESSMENT_SUCCESS,

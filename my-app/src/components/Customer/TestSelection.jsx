@@ -4,23 +4,27 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Question from "./Question";
 import { fetchTests } from "../../actions/testAction";
 import { addAssessmentWithTests } from "../../actions/AssesmentAction";
+import Question from "./Question"; // Import the Question component
+import Preview from "./Preview";
+
 const TestSelection = ({ handleBackButtonClick }) => {
   const dispatch = useDispatch();
   const tests = useSelector((state) => state.test.tests);
   const [showQuestion, setShowQuestion] = useState(false);
-  const [selectedTests, setSelectedTests] = useState([]); // State to store selected tests
+  const [selectedTests, setSelectedTests] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalTestId, setModalTestId] = useState(null);
   useEffect(() => {
     dispatch(fetchTests());
   }, [dispatch]);
+
   const handleNextButtonClick = () => {
     setShowQuestion(true);
     // Retrieve the company name from localStorage
     const companyName = JSON.parse(localStorage.getItem('activeCompany')).name;
-    const assessmentNmae = JSON.parse(localStorage.getItem('assessments'))
-
+    const assessmentName = localStorage.getItem('assessments');
     // Structure the tests array
     const testsPayload = selectedTests.map(testId => {
       const test = tests.find(t => t.id === testId);
@@ -31,12 +35,12 @@ const TestSelection = ({ handleBackButtonClick }) => {
     });
     // Include the company name in the payload
     dispatch(addAssessmentWithTests({
-      assessment_name: assessmentNmae,
+      assessment_name: assessmentName,
       tests: testsPayload,
       company_name: companyName
     }));
   };
-  // Function to handle test selection
+
   const handleTestSelection = (testId) => {
     const alreadySelected = selectedTests.includes(testId);
     if (alreadySelected) {
@@ -45,10 +49,133 @@ const TestSelection = ({ handleBackButtonClick }) => {
       setSelectedTests([...selectedTests, testId]);
     }
   };
+
+  const openModal = (testId) => {
+    setShowModal(true);
+    setModalTestId(testId);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalTestId(null);
+  };
+
+  const saveQuestionCount = () => {
+    // Implement save logic here
+    closeModal();
+  };
+
+  const Modal = ({ test }) => {
+    const [questionCounts, setQuestionCounts] = useState({
+      easy: 10,
+      medium: 10,
+      hard: 10,
+    }); // State to hold the selected question counts for each difficulty
+    const [difficulty, setDifficulty] = useState("easy"); // State to hold the selected difficulty level
+
+    const handleQuestionCountChange = (event, selectedDifficulty) => {
+      const newQuestionCounts = {
+        ...questionCounts,
+        [selectedDifficulty]: parseInt(event.target.value),
+      };
+      setQuestionCounts(newQuestionCounts); // Update the question counts state for the selected difficulty
+    };
+
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-8 rounded-lg">
+          <h2 className="text-lg font-semibold mb-4">
+            {test.test_name} - Edit Question Count
+          </h2>
+          {/* Easy difficulty */}
+          <div className="mb-4">
+            <h3 className="text-base font-semibold mb-2">Easy</h3>
+            {/* Range input */}
+            <div className="flex items-center mb-4">
+              {/* Range input */}
+              <input
+                type="range"
+                value={questionCounts["easy"]} // Show question count only for easy difficulty
+                min="0"
+                max="10"
+                onChange={(event) => handleQuestionCountChange(event, "easy")}
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-yellow-300"
+              />
+              {/* Box to display selected question count */}
+              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center">
+                {questionCounts["easy"]}{" "}
+                {/* Show question count only for easy difficulty */}
+              </div>
+            </div>
+          </div>
+          {/* Medium difficulty */}
+          <div className="mb-4">
+            <h3 className="text-base font-semibold mb-2">Medium</h3>
+
+            {/* Range input */}
+
+            <div className="flex items-center mb-4">
+              {/* Range input */}
+              <input
+                type="range"
+                value={questionCounts["medium"]} // Show question count only for medium difficulty
+                min="0"
+                max="15"
+                onChange={(event) => handleQuestionCountChange(event, "medium")}
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-green-300"
+              />
+              {/* Box to display selected question count */}
+              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center">
+                {questionCounts["medium"]}{" "}
+                {/* Show question count only for medium difficulty */}
+              </div>
+            </div>
+          </div>
+          {/* Hard difficulty */}
+          <div>
+            <h3 className="text-base font-semibold mb-2">Hard</h3>
+            {/* Range input */}
+            <div className="flex items-center mb-4">
+              {/* Range input */}
+              <input
+                type="range"
+                value={questionCounts["hard"]} // Show question count only for hard difficulty
+                min="0"
+                max="20"
+                onChange={(event) => handleQuestionCountChange(event, "hard")}
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-red-500"
+              />
+              {/* Box to display selected question count */}
+              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center">
+                {questionCounts["hard"]}{" "}
+                {/* Show question count only for hard difficulty */}
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button variant="outline-secondary" onClick={closeModal}>
+              Close
+            </Button>
+            <Button
+              variant="success"
+              className="ml-2"
+              onClick={saveQuestionCount}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       {showQuestion ? (
-        <Question Question={Question} handleBackButtonClick={handleBackButtonClick} />
+        <Preview
+          Preview={Preview}
+          handleBackButtonClick={handleBackButtonClick}
+        />
       ) : (
         <div>
           <h2 className="text-center mb-4">Test Selection</h2>
@@ -65,13 +192,42 @@ const TestSelection = ({ handleBackButtonClick }) => {
                       <br />
                       Category: SEO
                       <br />
-                      Difficulty Level: {test.difficulty_level}
+                      Question Count: {test.question_count}
+                      <span
+                        onClick={() => openModal(test.id)}
+                        className="cursor-pointer ml-2"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 text-gray-500 hover:text-gray-800"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                          />
+                        </svg>
+                      </span>
                     </Card.Text>
                     <Button
-                      variant={selectedTests.includes(test.id) ? "success" : "primary"}
+                      variant={
+                        selectedTests.includes(test.id) ? "success" : "primary"
+                      }
                       onClick={() => handleTestSelection(test.id)}
                     >
-                      {selectedTests.includes(test.id) ? "Selected" : "Add Test"}
+                      {selectedTests.includes(test.id)
+                        ? "Selected"
+                        : "Add Test"}
                     </Button>
                   </Card.Body>
                 </Card>
@@ -79,16 +235,28 @@ const TestSelection = ({ handleBackButtonClick }) => {
             ))}
           </Row>
           <div className="text-center mt-4">
-            <Button variant="outline-primary" size="lg" onClick={handleBackButtonClick}>
+            <Button
+              variant="outline-primary"
+              size="lg"
+              onClick={handleBackButtonClick}
+            >
               Back
             </Button>{" "}
-            <Button variant="outline-success" size="lg" onClick={handleNextButtonClick}>
+            <Button
+              variant="outline-success"
+              size="lg"
+              onClick={handleNextButtonClick}
+            >
               Next
             </Button>
           </div>
         </div>
       )}
+      {showModal && (
+        <Modal test={tests.find((test) => test.id === modalTestId)} />
+      )}
     </div>
   );
 };
+
 export default TestSelection;
