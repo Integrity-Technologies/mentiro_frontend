@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import Assesment from "./Assesment";
 import DualLineGraph from "./Graph";
 import CompanyProfile from "./CompanyProfile";
+import CandidateProfile from "./CandidatesProfile";
+import ViewTestResult from "./ViewTestResult";
 const logoImage = "/assets/icon.jpg";
 
 const Customer = () => {
@@ -32,13 +34,14 @@ const Customer = () => {
   const sections = {
     "/CompanyProfile": <CompanyProfile />,
     "/Assesments": <Assesment />,
+    "/CandidatesProfile": <CandidateProfile />,
+    "/ViewTestResult": <ViewTestResult />
   };
 
   // Define customer menu options
   const customerMenuOptions = [
     { label: "Company Profile", link: "/customer/option1" },
     { label: "Assessment", link: "/customer/option2" },
-    { label: "home", link: "/customer/option2" },
   ];
 
   return (
@@ -90,7 +93,7 @@ const Customer = () => {
                 className="block w-full text-left px-4 py-2 hover:bg-gray-100"
                 onClick={() => handleLanguageChange('Arabic')}
               >
-                العربية
+                Arabic
               </button>
             </div>
           )}

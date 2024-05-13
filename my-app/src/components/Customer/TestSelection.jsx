@@ -71,7 +71,7 @@ const TestSelection = ({ handleBackButtonClick }) => {
   // Function to calculate total question count for a test
   const calculateTotalQuestionCount = (testId) => {
     const counts = selectedQuestionCounts[testId];
-    if (!counts) return 0;
+    if (!counts) return 10;
     return Object.values(counts).reduce((total, count) => total + count, 0);
   };
 
