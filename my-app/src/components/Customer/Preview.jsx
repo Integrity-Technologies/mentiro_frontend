@@ -15,73 +15,80 @@ const Preview = ({ handleBackButtonClick }) => {
   // Data to be displayed in the preview
   const assessmentName = "Sample Assessment"; // Replace with actual assessment name
   const categoryName = "SEO"; // Replace with actual category name
-  const testName = "coding test"; // Replace with actual difficulty level
+  const tests = [
+    { testName: "Coding Test", duration: 10 },
+    { testName: "SEO Quiz", duration: 10 },
+    { testName: "Programming", duration: 10 },
+    { testName: "English", duration: 10 },
 
-  // Array of sample questions (replace with actual questions data)
-  const questions = [
-    {
-      question: "What is SEO?",
-      options: [
-        "Search Optimization",
-        "Search Engine",
-        "Search Engine Optimization",
-        "Search Engine",
-      ],
-    },
-    // Add more questions here
+    // Add more tests here
   ];
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-3xl font-semibold text-center mb-8">Assessment Preview</h2>
 
         {/* Card for assessment details */}
         <Card className="mb-4">
-          <Card.Body>
-            <Card.Title className="text-xl font-semibold">Assessment Details</Card.Title>
-            <Card.Text>
-              <p><strong>Assessment Name:</strong> {assessmentName}</p>
-              <p><strong>Category:</strong> {categoryName}</p>
-              <p><strong>Test Name</strong> {testName}</p>
-            </Card.Text>
-          </Card.Body>
-        </Card>
+  <Card.Body>
+    <Card.Title className="text-xl font-semibold mb-4">Assessment Details</Card.Title>
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <p className="text-sm font-semibold">Assessment Name:</p>
+        <p className="text-lg">{assessmentName}</p>
+      </div>
+      <div>
+        <p className="text-sm font-semibold">Category:</p>
+        <p className="text-lg">{categoryName}</p>
+      </div>
+      <div>
+        <p className="text-sm font-semibold">Total Tests:</p>
+        <p className="text-lg">4</p>
+      </div>
+      <div>
+        <p className="text-sm font-semibold">Assessment Time:</p>
+        <p className="text-lg">40 mins <i className="far fa-clock ml-1"></i></p>
+      </div>
+    </div>
+  </Card.Body>
+</Card>
 
-        {/* Display questions */}
-        {/* <h3 className="text-2xl font-semibold mb-4">Questions:</h3>
-        {questions.map((question, index) => (
-          <div key={index} className="mb-4">
-            <p className="text-lg">
-              Question {index + 1}: {question.question}
-            </p>
-            <ul className="list-disc pl-6">
-              {question.options.map((option, idx) => (
-                <li key={idx} className="text-lg">{option}</li>
+
+        {/* Table for selected tests */}
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold mb-4">Selected Tests</h3>
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 px-4 py-2">Test Name</th>
+                <th className="border border-gray-300 px-4 py-2">Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tests.map((test, index) => (
+                <tr key={index} className="border-b border-gray-300">
+                  <td className="border border-gray-300 px-4 py-2">{test.testName}</td>
+                  <td className="border border-gray-300 px-4 py-2">{test.duration} mins <i className="far fa-clock ml-1"></i></td>
+                </tr>
               ))}
-            </ul>
-          </div>
-        ))} */}
+            </tbody>
+          </table>
+        </div>
 
         {/* Submit Button */}
-        <div className="text-center mt-8">
+        <div className="flex justify-center space-x-4">
           <Button
             variant="primary"
             size="lg"
             onClick={handleSubmitButtonClick}
-            className="w-full md:w-auto"
           >
             Submit
           </Button>
-        </div>
-
-        {/* Back Button */}
-        <div className="text-center mt-8">
           <Button
             variant="outline-primary"
             size="lg"
             onClick={handleBackButtonClick}
-            className="w-full md:w-auto"
           >
             Back
           </Button>

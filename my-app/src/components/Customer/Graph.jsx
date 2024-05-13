@@ -1,38 +1,84 @@
-import React from "react";
+import React, { useEffect, useRef } from 'react';
+import Chart from 'chart.js/auto';
 
-const Graph = ({ data }) => {
-  // Assume data is an array of numbers representing some sample data for the graph
-  // You can replace this with your actual data or use a library like Chart.js for more complex graphs
-  return (
-    <div className="grid grid-cols-4 gap-4">
-      <div className="col-span-3">
-        <h2 className="text-2xl font-semibold mb-4">Active Assessment</h2>
-      </div>
-      <div className="col-span-1 flex justify-end items-center">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded">
-          Create New Assessment
-        </button>
-      </div>
-      {data.map((point, index) => (
-        <div key={index} className="bg-gray-100 border border-gray-300 rounded-lg p-4 mt-16">
-          <h2 className="text-lg font-semibold mb-4">Assessment Graph</h2>
-          <div className="h-64 bg-gray-200 flex items-center justify-center">
-            {/* Display graph here */}
-            <div className="text-center">
-              <div key={index} className="mb-2">
-                <div
-                  className="bg-blue-500 text-white rounded-md py-1"
-                  style={{ width: `${point * 10}px` }}
-                >
-                  {point}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+const DualLineGraph = ({ data }) => {
+  const chartRef = useRef(null);
+  const chartInstanceRef = useRef(null); // Keep track of the chart instance
+
+  useEffect(() => {
+    if (chartInstanceRef.current !== null) {
+      // Destroy the existing chart instance before initializing a new one
+      chartInstanceRef.current.destroy();
+    }
+
+    if (chartRef && chartRef.current) {
+      const ctx = chartRef.current.getContext('2d');
+
+      const newChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.labels,
+          datasets: [
+            {
+              label: 'Assessments Created',
+              data: data.assessments,
+              borderColor: 'rgb(75, 192, 192)',
+              borderWidth: 2,
+              fill: false,
+              yAxisID: 'assessments-y-axis',
+            },
+            {
+              label: 'Candidates Processed',
+              data: data.candidates,
+              borderColor: 'rgb(255, 99, 132)',
+              borderWidth: 2,
+              fill: false,
+              yAxisID: 'candidates-y-axis',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            assessments: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: {
+                display: true,
+                text: 'Assessments Created',
+              },
+            },
+            candidates: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: {
+                display: true,
+                text: 'Candidates Processed',
+              },
+              grid: {
+                drawOnChartArea: false,
+              },
+            },
+          },
+        },
+      });
+
+      // Save the chart instance to be able to destroy it later
+      chartInstanceRef.current = newChartInstance;
+    }
+
+    return () => {
+      // Clean up function to destroy the chart instance when the component unmounts
+      if (chartInstanceRef.current !== null) {
+        chartInstanceRef.current.destroy();
+      }
+    };
+  }, [data]);
+
+  return <canvas ref={chartRef} className="border border-solid border-black outline-none" style={{ width: '100%', height: '90vh' }} />;
 };
 
-export default Graph;
+export default DualLineGraph;
+

@@ -100,7 +100,7 @@ export const deleteAssessment = (assessmentId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ASSESSMENT_ERROR,
-      payload: error.response.data.error,
+      payload: error?.response?.data?.error,
     });
   }
 };
