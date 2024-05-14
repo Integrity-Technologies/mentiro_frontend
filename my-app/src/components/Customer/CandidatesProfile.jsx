@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCandidates } from "../../actions/candidateAction";
 import TablePagination from "../Admin/TablePagination";
+import { useTranslation } from 'react-i18next';
 
 const CandidateProfile = () => {
   const dispatch = useDispatch();
   const candidates = useSelector((state) => state.candidates.candidates);
   const [searchTerm, setSearchTerm] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getAllCandidates());
@@ -32,11 +34,11 @@ const CandidateProfile = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Candidates</h1>
+      <h1 className="text-2xl font-bold mb-4">{t('candidates.title')}</h1>
       <div className="mb-3">
         <input
           type="text"
-          placeholder="Search by name"
+          placeholder={t('candidates.searchPlaceholder')}
           className="border border-gray-300 rounded px-3 py-1 w-1/4"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -45,11 +47,11 @@ const CandidateProfile = () => {
       <table className="border-collapse w-full mb-4">
         <thead>
           <tr>
-            <th className="border border-gray-400 px-4 py-2">ID</th>
-            <th className="border border-gray-400 px-4 py-2">First Name</th>
-            <th className="border border-gray-400 px-4 py-2">Last Name</th>
-            <th className="border border-gray-400 px-4 py-2">Email</th>
-            <th className="border border-gray-400 px-4 py-2">Date Joined</th>
+            <th className="border border-gray-400 px-4 py-2">{t('candidates.id')}</th>
+            <th className="border border-gray-400 px-4 py-2">{t('candidates.firstName')}</th>
+            <th className="border border-gray-400 px-4 py-2">{t('candidates.lastName')}</th>
+            <th className="border border-gray-400 px-4 py-2">{t('candidates.email')}</th>
+            <th className="border border-gray-400 px-4 py-2">{t('candidates.dateJoined')}</th>
           </tr>
         </thead>
         <tbody>
