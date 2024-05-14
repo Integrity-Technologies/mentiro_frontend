@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next'; 
 
 const CompanyProfile = () => {
-  const [user, setUser] = useState(null); // State to store user information
-  const [companyList, setCompanyList] = useState([]); // State to store list of companies
-  const [activeCompany, setActiveCompany] = useState(null); // State to store active company
+  const [user, setUser] = useState(null);
+  const [companyList, setCompanyList] = useState([]);
+  const [activeCompany, setActiveCompany] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Get token from localStorage
@@ -51,7 +53,7 @@ const CompanyProfile = () => {
     <div className="container mx-auto p-4">
       {user ? (
         <div>
-          <h2 className="text-3xl font-semibold mb-4">Welcome, {user.first_name}!</h2>
+          <h2 className="text-3xl font-semibold mb-4">{t('CompanyProfile.welcomeMessage')} {user.first_name}!</h2>
           {/* Display user data in a card-like layout */}
           <div className="bg-white shadow-md rounded-lg p-6 mb-4">
             <div className="grid grid-cols-3 gap-4">
@@ -77,7 +79,7 @@ const CompanyProfile = () => {
           </div>
 
           {/* Display company list */}
-          <h3 className="text-2xl font-semibold mt-6 mb-4">Company List</h3>
+          <h3 className="text-2xl font-semibold mt-6 mb-4">{t('CompanyProfile.companyList')}</h3>
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* List each company */}
             {companyList.map(company => (
@@ -91,14 +93,14 @@ const CompanyProfile = () => {
                   'bg-green-500 text-white hover:bg-green-600 focus:ring focus:ring-green-400' : 
                   'bg-blue-500 text-white hover:bg-blue-600 focus:ring focus:ring-blue-400'}`}
                 >
-                  {activeCompany && activeCompany.id === company.id ? 'Activated' : 'Activate'}
+                  {activeCompany && activeCompany.id === company.id ? `${t('CompanyProfile.activatedButton')}` :`${t('CompanyProfile.activateButton')}`}
                 </button>
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <p className="text-lg font-semibold text-center">Please login to view your profile.</p>
+        <p className="text-lg font-semibold text-center">{t('CompanyProfile.loginMessage')}</p>
       )}
     </div>
   );
