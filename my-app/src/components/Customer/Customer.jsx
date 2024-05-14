@@ -16,9 +16,8 @@ const Customer = ( isSetLanguageButton) => {
   // const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLanguageChange = (lng) => {
-    console.log("🚀 ~ handleLanguageChange ~ lng:", lng)
     setSelectedLanguage(lng);
-    setDropdownOpen(false);
+    // setDropdownOpen(false);
   };
 
   const data = {
