@@ -172,4 +172,33 @@
       
     }
   }
+
+ "CompanyProfile":{
+    "welcomeMessage": "Welcome,",
+    "companyList": "Company List",
+    "activatedButton": "Activated",
+    "activateButton":"Activate",
+    "loginMessage":"Please login to view your profile"
+  },
+  
+  "candidates": {
+    "title": "Candidates",
+    "searchPlaceholder": "Search by name",
+    "id": "ID",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "dateJoined": "Date Joined"
+  },
+
+  "candidatesResult":{
+    "title":"Candidates Result",
+    "searchPlaceholder": "Search by candidate name",
+    "id": "ID",
+    "Name":"Candidate Name",
+    "assessmentName": "Assessment Name",
+    "testName": "Test Name",
+    "Score": "Score"
+  }
+  
 }
