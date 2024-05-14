@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -49,6 +49,8 @@ console.log(user, token + "from local storage")
     }
   });
 
+  const [isLanguageButton, isSetLanguageButton] = useState(false);
+
   return (
     <>
       <BrowserRouter>
@@ -67,8 +69,8 @@ console.log(user, token + "from local storage")
           {/* Admin Dashboard Route
         token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
         {/* Customer Dashboard Route */}
-         {token && user === "false" && <Route path="/customer-dashboard" element={<Customer />} />} 
-         {user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
+         {token && user === "false" && <Route path="/customer-dashboard" element={<Customer isLanguageButton={true}/>} />} 
+         {user === "true" && <Route path="/admin-dashboard" element={<Admin isLanguageButton={false}/>} />}
 
 
         {/* Redirect Unauthenticated Users to Login */}
