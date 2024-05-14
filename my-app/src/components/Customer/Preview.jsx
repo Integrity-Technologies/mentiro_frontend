@@ -1,47 +1,39 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import InviteCandidate from "./InviteCandidate"; // Import the InviteCandidate component
+import InviteCandidate from "./InviteCandidate";
 import { addAssessmentWithTests, getAllAssessments } from "../../actions/AssesmentAction";
 import { useDispatch } from "react-redux";
 
 const Preview = ({ handleBackButtonClick }) => {
   const dispatch = useDispatch();
-
-  // State to manage visibility of the invite candidate component
   const [showInviteCandidate, setShowInviteCandidate] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
 
-  // Function to handle submit button click
   const handleSubmitButtonClick = async () => {
     setShowPreview(false);
     setShowInviteCandidate(true);
 
-    const companyName = JSON.parse(localStorage.getItem('activeCompany')).name;
     const assessmentName = localStorage.getItem('assessments');
-    const selectedtests = localStorage.getItem("selectedTests")
+    const companyName = JSON.parse(localStorage.getItem('activeCompany')).name;
+    const selectedTests = JSON.parse(localStorage.getItem('selectedTests'));
 
-    // Structure the tests array
-    // Include the company name in the payload
-    console.log(selectedtests);
     await dispatch(addAssessmentWithTests({
       assessment_name: assessmentName,
-      tests: selectedtests,
-      company_name: companyName
+      company_name: companyName,
+      tests: selectedTests
     }));
-  
-    await dispatch(getAllAssessments);
+
+    await dispatch(getAllAssessments());
   };
 
-  // Data to be displayed in the preview
-  const assessmentName = "Sample Assessment"; // Replace with actual assessment name
-  const categoryName = "SEO"; // Replace with actual category name
+  const assessmentName = "Sample Assessment";
+  const categoryName = "SEO";
   const tests = [
     { testName: "Coding Test", duration: 10 },
     { testName: "SEO Quiz", duration: 10 },
     { testName: "Programming", duration: 10 },
     { testName: "English", duration: 10 },
-    // Add more tests here
   ];
 
   return (
@@ -51,7 +43,6 @@ const Preview = ({ handleBackButtonClick }) => {
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <h2 className="text-3xl font-semibold text-center mb-8">Assessment Preview</h2>
 
-            {/* Card for assessment details */}
             <Card className="mb-4">
               <Card.Body>
                 <Card.Title className="text-xl font-semibold mb-4">Assessment Details</Card.Title>
@@ -66,7 +57,7 @@ const Preview = ({ handleBackButtonClick }) => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Total Tests:</p>
-                    <p className="text-lg">4</p>
+                    <p className="text-lg">{tests.length}</p>
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Assessment Time:</p>
@@ -76,7 +67,6 @@ const Preview = ({ handleBackButtonClick }) => {
               </Card.Body>
             </Card>
 
-            {/* Table for selected tests */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold mb-4">Selected Tests</h3>
               <table className="w-full border-collapse border border-gray-300">
@@ -97,7 +87,6 @@ const Preview = ({ handleBackButtonClick }) => {
               </table>
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-center space-x-4">
               <Button
                 variant="primary"

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const SimplePieChart = () => {
+const SimpleBarGraph = () => {
   const chartContainer = useRef(null);
 
   useEffect(() => {
@@ -23,13 +23,17 @@ const SimplePieChart = () => {
     };
 
     const options = {
-      responsive: true
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
     };
 
     if (chartContainer && chartContainer.current) {
       const ctx = chartContainer.current.getContext('2d');
       new Chart(ctx, {
-        type: 'pie', // Change type to 'pie'
+        type: 'bar',
         data: data,
         options: options
       });
@@ -37,14 +41,10 @@ const SimplePieChart = () => {
   }, []);
 
   return (
-    <div className="container mt-4">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <canvas ref={chartContainer} className="chartjs-render-monitor" width="400" height="400"></canvas>
-        </div>
-      </div>
+    <div>
+      <canvas ref={chartContainer} width="400" height="200"></canvas>
     </div>
   );
 };
 
-export default SimplePieChart;
+export default SimpleBarGraph;
