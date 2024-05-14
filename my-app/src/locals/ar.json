@@ -145,7 +145,21 @@
           "close": "إغلاق",
           "saveChanges": "حفظ التغييرات"
         }
+      },
+
+      "assesment":{
+        "welcome": "أهلاً وسهلاً, {{firstName}}!",
+        "userDetails": {
+          "lastName": "الاسم الأخير",
+          "email": "البريد الإلكتروني",
+          "phone": "الهاتف"
+        },
+        "companyList": "قائمة الشركات",
+        "activate": "تفعيل",
+        "activated": "تم التنشيط",
+        "loginPrompt": "يرجى تسجيل الدخول لعرض ملفك الشخصي."
       }
+      
     }
   }
 }

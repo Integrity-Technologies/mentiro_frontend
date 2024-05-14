@@ -25,6 +25,7 @@ const Preview = ({ handleBackButtonClick }) => {
   ];
 
   return (
+    
     <div className="container mx-auto">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-3xl font-semibold text-center mb-8">Assessment Preview</h2>

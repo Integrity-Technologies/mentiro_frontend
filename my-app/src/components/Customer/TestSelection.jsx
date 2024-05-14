@@ -16,12 +16,20 @@ const TestSelection = ({ handleBackButtonClick }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalTestId, setModalTestId] = useState(null);
   const [selectedQuestionCounts, setSelectedQuestionCounts] = useState({}); // State to hold question counts for each test
+  const [showAlert, setShowAlert] = useState(false); // State to show alert when no tests are selected
 
   useEffect(() => {
     dispatch(fetchTests());
   }, [dispatch]);
 
   const handleNextButtonClick = async () => {
+    // Check if no tests are selected
+    if (selectedTests.length === 0) {
+      // Show alert if no tests are selected
+      setShowAlert(true);
+      return; // Exit function
+    }
+  
     setShowQuestion(true);
     // Retrieve the company name from localStorage
     const companyName = JSON.parse(localStorage.getItem('activeCompany')).name;
@@ -41,7 +49,7 @@ const TestSelection = ({ handleBackButtonClick }) => {
       tests: testsPayload,
       company_name: companyName
     }));
-
+  
     await dispatch(getAllAssessments);
   };
 
@@ -77,10 +85,11 @@ const TestSelection = ({ handleBackButtonClick }) => {
 
   const Alert = ({ message }) => (
     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong className="font-bold">Error:</strong>
-        <span className="block sm:inline ml-2">{message}</span>
+      <strong className="font-bold">Error:</strong>
+      <span className="block sm:inline ml-2">{message}</span>
     </div>
-);
+  );
+  
 
 const Modal = ({ test, updateQuestionCount }) => {
   const [questionCounts, setQuestionCounts] = useState({
@@ -228,6 +237,7 @@ const Modal = ({ test, updateQuestionCount }) => {
       ) : (
         <div>
         <h2 className="text-center mb-4">Test Selection</h2>
+        {showAlert && <Alert message="Please select at least one test." />} {/* Added this line */}
         <Row className="justify-content-center align-items-center">
           {tests.map((test) => (
             <Col key={test.id} md={4} className="mb-3 ml-md-15">

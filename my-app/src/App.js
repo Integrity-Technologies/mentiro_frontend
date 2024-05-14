@@ -65,12 +65,15 @@ console.log(user, token + "from local storage")
           <Route path="/customer-dashboard" element={<Customer />} /> 
           <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
           {/* Admin Dashboard Route
-        {token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />} */}
+        token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
         {/* Customer Dashboard Route */}
-        {/* {token && user === "false" && <Route path="/customer-dashboard" element={<Customer />} />} */}
+         {token && user === "false" && <Route path="/customer-dashboard" element={<Customer />} />} 
+         {user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
+
+
         {/* Redirect Unauthenticated Users to Login */}
-        {/* {!token && <Route path="*" element={<Navigate to="/" />} />} */}
-          {/* <Route
+         {!token && <Route path="*" element={<Navigate to="/" />} />} 
+           {/* <Route
             path="/admin-dashboard"
             element={
               <ProtectedRoute
@@ -78,9 +81,9 @@ console.log(user, token + "from local storage")
                 token={token}
                 adminComponent={<Admin />}
                 userComponent={<Customer />}
-              />
-            }
-          /> */}
+              /> */}
+            {/* }
+          />  */}
         </Routes>
       </BrowserRouter>
     </>

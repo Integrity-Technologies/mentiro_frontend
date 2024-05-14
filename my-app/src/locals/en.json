@@ -155,7 +155,21 @@
           "close": "Close",
           "saveChanges": "Save Changes"
         }
+      },
+
+      "assesment":{
+        "welcome": "Welcome, {{firstName}}!",
+        "userDetails": {
+          "lastName": "Last Name",
+          "email": "Email",
+          "phone": "Phone"
+        },
+        "companyList": "Company List",
+        "activate": "Activate",
+        "activated": "Activated",
+        "loginPrompt": "Please login to view your profile."
       }
+      
     }
   }
 }

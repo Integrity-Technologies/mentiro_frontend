@@ -5,6 +5,7 @@ import DualLineGraph from "./Graph";
 import CompanyProfile from "./CompanyProfile";
 import CandidateProfile from "./CandidatesProfile";
 import ViewTestResult from "./ViewTestResult";
+import LanguageToggleButton from "../Togglebutton";
 const logoImage = "/assets/icon.jpg";
 
 const Customer = () => {
@@ -97,6 +98,7 @@ const Customer = () => {
               </button>
             </div>
           )}
+          <LanguageToggleButton />
         </div>
       </div>
     </div>
