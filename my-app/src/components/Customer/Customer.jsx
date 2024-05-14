@@ -8,22 +8,14 @@ import ViewTestResult from "./ViewTestResult";
 import LanguageToggleButton from "../Togglebutton";
 const logoImage = "/assets/icon.jpg";
 
-const Customer = ( isSetLanguageButton) => {
+const Customer = ({ isSetLanguageButton }) => {
   const { t, i18n } = useTranslation();
 
-  const [activeLink, setActiveLink] = useState("");
+  const [activeLink, setActiveLink] = useState("/Graph"); // Default active link to the graph
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
-  // const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLanguageChange = (lng) => {
     setSelectedLanguage(lng);
-    // setDropdownOpen(false);
-  };
-
-  const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    assessments: [10, 20, 30, 25, 35, 45], // Sample data for assessments created
-    candidates: [5, 15, 25, 20, 30, 40], // Sample data for candidates processed
   };
 
   const handleClick = (link) => {
@@ -33,7 +25,7 @@ const Customer = ( isSetLanguageButton) => {
   const sections = {
     "/Graph": <DualLineGraph />,
     "/CompanyProfile": <CompanyProfile />,
-    "/Assesments": <Assesment />,
+    "/Assessments": <Assesment />,
     "/CandidatesProfile": (
       <CandidateProfile
         language={selectedLanguage}
@@ -45,8 +37,10 @@ const Customer = ( isSetLanguageButton) => {
 
   // Define customer menu options
   const customerMenuOptions = [
-    { label: "Company Profile", link: "/customer/option1" },
-    { label: "Assessment", link: "/customer/option2" },
+    { label: "CompanyProfile", link: "/CompanyProfile" },
+    { label: "Assessment", link: "/Assessments" },
+    { label: "CandidatesProfile", link: "/CandidatesProfile" },
+    { label: "TestResult", link: "/TestResult" },
   ];
 
   return (
@@ -60,15 +54,15 @@ const Customer = ( isSetLanguageButton) => {
           />
         </div>
         <nav className="mt-10">
-          {Object.keys(sections).map((link) => (
+          {customerMenuOptions.map((option) => (
             <button
-              key={link}
+              key={option.link}
               className={`block px-20 py-2 mr-20 ${
-                activeLink.includes(link) ? "bg-teal-600 text-white" : ""
+                activeLink === option.link ? "bg-teal-600 text-white" : ""
               } mb-3`}
-              onClick={() => handleClick(link)}
+              onClick={() => handleClick(option.link)}
             >
-              {link === "/Assesments" ? "Assessment" : link.replace("/", "")}
+              {option.label}
             </button>
           ))}
         </nav>

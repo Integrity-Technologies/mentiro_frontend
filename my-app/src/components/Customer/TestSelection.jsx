@@ -15,52 +15,43 @@ const TestSelection = ({ handleBackButtonClick }) => {
   const [selectedTests, setSelectedTests] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalTestId, setModalTestId] = useState(null);
-  const [selectedQuestionCounts, setSelectedQuestionCounts] = useState({}); // State to hold question counts for each test
-  const [showAlert, setShowAlert] = useState(false); // State to show alert when no tests are selected
+  const [selectedQuestionCounts, setSelectedQuestionCounts] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTests());
   }, [dispatch]);
 
   const handleNextButtonClick = async () => {
-    // Check if no tests are selected
     if (selectedTests.length === 0) {
-      // Show alert if no tests are selected
       setShowAlert(true);
-      return; // Exit function
+      return;
     }
-  
+
     setShowQuestion(true);
-    // Retrieve the company name from localStorage
-    const companyName = JSON.parse(localStorage.getItem('activeCompany')).name;
-    const assessmentName = localStorage.getItem('assessments');
-    // Structure the tests array
+    
+    const selectedTestObjects = tests.filter(test => selectedTests.includes(test.id));
+    
+    localStorage.setItem('selectedTests', JSON.stringify(selectedTestObjects));
+
     const testsPayload = selectedTests.map(testId => {
       const test = tests.find(t => t.id === testId);
       return {
         test_name: test.test_name,
         test_difficulty: test.difficulty_level,
-        question_count: selectedQuestionCounts[testId] || 0 // Include question count for each test
+        question_count: selectedQuestionCounts[testId] || 0
       };
     });
-    // Include the company name in the payload
-    await dispatch(addAssessmentWithTests({
-      assessment_name: assessmentName,
-      tests: testsPayload,
-      company_name: companyName
-    }));
-  
-    await dispatch(getAllAssessments);
-  };
+  }
 
-  const handleTestSelection = (testId) => {
-    const alreadySelected = selectedTests.includes(testId);
-    if (alreadySelected) {
-      setSelectedTests(selectedTests.filter((id) => id !== testId));
-    } else {
-      setSelectedTests([...selectedTests, testId]);
-    }
-  };
+    const handleTestSelection = (testId) => {
+      const alreadySelected = selectedTests.includes(testId);
+      if (alreadySelected) {
+        setSelectedTests(selectedTests.filter((id) => id !== testId));
+      } else {
+        setSelectedTests([...selectedTests, testId]);
+      }
+    };
 
   const openModal = (testId) => {
     setShowModal(true);
