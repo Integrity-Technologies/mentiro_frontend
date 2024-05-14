@@ -162,4 +162,33 @@
       
     }
   }
+
+   "CompanyProfile": {
+    "welcomeMessage": "مرحبًا،",
+    "companyList": "قائمة الشركات",
+    "activatedButton": "تم التنشيط",
+    "activateButton": "تنشيط",
+    "loginMessage": "الرجاء تسجيل الدخول لعرض ملفك الشخصي"
+  },  
+
+  "candidates": {
+      "title": "المرشحون",
+      "searchPlaceholder": "البحث حسب الاسم",
+      "id": "الرقم التعريفي",
+      "firstName": "الاسم الأول",
+      "lastName": "الاسم الأخير",
+      "email": "البريد الإلكتروني",
+      "dateJoined": "تاريخ الانضمام"
+    },
+
+    "candidatesResult": {
+      "title": "نتائج المرشحين",
+      "searchPlaceholder": "البحث بواسطة اسم المرشح",
+      "id": "الرقم التعريفي",
+      "Name": "اسم المرشح",
+      "assessmentName": "اسم التقييم",
+      "testName": "اسم الاختبار",
+      "Score": "النتيجة"
+    }
+    
 }
