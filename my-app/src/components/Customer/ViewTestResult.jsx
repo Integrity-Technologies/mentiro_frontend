@@ -1,73 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Table, Form, FormControl } from "react-bootstrap";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { fetchResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
-
-  // Mock result data for demonstration
-  const mockResult = [
-    {
-      id: 1,
-      candidate_name: "faizan",
-      assessments: [
-        {
-          name: "testing assessment",
-          tests: [
-            {
-              name: "Result testing 2",
-              questions: [
-                {
-                  answer_id: 9,
-                  is_correct: 1,
-                  question_id: 5,
-                },
-              ],
-              score: 1,
-            },
-            {
-              name: "Result testing",
-              questions: [
-                {
-                  answer_id: 9,
-                  is_correct: 1,
-                  question_id: 5,
-                },
-                {
-                  answer_id: 9,
-                  is_correct: 1,
-                  question_id: 5,
-                },
-                {
-                  answer_id: 9,
-                  is_correct: 1,
-                  question_id: 5,
-                },
-              ],
-              score: 3,
-            },
-          ],
-        },
-        {
-          name: "testing assessment 1",
-          tests: [
-            {
-              name: "Demo test upgraded final",
-              questions: [
-                {
-                  answer_id: 9,
-                  is_correct: 1,
-                  question_id: 5,
-                },
-              ],
-              score: 1,
-            },
-          ],
-        },
-      ],
-    },
-  ];
+import { useTranslation } from 'react-i18next';
 
 const ViewTestResult = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { results, error } = useSelector((state) => state.results);
   const [searchTerm, setSearchTerm] = useState("");
@@ -88,7 +27,10 @@ const ViewTestResult = () => {
   const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentResults = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
+  const currentResults = filteredResults.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   const handlePageChange = (page) => setCurrentPage(page);
 
@@ -99,11 +41,11 @@ const ViewTestResult = () => {
 
   return (
     <div>
-      <h1>Candidates Result</h1>
+      <h1>{t("candidatesResult.title")}</h1>
       <Form inline className="mb-3">
         <FormControl
           type="text"
-          placeholder="Search by candidate name"
+          placeholder={t("candidatesResult.searchPlaceholder")}
           className="mr-sm-2 w-25"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -112,11 +54,11 @@ const ViewTestResult = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Candidate Name</th>
-            <th>Assessment Name</th>
-            <th>Test Name</th>
-            <th>Score</th>
+            <th>{t("candidatesResult.id")}</th>
+            <th>{t("candidatesResult.Name")}</th>
+            <th>{t("candidatesResult.assessmentName")}</th>
+            <th>{t("candidatesResult.testName")}</th>
+            <th>{t("candidatesResult.Score")}</th>
           </tr>
         </thead>
         <tbody>
@@ -156,7 +98,11 @@ const ViewTestResult = () => {
           )}
         </tbody>
       </Table>
-      <TablePagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+      <TablePagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
