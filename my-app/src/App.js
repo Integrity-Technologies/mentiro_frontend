@@ -49,8 +49,7 @@ console.log(user, token + "from local storage")
     }
   });
 
-  const [isLanguageButton, isSetLanguageButton] = useState(false);
-
+  const [isLanguageButton, setIsLanguageButton] = useState(false);
   return (
     <>
       <BrowserRouter>
@@ -63,14 +62,14 @@ console.log(user, token + "from local storage")
           <Route path="/logout" element={<Logout />} />
           <Route path="/assesment" element={<Assessment />} />
           <Route path="/candidates" element={<Candidates />} />
-          <Route path="/admin-dashboard" element={<Admin />} />
-          <Route path="/customer-dashboard" element={<Customer />} /> 
+          <Route path="/admin-dashboard" element={<Admin isLanguageButton={isLanguageButton}/>} />
+          <Route path="/customer-dashboard" element={<Customer  isLanguageButton={true}/>} /> 
           <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
           {/* Admin Dashboard Route
         token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
         {/* Customer Dashboard Route */}
-         {token && user === "false" && <Route path="/customer-dashboard" element={<Customer isLanguageButton={true}/>} />} 
-         {user === "true" && <Route path="/admin-dashboard" element={<Admin isLanguageButton={false}/>} />}
+         {token && user === "false" && <Route path="/customer-dashboard" element={<Customer/>} />} 
+         {user === "true" && <Route path="/admin-dashboard" element={<Admin/>} />}
 
 
         {/* Redirect Unauthenticated Users to Login */}
