@@ -5,7 +5,7 @@ import { logout } from "../actions/authActions"; // Adjust the path as needed
 import { Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const LanguageToggleButton = ({ isSetLanguageButton, onLanguageChange }) => {
+const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
   const { i18n } = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const LanguageToggleButton = ({ isSetLanguageButton, onLanguageChange }) => {
 
   return (
     <div>
-      {isSetLanguageButton && (
+      {isLanguageButton && (
         <div className="flex">
           <button
             className={`${
