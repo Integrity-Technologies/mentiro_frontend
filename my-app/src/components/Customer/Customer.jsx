@@ -8,7 +8,7 @@ import ViewTestResult from "./ViewTestResult";
 import LanguageToggleButton from "../Togglebutton";
 const logoImage = "/assets/icon.jpg";
 
-const Customer = ({ isSetLanguageButton }) => {
+const Customer = ({isLanguageButton} ) => {
   const { t, i18n } = useTranslation();
 
   const [activeLink, setActiveLink] = useState("/Graph"); // Default active link to the graph
@@ -99,7 +99,7 @@ const Customer = ({ isSetLanguageButton }) => {
               </button>
             </div>
           )} */}
-          <LanguageToggleButton onLanguageChange={handleLanguageChange} isSetLanguageButton={isSetLanguageButton}/>
+          <LanguageToggleButton onLanguageChange={handleLanguageChange} isLanguageButton={isLanguageButton}/>
         </div>
       </div>
     </div>
