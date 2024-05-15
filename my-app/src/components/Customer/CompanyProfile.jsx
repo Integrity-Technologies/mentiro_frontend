@@ -9,28 +9,29 @@ const CompanyProfile = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    // Get token from localStorage
     const token = localStorage.getItem('token');
-
+  
     if (token) {
-      // Pass token in the headers for authorization
       const config = {
         headers: {
           Authorization: `Bearer ${token}`
         }
       };
-
-      // Fetch user data
+  
       axios.get("http://localhost:5000/api/users/me", config)
         .then(response => {
-          // Store user data in state
           setUser(response.data.user);
           
-          // Fetch companies using user ID
           axios.get("http://localhost:5000/api/company/myCompanies", config)
             .then(companyResponse => {
-              // Store company list in state
               setCompanyList(companyResponse.data);
+  
+              // Check if there's an active company stored in localStorage
+              const storedActiveCompany = JSON.parse(localStorage.getItem('activeCompany'));
+              if (storedActiveCompany) {
+                // If there's an active company stored, set it as active
+                setActiveCompany(storedActiveCompany);
+              }
             })
             .catch(error => {
               console.error("Error fetching company data:", error);
@@ -40,7 +41,8 @@ const CompanyProfile = () => {
           console.error("Error fetching user data:", error);
         });
     }
-  }, []); // Empty dependency array ensures this effect runs only once when component mounts
+  }, []);
+   // Empty dependency array ensures this effect runs only once when component mounts
 
   // Function to handle activation of a company
   const handleActivateCompany = (company) => {

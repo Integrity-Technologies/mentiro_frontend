@@ -1,37 +1,49 @@
 import React, { useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import Candidate from "./Candidate";
+import InviteModal from "./Invitemodal";
 
 const InviteCandidate = ({ handleBackButtonClick }) => {
-  const [showCandidate, setShowCandidate] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleSubmitButtonClick = () => {
-    setShowCandidate(true);
+  const handleInviteButtonClick = () => {
+    setShowModal(true);
   };
 
-  //   const handleInviteClick = () => {
-  //     // Replace 'mailto:' with the email address you want to redirect to
-  //     // window.location.href = 'mailto:example@example.com';
-  //   };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+
 
   return (
-    <div>
-      {showCandidate ? (
-        <Candidate handleBackButtonClick={handleBackButtonClick} />
-      ) : (
-        <div>
-          <Container
-            className="d-flex flex-column justify-content-center align-items-center"
-            style={{ height: "100vh" }}
-          >
-            <h1 className="text-center mb-4">Invite Candidate via Email</h1>
-            <Button variant="primary">
-              Invite
-            </Button>
+   
+        <div className="bg-white p-8 flex justify-center items-center h-screen relative">
+          <Container>
+            <h2 className="absolute top-3 left-5 right-0">Congratulation! Your Assessment is Live</h2>
+            <h3 className="absolute top-20 left-5 right-0">Assessment Name: XYZ Assessment</h3>
+            <p className="absolute top-40 left-5 right-0">Forward this link to the candidate to take up the assessment:</p>
+
+            <div className="absolute top-56 left-5 right-0 border border-gray-400 rounded-md p-2 flex items-center">
+              <input
+                type="text"
+                value="https://dummy-link.com"
+                readOnly
+                className="flex-1 mr-2 border-0"
+              />
+              <button className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded-md">
+                Copy
+              </button>
+            </div>
+
+            <Button variant="dark" onClick={handleInviteButtonClick} className="mt-4 left-0">
+          Invite email
+        </Button>
+
+        <InviteModal showModal={showModal} handleClose={handleCloseModal} />
           </Container>
         </div>
-      )}
-    </div>
+      
   );
 };
 
