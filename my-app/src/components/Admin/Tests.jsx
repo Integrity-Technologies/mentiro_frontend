@@ -349,23 +349,28 @@ const Tests = () => {
               )}
             </Form.Group>
 
-            <Form.Group controlId="formTestCategories">
-              <Form.Label>
-                {t("tests.modals.editTest.formLabels.testCategories")}
-              </Form.Label>
-              <Form.Control
-                as="select"
-                value={newTest.category_names}
-                onChange={(e) => handleCategorySelect(e.target.value)}
-              >
-                <option value="">Select Category</option>
+              <Form.Group controlId="formTestCategories">
+              <Form.Label>Test Categories</Form.Label>
+              <div>
                 {categories.map((category) => (
-                  <option key={category.id} value={category.category_name}>
-                    {category.category_name}
-                  </option>
+                  <Form.Check
+                    key={category.id}
+                    type="checkbox"
+                    id={`checkbox-${category.id}`}
+                    label={category.category_name}
+                    checked={newTest.category_names.includes(
+                      category.category_name
+                    )
+                    }
+                    onChange={(e) =>
+                      handleCategorySelect(
+                        category.category_name,
+                        e.target.checked
+                      )
+                    }
+                  />
                 ))}
-              </Form.Control>
-
+              </div>
               {categoryNameError && (
                 <div className="text-danger">{categoryNameError}</div>
               )}
@@ -448,22 +453,29 @@ const Tests = () => {
             </Form.Group>
             <Form.Group controlId="formTestCategories">
               <Form.Label>Test Categories</Form.Label>
-              <Form.Control
-                as="select"
-                value={newTest.category_names}
-                onChange={(e) => handleCategorySelect(e.target.value)}
-              >
-                <option value="">Select Category</option>
+              <div>
                 {categories.map((category) => (
-                  <option key={category.id} value={category.category_name}>
-                    {category.category_name}
-                  </option>
+                  <Form.Check
+                    key={category.id}
+                    type="checkbox"
+                    id={`checkbox-${category.id}`}
+                    label={category.category_name}
+                    checked={newTest.category_names.includes(
+                      category.category_name
+                    )}
+                    onChange={(e) =>
+                      handleCategorySelect(
+                        category.category_name,
+                        e.target.checked
+                      )
+                    }
+                  />
                 ))}
-              </Form.Control>
+              </div>
               {categoryNameError && (
                 <div className="text-danger">{categoryNameError}</div>
               )}
-            </Form.Group>
+            </Form.Group>            
             <Form.Group controlId="formCompanyName">
               <Form.Label>
                 {t("tests.modals.editTest.formLabels.companyName")}
