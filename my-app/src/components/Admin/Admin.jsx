@@ -11,7 +11,7 @@ import Company from "./Company";
 import Question from "./Question";
 const logoImage = "/assets/icon.jpg";
 
-const Dashboard = () => {
+const Dashboard = ({ isLanguageButton }) => {
   const { t, i18n } = useTranslation();
 
   const [activeLink, setActiveLink] = useState("");
@@ -66,7 +66,10 @@ const Dashboard = () => {
           ))}
         </nav>
         <div className="p-4 mt-auto">
-          <LanguageToggleButton onLanguageChange={handleLanguageChange} />
+          <LanguageToggleButton
+            isLanguageButton={isLanguageButton}
+            onLanguageChange={handleLanguageChange}
+          />
         </div>
       </aside>
 
