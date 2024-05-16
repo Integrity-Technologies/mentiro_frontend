@@ -56,6 +56,7 @@ const Preview = () => {
           testTime,
           test_difficulty,
           category, // Include category in the test object
+          
         };
       });
 
@@ -68,34 +69,33 @@ const Preview = () => {
   }, [assessmentData]);
 
   const handleSubmitButtonClick = async () => {
-    try {
-      if (!assessmentData) {
-        throw new Error("Assessment data is not available.");
-      }
-
-      await dispatch(
-        addAssessmentWithTests({
-          assessment_name: assessmentData.assessmentName,
-          company_name: assessmentData.companyName,
-          tests: assessmentData.tests,
-        })
-      );
-     await dispatch(getAllAssessments());
-
-      
-     localStorage.setItem('assessmentData', JSON.stringify(assessmentData));
-
-      setSuccessAlert(true);
-      setShowPreview(false);
-      setShowInviteCandidate(true);
-      setTimeout(() => {
-        setSuccessAlert(false);
-      }, 5000);
-    } catch (error) {
-      console.error(error);
-      setErrorAlert(true);
+  try {
+    if (!assessmentData) {
+      throw new Error("Assessment data is not available.");
     }
-  };
+
+    await dispatch(
+      addAssessmentWithTests({
+        assessment_name: assessmentData.assessmentName,
+        company_name: assessmentData.companyName,
+        tests: assessmentData.tests,
+      })
+    );
+console.log(addAssessmentWithTests, assessmentData.assessmentName);
+    // Save assessment data to local storage
+
+    // Update local state to trigger the next step in UI
+    setShowPreview(false);
+    setShowInviteCandidate(true);
+
+    // Dispatch action to get all assessments (if needed)
+    await dispatch(getAllAssessments());
+  } catch (error) {
+    console.error(error);
+    // Handle error, show error messages, etc.
+  }
+};
+
 
   const handleBackButtonClick = () => {
     setShowInviteCandidate(false);
@@ -110,7 +110,7 @@ const Preview = () => {
 
   return (
     <>
-      {successAlert && (
+      {/* {successAlert && (
         <div
           className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
           role="alert"
@@ -131,7 +131,7 @@ const Preview = () => {
             Failed to create assessment. Please try again.
           </span>
         </div>
-      )}
+      )} */}
       {showTestSelection && (
         <TestSelection handleBackButtonClick={handleBackButtonClick} />
       )}

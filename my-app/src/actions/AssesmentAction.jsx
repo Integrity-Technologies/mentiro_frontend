@@ -31,6 +31,7 @@ export const getAllAssessments = () => async (dispatch) => {
   };
 
   export const addAssessmentWithTests = (assessmentData) => async (dispatch) => {
+    console.log(assessmentData);
     try {
       const token = getToken();
       const axiosConfig = {
@@ -43,10 +44,14 @@ export const getAllAssessments = () => async (dispatch) => {
         assessmentData,
         axiosConfig
       );
+      console.log(res.data + "assessment action");
+
       dispatch({
         type: ADD_ASSESSMENT_SUCCESS,
         payload: res.data,
       });
+      return res.data; // Return the data to be used in the component
+
     } catch (error) {
       dispatch({
         type: ASSESSMENT_ERROR,
