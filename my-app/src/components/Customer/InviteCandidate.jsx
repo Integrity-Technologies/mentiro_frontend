@@ -29,7 +29,7 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
                 type="text"
                 value="https://dummy-link.com"
                 readOnly
-                className="flex-1 mr-2 border-0"
+                className="flex-1 mr-2 border-0 border-none border-white"
               />
               <button className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded-md">
                 Copy

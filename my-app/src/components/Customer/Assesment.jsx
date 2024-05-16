@@ -91,10 +91,10 @@ const Assessment = () => {
           <div className="mb-4">
             <h2 className="text-3xl font-bold mb-6">Create New Assessment</h2>
             <Button onClick={() => setShowAddModal(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Add Assessment
+              Create Assessment
             </Button>
           </div>
-
+           <h2 className="text-3xl font-bold mb-6 mt-5">My Assessments</h2>
           <table className="w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gray-200">
@@ -137,7 +137,7 @@ const Assessment = () => {
 
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Assessment</Modal.Title>
+          <Modal.Title>Create Assessment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -157,7 +157,7 @@ const Assessment = () => {
             Cancel
           </Button>
           <Button variant="primary" onClick={handleAddAssessment}>
-            Add Assessment
+            Create Assessment
           </Button>
         </Modal.Footer>
       </Modal>

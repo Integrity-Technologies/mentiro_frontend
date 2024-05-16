@@ -23,18 +23,23 @@ const TestSelection = ({ handleBackButtonClick }) => {
   }, [dispatch]);
 
   const handleNextButtonClick = async () => {
-    if (selectedTests.length === 0) {
+    if (selectedTests.length === 0 || Object.keys(selectedQuestionCounts).length !== selectedTests.length) {
       setShowAlert(true);
       return;
     }
 
     setShowQuestion(true);
 
+    const activeCompany = JSON.parse(localStorage.getItem('activeCompany'));
+    const company_name = activeCompany.name;
+
     const formattedTestsData = selectedTests.map(testId => {
       const test = tests.find(t => t.id === testId);
       return {
         test_name: test.test_name,
-        test_difficulty: selectedQuestionCounts[testId] || { easy: 0, medium: 0, hard: 0 }
+        test_difficulty: selectedQuestionCounts[testId] || { easy: 0, medium: 0, hard: 0 },
+        category: test.categories || 'Uncategorized', // Add category information here with a default value
+        company: company_name
       };
     });
 
@@ -42,12 +47,8 @@ const TestSelection = ({ handleBackButtonClick }) => {
   };
 
   const handleTestSelection = (testId) => {
-    const alreadySelected = selectedTests.includes(testId);
-    if (alreadySelected) {
-      setSelectedTests(selectedTests.filter((id) => id !== testId));
-    } else {
-      setSelectedTests([...selectedTests, testId]);
-    }
+    setShowModal(true);
+    setModalTestId(testId);
   };
 
   const openModal = (testId) => {
@@ -62,6 +63,10 @@ const TestSelection = ({ handleBackButtonClick }) => {
 
   const updateQuestionCount = (counts) => {
     setSelectedQuestionCounts({ ...selectedQuestionCounts, [modalTestId]: counts });
+    // Close modal after saving
+    closeModal();
+    // Add the test to selectedTests
+    setSelectedTests([...selectedTests, modalTestId]);
   };
 
   const calculateTotalQuestionCount = (testId) => {
@@ -78,36 +83,36 @@ const TestSelection = ({ handleBackButtonClick }) => {
   );
 
   const Modal = ({ test, updateQuestionCount }) => {
-  const [questionCounts, setQuestionCounts] = useState({
-    easy: 10,
-    medium: 10,
-    hard: 10,
-  }); // State to hold the selected question counts for each difficulty
-  const [difficulty, setDifficulty] = useState("easy"); // State to hold the selected difficulty level
-  const [showAlert, setShowAlert] = useState(false);
+    const [questionCounts, setQuestionCounts] = useState({
+      easy: 10,
+      medium: 10,
+      hard: 10,
+    }); // State to hold the selected question counts for each difficulty
+    const [difficulty, setDifficulty] = useState("easy"); // State to hold the selected difficulty level
+    const [showAlert, setShowAlert] = useState(false);
 
-  const handleQuestionCountChange = (event, selectedDifficulty) => {
-    const newQuestionCounts = {
-      ...questionCounts,
-      [selectedDifficulty]: parseInt(event.target.value),
+    const handleQuestionCountChange = (event, selectedDifficulty) => {
+      const newQuestionCounts = {
+        ...questionCounts,
+        [selectedDifficulty]: parseInt(event.target.value),
+      };
+      setQuestionCounts(newQuestionCounts); // Update the question counts state for the selected difficulty
     };
-    setQuestionCounts(newQuestionCounts); // Update the question counts state for the selected difficulty
-  };
 
-  const saveQuestionCount = () => {
-    // Check if all three question counts are zero
-    const allCountsZero = Object.values(questionCounts).every(
-      (count) => count === 0
-    );
+    const saveQuestionCount = () => {
+      // Check if all three question counts are zero
+      const allCountsZero = Object.values(questionCounts).every(
+        (count) => count === 0
+      );
 
-    if (allCountsZero) {
-      setShowAlert(true);
-    } else {
-      // Call the updateQuestionCount function and pass the questionCounts
-      updateQuestionCount(questionCounts);
-      closeModal(); // Close modal after saving
-    }
-  };
+      if (allCountsZero) {
+        setShowAlert(true);
+      } else {
+        // Call the updateQuestionCount function and pass the questionCounts
+        updateQuestionCount(questionCounts);
+        closeModal(); // Close modal after saving
+      }
+    };
 
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -196,97 +201,78 @@ const TestSelection = ({ handleBackButtonClick }) => {
 
   return (
     <div>
-    {showQuestion ? (
-      <Preview
-        Preview={Preview}
-        handleBackButtonClick={handleBackButtonClick}
-      />
-    ) : (
-      <div>
-      <h2 className="text-center mb-4">Test Selection</h2>
-      {showAlert && <Alert message="Please select at least one test." />}
-      <Row className="justify-content-center align-items-center">
-        {tests.map((test) => (
-          <Col key={test.id} md={4} className="mb-3 ml-md-15">
-            <Card style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>Test Review</Card.Title>
-                <Card.Text>
-                  Please review the test details before proceeding.
-                  <br />
-                  Test Name: {test.test_name}
-                  <br />
-                  Category: SEO
-                  <br />
-                  Question Count: {test.question_count}
-                  <br />
-                  Total Question: {calculateTotalQuestionCount(test.id)}
-                  <span
-                    onClick={() => openModal(test.id)}
-                    className="cursor-pointer ml-2"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+      {showQuestion ? (
+        <Preview
+          Preview={Preview}
+          handleBackButtonClick={handleBackButtonClick}
+        />
+      ) : (
+        <div>
+          <h2 className="text-center mb-4">Test Selection</h2>
+          {showAlert && <Alert message="Please select at least one test." />}
+          <Row className="justify-content-center align-items-center">
+            {tests.map((test) => (
+              <Col key={test.id} md={4} className="mb-3 ml-md-15">
+                <Card style={{ width: "18rem" }}>
+                  <Card.Body>
+                    <Card.Title>Test Review</Card.Title>
+                    <Card.Text>
+                      Please review the test details before proceeding.
+                      <br />
+                      Test Name: {test.test_name}
+                      <br />
+                      Category: {test.categories}
+                      <br />
+                      Question Count: {test.question_count}
+                      <br />
+                      Total Question: {calculateTotalQuestionCount(test.id)}
+                      <span
+                        onClick={() => openModal(test.id)}
+                        className="cursor-pointer ml-2"
+                      >
+                        
+                      </span>
+                    </Card.Text>
+                    <Button
+                      variant={
+                        selectedTests.includes(test.id) ? "success" : "primary"
+                      }
+                      onClick={() => handleTestSelection(test.id)}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
-                  </span>
-                </Card.Text>
-                <Button
-                  variant={
-                    selectedTests.includes(test.id) ? "success" : "primary"
-                  }
-                  onClick={() => handleTestSelection(test.id)}
-                >
-                  {selectedTests.includes(test.id)
-                    ? "Selected"
-                    : "Add Test"}
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-      <div className="text-center mt-4">
-        <Button
-          variant="outline-primary"
-          size="lg"
-          onClick={handleBackButtonClick}
-        >
-          Back
-        </Button>{" "}
-        <Button
-          variant="outline-success"
-          size="lg"
-          onClick={handleNextButtonClick}
-        >
-          Next
-        </Button>
-      </div>
+                      {selectedTests.includes(test.id)
+                        ? "Selected"
+                        : "Add Test"}
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+          <div className="text-center mt-4">
+            <Button
+              variant="outline-primary"
+              size="lg"
+              onClick={handleBackButtonClick}
+            >
+              Back
+            </Button>{" "}
+            <Button
+              variant="outline-success"
+              size="lg"
+              onClick={handleNextButtonClick}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
+      {showModal && (
+        <Modal
+          test={tests.find((test) => test.id === modalTestId)}
+          updateQuestionCount={updateQuestionCount}
+        />
+      )}
     </div>
-  )}
-  {showModal && (
-    <Modal
-      test={tests.find((test) => test.id === modalTestId)}
-      updateQuestionCount={updateQuestionCount}
-    />
-  )}
-</div>
   );
 };
 
