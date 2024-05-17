@@ -69,32 +69,32 @@ const Preview = () => {
   }, [assessmentData]);
 
   const handleSubmitButtonClick = async () => {
-  try {
-    if (!assessmentData) {
-      throw new Error("Assessment data is not available.");
+    try {
+      if (!assessmentData) {
+        throw new Error("Assessment data is not available.");
+      }
+  
+       await dispatch(
+        addAssessmentWithTests({
+          assessment_name: assessmentData.assessmentName,
+          company_name: assessmentData.companyName,
+          tests: assessmentData.tests,
+        })
+      );
+  
+  
+      // Update local state to trigger the next step in UI
+      setShowPreview(false);
+      setShowInviteCandidate(true);
+  
+      // Dispatch action to get all assessments (if needed)
+      await dispatch(getAllAssessments());
+    } catch (error) {
+      console.error(error);
+      // Handle error, show error messages, etc.
     }
-
-    await dispatch(
-      addAssessmentWithTests({
-        assessment_name: assessmentData.assessmentName,
-        company_name: assessmentData.companyName,
-        tests: assessmentData.tests,
-      })
-    );
-console.log(addAssessmentWithTests, assessmentData.assessmentName);
-    // Save assessment data to local storage
-
-    // Update local state to trigger the next step in UI
-    setShowPreview(false);
-    setShowInviteCandidate(true);
-
-    // Dispatch action to get all assessments (if needed)
-    await dispatch(getAllAssessments());
-  } catch (error) {
-    console.error(error);
-    // Handle error, show error messages, etc.
-  }
-};
+  };
+  
 
 
   const handleBackButtonClick = () => {

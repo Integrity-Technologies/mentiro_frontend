@@ -55,9 +55,12 @@ const Assessment = () => {
     setShowEditModal(true);
   };
 
-  const handleEditSave = () => {
+  const handleEditSave = async () => {
     if (editedName.trim() !== "") {
-      dispatch(editAssessment(editId, { assessment_name: editedName.trim() }));
+    await  dispatch(editAssessment(editId, { assessment_name: editedName.trim() }));
+
+    await  dispatch(getAllAssessments());
+
       setShowEditModal(false);
     }
   };

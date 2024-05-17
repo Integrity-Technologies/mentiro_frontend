@@ -1,52 +1,20 @@
-import React, { useEffect, useRef } from "react";
-import Chart from "chart.js/auto";
+import React from 'react';
+import CircleGraph from './CircleGraph';
+import DonutGraph from './DonutGraph';
 
-const DualLineGraph = () => {
-  const chartRef = useRef(null);
-
-  useEffect(() => {
-    const data = {
-      labels: ["Candidates Processed", "Assessments Created"],
-      datasets: [
-        {
-          label: "Count",
-          data: [2, 2],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-          ],
-          borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
-          borderWidth: 1,
-        },
-      ],
-    };
-
-    const config = {
-      type: "doughnut",
-      data: data,
-      options: {},
-    };
-
-    if (chartRef && chartRef.current) {
-      new Chart(chartRef.current, config);
-    }
-
-    // Cleanup
-    return () => {
-      if (chartRef && chartRef.current && chartRef.current.destroy) {
-        chartRef.current.destroy();
-      }
-    };
-  }, []);
-
-  return (
-    <div className="shadow-lg rounded-lg overflow-hidden">
-      <canvas
-        className="w-full h-10"
-        ref={chartRef}
-      ></canvas>
-    </div>
-  );
+const DualGraphs = () => {
+    return (
+        <div className="flex flex-col md:flex-row justify-center items-center gap-5 p-5 h-screen bg-gray-100">
+            <div className="flex flex-col items-center bg-white p-5 shadow-lg rounded-lg w-80">
+                <h2 className="text-xl font-semibold mb-5 text-center">Assessment</h2>
+                <CircleGraph />
+            </div>
+            <div className="flex flex-col items-center bg-white p-5 shadow-lg rounded-lg w-80">
+                <h2 className="text-xl font-semibold mb-5 text-center">Candidate</h2>
+                <DonutGraph />
+            </div>
+        </div>
+    );
 };
 
-export default DualLineGraph;
+export default DualGraphs;
