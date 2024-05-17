@@ -37,6 +37,7 @@ const Customer = ({isLanguageButton} ) => {
 
   // Define customer menu options
   const customerMenuOptions = [
+    { label: "Dashboard", link: "/Graph" },
     { label: "CompanyProfile", link: "/CompanyProfile" },
     { label: "Assessment", link: "/Assessments" },
     { label: "CandidatesProfile", link: "/CandidatesProfile" },

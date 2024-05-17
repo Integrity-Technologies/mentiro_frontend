@@ -65,15 +65,16 @@ console.log(user, token + "from local storage")
           <Route path="/admin-dashboard" element={<Admin isLanguageButton={isLanguageButton}/>} />
           <Route path="/customer-dashboard" element={<Customer  isLanguageButton={true}/>} /> 
           <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
+          <Route path="/api/Assessments/assessment" element={<Candidates />} />
           {/* Admin Dashboard Route
         token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
         {/* Customer Dashboard Route */}
-         {token && user === "false" && <Route path="/customer-dashboard" element={<Customer/>} />} 
+         {/* {token && user === "false" && <Route path="/customer-dashboard" element={<Customer/>} />} 
          {user === "true" && <Route path="/admin-dashboard" element={<Admin/>} />}
 
 
         {/* Redirect Unauthenticated Users to Login */}
-         {!token && <Route path="*" element={<Navigate to="/" />} />} 
+         {/* {!token && <Route path="*" element={<Navigate to="/" />} />}  */} 
            {/* <Route
             path="/admin-dashboard"
             element={

@@ -113,8 +113,8 @@ const Assessment = () => {
                     <td className="border border-gray-300 px-4 py-2">{assessment.id}</td>
                     <td className="border border-gray-300 px-4 py-2">{assessment.assessment_name}</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      <button onClick={() => handleEditAssessment(assessment.id, assessment.assessment_name)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Edit
+                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Preview
                       </button>
                       <button onClick={() => handleDeleteAssessment(assessment.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">
                         Delete
