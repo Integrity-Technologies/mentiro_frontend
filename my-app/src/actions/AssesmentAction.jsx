@@ -145,3 +145,41 @@ export const InviteAssessment = (assessmentData) => async (dispatch) => {
       });
     }
   };
+
+
+
+
+export const getAssessmentByUniqueLink = (assessmentData) => async (dispatch) => {
+  try {
+    const token = getToken();
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const res = await axios.get(
+      `http://localhost:5000/api/Assessments/assessment/${assessmentData}`,
+      
+      axiosConfig
+    );
+
+    // Save the response data to local storage
+    dispatch({
+      type: INVITE_ASSESSMENT_SUCCESS,
+      payload: res.data,
+    });
+
+    return res.data; // Return the data to be used in the component
+  } catch (error) {
+    console.error('Error fetching assessment data:', error);
+    // Handle error or dispatch error action
+  }
+};
+
+
+
+
+
+
+

@@ -189,6 +189,11 @@
       "assessmentName": "اسم التقييم",
       "testName": "اسم الاختبار",
       "Score": "النتيجة"
+    },
+
+    "graphView": {
+      "Candidate": "مُرَشَّح",
+      "Assessment": "تقدير"
     }
     
 }

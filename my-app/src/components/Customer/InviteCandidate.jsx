@@ -53,7 +53,7 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
           </button>
         </div>
 
-        {copySuccess && <p className="absolute top-70 left-5 right-0 text-green-500">Link copied!</p>}
+        {copySuccess && <p className="absolute top-45 left-5 right-0 text-green-500">Link copied!</p>}
 
         <Button variant="dark" onClick={handleInviteButtonClick} className="mt-4 left-0">
           Invite email

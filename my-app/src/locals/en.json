@@ -199,6 +199,11 @@
     "assessmentName": "Assessment Name",
     "testName": "Test Name",
     "Score": "Score"
+  },
+  
+  "graphView": {
+    "Candidate": "Candidate",
+    "Assessment": "Assessment"
   }
   
 }

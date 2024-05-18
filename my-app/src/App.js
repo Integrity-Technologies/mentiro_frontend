@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "./reducers/fetchUser";
 import Company from "./components/Admin/Company.jsx";
 import CompanyProfile from "./components/Customer/CompanyProfile.jsx";
+import PreviewExistingAssessment from "./components/Customer/PreviewExistingAssesment.jsx";
 
 function App() {
   const { user, token } = useSelector((state) => state.auth);
@@ -65,7 +66,8 @@ console.log(user, token + "from local storage")
           <Route path="/admin-dashboard" element={<Admin isLanguageButton={isLanguageButton}/>} />
           <Route path="/customer-dashboard" element={<Customer  isLanguageButton={true}/>} /> 
           <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
-          <Route path="/api/Assessments/assessment" element={<Candidates />} />
+          <Route path="/api/assessment" element={<Candidates />} />
+          <Route path="/customer-dashboard/Preview-Assessment" element={<PreviewExistingAssessment />} />
           {/* Admin Dashboard Route
         token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
         {/* Customer Dashboard Route */}

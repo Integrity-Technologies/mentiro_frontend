@@ -6,6 +6,7 @@ import CompanyProfile from "./CompanyProfile";
 import CandidateProfile from "./CandidatesProfile";
 import ViewTestResult from "./ViewTestResult";
 import LanguageToggleButton from "../Togglebutton";
+import PreviewExistingAssessment from "./PreviewExistingAssesment";
 const logoImage = "/assets/icon.jpg";
 
 const Customer = ({isLanguageButton} ) => {
@@ -33,6 +34,7 @@ const Customer = ({isLanguageButton} ) => {
       />
     ),
     "/TestResult": <ViewTestResult />,
+    "/Preview-assesment": <PreviewExistingAssessment />
   };
 
   // Define customer menu options
