@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import Candidate from "./Candidate";
 import InviteModal from "./Invitemodal";
+import { FaCheckCircle } from "react-icons/fa"; // Import congratulatory icon
+
 
 const InviteCandidate = ({ handleBackButtonClick }) => {
   const [showModal, setShowModal] = useState(false);
@@ -37,7 +39,7 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
   return (
     <div className="bg-white p-8 flex justify-center items-center h-screen relative">
       <Container>
-        <h2 className="absolute top-3 left-5 right-0">Congratulations! Your Assessment is Live</h2>
+      <FaCheckCircle className="congratulations-icon" /><h2 className="absolute top-3 left-5 right-0">Congratulations! Your Assessment is Live</h2>
         <h3 className="absolute top-20 left-5 right-0">Assessment Name: {Name}</h3>
         <p className="absolute top-40 left-5 right-0">Forward this link to the candidate to take up the assessment:</p>
 

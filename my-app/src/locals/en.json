@@ -184,6 +184,7 @@
   "candidates": {
     "title": "Candidates",
     "searchPlaceholder": "Search by name",
+    "noData": "No candidate found",
     "id": "ID",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -194,6 +195,7 @@
   "candidatesResult":{
     "title":"Candidates Result",
     "searchPlaceholder": "Search by candidate name",
+    "noData": "No candidate result found",
     "id": "ID",
     "Name":"Candidate Name",
     "assessmentName": "Assessment Name",
@@ -203,7 +205,10 @@
   
   "graphView": {
     "Candidate": "Candidate",
-    "Assessment": "Assessment"
+    "Candidate.NoData":"No Candidate Data Available",
+    "Assessment": "Assessment",
+    "Assessment.NoData":"No Assessment Data Available"
   }
+  
   
 }

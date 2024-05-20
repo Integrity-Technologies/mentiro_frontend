@@ -172,28 +172,32 @@
   },  
 
   "candidates": {
-      "title": "المرشحون",
-      "searchPlaceholder": "البحث حسب الاسم",
-      "id": "الرقم التعريفي",
-      "firstName": "الاسم الأول",
-      "lastName": "الاسم الأخير",
-      "email": "البريد الإلكتروني",
-      "dateJoined": "تاريخ الانضمام"
-    },
+    "title": "المرشحون",
+    "searchPlaceholder": "البحث حسب الاسم",
+    "noData": "لم يتم العثور على أي مرشح",
+    "id": "الرقم التعريفي",
+    "firstName": "الاسم الأول",
+    "lastName": "الاسم الأخير",
+    "email": "البريد الإلكتروني",
+    "dateJoined": "تاريخ الانضمام"
+  },
 
-    "candidatesResult": {
-      "title": "نتائج المرشحين",
-      "searchPlaceholder": "البحث بواسطة اسم المرشح",
-      "id": "الرقم التعريفي",
-      "Name": "اسم المرشح",
-      "assessmentName": "اسم التقييم",
-      "testName": "اسم الاختبار",
-      "Score": "النتيجة"
-    },
+  "candidatesResult": {
+    "title": "نتائج المرشحين",
+    "searchPlaceholder": "البحث بواسطة اسم المرشح",
+    "noData":"لم يتم العثور على أي مرشح",
+    "id": "الرقم التعريفي",
+    "Name": "اسم المرشح",
+    "assessmentName": "اسم التقييم",
+    "testName": "اسم الاختبار",
+    "Score": "النتيجة"
+  },
 
-    "graphView": {
-      "Candidate": "مُرَشَّح",
-      "Assessment": "تقدير"
-    }
+  "graphView": {
+    "Candidate": "مُرَشَّح",
+    "Candidate.NoData":"لا توجد بيانات مرشحة متاحة",
+    "Assessment": "تقدير",
+    "Assessment.NoData":"لا توجد بيانات تقييم متاحة"
+  }
     
 }

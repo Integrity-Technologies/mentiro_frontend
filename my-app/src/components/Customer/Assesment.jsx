@@ -5,6 +5,8 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
+import { RiAddFill } from "react-icons/ri";
+
 import {
   getAllAssessments,
   editAssessment,
@@ -119,182 +121,195 @@ const Assessment = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {currentView === "list" && (
-        <>
-          {showTestSelection ? (
-            <TestSelection
-              assessments={assessments}
-              handleBackButtonClick={handleBackButtonClick}
-            />
-          ) : (
-            <div>
-              <div className="mb-4">
-                <h2 className="text-3xl font-bold mb-6">
-                  Create New Assessment
-                </h2>
-                <Button
-                  onClick={() => setShowAddModal(true)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Create Assessment
-                </Button>
-              </div>
-              {assessments?.assessments?.length > 0 && (
-                <>
-                  <h2 className="text-3xl font-bold mb-6 mt-5">My Assessments</h2>
-                  <table className="w-full border-collapse border border-gray-300">
-                    <thead>
-                      <tr className="bg-gray-200">
-                        <th className="border border-gray-300 px-4 py-2">ID</th>
-                        <th className="border border-gray-300 px-4 py-2">
-                          Assessment Name
-                        </th>
-                        <th className="border border-gray-300 px-4 py-2">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {assessments?.assessments?.length > 0 ? (
-                        assessments?.assessments?.map((assessment) => (
-                          <tr key={assessment.id} className="bg-white">
-                            <td className="border border-gray-300 px-4 py-2">
-                              {assessment.id}
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2">
-                              {assessment.assessment_name}
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2">
-                              <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                onClick={() => handlePreview(assessment.uniquelink)} // Call handlePreview
-                              >
-                                Preview
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleDeleteAssessment(assessment.id)
-                                }
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
-                              >
-                                Delete
-                              </button>
+      <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
+        {currentView === "list" && (
+          <>
+            {showTestSelection ? (
+              <TestSelection
+                assessments={assessments}
+                handleBackButtonClick={handleBackButtonClick}
+              />
+            ) : (
+              <div>
+                <div className="mb-4">
+                  <h2 className="text-3xl font-bold mb-6">
+                    Create New Assessment
+                  </h2>
+                  <Button
+                    onClick={() => setShowAddModal(true)}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    <RiAddFill className="inline-block mr-1" />
+                    Create Assessment{" "}
+                    {/* Adding the add icon inline with the button text */}
+                  </Button>
+                </div>
+                {assessments?.assessments?.length > 0 && (
+                  <>
+                    <h2 className="text-3xl font-bold mb-6 mt-5">
+                      My Assessments
+                    </h2>
+                    <hr className="mb-6 border-gray-400" />
+                    <table className="w-full border-collapse border border-gray-300">
+                      <thead>
+                        <tr className="bg-gray-200">
+                          <th className="border border-gray-300 px-4 py-2">
+                            ID
+                          </th>
+                          <th className="border border-gray-300 px-4 py-2">
+                            Assessment Name
+                          </th>
+                          <th className="border border-gray-300 px-4 py-2">
+                            Action
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {assessments?.assessments?.length > 0 ? (
+                          assessments?.assessments?.map((assessment) => (
+                            <tr key={assessment.id} className="bg-white">
+                              <td className="border border-gray-300 px-4 py-2">
+                                {assessment.id}
+                              </td>
+                              <td className="border border-gray-300 px-4 py-2">
+                                {assessment.assessment_name}
+                              </td>
+                              <td className="border border-gray-300 px-4 py-2">
+                                <button
+                                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                  onClick={() =>
+                                    handlePreview(assessment.uniquelink)
+                                  } // Call handlePreview
+                                >
+                                  Preview
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteAssessment(assessment.id)
+                                  }
+                                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr className="bg-white">
+                            <td
+                              colSpan="3"
+                              className="border border-gray-300 px-4 py-2 text-center"
+                            >
+                              No assessments found
                             </td>
                           </tr>
-                        ))
-                      ) : (
-                        <tr className="bg-white">
-                          <td
-                            colSpan="3"
-                            className="border border-gray-300 px-4 py-2 text-center"
-                          >
-                            No assessments found
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </>
-              )}
-              {nextButton && (
-                <div className="text-center mt-4">
-                  <button
-                    onClick={handleNextButtonClick}
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Next
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+                        )}
+                      </tbody>
+                    </table>
+                  </>
+                )}
+                {nextButton && (
+                  <div className="text-center mt-4">
+                    <button
+                      onClick={handleNextButtonClick}
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
-          <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Create Assessment</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form>
-                <Form.Group controlId="formAssessmentName">
-                  <Form.Label>Assessment Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter assessment name"
-                    value={assessmentName}
-                    onChange={handleAssessmentNameChange}
-                    isInvalid={!!assessmentNameError}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {assessmentNameError}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() => setShowAddModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleAddAssessment}>
-                Create Assessment
-              </Button>
-            </Modal.Footer>
-          </Modal>
+            <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Create Assessment</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <Form.Group controlId="formAssessmentName">
+                    <Form.Label>Assessment Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter assessment name"
+                      value={assessmentName}
+                      onChange={handleAssessmentNameChange}
+                      isInvalid={!!assessmentNameError}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {assessmentNameError}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={handleAddAssessment}>
+                  Create Assessment
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
-          <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Edit Assessment</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form>
-                <Form.Group controlId="formAssessmentName">
-                  <Form.Label>Assessment Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={editedName}
-                    onChange={(e) => setEditedName(e.target.value)}
-                  />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() => setShowEditModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleEditSave}>
-                Save
-              </Button>
-            </Modal.Footer>
-          </Modal>
+            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Edit Assessment</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <Form.Group controlId="formAssessmentName">
+                    <Form.Label>Assessment Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={editedName}
+                      onChange={(e) => setEditedName(e.target.value)}
+                    />
+                  </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={handleEditSave}>
+                  Save
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
-          <Modal
-            show={showDeleteModal}
-            onHide={() => setShowDeleteModal(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Delete Assessment</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>Are you sure you want to delete this assessment?</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button variant="danger" onClick={handleConfirmDelete}>
-                Delete
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </>
-      )}
-      {currentView === "preview" && <PreviewExistingAssessment />}
+            <Modal
+              show={showDeleteModal}
+              onHide={() => setShowDeleteModal(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Delete Assessment</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p>Are you sure you want to delete this assessment?</p>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="danger" onClick={handleConfirmDelete}>
+                  Delete
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </>
+        )}
+        {currentView === "preview" && <PreviewExistingAssessment />}
+      </div>
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Table, Form, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { TiChartBarOutline } from "react-icons/ti";
 
 const ViewTestResult = () => {
   const { t } = useTranslation();
@@ -36,68 +36,98 @@ const ViewTestResult = () => {
 
   // Handle error state
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-red-500">Error: {error}</div>;
   }
 
   return (
-    <div>
-      <h1>{t("candidatesResult.title")}</h1>
-      <Form inline className="mb-3">
-        <FormControl
+    <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
+      <div className="flex items-center mb-4">
+        <TiChartBarOutline className="mr-2" size={24} />
+        <h1 className="text-xl font-bold">{t("candidatesResult.title")}</h1>
+      </div>
+      <hr className="mb-6 border-gray-400" />
+      <div className="mb-4">
+        <input
           type="text"
           placeholder={t("candidatesResult.searchPlaceholder")}
-          className="mr-sm-2 w-25"
+          className="border border-gray-300 rounded-md py-2 px-4 w-full sm:w-64 focus:outline-none focus:border-blue-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </Form>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>{t("candidatesResult.id")}</th>
-            <th>{t("candidatesResult.Name")}</th>
-            <th>{t("candidatesResult.assessmentName")}</th>
-            <th>{t("candidatesResult.testName")}</th>
-            <th>{t("candidatesResult.Score")}</th>
+      </div>
+      <table className="w-full table-auto border-collapse">
+        <thead className="bg-gray-200">
+          <tr className="border-b-2">
+            <th className="border px-4 py-2">{t("candidatesResult.id")}</th>
+            <th className="border px-4 py-2">{t("candidatesResult.Name")}</th>
+            <th className="border px-4 py-2">
+              {t("candidatesResult.assessmentName")}
+            </th>
+            <th className="border px-4 py-2">{t("candidatesResult.testName")}</th>
+            <th className="border px-4 py-2">{t("candidatesResult.Score")}</th>
           </tr>
         </thead>
         <tbody>
-          {currentResults.map((candidate) =>
-            candidate.assessments.map((assessment, index) =>
-              assessment.tests.map((test, index2) => (
-                <tr key={`${candidate.id}-${index}-${index2}`}>
-                  {index === 0 &&
-                    index2 === 0 && ( // Only render candidate id and name for the first assessment and test
-                      <>
-                        <td
-                          rowSpan={
-                            candidate.assessments.length *
-                            assessment.tests.length
-                          }
-                        >
-                          {candidate.id}
-                        </td>
-                        <td
-                          rowSpan={
-                            candidate.assessments.length *
-                            assessment.tests.length
-                          }
-                        >
-                          {candidate.candidate_name}
-                        </td>
-                      </>
+          {filteredResults.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center px-4 py-2 border">
+                {t("candidatesResult.noData")}
+              </td>
+            </tr>
+          ) : (
+            currentResults.map((candidate) =>
+              candidate.assessments.map((assessment, index) =>
+                assessment.tests.map((test, index2) => (
+                  <tr key={`${candidate.id}-${index}-${index2}`} className="border-b">
+                    {index === 0 &&
+                      index2 === 0 && ( // Only render candidate id and name for the first assessment and test
+                        <>
+                          <td
+                            rowSpan={
+                              candidate.assessments.length *
+                              assessment.tests.length
+                            }
+                            className="border px-4 py-2"
+                          >
+                            {candidate.id}
+                          </td>
+                          <td
+                            rowSpan={
+                              candidate.assessments.length *
+                              assessment.tests.length
+                            }
+                            className="border px-4 py-2"
+                          >
+                            {candidate.candidate_name}
+                          </td>
+                        </>
+                      )}
+                    {index2 === 0 && ( // Only render assessment name for the first test
+                      <td
+                        rowSpan={assessment.tests.length}
+                        className="border px-4 py-2"
+                      >
+                        {assessment.name}
+                      </td>
                     )}
-                  {index2 === 0 && ( // Only render assessment name for the first test
-                    <td rowSpan={assessment.tests.length}>{assessment.name}</td>
-                  )}
-                  <td>{test.name}</td>
-                  <td>{test.score}%</td>
-                </tr>
-              ))
+                    <td className="border px-4 py-2">{test.name}</td>
+                    <td className="border px-4 py-2">
+                      {/* Render a badge with the percentage score */}
+                      <span
+                        className={`px-2 py-1 rounded-md text-white ${
+                          test.score >= 50 ? "bg-green-500" : "bg-red-500"
+                        }`}
+                      >
+                        {test.score}%
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )
             )
           )}
         </tbody>
-      </Table>
+      </table>
       <TablePagination
         totalPages={totalPages}
         currentPage={currentPage}
