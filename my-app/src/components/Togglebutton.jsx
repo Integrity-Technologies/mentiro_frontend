@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { logout } from "../actions/authActions"; // Adjust the path as needed
-import { Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa"; // Import the icon
-
 
 const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
   const { i18n } = useTranslation();
@@ -26,7 +24,7 @@ const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
     setTimeout(() => {
       setShowAlert(false);
       navigate("/");
-    }, 2000); // 3000 milliseconds = 3 seconds, adjust as needed
+    }, 2000); // 2000 milliseconds = 2 seconds, adjust as needed
   };
 
   return (
@@ -51,19 +49,19 @@ const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
       )}
       <div className="fixed-bottom ml-md-5">
         {showAlert && (
-          <Alert variant="danger" className="w-25">
+          <div className="w-25 p-4 mb-4 text-sm text-red-700 bg-red-100 border border-red-400 rounded-md">
             Logout successful.
-          </Alert>
+          </div>
         )}
         <div className="ml-5">
-        <a
-          href="#"
-          onClick={handleLogout}
-          className="text-red-600 hover:text-red-800 font-bold flex items-center"
-        >
-          <FaSignOutAlt className="mr-2" /> {/* Icon with margin */}
-          Logout
-        </a>
+          <a
+            href="#"
+            onClick={handleLogout}
+            className="text-red-600 hover:text-red-800 font-bold flex items-center no-underline"
+          >
+            <FaSignOutAlt className="mr-2" /> {/* Icon with margin */}
+            Logout
+          </a>
         </div>
       </div>
     </div>

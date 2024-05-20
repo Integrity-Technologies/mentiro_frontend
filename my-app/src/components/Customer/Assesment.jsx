@@ -55,7 +55,6 @@ const Assessment = () => {
       return;
     }
 
-    // if (assessmentName.trim() !== "") {
     const newAssessment = {
       id: Object.keys(assessments).length + 1,
       assessment_name: assessmentName.trim(),
@@ -65,7 +64,6 @@ const Assessment = () => {
     setNextButton(true);
     setAssessmentName("");
     setShowAddModal(false);
-    // }
   };
 
   const handleAssessmentNameChange = (e) => {
@@ -141,57 +139,61 @@ const Assessment = () => {
                   Create Assessment
                 </Button>
               </div>
-              <h2 className="text-3xl font-bold mb-6 mt-5">My Assessments</h2>
-              <table className="w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="border border-gray-300 px-4 py-2">ID</th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Assessment Name
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {assessments?.assessments?.length > 0 ? (
-                    assessments?.assessments?.map((assessment) => (
-                      <tr key={assessment.id} className="bg-white">
-                        <td className="border border-gray-300 px-4 py-2">
-                          {assessment.id}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {assessment.assessment_name}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => handlePreview(assessment.uniquelink)} // Call handlePreview
-                          >
-                            Preview
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleDeleteAssessment(assessment.id)
-                            }
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
-                          >
-                            Delete
-                          </button>
-                        </td>
+              {assessments?.assessments?.length > 0 && (
+                <>
+                  <h2 className="text-3xl font-bold mb-6 mt-5">My Assessments</h2>
+                  <table className="w-full border-collapse border border-gray-300">
+                    <thead>
+                      <tr className="bg-gray-200">
+                        <th className="border border-gray-300 px-4 py-2">ID</th>
+                        <th className="border border-gray-300 px-4 py-2">
+                          Assessment Name
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2">Action</th>
                       </tr>
-                    ))
-                  ) : (
-                    <tr className="bg-white">
-                      <td
-                        colSpan="3"
-                        className="border border-gray-300 px-4 py-2 text-center"
-                      >
-                        No assessments found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                      {assessments?.assessments?.length > 0 ? (
+                        assessments?.assessments?.map((assessment) => (
+                          <tr key={assessment.id} className="bg-white">
+                            <td className="border border-gray-300 px-4 py-2">
+                              {assessment.id}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2">
+                              {assessment.assessment_name}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2">
+                              <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={() => handlePreview(assessment.uniquelink)} // Call handlePreview
+                              >
+                                Preview
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleDeleteAssessment(assessment.id)
+                                }
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr className="bg-white">
+                          <td
+                            colSpan="3"
+                            className="border border-gray-300 px-4 py-2 text-center"
+                          >
+                            No assessments found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </>
+              )}
               {nextButton && (
                 <div className="text-center mt-4">
                   <button

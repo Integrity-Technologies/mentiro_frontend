@@ -82,12 +82,11 @@ const Customer = ({ isLanguageButton }) => {
       </div>
       {/* Language Dropdown */}
       <div className="absolute top-0 right-0 mt-2 mr-5">
-        <div className="">
-          <LanguageToggleButton
+  
+          <LanguageToggleButton 
             onLanguageChange={handleLanguageChange}
             isLanguageButton={isLanguageButton}
           />
-        </div>
       </div>
     </div>
   );

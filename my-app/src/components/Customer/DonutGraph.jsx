@@ -2,12 +2,14 @@ import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCandidates } from "../../actions/candidateAction";
+import { useTranslation } from "react-i18next";
 
 const DonutGraph = () => {
   const chartRef = useRef(null);
   const dispatch = useDispatch();
   const candidates = useSelector((state) => state.candidates);
   const candidatesCount = candidates?.candidates?.length || 0;
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getAllCandidates());
@@ -15,16 +17,17 @@ const DonutGraph = () => {
 
   useEffect(() => {
     const data = {
-      labels: ["Candidates Processed"],
+      labels: ["Candidates"],
       datasets: [
         {
           label: "Count",
           data: [candidatesCount],
           backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
+            "rgba(75, 192, 192, 0.5)",
           ],
-          borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+          borderColor: [
+            "rgba(75, 192, 192, 1)",
+          ],
           borderWidth: 1,
         },
       ],
@@ -36,16 +39,16 @@ const DonutGraph = () => {
       options: {
         plugins: {
           legend: {
-            position: 'right'
+            position: "right",
           },
           tooltip: {
             callbacks: {
-              label: function(context) {
+              label: function (context) {
                 return `${context.label}: ${context.raw}`;
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
     };
 
@@ -57,7 +60,11 @@ const DonutGraph = () => {
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <canvas ref={chartRef} className="w-full h-full"></canvas>
+      {candidatesCount === 0 ? (
+        <p className="text-red-500 font-bold">{t("graphView.Candidate.NoData")}</p>
+      ) : (
+        <canvas ref={chartRef} className="w-full h-full"></canvas>
+      )}
     </div>
   );
 };

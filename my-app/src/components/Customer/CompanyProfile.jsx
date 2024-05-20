@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
+import { FaUser, FaBuilding, FaEnvelope, FaPhone } from 'react-icons/fa';
 
 const CompanyProfile = () => {
   const [user, setUser] = useState(null);
@@ -52,40 +53,46 @@ const CompanyProfile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 h-100">
       {user ? (
-        <div>
-          <h2 className="text-3xl font-semibold mb-4">{t('CompanyProfile.welcomeMessage')} {user.first_name}!</h2>
+        <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
+          <h2 className="text-3xl font-semibold mb-4 flex items-center">
+            <FaUser className="mr-2 text-gray-500" />
+            {t('CompanyProfile.welcomeMessage')} {user.first_name}!
+          </h2>
+          <hr className="mb-6 border-gray-400" />
+
+
           {/* Display user data in a card-like layout */}
-          <div className="bg-white shadow-md rounded-lg p-6 mb-4">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mt-0 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 2a3 3 0 0 0-3 3v1a3 3 0 0 0 1 2.236v1.28a4 4 0 0 0-1.33 2.5l-.007.024A2.5 2.5 0 1 0 4 14h12a2.5 2.5 0 0 0-2.496-2.5l-.004-.028A4 4 0 0 0 13 9.516v-1.28A3 3 0 0 0 14 6V5a3 3 0 0 0-3-3zM6 15v-1h8v1H6z" clipRule="evenodd" />
-                </svg>
+          <div className="mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex items-center justify-center bg-gray-100 shadow-sm rounded-md p-2">
+                <FaUser className="h-6 w-6 mt-0 text-gray-500" />
                 <p className="ml-2">{user.last_name}</p>
               </div>
-              <div className="flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mt-0 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 3.293a1 1 0 0 1 1.414 0l10 10a1 1 0 0 1-1.414 1.414L10 12.414l-4.293 4.293a1 1 0 0 1-1.414-1.414l4-4a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-8-8a1 1 0 1 1 1.414-1.414L10 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414L11.414 12l4.293 4.293a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-1.414 0l-10-10a1 1 0 1 1 1.414-1.414L8 14.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l8-8a1 1 0 0 1 1.414 0z" clipRule="evenodd" />
-                </svg>
+              <div className="flex items-center justify-center bg-gray-100 shadow-sm rounded-md p-2">
+                <FaEnvelope className="h-6 w-6 mt-0 text-gray-500" />
                 <p className="ml-2">{user.email}</p>
               </div>
-              <div className="flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mt-0 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 2a3 3 0 0 0-3 3v1a3 3 0 0 0 1 2.236v1.28a4 4 0 0 0-1.33 2.5l-.007.024A2.5 2.5 0 1 0 4 14h12a2.5 2.5 0 0 0-2.496-2.5l-.004-.028A4 4 0 0 0 13 9.516v-1.28A3 3 0 0 0 14 6V5a3 3 0 0 0-3-3zM6 15v-1h8v1H6z" clipRule="evenodd" />
-                </svg>
+              <div className="flex items-center justify-center bg-gray-100 shadow-sm rounded-md p-2">
+                <FaPhone className="h-6 w-6 mt-0 text-gray-500" />
                 <p className="ml-2">{user.phone}</p>
               </div>
             </div>
           </div>
 
           {/* Display company list */}
-          <h3 className="text-2xl font-semibold mt-6 mb-4">{t('CompanyProfile.companyList')}</h3>
+          <h3 className="text-2xl font-semibold mt-20 mb-4 flex items-center">
+            <FaBuilding className="mr-2 text-gray-500" />
+            {t('CompanyProfile.companyList')}
+          </h3>
+          <hr className="mb-6 border-gray-400" />
+
+
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* List each company */}
             {companyList.map(company => (
-              <li key={company.id} className="bg-white shadow-md rounded-md p-4">
+              <li key={company.id} className="bg-gray-100 shadow-sm rounded-md p-4">
                 <p className="text-lg font-semibold">{company.name}</p>
                 {/* Render activate button for each company */}
                 <button 
