@@ -27,7 +27,9 @@ const Assessment = () => {
   const [uniqueLink, setUniqueLink] = useState(""); // State for unique link
   const [currentView, setCurrentView] = useState("list"); // State for tracking the current view
 
-  const assessments = useSelector((state) => state.assessment.assessments || []);
+  const assessments = useSelector(
+    (state) => state.assessment.assessments || []
+  );
   const token = useSelector(getToken);
   const dispatch = useDispatch();
 
@@ -40,10 +42,12 @@ const Assessment = () => {
       setAssessmentNameError("Assessment name is required.");
       return;
     }
-    
-    console.log("🚀 ~ handleAddAssessment ~ assessments:", assessments)
+
+    console.log("🚀 ~ handleAddAssessment ~ assessments:", assessments);
     const isDuplicate = assessments?.assessments?.some(
-      (assessment) => assessment.assessment_name.toLowerCase() === assessmentName.trim().toLowerCase()
+      (assessment) =>
+        assessment.assessment_name.toLowerCase() ===
+        assessmentName.trim().toLowerCase()
     );
 
     if (isDuplicate) {
@@ -117,156 +121,177 @@ const Assessment = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {showTestSelection ? (
-        <TestSelection
-          assessments={assessments}
-          handleBackButtonClick={handleBackButtonClick}
-        />
-      ) : (
-        <div>
-          <div className="mb-4">
-            <h2 className="text-3xl font-bold mb-6">Create New Assessment</h2>
-            <Button
-              onClick={() => setShowAddModal(true)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Create Assessment
-            </Button>
-          </div>
-          <h2 className="text-3xl font-bold mb-6 mt-5">My Assessments</h2>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 px-4 py-2">ID</th>
-                <th className="border border-gray-300 px-4 py-2">
-                  Assessment Name
-                </th>
-                <th className="border border-gray-300 px-4 py-2">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assessments?.assessments?.length > 0 ? (
-                assessments?.assessments?.map((assessment) => (
-                  <tr key={assessment.id} className="bg-white">
-                    <td className="border border-gray-300 px-4 py-2">
-                      {assessment.id}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {assessment.assessment_name}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Preview
-                      </button>
-                      <button
-                        onClick={() => handleDeleteAssessment(assessment.id)}
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
-                      >
-                        Delete
-                      </button>
-                    </td>
+      {currentView === "list" && (
+        <>
+          {showTestSelection ? (
+            <TestSelection
+              assessments={assessments}
+              handleBackButtonClick={handleBackButtonClick}
+            />
+          ) : (
+            <div>
+              <div className="mb-4">
+                <h2 className="text-3xl font-bold mb-6">
+                  Create New Assessment
+                </h2>
+                <Button
+                  onClick={() => setShowAddModal(true)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Create Assessment
+                </Button>
+              </div>
+              <h2 className="text-3xl font-bold mb-6 mt-5">My Assessments</h2>
+              <table className="w-full border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="border border-gray-300 px-4 py-2">ID</th>
+                    <th className="border border-gray-300 px-4 py-2">
+                      Assessment Name
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2">Action</th>
                   </tr>
-                ))
-              ) : (
-                <tr className="bg-white">
-                  <td
-                    colSpan="3"
-                    className="border border-gray-300 px-4 py-2 text-center"
+                </thead>
+                <tbody>
+                  {assessments?.assessments?.length > 0 ? (
+                    assessments?.assessments?.map((assessment) => (
+                      <tr key={assessment.id} className="bg-white">
+                        <td className="border border-gray-300 px-4 py-2">
+                          {assessment.id}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {assessment.assessment_name}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => handlePreview(assessment.uniquelink)} // Call handlePreview
+                          >
+                            Preview
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleDeleteAssessment(assessment.id)
+                            }
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="bg-white">
+                      <td
+                        colSpan="3"
+                        className="border border-gray-300 px-4 py-2 text-center"
+                      >
+                        No assessments found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              {nextButton && (
+                <div className="text-center mt-4">
+                  <button
+                    onClick={handleNextButtonClick}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    No assessments found
-                  </td>
-                </tr>
+                    Next
+                  </button>
+                </div>
               )}
-            </tbody>
-          </table>
-          {nextButton && (
-            <div className="text-center mt-4">
-              <button
-                onClick={handleNextButtonClick}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Next
-              </button>
             </div>
           )}
-        </div>
+
+          <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Create Assessment</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group controlId="formAssessmentName">
+                  <Form.Label>Assessment Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter assessment name"
+                    value={assessmentName}
+                    onChange={handleAssessmentNameChange}
+                    isInvalid={!!assessmentNameError}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {assessmentNameError}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setShowAddModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleAddAssessment}>
+                Create Assessment
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Assessment</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group controlId="formAssessmentName">
+                  <Form.Label>Assessment Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                  />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setShowEditModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleEditSave}>
+                Save
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal
+            show={showDeleteModal}
+            onHide={() => setShowDeleteModal(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Delete Assessment</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>Are you sure you want to delete this assessment?</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleConfirmDelete}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </>
       )}
-
-      <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Assessment</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formAssessmentName">
-              <Form.Label>Assessment Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter assessment name"
-                value={assessmentName}
-                onChange={handleAssessmentNameChange}
-                isInvalid={!!assessmentNameError}
-              />
-              <Form.Control.Feedback type="invalid">
-                {assessmentNameError}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowAddModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleAddAssessment}>
-            Create Assessment
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Assessment</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formAssessmentName">
-              <Form.Label>Assessment Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={editedName}
-                onChange={(e) => setEditedName(e.target.value)}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleEditSave}>
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Assessment</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to delete this assessment?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={handleConfirmDelete}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      
-      
       {currentView === "preview" && <PreviewExistingAssessment />}
     </div>
   );
