@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "../actions/authActions"; // Adjust the path as needed
 import { Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa"; // Import the icon
+
 
 const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
   const { i18n } = useTranslation();
@@ -53,9 +55,16 @@ const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
             Logout successful.
           </Alert>
         )}
-        <Button onClick={handleLogout} variant="danger" className="ml-md-25">
+        <div className="ml-5">
+        <a
+          href="#"
+          onClick={handleLogout}
+          className="text-red-600 hover:text-red-800 font-bold flex items-center"
+        >
+          <FaSignOutAlt className="mr-2" /> {/* Icon with margin */}
           Logout
-        </Button>
+        </a>
+        </div>
       </div>
     </div>
   );
