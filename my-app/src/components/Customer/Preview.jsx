@@ -147,31 +147,38 @@ const Preview = () => {
                   Assessment Details
                 </Card.Title>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-semibold">Assessment Name:</p>
-                    <p className="text-lg">{assessmentData.assessmentName}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Category:</p>
-                    <p className="text-lg">
-                      {assessmentData.tests
-                        .map((test) => test.category)
-                        .join(", ")}
-                    </p>
-                  </div>
+  <div>
+    <p className="text-sm font-semibold">Assessment Name:</p>
+    <p className="text-lg">{assessmentData.assessmentName}</p>
+  </div>
+  <div>
+    <p className="text-sm font-semibold">Category:</p>
+    <div>
+      {assessmentData.tests.map((test, index) => (
+        <span
+          key={index}
+          className="inline-block px-3 py-1 mr-2 bg-blue-500 text-white text-sm font-semibold rounded-full"
+        >
+          {test.category}
+        </span>
+      ))}
+    </div>
+  </div>
 
-                  <div>
-                    <p className="text-sm font-semibold">Total Tests:</p>
-                    <p className="text-lg">{assessmentData.tests.length}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Assessment Time:</p>
-                    <p className="text-lg">
-                      {assessmentData.assessmentTime} mins{" "}
-                      <i className="far fa-clock ml-1"></i>
-                    </p>
-                  </div>
-                </div>
+  <div>
+    <p className="text-sm font-semibold">Total Tests:</p>
+    <p className="text-lg">{assessmentData.tests.length}</p>
+  </div>
+  <div>
+    <p className="text-sm font-semibold">Assessment Time:</p>
+    <div className="flex items-center">
+      <span className="mr-2">{assessmentData.assessmentTime}</span>
+      <span className="inline-block px-2 py-1 bg-green-500 text-white text-sm font-semibold rounded-full">
+        mins <i className="far fa-clock ml-1"></i>
+      </span>
+    </div>
+  </div>
+</div>
               </Card.Body>
             </Card>
             <div className="mb-8">
@@ -204,7 +211,7 @@ const Preview = () => {
             </div>
             <div className="flex justify-center space-x-4">
               <Button
-                variant="primary"
+                variant="success"
                 size="lg"
                 onClick={handleSubmitButtonClick}
               >

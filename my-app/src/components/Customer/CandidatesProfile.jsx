@@ -52,7 +52,7 @@ const CandidateProfile = () => {
       <table className="w-full table-auto border-collapse">
         <thead className="bg-gray-200">
           <tr className="border-b-2">
-            <th className="border px-4 py-2">{t("candidates.id")}</th>
+            <th className="border px-4 py-2">#</th>
             <th className="border px-4 py-2">{t("candidates.firstName")}</th>
             <th className="border px-4 py-2">{t("candidates.lastName")}</th>
             <th className="border px-4 py-2">{t("candidates.email")}</th>
@@ -68,7 +68,7 @@ const CandidateProfile = () => {
             </tr>
           ) : (
             currentCandidates.map((candidate) => (
-              <tr key={candidate.id}>
+              <tr key={candidate.id} className="hover:bg-gray-100 cursor-pointer">
                 <td className="border px-4 py-2">{candidate.id}</td>
                 <td className="border px-4 py-2">{candidate.first_name}</td>
                 <td className="border px-4 py-2">{candidate.last_name}</td>

@@ -6,6 +6,9 @@ import Modal from "react-bootstrap/Modal";
 import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
 import { RiAddFill } from "react-icons/ri";
+import {FaClipboardList} from 'react-icons/fa'
+import { FaEye, FaTrash } from "react-icons/fa"; // Import the icons
+import { MdAssessment } from "react-icons/md"
 
 import {
   getAllAssessments,
@@ -121,7 +124,6 @@ const Assessment = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
         {currentView === "list" && (
           <>
             {showTestSelection ? (
@@ -130,11 +132,17 @@ const Assessment = () => {
                 handleBackButtonClick={handleBackButtonClick}
               />
             ) : (
-              <div>
-                <div className="mb-4">
-                  <h2 className="text-3xl font-bold mb-6">
+              
+              <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
+
+
+                <div className="flex items-center mb-4">
+                  <FaClipboardList className="mr-2" size={22} />
+                  <h2 className="text-xl font-bold">
                     Create New Assessment
                   </h2>
+                  </div>
+                  <hr className="mb-6 border-gray-400" />
                   <Button
                     onClick={() => setShowAddModal(true)}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -143,18 +151,21 @@ const Assessment = () => {
                     Create Assessment{" "}
                     {/* Adding the add icon inline with the button text */}
                   </Button>
-                </div>
                 {assessments?.assessments?.length > 0 && (
                   <>
-                    <h2 className="text-3xl font-bold mb-6 mt-5">
+                  
+                  <div className="flex items-center mb-4 mt-10">
+                  <MdAssessment  className="mr-2" size={22} />
+                    <h2 className="text-xl font-bold">
                       My Assessments
                     </h2>
+                    </div>
                     <hr className="mb-6 border-gray-400" />
                     <table className="w-full border-collapse border border-gray-300">
                       <thead>
                         <tr className="bg-gray-200">
-                          <th className="border border-gray-300 px-4 py-2">
-                            ID
+                          <th className="border border-gray-300 px-4 py-2 font-bold">
+                            #
                           </th>
                           <th className="border border-gray-300 px-4 py-2">
                             Assessment Name
@@ -165,36 +176,34 @@ const Assessment = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {assessments?.assessments?.length > 0 ? (
-                          assessments?.assessments?.map((assessment) => (
-                            <tr key={assessment.id} className="bg-white">
-                              <td className="border border-gray-300 px-4 py-2">
-                                {assessment.id}
-                              </td>
-                              <td className="border border-gray-300 px-4 py-2">
-                                {assessment.assessment_name}
-                              </td>
-                              <td className="border border-gray-300 px-4 py-2">
-                                <button
-                                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                  onClick={() =>
-                                    handlePreview(assessment.uniquelink)
-                                  } // Call handlePreview
-                                >
-                                  Preview
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleDeleteAssessment(assessment.id)
-                                  }
-                                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
-                                >
-                                  Delete
-                                </button>
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
+                      {assessments?.assessments?.length > 0 ? (
+                    assessments.assessments.map((assessment) => (
+                      <tr key={assessment.id} className="hover:bg-gray-100 cursor-pointer">
+                        <td className="border border-gray-300 px-4 py-2">
+                          {assessment.id}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {assessment.assessment_name}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          <button
+                            className="text-blue-500 font-bold rounded inline-flex items-center"
+                            onClick={() => handlePreview(assessment.uniquelink)} // Call handlePreview
+                          >
+                            <FaEye className="mr-2" size={22}/>
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleDeleteAssessment(assessment.id)
+                            }
+                            className="text-red-500 font-bold rounded ml-2 inline-flex items-center"
+                          >
+                            <FaTrash className="mr-2" size={20}/>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )  : (
                           <tr className="bg-white">
                             <td
                               colSpan="3"
@@ -220,40 +229,41 @@ const Assessment = () => {
                 )}
               </div>
             )}
+            
 
-            <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
-              <Modal.Header closeButton>
-                <Modal.Title>Create Assessment</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Form>
-                  <Form.Group controlId="formAssessmentName">
-                    <Form.Label>Assessment Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter assessment name"
-                      value={assessmentName}
-                      onChange={handleAssessmentNameChange}
-                      isInvalid={!!assessmentNameError}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {assessmentNameError}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Form>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button
-                  variant="secondary"
-                  onClick={() => setShowAddModal(false)}
-                >
-                  Cancel
-                </Button>
-                <Button variant="primary" onClick={handleAddAssessment}>
-                  Create Assessment
-                </Button>
-              </Modal.Footer>
-            </Modal>
+<Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+      <Modal.Header closeButton>
+        <Modal.Title className="d-flex align-items-center">
+          <FaClipboardList className="me-2" /> {/* Add some margin to the right */}
+          Create Assessment
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="relative">
+          <input
+            type="text"
+            id="formAssessmentName"
+            placeholder=" "
+            className={`block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer ${assessmentNameError ? 'border-red-500' : ''}`}
+            value={assessmentName}
+            onChange={handleAssessmentNameChange}
+          />
+          <label
+            htmlFor="formAssessmentName"
+            className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+          >
+            Assessment Name
+          </label>
+          {assessmentNameError && <p className="mt-2 text-sm text-red-600">{assessmentNameError}</p>}
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        
+        <Button variant="primary" onClick={handleAddAssessment}>
+          Create
+        </Button>
+      </Modal.Footer>
+    </Modal>
 
             <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
               <Modal.Header closeButton>
@@ -289,27 +299,24 @@ const Assessment = () => {
               onHide={() => setShowDeleteModal(false)}
             >
               <Modal.Header closeButton>
-                <Modal.Title>Delete Assessment</Modal.Title>
+              <Modal.Title className="d-flex align-items-center">
+          <FaTrash className="me-2 text-red-500 font-bold" size={20} /> {/* Add some margin to the right */}
+          Delete Assessment
+        </Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <p>Are you sure you want to delete this assessment?</p>
               </Modal.Body>
               <Modal.Footer>
-                <Button
-                  variant="secondary"
-                  onClick={() => setShowDeleteModal(false)}
-                >
-                  Cancel
-                </Button>
+                
                 <Button variant="danger" onClick={handleConfirmDelete}>
                   Delete
                 </Button>
               </Modal.Footer>
             </Modal>
-          </>
+            </>
         )}
         {currentView === "preview" && <PreviewExistingAssessment />}
-      </div>
     </div>
   );
 };

@@ -57,11 +57,11 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
 
         {copySuccess && <p className="absolute top-45 left-5 right-0 text-green-500">Link copied!</p>}
 
-        <Button variant="dark" onClick={handleInviteButtonClick} className="mt-4 left-0">
+        <Button variant="success" onClick={handleInviteButtonClick} className="mt-4 left-0">
           Invite email
         </Button>
 
-        <Button variant="dark" onClick={redirectToDashboard} className="mt-4 ml-3"> {/* Back Button */}
+        <Button variant="outline-primary" onClick={redirectToDashboard} className="mt-4 ml-3"> {/* Back Button */}
           Back
         </Button>
 

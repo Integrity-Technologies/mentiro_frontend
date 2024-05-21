@@ -94,7 +94,7 @@ const InviteModal = ({ showModal, handleClose }) => {
               Close
             </Button>
             <Button variant="dark" onClick={handleSendInvite}>
-              Send Invitation
+              Send 
             </Button>
           </>
         ) : (

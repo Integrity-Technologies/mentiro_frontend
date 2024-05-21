@@ -58,7 +58,7 @@ const ViewTestResult = () => {
       <table className="w-full table-auto border-collapse">
         <thead className="bg-gray-200">
           <tr className="border-b-2">
-            <th className="border px-4 py-2">{t("candidatesResult.id")}</th>
+            <th className="border px-4 py-2">#</th>
             <th className="border px-4 py-2">{t("candidatesResult.Name")}</th>
             <th className="border px-4 py-2">
               {t("candidatesResult.assessmentName")}
@@ -78,7 +78,7 @@ const ViewTestResult = () => {
             currentResults.map((candidate) =>
               candidate.assessments.map((assessment, index) =>
                 assessment.tests.map((test, index2) => (
-                  <tr key={`${candidate.id}-${index}-${index2}`} className="border-b">
+                  <tr key={`${candidate.id}-${index}-${index2}`} className="hover:bg-gray-100 cursor-pointer">
                     {index === 0 &&
                       index2 === 0 && ( // Only render candidate id and name for the first assessment and test
                         <>

@@ -67,16 +67,16 @@ const CompanyProfile = () => {
           <div className="mb-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center justify-center bg-gray-100 shadow-sm rounded-md p-2">
-                <FaUser className="h-6 w-6 mt-0 text-gray-500" />
-                <p className="ml-2">{user.last_name}</p>
+                <FaUser className="mt-0 text-gray-500" size={18} />
+                <p className="ml-2 mt-2.5">{user.last_name}</p>
               </div>
               <div className="flex items-center justify-center bg-gray-100 shadow-sm rounded-md p-2">
-                <FaEnvelope className="h-6 w-6 mt-0 text-gray-500" />
-                <p className="ml-2">{user.email}</p>
+                <FaEnvelope className="mt-0 text-gray-500" size={18} />
+                <p className="ml-2 mt-2.5">{user.email}</p>
               </div>
               <div className="flex items-center justify-center bg-gray-100 shadow-sm rounded-md p-2">
-                <FaPhone className="h-6 w-6 mt-0 text-gray-500" />
-                <p className="ml-2">{user.phone}</p>
+                <FaPhone className="mt-0 text-gray-500" size={18} />
+                <p className="ml-2 mt-2.5">{user.phone}</p>
               </div>
             </div>
           </div>
