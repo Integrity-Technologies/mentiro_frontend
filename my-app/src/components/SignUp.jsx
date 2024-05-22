@@ -4,8 +4,8 @@ import { signUp } from "../actions/authActions";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import countries from "./../data/countries";
-import { NavbarComp } from "./NavbarComp";
 const logoImage = "/assets/icon.jpg";
+const rightImage = "/assets/signup-image.jpg"; // Replace with the actual path to your image
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -106,9 +106,9 @@ const SignUp = () => {
 
   return (
     <>
-      <section className="flex justify-center items-center h-screen bg-gray-50 dark:bg-gray-900 h-100">
-        <div className="w-full max-w-md bg-white rounded-lg shadow md:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+      <section className="flex justify-between items-center h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="flex flex-col justify-center items-center mt-5 max-w-lg bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <div className="w-full p-6 space-y-4 md:space-y-6 sm:p-8">
             <div className="text-center">
               <img className="w-24 h-24 mx-auto mb-4 rounded-circle" src={logoImage} alt="logo" />
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -116,8 +116,8 @@ const SignUp = () => {
               </h1>
             </div>
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-              <div className="d-flex mb-3">
-                <div className="me-3 flex-grow-1">
+              <div className="flex flex-wrap mb-3">
+                <div className="w-full md:w-1/2 md:pr-2 mb-3 md:mb-0">
                   <div className="relative">
                     <input
                       type="text"
@@ -137,7 +137,7 @@ const SignUp = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex-grow-1">
+                <div className="w-full md:w-1/2 md:pl-2">
                   <div className="relative">
                     <input
                       type="text"
@@ -178,37 +178,35 @@ const SignUp = () => {
                   )}
                 </div>
               </div>
-              <div className="mb-3 d-flex">
-                <div className="me-3 flex-grow-1">
-                  <label
-                    htmlFor="phone"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              <div className="mb-3">
+                <label
+                  htmlFor="phone"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  {t("signup.phone")} <span className="text-danger">*</span>
+                </label>
+                <div className="flex">
+                  <select
+                    value={countryCode}
+                    onChange={handleCountryCodeChange}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-36"
                   >
-                    {t("signup.phone")} <span className="text-danger">*</span>
-                  </label>
-                  <div className="d-flex">
-                    <select
-                      value={countryCode}
-                      onChange={handleCountryCodeChange}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-36"
-                    >
-                      {countries?.map((country, index) => (
-                        <option key={index} value={country.country_phone_code}>
-                          {`+${country.country_phone_code} (${country.country_name})`}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="phone"
-                      name="phone"
-                      placeholder={t("signup.enterPhone")}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                  </div>
-                  {errors.phone && (
-                    <span className="text-danger text-sm">{errors.phone}</span>
-                  )}
+                    {countries?.map((country, index) => (
+                      <option key={index} value={country.country_phone_code}>
+                        {`+${country.country_phone_code} (${country.country_name})`}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="phone"
+                    name="phone"
+                    placeholder={t("signup.enterPhone")}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
                 </div>
+                {errors.phone && (
+                  <span className="text-danger text-sm">{errors.phone}</span>
+                )}
               </div>
               <div className="mb-3">
                 <div className="relative">
@@ -299,6 +297,15 @@ const SignUp = () => {
                 </div>
               ))}
           </div>
+        </div>
+        <div className="hidden md:flex md:flex-col justify-center items-center w-1/2 h-screen bg-gray-50 dark:bg-gray-900">
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            Make data driven<br /> hiring decisions
+          </h1>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            With the Free plan you can screen candidates for<br /> essential skills applicable to a wide range of job roles
+          </p>
+          <img className="object-cover w-full h-80 mt-10 rounded-r-lg" src="https://app.testgorilla.com/assets/others/ddhd.png" alt="Signup" />
         </div>
       </section>
     </>

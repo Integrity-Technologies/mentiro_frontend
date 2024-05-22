@@ -15,15 +15,12 @@ const ViewTestResult = () => {
     dispatch(fetchResults()); // Dispatch the fetchResults action when component mounts
   }, [dispatch]);
 
-  // Filter results based on search term
   const filteredResults = results.filter((candidate) =>
     candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Number of users per page
-  // Pagination logic
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -34,43 +31,47 @@ const ViewTestResult = () => {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
-  // Handle error state
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
+  
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
+    <div className="bg-gray-100 shadow-lg rounded-lg p-6 min-h-screen">
       <div className="flex items-center mb-4">
-        <TiChartBarOutline className="mr-2" size={24} />
-        <h1 className="text-xl font-bold">{t("candidatesResult.title")}</h1>
+        <TiChartBarOutline className="mr-2 text-blue-500" size={24} />
+        <h1 className="text-2xl font-bold text-gray-700">
+          {t("candidatesResult.title")}
+        </h1>
       </div>
       <hr className="mb-6 border-gray-400" />
-      <div className="mb-4">
+      <div className="mb-4 relative">
         <input
           type="text"
           placeholder={t("candidatesResult.searchPlaceholder")}
-          className="border border-gray-300 rounded-md py-2 px-4 w-full sm:w-64 focus:outline-none focus:border-blue-500"
+          className="border-2 border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
       <table className="w-full table-auto border-collapse">
-        <thead className="bg-gray-200">
-          <tr className="border-b-2">
+        <thead className="bg-blue-600 text-white">
+          <tr className="border-b-2 border-blue-700">
             <th className="border px-4 py-2">#</th>
             <th className="border px-4 py-2">{t("candidatesResult.Name")}</th>
             <th className="border px-4 py-2">
               {t("candidatesResult.assessmentName")}
             </th>
-            <th className="border px-4 py-2">{t("candidatesResult.testName")}</th>
+            <th className="border px-4 py-2">
+              {t("candidatesResult.testName")}
+            </th>
             <th className="border px-4 py-2">{t("candidatesResult.Score")}</th>
           </tr>
         </thead>
         <tbody>
           {filteredResults.length === 0 ? (
             <tr>
-              <td colSpan="5" className="text-center px-4 py-2 border">
+              <td
+                colSpan="5"
+                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+              >
                 {t("candidatesResult.noData")}
               </td>
             </tr>
@@ -78,31 +79,33 @@ const ViewTestResult = () => {
             currentResults.map((candidate) =>
               candidate.assessments.map((assessment, index) =>
                 assessment.tests.map((test, index2) => (
-                  <tr key={`${candidate.id}-${index}-${index2}`} className="hover:bg-gray-100 cursor-pointer">
-                    {index === 0 &&
-                      index2 === 0 && ( // Only render candidate id and name for the first assessment and test
-                        <>
-                          <td
-                            rowSpan={
-                              candidate.assessments.length *
-                              assessment.tests.length
-                            }
-                            className="border px-4 py-2"
-                          >
-                            {candidate.id}
-                          </td>
-                          <td
-                            rowSpan={
-                              candidate.assessments.length *
-                              assessment.tests.length
-                            }
-                            className="border px-4 py-2"
-                          >
-                            {candidate.candidate_name}
-                          </td>
-                        </>
-                      )}
-                    {index2 === 0 && ( // Only render assessment name for the first test
+                  <tr
+                    key={`${candidate.id}-${index}-${index2}`}
+                    className="hover:bg-gray-100 cursor-pointer transition duration-150"
+                  >
+                    {index === 0 && index2 === 0 && (
+                      <>
+                        <td
+                          rowSpan={
+                            candidate.assessments.length *
+                            assessment.tests.length
+                          }
+                          className="border px-4 py-2"
+                        >
+                          {candidate.id}
+                        </td>
+                        <td
+                          rowSpan={
+                            candidate.assessments.length *
+                            assessment.tests.length
+                          }
+                          className="border px-4 py-2"
+                        >
+                          {candidate.candidate_name}
+                        </td>
+                      </>
+                    )}
+                    {index2 === 0 && (
                       <td
                         rowSpan={assessment.tests.length}
                         className="border px-4 py-2"
@@ -112,9 +115,8 @@ const ViewTestResult = () => {
                     )}
                     <td className="border px-4 py-2">{test.name}</td>
                     <td className="border px-4 py-2">
-                      {/* Render a badge with the percentage score */}
                       <span
-                        className={`px-2 py-1 rounded-md text-white ${
+                        className={`px-2 py-1 rounded-full text-white ${
                           test.score >= 50 ? "bg-green-500" : "bg-red-500"
                         }`}
                       >

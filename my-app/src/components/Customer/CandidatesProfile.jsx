@@ -20,10 +20,8 @@ const CandidateProfile = () => {
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Number of users per page
-  // Pagination logic
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -34,24 +32,26 @@ const CandidateProfile = () => {
   const handlePageChange = (page) => setCurrentPage(page);
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
-      <div className="flex items-center mb-4">
-        <FaUserCircle className="mr-2" size={24} />
-        <h1 className="text-xl font-bold">{t("candidates.title")}</h1>
+    <div className="bg-gray-100 shadow-xl rounded-xl p-6 min-h-screen transition duration-500 ease-in-out transform hover:shadow-2xl">
+      <div className="flex items-center mb-6">
+        <FaUserCircle className="mr-3 text-blue-500" size={24} />
+        <h1 className="text-2xl font-bold text-gray-700 mt-1">
+          {t("candidates.title")}
+        </h1>
       </div>
-      <hr className="mb-6 border-gray-400" />
-      <div className="mb-3">
+      <hr className="mb-6 border-gray-300" />
+      <div className="mb-4 relative">
         <input
           type="text"
           placeholder={t("candidates.searchPlaceholder")}
-          className="border border-gray-300 rounded px-3 py-1 w-1/4"
+          className="border-2 border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <table className="w-full table-auto border-collapse">
-        <thead className="bg-gray-200">
-          <tr className="border-b-2">
+      <table className="w-full table-auto border-collapse bg-white rounded-lg overflow-hidden">
+        <thead className="bg-blue-600 text-white">
+          <tr className="border-b-2 border-blue-700">
             <th className="border px-4 py-2">#</th>
             <th className="border px-4 py-2">{t("candidates.firstName")}</th>
             <th className="border px-4 py-2">{t("candidates.lastName")}</th>
@@ -62,13 +62,19 @@ const CandidateProfile = () => {
         <tbody>
           {filteredCandidates.length === 0 ? (
             <tr>
-              <td colSpan="5" className="text-center px-4 py-2 border">
+              <td
+                colSpan="5"
+                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+              >
                 {t("candidates.noData")}
               </td>
             </tr>
           ) : (
             currentCandidates.map((candidate) => (
-              <tr key={candidate.id} className="hover:bg-gray-100 cursor-pointer">
+              <tr
+                key={candidate.id}
+                className="hover:bg-blue-100 cursor-pointer transition duration-150"
+              >
                 <td className="border px-4 py-2">{candidate.id}</td>
                 <td className="border px-4 py-2">{candidate.first_name}</td>
                 <td className="border px-4 py-2">{candidate.last_name}</td>

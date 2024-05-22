@@ -8,6 +8,7 @@ import ViewTestResult from "./ViewTestResult";
 import LanguageToggleButton from "../Togglebutton";
 import PreviewExistingAssessment from "./PreviewExistingAssesment";
 import { FaTachometerAlt, FaBuilding, FaClipboardList, FaUser, FaFileAlt } from "react-icons/fa";
+import ActiveAssessment from "./ActiveAssessment";
 const logoImage = "/assets/icon.jpg";
 
 const Customer = ({ isLanguageButton }) => {
@@ -27,7 +28,7 @@ const Customer = ({ isLanguageButton }) => {
   const sections = {
     "/Graph": <DualLineGraph />,
     "/CompanyProfile": <CompanyProfile />,
-    "/Assessments": <Assesment />,
+    "/Assessments": <ActiveAssessment />,
     "/CandidatesProfile": (
       <CandidateProfile
         language={selectedLanguage}
@@ -77,7 +78,7 @@ const Customer = ({ isLanguageButton }) => {
         </nav>
       </div>
 
-      <div className="absolute top-0 right-0 mt-2 mr-0">
+      <div className="absolute top-0 right-0 mt-2 mr-5">
   
           <LanguageToggleButton 
             onLanguageChange={handleLanguageChange}
