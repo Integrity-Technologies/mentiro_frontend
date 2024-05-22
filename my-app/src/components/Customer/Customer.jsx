@@ -77,17 +77,19 @@ const Customer = ({ isLanguageButton }) => {
         </nav>
       </div>
 
-      <div className="w-4/5 bg-gray-100 p-10 overflow-y-auto">
-        {sections[activeLink]}
-      </div>
-      {/* Language Dropdown */}
-      <div className="absolute top-0 right-0 mt-2 mr-5">
+      <div className="absolute top-0 right-0 mt-2 mr-0">
   
           <LanguageToggleButton 
             onLanguageChange={handleLanguageChange}
             isLanguageButton={isLanguageButton}
           />
       </div>
+
+      <div className="w-4/5 bg-gray-300 p-10 overflow-y-auto">
+        {sections[activeLink]}
+      </div>
+      {/* Language Dropdown */}
+      
     </div>
   );
 };

@@ -53,11 +53,11 @@ const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
             Logout successful.
           </div>
         )}
-        <div className="ml-5">
+        <div className="ml-5 w-25">
           <a
             href="#"
             onClick={handleLogout}
-            className="text-red-600 hover:text-red-800 font-bold flex items-center no-underline"
+            className="text-red-600 hover:text-red-800 font-bold flex no-underline"
           >
             <FaSignOutAlt className="mr-2" /> {/* Icon with margin */}
             Logout

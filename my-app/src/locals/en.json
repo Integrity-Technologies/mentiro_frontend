@@ -178,7 +178,10 @@
     "companyList": "Company List",
     "activatedButton": "Activated",
     "activateButton":"Activate",
-    "loginMessage":"Please login to view your profile"
+    "loginMessage":"Please login to view your profile",
+    "createCompany":"Create Company",
+    "create": "Create",
+    "companyNamePlaceholder": "Company Name"
   },
   
   "candidates": {

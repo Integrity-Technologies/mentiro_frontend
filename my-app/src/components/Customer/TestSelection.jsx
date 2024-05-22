@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import { Badge } from "react-bootstrap";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+// import Button from "react-bootstrap/Button";
+// import Card from "react-bootstrap/Card";
+// import { Badge } from "react-bootstrap";
+// import Row from "react-bootstrap/Row";
+// import Col from "react-bootstrap/Col";
 import { fetchTests } from "../../actions/testAction";
-import {
-  addAssessmentWithTests,
-  getAllAssessments,
-} from "../../actions/AssesmentAction";
+// import {
+//   addAssessmentWithTests,
+//   getAllAssessments,
+// } from "../../actions/AssesmentAction";
 import Preview from "./Preview";
 import { FaClipboardCheck, FaTimes } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
@@ -134,21 +134,37 @@ const TestSelection = ({ handleBackButtonClick }) => {
     };
 
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-8 rounded-lg w-25">
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
           <div className="flex items-center mb-4">
-            <FaClipboardCheck className="mr-2" size={20} />
-            <h2 className="text-xl font-bold">{test.test_name}</h2>
-            {/* <FaTimes
-              className="cursor-pointer ml-20"
-              size={20}
+            <FaClipboardCheck className="text-blue-500 mr-2" size={24} />
+            <h2 className="text-xl font-bold text-gray-700">
+              {test.test_name}
+            </h2>
+            <button
+              className="ml-auto text-gray-500 hover:text-gray-700"
               onClick={closeModal}
-            /> */}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
-          <hr className="mb-6 border-gray-400" />
+          <hr className="mb-6 border-gray-300" />
           {showAlert && (
             <div
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6"
               role="alert"
             >
               <strong className="font-bold">Error:</strong>
@@ -158,7 +174,7 @@ const TestSelection = ({ handleBackButtonClick }) => {
             </div>
           )}
           <div className="mb-4">
-            <h3 className="text-base font-semibold mb-2">Easy</h3>
+            <h3 className="text-base font-semibold mb-2 text-gray-700">Easy</h3>
             <div className="flex items-center mb-4">
               <input
                 type="range"
@@ -168,13 +184,15 @@ const TestSelection = ({ handleBackButtonClick }) => {
                 onChange={(event) => handleQuestionCountChange(event, "easy")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-yellow-300"
               />
-              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center">
+              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center text-gray-700">
                 {questionCounts["easy"]}
               </div>
             </div>
           </div>
           <div className="mb-4">
-            <h3 className="text-base font-semibold mb-2">Medium</h3>
+            <h3 className="text-base font-semibold mb-2 text-gray-700">
+              Medium
+            </h3>
             <div className="flex items-center mb-4">
               <input
                 type="range"
@@ -184,13 +202,13 @@ const TestSelection = ({ handleBackButtonClick }) => {
                 onChange={(event) => handleQuestionCountChange(event, "medium")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-green-300"
               />
-              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center">
+              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center text-gray-700">
                 {questionCounts["medium"]}
               </div>
             </div>
           </div>
           <div>
-            <h3 className="text-base font-semibold mb-2">Hard</h3>
+            <h3 className="text-base font-semibold mb-2 text-gray-700">Hard</h3>
             <div className="flex items-center mb-4">
               <input
                 type="range"
@@ -200,98 +218,113 @@ const TestSelection = ({ handleBackButtonClick }) => {
                 onChange={(event) => handleQuestionCountChange(event, "hard")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-red-500"
               />
-              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center">
+              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center text-gray-700">
                 {questionCounts["hard"]}
               </div>
             </div>
           </div>
-          <div className="flex justify-end mt-4">
-            <button
-              className="bg-gray-300 px-4 py-2 rounded-lg mr-2"
+          <div className="flex justify-end mt-6">
+            {/* <button
+              className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg mr-2 transition-colors duration-300"
               onClick={closeModal}
             >
               Close
-            </button>
-            <Button
-              variant="success"
-              className=" px-4 py-2 rounded-lg"
+            </button> */}
+            <button
+              className="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg transition-colors duration-300"
               onClick={saveQuestionCount}
             >
               Save
-            </Button>
+            </button>
           </div>
         </div>
       </div>
     );
   };
 
+
   return (
     <div>
       {showQuestion ? (
-        <Preview
-          Preview={Preview}
-          handleBackButtonClick={handleBackButtonClick}
-        />
+        <Preview handleBackButtonClick={handleBackButtonClick} />
       ) : (
         <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
           <div className="flex items-center justify-center mb-4">
             <FaClipboardCheck className="mr-2" size={22} />
             <h2 className="text-center text-xl font-bold">Test Selection</h2>
           </div>
-          <hr className="mb-6 border-gray-400" />
-          {showAlert && <Alert message="Please select at least one test." />}
-          <Row className="justify-content-center align-items-center">
+          <hr className="mb-4 border-gray-400" />
+          {showAlert && (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 transition-opacity duration-500 ease-in-out"
+              role="alert"
+            >
+              <span className="block sm:inline">
+                Please select at least one test.
+              </span>
+            </div>
+          )}
+          <div className="flex flex-wrap justify-center">
             {tests.map((test) => (
-              <Col key={test.id} md={4} className="mb-3 ml-md-15">
-                <Card style={{ width: "18rem" }}>
-                  <Card.Body>
+              <div
+                key={test.id}
+                className="mb-6 px-4 w-full md:w-1/2 lg:w-1/3 transition-transform duration-300 transform hover:scale-105"
+              >
+                <div className="bg-white shadow-md rounded-lg overflow-hidden transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+                  <div className="p-6">
                     <div className="flex items-center mb-4">
-                      <MdPreview className="mr-2" size={22} />
-                      <Card.Title>Test Review</Card.Title>
+                      <MdPreview className="text-gray-600 mr-2" size={22} />
+                      <h5 className="font-bold text-lg text-gray-700">
+                        {test.test_name}
+                      </h5>
                     </div>
-                    Please review the test details before proceeding.
-                    <hr className="mb-6 border-gray-400" />
-                    <Card.Text>
-                      <strong>Test Name:</strong> {test.test_name}
-                      <br />
-                      <strong>Category:</strong>
-                      <span class="inline-block px-2 py-1 text-sm font-semibold leading-none bg-green-500 text-white rounded">
+                    <hr className="mb-6 border-gray-300" />
+                    <p className="mb-2">
+                      <strong className="text-gray-700">Description:</strong>{" "}
+                      {test.test_description}
+                    </p>
+                    <p className="mb-2">
+                      <strong className="text-gray-700">Category:</strong>
+                      <span className="inline-block px-2 py-1 text-sm font-semibold leading-none bg-green-500 text-white rounded ml-2">
                         {test.categories}
                       </span>
-                      <br />
-                      <strong>Total Question:</strong>{" "}
+                    </p>
+                    <p className="mb-4">
+                      <strong className="text-gray-700">
+                        Total Questions:
+                      </strong>{" "}
                       {calculateTotalQuestionCount(test.id)}
-                      <span
-                        onClick={() => openModal(test.id)}
-                        className="cursor-pointer ml-2"
-                      ></span>
-                    </Card.Text>
-                    <Button
-                      variant={
-                        selectedTests.includes(test.id) ? "success" : "primary"
-                      }
+                    </p>
+                    <button
+                      className={`w-full py-2 rounded font-bold text-white ${
+                        selectedTests.includes(test.id)
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-blue-500 hover:bg-blue-600"
+                      } transition-colors duration-300`}
                       onClick={() => handleTestSelection(test.id)}
                     >
                       {selectedTests.includes(test.id)
                         ? "Selected"
                         : "Add Test"}
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
+                    </button>
+                  </div>
+                </div>
+              </div>
             ))}
-          </Row>
-          <div className="text-center mt-4">
-            <Button variant="success" size="lg" onClick={handleNextButtonClick}>
+          </div>
+          <div className="text-center mt-8">
+            <button
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"
+              onClick={handleNextButtonClick}
+            >
               Next
-            </Button>{" "}
-            <Button
-              variant="outline-primary"
-              size="lg"
+            </button>
+            <button
+              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
               onClick={handleBackButtonClick}
             >
               Back
-            </Button>{" "}
+            </button>
           </div>
         </div>
       )}

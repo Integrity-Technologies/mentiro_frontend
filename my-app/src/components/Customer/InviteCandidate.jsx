@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Container, Button } from "react-bootstrap";
-import Candidate from "./Candidate";
+import { MdCelebration } from 'react-icons/md';
+import { FiCopy } from 'react-icons/fi';
 import InviteModal from "./Invitemodal";
-import { FaCheckCircle } from "react-icons/fa"; // Import congratulatory icon
-
 
 const InviteCandidate = ({ handleBackButtonClick }) => {
   const [showModal, setShowModal] = useState(false);
@@ -37,36 +35,38 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
   };
 
   return (
-    <div className="bg-white p-8 flex justify-center items-center h-screen relative">
-      <Container>
-      <FaCheckCircle className="congratulations-icon" /><h2 className="absolute top-3 left-5 right-0">Congratulations! Your Assessment is Live</h2>
-        <h3 className="absolute top-20 left-5 right-0">Assessment Name: {Name}</h3>
-        <p className="absolute top-40 left-5 right-0">Forward this link to the candidate to take up the assessment:</p>
+    <div className="bg-white min-h-screen flex flex-col px-6 py-10 relative">
+      <div className="absolute top-5 left-5 right-0 flex items-center">
+        <MdCelebration className="text-yellow-300 animate-bounce" size={28} />
+        <h2 className="ml-3 text-3xl font-semibold">Congratulations! Your Assessment is Live</h2>
+      </div>
+      <h3 className="mt-16 text-xl font-medium">Assessment Name: {Name}</h3>
+      <p className="mt-4">Forward this link to the candidate to take up the assessment:</p>
 
-        <div className="absolute top-56 left-5 right-0 border border-gray-400 rounded-md p-2 flex items-center">
-          <input
-            type="text"
-            value={link}
-            readOnly
-            className="flex-1 mr-2 border-0 border-none border-white"
-          />
-          <button onClick={copyToClipboard} className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded-md">
-            Copy
-          </button>
-        </div>
+      <div className="mt-6 flex items-center relative">
+        <input
+          type="text"
+          value={link}
+          readOnly
+          className="flex-1 border border-gray-300 rounded-lg py-2 pl-4 pr-10 bg-gray-100 text-gray-700"
+        />
+        <button onClick={copyToClipboard} className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded transition duration-300 ease-in-out">
+          <FiCopy size={20} />
+        </button>
+      </div>
+      {copySuccess && <p className="mt-2 text-green-500">Link copied to clipboard!</p>}
 
-        {copySuccess && <p className="absolute top-45 left-5 right-0 text-green-500">Link copied!</p>}
+      <div className="mt-8 flex justify-between">
+        <button onClick={handleInviteButtonClick} className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105">
+          Invite via Email
+        </button>
 
-        <Button variant="success" onClick={handleInviteButtonClick} className="mt-4 left-0">
-          Invite email
-        </Button>
+        {/* <button onClick={redirectToDashboard} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105">
+          Back to Dashboard
+        </button> */}
+      </div>
 
-        <Button variant="outline-primary" onClick={redirectToDashboard} className="mt-4 ml-3"> {/* Back Button */}
-          Back
-        </Button>
-
-        <InviteModal showModal={showModal} handleClose={handleCloseModal} />
-      </Container>
+      <InviteModal showModal={showModal} handleClose={handleCloseModal} />
     </div>
   );
 };
