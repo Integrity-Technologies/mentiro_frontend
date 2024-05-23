@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import Button from "react-bootstrap/Button";
-// import Card from "react-bootstrap/Card";
-// import { Badge } from "react-bootstrap";
-// import Row from "react-bootstrap/Row";
-// import Col from "react-bootstrap/Col";
 import { fetchTests } from "../../actions/testAction";
-// import {
-//   addAssessmentWithTests,
-//   getAllAssessments,
-// } from "../../actions/AssesmentAction";
 import Preview from "./Preview";
 import { FaClipboardCheck, FaTimes } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
 
-const TestSelection = ({ handleBackButtonClick }) => {
+const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   const dispatch = useDispatch();
   const tests = useSelector((state) => state.test.tests);
   const [showQuestion, setShowQuestion] = useState(false);
@@ -57,6 +48,9 @@ const TestSelection = ({ handleBackButtonClick }) => {
     });
 
     localStorage.setItem("selectedTests", JSON.stringify(formattedTestsData));
+    
+    // Call the function to proceed to the next step
+    goToNextStep();
   };
 
   const handleTestSelection = (testId) => {
@@ -79,9 +73,7 @@ const TestSelection = ({ handleBackButtonClick }) => {
       ...selectedQuestionCounts,
       [modalTestId]: counts,
     });
-    // Close modal after saving
     closeModal();
-    // Add the test to selectedTests
     setSelectedTests([...selectedTests, modalTestId]);
   };
 
@@ -106,8 +98,7 @@ const TestSelection = ({ handleBackButtonClick }) => {
       easy: 10,
       medium: 10,
       hard: 10,
-    }); // State to hold the selected question counts for each difficulty
-    const [difficulty, setDifficulty] = useState("easy"); // State to hold the selected difficulty level
+    });
     const [showAlert, setShowAlert] = useState(false);
 
     const handleQuestionCountChange = (event, selectedDifficulty) => {
@@ -115,21 +106,18 @@ const TestSelection = ({ handleBackButtonClick }) => {
         ...questionCounts,
         [selectedDifficulty]: parseInt(event.target.value),
       };
-      setQuestionCounts(newQuestionCounts); // Update the question counts state for the selected difficulty
+      setQuestionCounts(newQuestionCounts);
     };
 
     const saveQuestionCount = () => {
-      // Check if all three question counts are zero
       const allCountsZero = Object.values(questionCounts).every(
         (count) => count === 0
       );
-
       if (allCountsZero) {
         setShowAlert(true);
       } else {
-        // Call the updateQuestionCount function and pass the questionCounts
         updateQuestionCount(questionCounts);
-        closeModal(); // Close modal after saving
+        closeModal();
       }
     };
 
@@ -164,7 +152,7 @@ const TestSelection = ({ handleBackButtonClick }) => {
           <hr className="mb-6 border-gray-300" />
           {showAlert && (
             <div
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6"
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 transition-opacity duration-500 ease-in-out"
               role="alert"
             >
               <strong className="font-bold">Error:</strong>
@@ -224,12 +212,6 @@ const TestSelection = ({ handleBackButtonClick }) => {
             </div>
           </div>
           <div className="flex justify-end mt-6">
-            {/* <button
-              className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg mr-2 transition-colors duration-300"
-              onClick={closeModal}
-            >
-              Close
-            </button> */}
             <button
               className="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg transition-colors duration-300"
               onClick={saveQuestionCount}
@@ -248,7 +230,9 @@ const TestSelection = ({ handleBackButtonClick }) => {
       {showQuestion ? (
         <Preview handleBackButtonClick={handleBackButtonClick} />
       ) : (
-        <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
+        
+        <div className="bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
+          
           <div className="flex items-center justify-center mb-4">
             <FaClipboardCheck className="mr-2" size={22} />
             <h2 className="text-center text-xl font-bold">Test Selection</h2>

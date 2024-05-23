@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,6 +19,8 @@ const CompanyProfile = () => {
   const [activeCompany, setActiveCompany] = useState(null);
   const [newCompanyName, setNewCompanyName] = useState("");
   const [showCreateCompanyModal, setShowCreateCompanyModal] = useState(false);
+  const [isCompanyNameValid, setIsCompanyNameValid] = useState(true);
+  const [success, setSuccess] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -42,12 +44,10 @@ const CompanyProfile = () => {
             .then((companyResponse) => {
               setCompanyList(companyResponse.data);
 
-              // Check if there's an active company stored in localStorage
               const storedActiveCompany = JSON.parse(
                 localStorage.getItem("activeCompany")
               );
               if (storedActiveCompany) {
-                // If there's an active company stored, set it as active
                 setActiveCompany(storedActiveCompany);
               }
             })
@@ -61,24 +61,25 @@ const CompanyProfile = () => {
     }
   }, []);
 
-  // Function to handle activation of a company
   const handleActivateCompany = (company) => {
-    // Save the active company in localStorage
     localStorage.setItem("activeCompany", JSON.stringify(company));
     setActiveCompany(company);
   };
 
-  // Function to handle changes in the new company name input
   const handleNewCompanyNameChange = (event) => {
     setNewCompanyName(event.target.value);
+    setIsCompanyNameValid(true); // Reset validation state on change
   };
 
-  // Function to handle submission of the new company form
   const handleCreateCompany = () => {
+    if (newCompanyName.trim() === "") {
+      setIsCompanyNameValid(false);
+      return;
+    }
+
     const companyData = { name: newCompanyName };
     dispatch(addCompany(companyData))
       .then(() => {
-        // Refresh the company list after successful creation
         const token = localStorage.getItem("token");
         const config = {
           headers: {
@@ -89,10 +90,12 @@ const CompanyProfile = () => {
           .get("http://localhost:5000/api/company/myCompanies", config)
           .then((companyResponse) => {
             setCompanyList(companyResponse.data);
-            // Clear the input field after successful creation
             setNewCompanyName("");
-            // Close the modal after creation
             setShowCreateCompanyModal(false);
+            setSuccess(true);
+            setTimeout(() => {
+              setSuccess(false);
+            }, 3000); // Hide message after 3 seconds
           })
           .catch((error) => {
             console.error("Error fetching updated company data:", error);
@@ -106,39 +109,43 @@ const CompanyProfile = () => {
   return (
     <div className="container mx-auto p-4 h-100">
       {user ? (
-        <div className="bg-white shadow-md rounded-lg p-6 min-h-screen">
+        <div className="bg-gray-100 shadow-lg rounded-lg p-6 min-h-screen">
           <h2 className="text-3xl font-semibold mb-4 flex items-center">
-            <FaUser className="mr-2 text-gray-500" />
+            <FaUser className="mr-2 text-primary" />
             {t("CompanyProfile.welcomeMessage")} {user.first_name}!
           </h2>
           <hr className="mb-6 border-gray-400" />
 
-          {/* Display user data in a card-like layout */}
           <div className="mb-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center rounded justify-center bg-gray-100 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-2">
-                <FaUser className="mt-0 text-gray-500" size={18} />
-                <p className="ml-2 mt-2.5">{user.last_name}</p>
+              <div className="flex items-center rounded justify-center bg-gray-300 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4">
+                <FaUser className="text-blue-500" size={24} />
+                <p className="ml-4 text-lg text-blue-900 font-medium">
+                  {user.last_name}
+                </p>
               </div>
-              <div className="flex items-center rounded justify-center bg-gray-100 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-2">
-                <FaEnvelope className="mt-0 text-gray-500" size={18} />
-                <p className="ml-2 mt-2.5">{user.email}</p>
+              <div className="flex items-center rounded justify-center bg-gray-300 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4">
+                <FaEnvelope className="text-green-500" size={24} />
+                <p className="ml-4 text-lg text-green-900 font-medium">
+                  {user.email}
+                </p>
               </div>
-              <div className="flex items-center rounded justify-center bg-gray-100 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-2">
-                <FaPhone className="mt-0 text-gray-500" size={18} />
-                <p className="ml-2 mt-2.5">{user.phone}</p>
+              <div className="flex items-center rounded justify-center bg-gray-300 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4">
+                <FaPhone className="text-yellow-500" size={24} />
+                <p className="ml-4 text-lg text-yellow-900 font-medium">
+                  {user.phone}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Display company list */}
           <div className="flex items-center justify-between mt-20 mb-4">
             <h3 className="text-2xl font-semibold flex items-center">
-              <FaBuilding className="mr-2 text-gray-500" />
+              <FaBuilding className="mr-2 text-primary" />
               {t("CompanyProfile.companyList")}
             </h3>
             <Button
-              className="flex items-center"
+              className="bg-black text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105"
               variant="primary"
               onClick={() => setShowCreateCompanyModal(true)}
             >
@@ -149,14 +156,20 @@ const CompanyProfile = () => {
           <hr className="mb-6 border-gray-400" />
 
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* List each company */}
             {companyList.map((company) => (
               <li
                 key={company.id}
-                className="bg-gray-100 rounded transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4"
+                className={`rounded transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4 
+                ${
+                  activeCompany && activeCompany.id === company.id
+                    ? "bg-green-200"
+                    : "bg-gray-300"
+                }
+                `}
               >
-                <p className="text-lg font-semibold">{company.name}</p>
-                {/* Render activate button for each company */}
+                <p className="text-lg font-semibold text-gray-900">
+                  {company.name}
+                </p>
                 <button
                   onClick={() => handleActivateCompany(company)}
                   className={`mt-2 w-full px-4 py-2 rounded focus:outline-none 
@@ -175,39 +188,58 @@ const CompanyProfile = () => {
           </ul>
         </div>
       ) : (
-        <p className="text-lg font-semibold text-center">
+        <p className="text-lg font-semibold text-center text-primary">
           {t("CompanyProfile.loginMessage")}
         </p>
       )}
 
-      {/* Modal for creating a new company */}
+      {success && (
+        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
+          Company created successfully!
+        </div>
+      )}
+
       <Modal
         show={showCreateCompanyModal}
         onHide={() => setShowCreateCompanyModal(false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title>{t("CompanyProfile.createCompany")}</Modal.Title>
+          <Modal.Title className="flex items-center">
+            <FaBuilding className="mr-2 text-primary" />
+            {t("CompanyProfile.createCompany")}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <div className="relative">
-          <input
-            type="text"
-            id="company"
-            value={newCompanyName}
-            onChange={handleNewCompanyNameChange}
-            placeholder=""
-            className={`block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer `}
-          />
-          <label
-            htmlFor="company"
-            className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-          >
-            {t("CompanyProfile.companyNamePlaceholder")}{" "}
-          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="company"
+              value={newCompanyName}
+              onChange={handleNewCompanyNameChange}
+              placeholder=""
+              className={`block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border ${
+                isCompanyNameValid ? "border-gray-300" : "border-red-500"
+              } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+            />
+            <label
+              htmlFor="company"
+              className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+            >
+              {t("CompanyProfile.companyNamePlaceholder")}{" "}
+            </label>
+            {!isCompanyNameValid && (
+              <p className="text-red-500 text-sm mt-1">
+                {t("CompanyProfile.companyNameError")}
+              </p>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleCreateCompany}>
+          <Button
+            variant="primary"
+            onClick={handleCreateCompany}
+            className="bg-primary hover:bg-primary-dark"
+          >
             {t("CompanyProfile.create")}
           </Button>
         </Modal.Footer>

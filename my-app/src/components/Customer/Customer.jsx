@@ -50,7 +50,7 @@ const Customer = ({ isLanguageButton }) => {
 
   return (
     <div className="flex h-screen">
-      <div className="w-1/5 bg-white shadow h-full overflow-y-auto">
+      <div className="w-1/5 bg-gray-100 shadow h-full overflow-y-auto">
         <div className="text-center mb-3">
           <img
             src={logoImage}
