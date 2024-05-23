@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Login from './components/Login';
+import Login from './components/Login.jsx';
 import Home from './components/Home.jsx'
 import ProtectedRoute from './routes/ProtectedRoute';
 import SignUp from './components/SignUp';

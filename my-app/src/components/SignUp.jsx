@@ -5,7 +5,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import countries from "./../data/countries";
 const logoImage = "/assets/icon.jpg";
-const rightImage = "/assets/signup-image.jpg"; // Replace with the actual path to your image
+const loginimg = "/assets/flat-illustration-design-communacation-concept-online-with-smartphone_540641-468-removebg-preview.png"
+
+
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -282,17 +284,17 @@ const SignUp = () => {
                 ))}
             </div>
           </div>
-          <div className="hidden md:flex flex-col justify-center items-center w-full md:w-1/2 bg-peach">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-4">
-              Make data driven<br /> hiring decisions
-            </h1>
-            <p className="text-lg text-gray-600 mb-8">
-              With the Free plan you can screen candidates for<br /> essential skills applicable to a wide range of job roles
-            </p>
-            <img className="w-full h-auto rounded-r-lg" src="https://app.testgorilla.com/assets/others/ddhd.png" />
-          </div>
-        </div>
+          <div className="hidden md:flex flex-col  w-full md:w-1/2 bg-peach ">
+      <div className="text-center w-full max-w-lg  rounded-r-lg  p-6">
+        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          Make data driven<br /> hiring decisions
+        </h1>
+        <p className="text-lg text-gray-600 mb-8">
+          With the Free plan you can screen candidates for<br /> essential skills applicable to a wide range of job roles
+        </p>
+        <img className="w-full rounded h-96 rounded-r-lg object-cover" src={loginimg} alt="Login" />
+      </div>
+    </div>
         </section>
       </>
     );

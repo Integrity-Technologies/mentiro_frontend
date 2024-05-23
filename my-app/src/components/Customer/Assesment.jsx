@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "react-bootstrap/Button";
+import { Button } from "react-bootstrap";
 import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
 import { FaClipboardList } from "react-icons/fa";
@@ -11,18 +11,19 @@ import countries from "../../data/countries";
 const Assessment = () => {
   const [assessmentName, setAssessmentName] = useState("");
   const [companyError, setCompanyError] = useState("");
-  const [currentView, setCurrentView] = useState("list");
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [jobRole, setJobRole] = useState("");
+  const [jobRoleError, setJobRoleError] = useState("");
   const [workArrangement, setWorkArrangement] = useState("");
+  const [workArrangementError, setWorkArrangementError] = useState("");
   const [jobLocation, setJobLocation] = useState("");
+  const [jobLocationError, setJobLocationError] = useState("");
   const [showTestSelection, setShowTestSelection] = useState(false);
   const totalSteps = 3;
   const [currentStep, setCurrentStep] = useState(0);
 
-  const assessments = useSelector(
-    (state) => state.assessment.assessments || []
-  );
+    const labels = ["Assessment Details", "Choose Tests", "Preview"];
+
+  const assessments = useSelector((state) => state.assessment.assessments || []);
   const token = useSelector(getToken);
   const dispatch = useDispatch();
 
@@ -31,8 +32,36 @@ const Assessment = () => {
   }, [dispatch]);
 
   const handleAddAssessment = () => {
+    let error = false;
     if (assessmentName.trim() === "") {
       setCompanyError("Assessment name is required.");
+      error = true;
+    } else {
+      setCompanyError("");
+    }
+
+    if (jobRole.trim() === "") {
+      setJobRoleError("Job role is required.");
+      error = true;
+    } else {
+      setJobRoleError("");
+    }
+
+    if (workArrangement.trim() === "") {
+      setWorkArrangementError("Work arrangement is required.");
+      error = true;
+    } else {
+      setWorkArrangementError("");
+    }
+
+    if (jobLocation.trim() === "") {
+      setJobLocationError("Job location is required.");
+      error = true;
+    } else {
+      setJobLocationError("");
+    }
+
+    if (error) {
       return;
     }
 
@@ -73,112 +102,131 @@ const Assessment = () => {
 
   return (
     <div className="container mx-auto p-4 bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
-      <>
-        <BallProgressBar steps={totalSteps} currentStep={currentStep} />
-
-        {showTestSelection ? (
-          <TestSelection
-            assessments={assessments}
-            handleBackButtonClick={handleBackButtonClick}
-            goToNextStep={goToNextStep} // Pass the goToNextStep function
-          />
-        ) : (
-          <div className="">
-            <div className="flex items-center mb-4">
-              <FaClipboardList className="mr-2" size={22} />
-              <h2 className="text-xl font-bold">Create New Assessment</h2>
-            </div>
-            <hr className="mb-6 border-gray-400" />
-            <div className="relative mb-4">
-              <label
-                htmlFor="formAssessmentName"
-                className="block mb-1 text-sm font-medium text-gray-700"
-              >
-                Assessment Name
-              </label>
-              <input
-                type="text"
-                id="formAssessmentName"
-                placeholder=""
-                className={`block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 ${
-                  companyError ? "border-red-500" : ""
-                }`}
-                value={assessmentName}
-                onChange={(e) => setAssessmentName(e.target.value)}
-              />
-              {companyError && (
-                <p className="mt-2 text-sm text-red-600">{companyError}</p>
-              )}
-            </div>
-            <div className="relative mb-4">
-              <label
-                htmlFor="formJobRole"
-                className="text-lg block mb-1 text-sm font-medium text-gray-700"
-              >
-                Job Role
-              </label>
-              <input
-                type="text"
-                id="formJobRole"
-                className="block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600"
-                value={jobRole}
-                onChange={(e) => setJobRole(e.target.value)}
-              />
-            </div>
-
-            <div className="relative mb-4">
-              <label
-                htmlFor="formWorkArrangement"
-                className="text-lg block mb-1 text-sm font-medium text-gray-700"
-              >
-                Work Arrangement
-              </label>
-              <select
-                id="formWorkArrangement"
-                className="block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600"
-                value={workArrangement}
-                onChange={(e) => setWorkArrangement(e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option value="online">Online</option>
-                <option value="remote">Remote</option>
-                <option value="hybrid">Hybrid</option>
-              </select>
-            </div>
-
-            <div className="relative mb-4">
-              <label
-                htmlFor="formJobLocation"
-                className="text-lg block mb-1 text-sm font-medium text-gray-700"
-              >
-                Job Location
-              </label>
-              <select
-                id="formJobLocation"
-                className="block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600"
-                value={jobLocation}
-                onChange={(e) => setJobLocation(e.target.value)}
-              >
-                <option value="">Select...</option>
-                {countries.map((country, index) => (
-                  <option key={index} value={country.country_name}>
-                    {country.country_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <Button
-              onClick={handleAddAssessment}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+  <>
+    <BallProgressBar
+      steps={totalSteps}
+      currentStep={currentStep}
+      labels={labels}
+    />
+    {showTestSelection ? (
+      <TestSelection
+        assessments={assessments}
+        handleBackButtonClick={handleBackButtonClick}
+        goToNextStep={goToNextStep}
+      />
+    ) : (
+      <div className="">
+        <div className="flex items-center mb-4 mt-5">
+          <FaClipboardList className="mr-2" size={22} />
+          <h2 className="text-xl font-bold">Create New Assessment</h2>
+        </div>
+        <hr className="mb-6 border-gray-400" />
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="relative">
+            <label
+              htmlFor="formAssessmentName"
+              className="block mb-1 text-sm font-medium text-gray-700"
             >
-              {showTestSelection ? "Create Assessment" : "Create & Continue"}
-            </Button>
+              Assessment Name
+            </label>
+            <input
+              type="text"
+              id="formAssessmentName"
+              placeholder="Enter assessment name"
+              className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                companyError ? "border-red-500" : ""
+              }`}
+              value={assessmentName}
+              onChange={(e) => setAssessmentName(e.target.value)}
+            />
+            {companyError && (
+              <p className="mt-2 text-sm text-red-600">{companyError}</p>
+            )}
           </div>
+          <div className="relative">
+            <label
+              htmlFor="formJobRole"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              Job Role
+            </label>
+            <input
+              type="text"
+              id="formJobRole"
+              placeholder="Enter job role"
+              className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                jobRoleError ? "border-red-500" : ""
+              }`}
+              value={jobRole}
+              onChange={(e) => setJobRole(e.target.value)}
+            />
+            {jobRoleError && (
+              <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
+            )}
+          </div>
+        </div>
+        <div className="relative mb-4">
+          <label
+            htmlFor="formWorkArrangement"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
+            Work Arrangement
+          </label>
+          <select
+            id="formWorkArrangement"
+            className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+              workArrangementError ? "border-red-500" : ""
+            }`}
+            value={workArrangement}
+            onChange={(e) => setWorkArrangement(e.target.value)}
+          >
+            <option value="">Work Arrangement...</option>
+            <option value="online">Online</option>
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
+          </select>
+          {workArrangementError && (
+            <p className="mt-2 text-sm text-red-600">{workArrangementError}</p>
+          )}
+        </div>
 
-)}
-</>
+        <div className="relative mb-4">
+          <label
+            htmlFor="formJobLocation"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
+            Job Location
+          </label>
+          <select
+            id="formJobLocation"
+            className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+              jobLocationError ? "border-red-500" : ""
+            }`}
+            value={jobLocation}
+            onChange={(e) => setJobLocation(e.target.value)}
+          >
+            <option value="">Select...</option>
+            {countries.map((country, index) => (
+              <option key={index} value={country.country_name}>
+                {country.country_name}
+              </option>
+            ))}
+          </select>
+          {jobLocationError && (
+            <p className="mt-2 text-sm text-red-600">{jobLocationError}</p>
+          )}
+        </div>
+        <Button
+          onClick={handleAddAssessment}
+          className="bg-black  hover:bg-black text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          {showTestSelection ? "Create Assessment" : "Create Assessment"}
+        </Button>
+      </div>
+    )}
+  </>
 </div>
-);
+  );
 };
 
 export default Assessment;

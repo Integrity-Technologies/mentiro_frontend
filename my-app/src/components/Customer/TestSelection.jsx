@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTests } from "../../actions/testAction";
 import Preview from "./Preview";
-import { FaClipboardCheck, FaTimes } from "react-icons/fa";
+import { FaClipboardCheck } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
 
 const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
@@ -42,14 +42,13 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
           medium: 0,
           hard: 0,
         },
-        category: test.categories || "Uncategorized", // Add category information here with a default value
+        category: test.categories || "Uncategorized",
         company: company_name,
       };
     });
 
     localStorage.setItem("selectedTests", JSON.stringify(formattedTestsData));
-    
-    // Call the function to proceed to the next step
+
     goToNextStep();
   };
 
@@ -79,7 +78,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
 
   const calculateTotalQuestionCount = (testId) => {
     const counts = selectedQuestionCounts[testId];
-    if (!counts) return 10;
+    if (!counts) return 0;
     return Object.values(counts).reduce((total, count) => total + count, 0);
   };
 
@@ -224,18 +223,15 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     );
   };
 
-
   return (
     <div>
       {showQuestion ? (
         <Preview handleBackButtonClick={handleBackButtonClick} />
       ) : (
-        
         <div className="bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
-          
           <div className="flex items-center justify-center mb-4">
             <FaClipboardCheck className="mr-2" size={22} />
-            <h2 className="text-center text-xl font-bold">Test Selection</h2>
+            <h2 className="text-center text-xl font-bold mt-1">Test Selection</h2>
           </div>
           <hr className="mb-4 border-gray-400" />
           {showAlert && (
@@ -248,50 +244,46 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               </span>
             </div>
           )}
-          <div className="flex flex-wrap justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {tests.map((test) => (
               <div
                 key={test.id}
-                className="mb-6 px-4 w-full md:w-1/2 lg:w-1/3 transition-transform duration-300 transform hover:scale-105"
+                className="bg-gray-100 shadow-lg rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 border border-gray-200"
               >
-                <div className="bg-white shadow-md rounded-lg overflow-hidden transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
-                      <MdPreview className="text-gray-600 mr-2" size={22} />
-                      <h5 className="font-bold text-lg text-gray-700">
-                        {test.test_name}
-                      </h5>
-                    </div>
-                    <hr className="mb-6 border-gray-300" />
-                    <p className="mb-2">
-                      <strong className="text-gray-700">Description:</strong>{" "}
-                      {test.test_description}
-                    </p>
-                    <p className="mb-2">
-                      <strong className="text-gray-700">Category:</strong>
-                      <span className="inline-block px-2 py-1 text-sm font-semibold leading-none bg-green-500 text-white rounded ml-2">
-                        {test.categories}
-                      </span>
-                    </p>
-                    <p className="mb-4">
-                      <strong className="text-gray-700">
-                        Total Questions:
-                      </strong>{" "}
-                      {calculateTotalQuestionCount(test.id)}
-                    </p>
-                    <button
-                      className={`w-full py-2 rounded font-bold text-white ${
-                        selectedTests.includes(test.id)
-                          ? "bg-green-500 hover:bg-green-600"
-                          : "bg-blue-500 hover:bg-blue-600"
-                      } transition-colors duration-300`}
-                      onClick={() => handleTestSelection(test.id)}
-                    >
-                      {selectedTests.includes(test.id)
-                        ? "Selected"
-                        : "Add Test"}
-                    </button>
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <MdPreview className="text-gray-600 mr-2" size={22} />
+                    <h5 className="font-bold text-lg text-gray-700">
+                      {test.test_name}
+                    </h5>
                   </div>
+                  <hr className="mb-6 border-black-300" />
+                  <p className="mb-2">
+                    <strong className="text-gray-700">Description:</strong>{" "}
+                    {test.test_description}
+                  </p>
+                  <p className="mb-2">
+                    <strong className="text-gray-700">Category:</strong>
+                    <span className="inline-block px-2 py-1 text-sm font-semibold leading-none bg-green-500 text-white rounded ml-2">
+                      {test.categories}
+                    </span>
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-gray-700">
+                      Total Questions:
+                    </strong>{" "}
+                    {calculateTotalQuestionCount(test.id)}
+                  </p>
+                  <button
+                    className={`w-full py-2 rounded font-bold text-white ${
+                      selectedTests.includes(test.id)
+                        ? "bg-green-500 hover:bg-green-600"
+                        : "bg-black hover:bg-black"
+                    } transition-colors duration-300`}
+                    onClick={() => handleTestSelection(test.id)}
+                  >
+                    {selectedTests.includes(test.id) ? "Selected" : "Add Test"}
+                  </button>
                 </div>
               </div>
             ))}
