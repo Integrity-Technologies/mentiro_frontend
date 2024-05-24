@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTests } from "../../actions/testAction";
 import Preview from "./Preview";
-import { FaClipboardCheck } from "react-icons/fa";
+import { FaPlus, FaClipboardCheck } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
 
 const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
@@ -250,7 +250,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             {tests.map((test) => (
               <div
                 key={test.id}
-                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border border-gray-200"
+                className="bg-gray-200 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border border-gray-400"
               >
                 <div className="relative">
                   <div className="absolute top-0 right-0 bg-green-500 text-white py-1 px-3 rounded-tr-lg rounded-bl-lg">
@@ -265,16 +265,20 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                   </div>
                   <div className="p-6">
                     <div className="flex items-center mb-4">
-                      <MdPreview className="text-gray-600 text-primary" size={22} />
+                      <MdPreview
+                        className="text-gray-600 text-primary"
+                        size={22}
+                      />
                       <h5 className="font-bold text-lg text-gray-800 ml-3">
                         {test.test_name}
                       </h5>
                     </div>
                     <p className="text-gray-600 mb-2">
-                      {test.test_description}
+                      {test.test_description ||
+                        "This test is based on SEO questions."}
                     </p>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-gray-600 font-semibold">
                         Total Questions: {calculateTotalQuestionCount(test.id)}
                       </span>
                     </div>
@@ -286,9 +290,12 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                       selectedTests.includes(test.id)
                         ? "bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
                         : "bg-black hover:bg-black focus:outline-none focus:ring-2 focus:ring-black"
-                    } transition-colors duration-300`}
+                    } transition-colors duration-300 flex items-center gap-2`}
                     onClick={() => handleTestSelection(test.id)}
                   >
+                    {!selectedTests.includes(test.id) && (
+                      <FaPlus className="mr-2" />
+                    )}
                     {selectedTests.includes(test.id) ? "Selected" : "Add Test"}
                   </button>
                 </div>
