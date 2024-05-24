@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAssessments } from "../../actions/AssesmentAction";
@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 const CircleGraph = () => {
     const chartContainer = useRef(null);
     const dispatch = useDispatch();
+    const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
     const assessments = useSelector((state) => state.assessment);
     const assessmentsCount = assessments?.assessments?.assessments?.length || 0;
     const { t } = useTranslation();
@@ -15,8 +17,27 @@ const CircleGraph = () => {
         dispatch(getAllAssessments());
     }, [dispatch]);
 
+
     useEffect(() => {
         if (!chartContainer.current || !assessments) return;
+
+        if (error) {
+            return (
+              <div className="text-center text-red-500">
+                {error.response?.status === 500
+                  ? "Server error, please try again later."
+                  : "An error occurred, please try again."}
+              </div>
+            );
+          }
+        
+          if (!data) {
+            return <div className="text-center">Loading...</div>;
+          }
+        
+          if (data.length === 0) {
+            return <div className="text-center text-yellow-700">No data available.</div>;
+          }
 
         const ctx = chartContainer.current.getContext('2d');
         const myChart = new Chart(ctx, {

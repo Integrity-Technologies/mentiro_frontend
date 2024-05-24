@@ -7,12 +7,21 @@ import { FaUserCircle } from "react-icons/fa";
 
 const CandidateProfile = () => {
   const dispatch = useDispatch();
-  const candidates = useSelector((state) => state.candidates.candidates);
-  const [searchTerm, setSearchTerm] = useState("");
   const { t } = useTranslation();
+  const candidates = useSelector((state) => state.candidates?.candidates || []);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllCandidates());
+    const fetchData = async () => {
+      try {
+        await dispatch(getAllCandidates());
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   const filteredCandidates = candidates.filter((candidate) => {
@@ -60,7 +69,16 @@ const CandidateProfile = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCandidates.length === 0 ? (
+          {error ? (
+            <tr>
+              <td
+                colSpan="5"
+                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+              >
+                {t("candidates.noData")}
+              </td>
+            </tr>
+          ) : filteredCandidates.length === 0 ? (
             <tr>
               <td
                 colSpan="5"

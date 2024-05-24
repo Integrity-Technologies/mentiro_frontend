@@ -8,6 +8,11 @@ export const EDIT_ASSESSMENT_SUCCESS = "EDIT_ASSESSMENT_SUCCESS";
 export const DELETE_ASSESSMENT_SUCCESS = "DELETE_ASSESSMENT_SUCCESS";
 export const ASSESSMENT_ERROR = "ASSESSMENT_ERROR";
 export const INVITE_ASSESSMENT_SUCCESS = "INVITE_ASSESSMENT_SUCCESS";
+export const GET_WORK_ARRANGEMENTS_SUCCESS = "GET_WORK_ARRANGEMENTS_SUCCESS";
+export const GET_ALL_JOB_LOCATION_SUCCESS = "GET_ALL_JOB_LOCATION_SUCCESS";
+
+
+
 
 export const getAllAssessments = () => async (dispatch) => {
     try {
@@ -179,7 +184,36 @@ export const getAssessmentByUniqueLink = (assessmentData) => async (dispatch) =>
 
 
 
+export const getAllworkArrangement = () => async (dispatch) => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/workArrangement/");
+    dispatch({
+      type: GET_WORK_ARRANGEMENTS_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ASSESSMENT_ERROR,
+      payload: error?.response?.data?.error,
+    });
+  }
+};
 
+
+export const getAlljobLocation = () => async (dispatch) => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/jobLocation/");
+    dispatch({
+      type: GET_ALL_JOB_LOCATION_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ASSESSMENT_ERROR,
+      payload: error?.response?.data?.error,
+    });
+  }
+};
 
 
 

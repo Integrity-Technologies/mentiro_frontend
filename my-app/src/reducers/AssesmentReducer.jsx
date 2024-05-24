@@ -4,11 +4,15 @@ import {
   EDIT_ASSESSMENT_SUCCESS,
   DELETE_ASSESSMENT_SUCCESS,
   ASSESSMENT_ERROR,
-  INVITE_ASSESSMENT_SUCCESS
+  INVITE_ASSESSMENT_SUCCESS,
+  GET_WORK_ARRANGEMENTS_SUCCESS,
+  GET_ALL_JOB_LOCATION_SUCCESS
 } from "../actions/AssesmentAction";
 
 const initialState = {
   assessments: [],
+  workArrangements: [], // Add initial state for work arrangements
+  jobLocations: [],
   error: null,
 };
 
@@ -20,6 +24,16 @@ const assessmentReducer = (state = initialState, action) => {
         assessments: action.payload,
         error: null,
       };
+      case GET_WORK_ARRANGEMENTS_SUCCESS:
+        return {
+          ...state,
+          workArrangements: action.payload,
+        };
+        case GET_ALL_JOB_LOCATION_SUCCESS:
+        return {
+          ...state,
+          jobLocations: action.payload,
+        };
     case ADD_ASSESSMENT_SUCCESS:
       return {
         ...state,

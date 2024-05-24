@@ -39,7 +39,13 @@ export const fetchTestsSuccess = (tests) => ({
 
 export const fetchTests = () => async (dispatch) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/test/allTests');
+      const token = getToken(); // Retrieve token from local storage
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}` // Set authorization header
+        }
+      };
+      const response = await axios.get('http://localhost:5000/api/test/allTests', axiosConfig);
       dispatch(fetchTestsSuccess(response.data));
       console.log(response.data);
     } catch (error) {

@@ -9,7 +9,7 @@ import {
 import TestSelection from "./TestSelection";
 import InviteCandidate from "./InviteCandidate";
 
-const Preview = ({handleBackButtonClick}) => {
+const Preview = ({ handleBackButtonClick }) => {
   const dispatch = useDispatch();
   const [showInviteCandidate, setShowInviteCandidate] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -19,14 +19,23 @@ const Preview = ({handleBackButtonClick}) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
-    const assessmentName = localStorage.getItem("assessments");
+    const assessmentData = JSON.parse(localStorage.getItem("assessmentData"));
     const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
     const selectedTests = JSON.parse(localStorage.getItem("selectedTests"));
+    const assessmentName = assessmentData.assessment_name;
+    const job_role = assessmentData.jobRole;
+    const work_arrangement = assessmentData.workArrangement;
+    const job_location = assessmentData.jobLocation;
 
-    if (assessmentName && activeCompany && selectedTests) {
+
+
+    if (assessmentData && activeCompany && selectedTests) {
       const companyName = activeCompany.name;
       const data = {
         assessmentName,
+        job_role,
+        work_arrangement,
+        job_location,
         companyName,
         tests: selectedTests,
       };
@@ -71,35 +80,40 @@ const Preview = ({handleBackButtonClick}) => {
       if (!assessmentData) {
         throw new Error("Assessment data is not available.");
       }
-
+  
       await dispatch(
         addAssessmentWithTests({
           assessment_name: assessmentData.assessmentName,
+          job_role: assessmentData.job_role,
+          work_arrangement: assessmentData.work_arrangement,
+          job_location: assessmentData.job_location,
           company_name: assessmentData.companyName,
           tests: assessmentData.tests,
         })
       );
-
+  
       setShowPreview(false);
       setShowInviteCandidate(true);
-
+  
       await dispatch(getAllAssessments());
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   const handleBackButton = () => {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
-
-    setShowTestSelection(true); // Update showTestSelection state to true
+    setShowTestSelection(true);
+    setProgress((prevProgress) => prevProgress - 1); // Decrease progress by 1
   };
+
 
   return (
     <>
       {showTestSelection && (
-      <TestSelection handleBackButtonClick={handleBackButtonClick} />
-    )}
+        <TestSelection handleBackButtonClick={handleBackButtonClick} />
+      )}
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">
           <h2 className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
