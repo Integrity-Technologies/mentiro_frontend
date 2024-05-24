@@ -20,6 +20,7 @@ const CompanyProfile = () => {
   const [newCompanyName, setNewCompanyName] = useState("");
   const [showCreateCompanyModal, setShowCreateCompanyModal] = useState(false);
   const [isCompanyNameValid, setIsCompanyNameValid] = useState(true);
+  const [companyNameError, setCompanyNameError] = useState("");
   const [success, setSuccess] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -69,15 +70,25 @@ const CompanyProfile = () => {
   const handleNewCompanyNameChange = (event) => {
     setNewCompanyName(event.target.value);
     setIsCompanyNameValid(true); // Reset validation state on change
+    setCompanyNameError(""); // Clear error message
   };
 
   const handleCreateCompany = () => {
     if (newCompanyName.trim() === "") {
       setIsCompanyNameValid(false);
+      setCompanyNameError(t("CompanyProfile.companyNameError"));
       return;
     }
 
     const companyData = { name: newCompanyName };
+
+    // Check if the company name already exists
+    if (companyList.some((company) => company.name === newCompanyName)) {
+      setIsCompanyNameValid(false);
+      setCompanyNameError(t("CompanyProfile.companyNameExistsError"));
+      return;
+    }
+
     dispatch(addCompany(companyData))
       .then(() => {
         const token = localStorage.getItem("token");
@@ -195,7 +206,7 @@ const CompanyProfile = () => {
 
       {success && (
         <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-          Company created successfully!
+          {t("CompanyProfile.successMessage")}
         </div>
       )}
 
@@ -229,7 +240,7 @@ const CompanyProfile = () => {
             </label>
             {!isCompanyNameValid && (
               <p className="text-red-500 text-sm mt-1">
-                {t("CompanyProfile.companyNameError")}
+                {companyNameError}
               </p>
             )}
           </div>

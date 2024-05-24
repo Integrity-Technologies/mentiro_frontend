@@ -231,7 +231,9 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
         <div className="bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
           <div className="flex items-center justify-center mb-4">
             <FaClipboardCheck className="mr-2" size={22} />
-            <h2 className="text-center text-xl font-bold mt-1">Test Selection</h2>
+            <h2 className="text-center text-xl font-bold mt-1">
+              Test Selection
+            </h2>
           </div>
           <hr className="mb-4 border-gray-400" />
           {showAlert && (
@@ -248,37 +250,42 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             {tests.map((test) => (
               <div
                 key={test.id}
-                className="bg-gray-100 shadow-lg rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 border border-gray-200"
+                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border border-gray-200"
               >
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
-                    <MdPreview className="text-gray-600 mr-2" size={22} />
-                    <h5 className="font-bold text-lg text-gray-700">
-                      {test.test_name}
-                    </h5>
-                  </div>
-                  <hr className="mb-6 border-black-300" />
-                  <p className="mb-2">
-                    <strong className="text-gray-700">Description:</strong>{" "}
-                    {test.test_description}
-                  </p>
-                  <p className="mb-2">
-                    <strong className="text-gray-700">Category:</strong>
-                    <span className="inline-block px-2 py-1 text-sm font-semibold leading-none bg-green-500 text-white rounded ml-2">
-                      {test.categories}
+                <div className="relative">
+                  <div className="absolute top-0 right-0 bg-green-500 text-white py-1 px-3 rounded-tr-lg rounded-bl-lg">
+                    <span className="text-xs font-semibold">
+                      {test.categories.map((category, index) => (
+                        <span key={index}>
+                          {category}
+                          {index < test.categories.length - 1 && ", "}
+                        </span>
+                      ))}
                     </span>
-                  </p>
-                  <p className="mb-4">
-                    <strong className="text-gray-700">
-                      Total Questions:
-                    </strong>{" "}
-                    {calculateTotalQuestionCount(test.id)}
-                  </p>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center mb-4">
+                      <MdPreview className="text-gray-600" size={22} />
+                      <h5 className="font-bold text-lg text-gray-800 ml-3">
+                        {test.test_name}
+                      </h5>
+                    </div>
+                    <p className="text-gray-600 mb-2">
+                      {test.test_description}
+                    </p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">
+                        Total Questions: {calculateTotalQuestionCount(test.id)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-100 px-6 py-2 flex justify-center items-center">
                   <button
-                    className={`w-full py-2 rounded font-bold text-white ${
+                    className={`py-2 px-4 rounded font-bold text-white shadow ${
                       selectedTests.includes(test.id)
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-black hover:bg-black"
+                        ? "bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        : "bg-black hover:bg-black focus:outline-none focus:ring-2 focus:ring-black"
                     } transition-colors duration-300`}
                     onClick={() => handleTestSelection(test.id)}
                   >
@@ -288,6 +295,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               </div>
             ))}
           </div>
+
           <div className="text-center mt-8">
             <button
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"
