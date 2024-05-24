@@ -122,7 +122,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
 
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
+        <div className="bg-gray-200 p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
           <div className="flex items-center mb-4">
             <FaClipboardCheck className="text-blue-500 mr-2" size={24} />
             <h2 className="text-xl font-bold text-gray-700">
