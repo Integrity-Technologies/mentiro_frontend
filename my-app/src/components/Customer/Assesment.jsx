@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
-import { FaClipboardList } from "react-icons/fa";
+import { FaPlus, FaClipboardList } from "react-icons/fa";
 import BallProgressBar from "./BallProgressbar";
 import { getAllAssessments } from "../../actions/AssesmentAction";
 import countries from "../../data/countries";
@@ -21,9 +21,11 @@ const Assessment = () => {
   const totalSteps = 3;
   const [currentStep, setCurrentStep] = useState(0);
 
-    const labels = ["Assessment Details", "Choose Tests", "Preview"];
+  const labels = ["Assessment Details", "Choose Tests", "Preview"];
 
-  const assessments = useSelector((state) => state.assessment.assessments || []);
+  const assessments = useSelector(
+    (state) => state.assessment.assessments || []
+  );
   const token = useSelector(getToken);
   const dispatch = useDispatch();
 
@@ -102,130 +104,133 @@ const Assessment = () => {
 
   return (
     <div className="container mx-auto p-4 bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
-  <>
-    <BallProgressBar
-      steps={totalSteps}
-      currentStep={currentStep}
-      labels={labels}
-    />
-    {showTestSelection ? (
-      <TestSelection
-        assessments={assessments}
-        handleBackButtonClick={handleBackButtonClick}
-        goToNextStep={goToNextStep}
-      />
-    ) : (
-      <div className="">
-        <div className="flex items-center mb-4 mt-5">
-          <FaClipboardList className="mr-2" size={22} />
-          <h2 className="text-xl font-bold">Create New Assessment</h2>
-        </div>
-        <hr className="mb-6 border-gray-400" />
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="relative">
-            <label
-              htmlFor="formAssessmentName"
-              className="block mb-1 text-sm font-medium text-gray-700"
-            >
-              Assessment Name
-            </label>
-            <input
-              type="text"
-              id="formAssessmentName"
-              placeholder="Enter assessment name"
-              className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                companyError ? "border-red-500" : ""
-              }`}
-              value={assessmentName}
-              onChange={(e) => setAssessmentName(e.target.value)}
-            />
-            {companyError && (
-              <p className="mt-2 text-sm text-red-600">{companyError}</p>
-            )}
-          </div>
-          <div className="relative">
-            <label
-              htmlFor="formJobRole"
-              className="block mb-1 text-sm font-medium text-gray-700"
-            >
-              Job Role
-            </label>
-            <input
-              type="text"
-              id="formJobRole"
-              placeholder="Enter job role"
-              className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                jobRoleError ? "border-red-500" : ""
-              }`}
-              value={jobRole}
-              onChange={(e) => setJobRole(e.target.value)}
-            />
-            {jobRoleError && (
-              <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
-            )}
-          </div>
-        </div>
-        <div className="relative mb-4">
-          <label
-            htmlFor="formWorkArrangement"
-            className="block mb-1 text-sm font-medium text-gray-700"
-          >
-            Work Arrangement
-          </label>
-          <select
-            id="formWorkArrangement"
-            className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-              workArrangementError ? "border-red-500" : ""
-            }`}
-            value={workArrangement}
-            onChange={(e) => setWorkArrangement(e.target.value)}
-          >
-            <option value="">Work Arrangement...</option>
-            <option value="online">Online</option>
-            <option value="remote">Remote</option>
-            <option value="hybrid">Hybrid</option>
-          </select>
-          {workArrangementError && (
-            <p className="mt-2 text-sm text-red-600">{workArrangementError}</p>
-          )}
-        </div>
+      <>
+        <BallProgressBar
+          steps={totalSteps}
+          currentStep={currentStep}
+          labels={labels}
+        />
+        {showTestSelection ? (
+          <TestSelection
+            assessments={assessments}
+            handleBackButtonClick={handleBackButtonClick}
+            goToNextStep={goToNextStep}
+          />
+        ) : (
+          <div className="">
+            <div className="flex items-center mb-4 mt-5">
+              <FaClipboardList className="mr-2 text-primary" size={22} />
+              <h2 className="text-xl font-bold">Create New Assessment</h2>
+            </div>
+            <hr className="mb-6 border-gray-400" />
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="relative">
+                <label
+                  htmlFor="formAssessmentName"
+                  className="block mb-1 text-sm font-medium text-gray-700"
+                >
+                  Assessment Name
+                </label>
+                <input
+                  type="text"
+                  id="formAssessmentName"
+                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                    companyError ? "border-red-500" : ""
+                  }`}
+                  value={assessmentName}
+                  onChange={(e) => setAssessmentName(e.target.value)}
+                />
+                {companyError && (
+                  <p className="mt-2 text-sm text-red-600">{companyError}</p>
+                )}
+              </div>
+              <div className="relative">
+                <label
+                  htmlFor="formJobRole"
+                  className="block mb-1 text-sm font-medium text-gray-700"
+                >
+                  Job Role
+                </label>
+                <input
+                  type="text"
+                  id="formJobRole"
+                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                    jobRoleError ? "border-red-500" : ""
+                  }`}
+                  value={jobRole}
+                  onChange={(e) => setJobRole(e.target.value)}
+                />
+                {jobRoleError && (
+                  <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
+                )}
+              </div>
+            </div>
+            <div className="relative mb-4">
+              <label
+                htmlFor="formWorkArrangement"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Work Arrangement
+              </label>
+              <select
+                id="formWorkArrangement"
+                className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  workArrangementError ? "border-red-500" : ""
+                }`}
+                value={workArrangement}
+                onChange={(e) => setWorkArrangement(e.target.value)}
+              >
+                <option value="">Select...</option>
+                <option value="online">Online</option>
+                <option value="remote">Remote</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+              {workArrangementError && (
+                <p className="mt-2 text-sm text-red-600">
+                  {workArrangementError}
+                </p>
+              )}
+            </div>
 
-        <div className="relative mb-4">
-          <label
-            htmlFor="formJobLocation"
-            className="block mb-1 text-sm font-medium text-gray-700"
-          >
-            Job Location
-          </label>
-          <select
-            id="formJobLocation"
-            className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-              jobLocationError ? "border-red-500" : ""
-            }`}
-            value={jobLocation}
-            onChange={(e) => setJobLocation(e.target.value)}
-          >
-            <option value="">Select...</option>
-            {countries.map((country, index) => (
-              <option key={index} value={country.country_name}>
-                {country.country_name}
-              </option>
-            ))}
-          </select>
-          {jobLocationError && (
-            <p className="mt-2 text-sm text-red-600">{jobLocationError}</p>
-          )}
-        </div>
-        <Button
-          onClick={handleAddAssessment}
-          className="bg-black  hover:bg-black text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
-        >
-          {showTestSelection ? "Create Assessment" : "Create Assessment"}
-        </Button>
-      </div>
-    )}
-  </>
-</div>
+            <div className="relative mb-4">
+              <label
+                htmlFor="formJobLocation"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                Job Location
+              </label>
+              <select
+                id="formJobLocation"
+                className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  jobLocationError ? "border-red-500" : ""
+                }`}
+                value={jobLocation}
+                onChange={(e) => setJobLocation(e.target.value)}
+              >
+                <option value="">Select...</option>
+                {countries.map((country, index) => (
+                  <option key={index} value={country.country_name}>
+                    {country.country_name}
+                  </option>
+                ))}
+              </select>
+              {jobLocationError && (
+                <p className="mt-2 text-sm text-red-600">{jobLocationError}</p>
+              )}
+            </div>
+            <Button
+              onClick={handleAddAssessment}
+              className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2"
+            >
+              <FaPlus className="inline-block mr-2" />
+              <span className="inline-block">
+                {showTestSelection ? "Create Assessment" : "Create Assessment"}
+              </span>
+            </Button>
+          </div>
+        )}
+      </>
+    </div>
   );
 };
 
