@@ -138,12 +138,11 @@ const Login = () => {
         </div>
         <div className="hidden md:flex flex-col  w-full md:w-1/2 bg-peach mt-10">
       <div className="text-center w-full max-w-lg  rounded-r-lg  p-6">
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">
-          Make data driven<br /> hiring decisions
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        Revolutionize Your Hiring with Data-Driven Insights
         </h1>
         <p className="text-lg text-gray-600 mb-8">
-          With the Free plan you can screen candidates for<br /> essential skills applicable to a wide range of job roles
-        </p>
+        With our Free plan, you can efficiently screen candidates for essential skills, ensuring you select the best fit for a wide range of job roles. Start making smarter, evidence-based hiring decisions today!        </p>
         <img className="w-full rounded h-96 rounded-r-lg object-cover" src={loginimg} alt="Login" />
       </div>
     </div>

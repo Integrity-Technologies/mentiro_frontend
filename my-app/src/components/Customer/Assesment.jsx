@@ -33,6 +33,27 @@ const Assessment = () => {
     dispatch(getAllAssessments());
   }, [dispatch]);
 
+  useEffect(() => {
+    const checkCompanyExists = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/company/myCompanies", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        console.log("🚀 ~ checkCompanyExists ~ data:", data)
+        if (data.length === 0) {
+          setCompanyError("Please create a company first.");
+        }
+      } catch (error) {
+        console.error("Error checking company existence:", error);
+      }
+    };
+
+    checkCompanyExists();
+  }, [token]);
+
   const handleAddAssessment = () => {
     let error = false;
     if (assessmentName.trim() === "") {
@@ -78,6 +99,8 @@ const Assessment = () => {
       return;
     }
 
+    
+
     const newAssessment = {
       id: Object.keys(assessments).length + 1,
       assessment_name: assessmentName.trim(),
@@ -86,15 +109,15 @@ const Assessment = () => {
     setAssessmentName("");
     setCurrentStep(1);
 
-    const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
-    if (activeCompany && activeCompany.name) {
+    if (!companyError) {
       setShowTestSelection(true);
-    } else {
-      setCompanyError("Please create a company first.");
     }
+  
   };
 
   const handleBackButtonClick = () => {
+    setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
+
     setShowTestSelection(false);
   };
 

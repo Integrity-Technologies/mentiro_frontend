@@ -45,7 +45,7 @@ const ForgetPassword = () => {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="bg-blue-100 dark:bg-gray-900">
       <div className="container mx-auto h-screen flex justify-center items-center">
         <div className="max-w-md w-full">
           {!isSubmitted && (

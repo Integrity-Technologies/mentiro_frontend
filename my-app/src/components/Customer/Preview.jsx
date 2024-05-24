@@ -9,12 +9,14 @@ import {
 import TestSelection from "./TestSelection";
 import InviteCandidate from "./InviteCandidate";
 
-const Preview = () => {
+const Preview = ({handleBackButtonClick}) => {
   const dispatch = useDispatch();
   const [showInviteCandidate, setShowInviteCandidate] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [showTestSelection, setShowTestSelection] = useState(false);
   const [assessmentData, setAssessmentData] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
     const assessmentName = localStorage.getItem("assessments");
@@ -87,22 +89,17 @@ const Preview = () => {
     }
   };
 
-  const handleBackButtonClick = () => {
-    setShowInviteCandidate(false);
-    setShowPreview(true);
-    setShowTestSelection(false);
-  };
+  const handleBackButton = () => {
+    setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
 
-  const handleTestSelectionButtonClick = () => {
-    setShowTestSelection(true);
-    setShowPreview(false);
+    setShowTestSelection(true); // Update showTestSelection state to true
   };
 
   return (
     <>
       {showTestSelection && (
-        <TestSelection handleBackButtonClick={handleBackButtonClick} />
-      )}
+      <TestSelection handleBackButtonClick={handleBackButtonClick} />
+    )}
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">
           <h2 className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
@@ -203,7 +200,7 @@ const Preview = () => {
             </button>
             <button
               size="lg"
-              onClick={handleTestSelectionButtonClick}
+              onClick={handleBackButton}
               className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
             >
               Back

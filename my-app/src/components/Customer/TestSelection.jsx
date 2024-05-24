@@ -14,6 +14,8 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   const [modalTestId, setModalTestId] = useState(null);
   const [selectedQuestionCounts, setSelectedQuestionCounts] = useState({});
   const [showAlert, setShowAlert] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+
 
   useEffect(() => {
     dispatch(fetchTests());
@@ -50,7 +52,9 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     localStorage.setItem("selectedTests", JSON.stringify(formattedTestsData));
 
     goToNextStep();
+    
   };
+  
 
   const handleTestSelection = (testId) => {
     setShowModal(true);

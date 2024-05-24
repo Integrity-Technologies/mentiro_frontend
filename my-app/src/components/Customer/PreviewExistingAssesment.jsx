@@ -133,11 +133,9 @@ const PreviewExistingAssessment = () => {
         )}
         <div className="mt-8 p-6 bg-blue-100 rounded-lg shadow-lg">
           <h3 className="text-2xl font-bold text-center mb-4 text-blue-800">
-            Invitation to Attempt Assessment
-          </h3>
-          <p className="text-lg text-center text-blue-700 mb-4">
-            Please forward this link to the candidate to take the assessment:
-          </p>
+          Invite Candidate          </h3>
+          <p className="text-sm text-center text-blue-700 mb-4">
+          To invite the candidate, simply copy the link provided or send it directly through email.          </p>
 
           <div className="flex items-center justify-center relative w-full max-w-lg mx-auto mb-4">
             <input
