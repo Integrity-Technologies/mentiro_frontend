@@ -22,19 +22,24 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   }, [dispatch]);
 
   const handleNextButtonClick = async () => {
-    if (
-      selectedTests.length === 0 ||
-      Object.keys(selectedQuestionCounts).length !== selectedTests.length
-    ) {
+    setShowAlert(false); // Reset showAlert state
+  
+    // Check if no tests are selected
+    if (selectedTests.length === 0) {
       setShowAlert(true);
       return;
     }
-
+  
+    // Check if question counts are provided for all selected tests
+    // if (Object.keys(selectedQuestionCounts).length !== selectedTests.length) {
+    //   return;
+    // }
+  
     setShowQuestion(true);
-
+  
     const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
     const company_name = activeCompany.name;
-
+  
     const formattedTestsData = selectedTests.map((testId) => {
       const test = tests.find((t) => t.id === testId);
       return {
@@ -48,18 +53,20 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
         company: company_name,
       };
     });
-
+  
     localStorage.setItem("selectedTests", JSON.stringify(formattedTestsData));
-
+  
     goToNextStep();
-    
   };
+  
   
 
   const handleTestSelection = (testId) => {
+    setShowAlert(false); // Reset showAlert state
     setShowModal(true);
     setModalTestId(testId);
   };
+  
 
   const openModal = (testId) => {
     setShowModal(true);
@@ -175,7 +182,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                 onChange={(event) => handleQuestionCountChange(event, "easy")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-yellow-300"
               />
-              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center text-gray-700">
+              <div className="w-10 h-8 bg-gray-300 rounded-full flex justify-center items-center text-gray-700">
                 {questionCounts["easy"]}
               </div>
             </div>
@@ -193,7 +200,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                 onChange={(event) => handleQuestionCountChange(event, "medium")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-green-300"
               />
-              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center text-gray-700">
+              <div className="w-10 h-8 bg-gray-300 rounded-full flex justify-center items-center text-gray-700">
                 {questionCounts["medium"]}
               </div>
             </div>
@@ -209,7 +216,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                 onChange={(event) => handleQuestionCountChange(event, "hard")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-red-500"
               />
-              <div className="w-10 h-8 bg-gray-200 rounded-full flex justify-center items-center text-gray-700">
+              <div className="w-10 h-8 bg-gray-300 rounded-full flex justify-center items-center text-gray-700">
                 {questionCounts["hard"]}
               </div>
             </div>

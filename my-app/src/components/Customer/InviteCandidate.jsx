@@ -51,8 +51,9 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
         Assessment Name: {Name}
       </h3>
       <p className="mt-4 text-blue-700">
-        Please forward this link to the candidate to take the assessment:
-      </p>
+      To invite the candidate, simply copy the link provided or send it directly through email.
+
+</p>
 
       <div className="mt-6 flex items-center relative w-full max-w-lg">
         <input
