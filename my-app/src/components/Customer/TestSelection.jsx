@@ -230,7 +230,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
       ) : (
         <div className="bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
           <div className="flex items-center justify-center mb-4">
-            <FaClipboardCheck className="mr-2" size={22} />
+            <FaClipboardCheck className="mr-2 text-primary" size={22} />
             <h2 className="text-center text-xl font-bold mt-1">
               Test Selection
             </h2>
@@ -265,7 +265,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                   </div>
                   <div className="p-6">
                     <div className="flex items-center mb-4">
-                      <MdPreview className="text-gray-600" size={22} />
+                      <MdPreview className="text-gray-600 text-primary" size={22} />
                       <h5 className="font-bold text-lg text-gray-800 ml-3">
                         {test.test_name}
                       </h5>
