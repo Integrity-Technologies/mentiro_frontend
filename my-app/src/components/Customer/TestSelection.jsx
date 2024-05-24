@@ -273,6 +273,9 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                         {test.test_name}
                       </h5>
                     </div>
+                    <h2 className="text-lg font-semibold text-gray-700 mb-2">
+                      Test Overview
+                    </h2>
                     <p className="text-gray-600 mb-2">
                       {test.test_description ||
                         "This test is based on SEO questions."}
