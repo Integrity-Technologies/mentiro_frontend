@@ -59,10 +59,17 @@ const DonutGraph = () => {
       },
     };
 
+    let myChart;
+
     if (chartRef.current) {
-      const myChart = new Chart(chartRef.current, config);
-      return () => myChart.destroy();
+      myChart = new Chart(chartRef.current, config);
     }
+
+    return () => {
+      if (myChart) {
+        myChart.destroy();
+      }
+    };
   }, [candidatesCount, error]);
 
   return (

@@ -7,37 +7,28 @@ import { useTranslation } from "react-i18next";
 const CircleGraph = () => {
     const chartContainer = useRef(null);
     const dispatch = useDispatch();
-    const [data, setData] = useState(null);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
     const assessments = useSelector((state) => state.assessment);
     const assessmentsCount = assessments?.assessments?.assessments?.length || 0;
     const { t } = useTranslation();
 
     useEffect(() => {
-        dispatch(getAllAssessments());
+        const fetchData = async () => {
+            try {
+                await dispatch(getAllAssessments());
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
     }, [dispatch]);
 
-
     useEffect(() => {
-        if (!chartContainer.current || !assessments) return;
-
-        if (error) {
-            return (
-              <div className="text-center text-red-500">
-                {error.response?.status === 500
-                  ? "Server error, please try again later."
-                  : "An error occurred, please try again."}
-              </div>
-            );
-          }
-        
-          if (!data) {
-            return <div className="text-center">Loading...</div>;
-          }
-        
-          if (data.length === 0) {
-            return <div className="text-center text-yellow-700">No data available.</div>;
-          }
+        if (loading || error) return;
 
         const ctx = chartContainer.current.getContext('2d');
         const myChart = new Chart(ctx, {
@@ -73,16 +64,38 @@ const CircleGraph = () => {
             }
         });
 
-        return () => myChart.destroy();
-    }, [assessments, assessmentsCount]);
+        return () => {
+            if (myChart) {
+                myChart.destroy();
+            }
+        };
+    }, [assessmentsCount, loading, error]);
+
+    if (loading) {
+        return <div className="text-center">Loading...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="text-center text-red-500">
+                {error.response?.status === 500
+                    ? "Server error, please try again later."
+                    : "An error occurred, please try again."}
+            </div>
+        );
+    }
+
+    if (assessmentsCount === 0) {
+        return (
+            <div className="text-center text-yellow-700">
+                {t("graphView.Assessment.NoData")}
+            </div>
+        );
+    }
 
     return (
         <div className="w-full h-full flex justify-center items-center">
-            {assessmentsCount === 0 ? (
-                <p className="text-red-500 font-bold">{t("graphView.Assessment.NoData")}</p>
-            ) : (
-                <canvas ref={chartContainer} className="w-full h-full"></canvas>
-            )}
+            <canvas ref={chartContainer} className="w-full h-full"></canvas>
         </div>
     );
 };

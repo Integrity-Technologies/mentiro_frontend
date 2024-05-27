@@ -34,8 +34,7 @@ const ViewTestResult = () => {
   
 
   return (
-    <div className="bg-gray-100 shadow-lg rounded-lg p-6 min-h-screen">
-      <div className="flex items-center mb-4">
+    <div className="bg-gray-100 shadow-xl rounded-xl p-6 min-h-screen transition duration-500 ease-in-out transform hover:shadow-2xl">      <div className="flex items-center mb-4">
         <TiChartBarOutline className="mr-2 text-blue-500" size={24} />
         <h1 className="text-2xl font-bold text-gray-700">
           {t("candidatesResult.title")}
