@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCandidates } from "../../actions/candidateAction";
+import { getUserCandidates } from "../../actions/candidateAction";
 import { useTranslation } from "react-i18next";
+import { getUserResults } from "../../actions/resultAction";
 
 const CandidateGraph = () => {
   const candidateChartRef = useRef(null);
@@ -11,24 +12,14 @@ const CandidateGraph = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [error, setError] = useState(null);
   const candidates = useSelector((state) => state.candidates);
+  const results = useSelector((state) => state.results);
   const { t } = useTranslation();
-
-  const dummyTests = [
-    { id: 1, test_name: "Test 1" },
-    { id: 2, test_name: "Test 2" },
-    { id: 3, test_name: "Test 3" },
-  ];
-
-  const dummyResults = [
-    { candidateId: 1, testName: "Test 1", score: 75 },
-    { candidateId: 1, testName: "Test 2", score: 85 },
-    { candidateId: 2, testName: "Test 3", score: 90 },
-  ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await dispatch(getAllCandidates());
+        await dispatch(getUserCandidates());
+        await dispatch(getUserResults());
       } catch (err) {
         setError(err.message);
       }
@@ -38,8 +29,8 @@ const CandidateGraph = () => {
   }, [dispatch]);
 
   const handleCandidateChange = (event) => {
-    const candidateId = event.target.value;
-    const candidate = candidates?.candidates?.find((c) => c.id === candidateId);
+    const candidateId = parseInt(event.target.value, 10);
+    const candidate = candidates?.find((c) => c.id === candidateId);
     setSelectedCandidate(candidate);
   };
 
@@ -78,9 +69,9 @@ const CandidateGraph = () => {
   };
 
   useEffect(() => {
-    if (error || !candidates?.candidates) return;
+    if (error || !candidates) return;
 
-    const candidatesCount = candidates?.candidates?.length || 0;
+    const candidatesCount = candidates.length || 0;
     const data = {
       labels: ["Candidates"],
       datasets: [
@@ -106,35 +97,21 @@ const CandidateGraph = () => {
   }, [candidates, error]);
 
   useEffect(() => {
-    if (!selectedCandidate) return;
+    if (!selectedCandidate || !results) return;
 
-    const candidateResults = dummyResults.filter(
+    const candidateResults = results.filter(
       (result) => result.candidateId === selectedCandidate.id
     );
 
-    const testNames = dummyTests.map((test) => test.test_name);
-    const attemptedTests = candidateResults.map((result) => result.testName);
+    const testNames = candidateResults.map((result) => result.testName);
     const scores = candidateResults.map((result) => result.score);
 
     const data = {
       labels: testNames,
       datasets: [
         {
-          label: t("graphView.Candidate.TestsAttempted"),
-          data: testNames.map((testName) =>
-            attemptedTests.includes(testName) ? 1 : 0
-          ),
-          backgroundColor: "rgba(75, 192, 192, 0.5)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 1,
-        },
-        {
           label: t("graphView.Candidate.Scores"),
-          data: testNames.map((testName) =>
-            attemptedTests.includes(testName)
-              ? scores[attemptedTests.indexOf(testName)]
-              : 0
-          ),
+          data: scores,
           backgroundColor: "rgba(192, 75, 75, 0.5)",
           borderColor: "rgba(192, 75, 75, 1)",
           borderWidth: 1,
@@ -151,7 +128,7 @@ const CandidateGraph = () => {
         }
       }
     };
-  }, [selectedCandidate, t]);
+  }, [selectedCandidate, results, t]);
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center p-4">
@@ -168,9 +145,9 @@ const CandidateGraph = () => {
               className="p-2 border border-gray-300 rounded w-full hover:shadow-lg transition-shadow"
             >
               <option value="">{t("graphView.SelectCandidate")}</option>
-              {candidates?.candidates?.map((candidate) => (
+              {candidates?.map((candidate) => (
                 <option key={candidate.id} value={candidate.id}>
-                  {candidate.first_name}
+                  {candidate.first_name} {candidate.last_name}
                 </option>
               ))}
             </select>
@@ -179,7 +156,7 @@ const CandidateGraph = () => {
             <div className="w-full h-full mt-4 flex flex-col md:flex-row justify-around items-center">
               <div className="w-full h-64">
                 <h3 className="text-center mb-2 text-lg font-semibold">
-                  {t("graphView.Candidate.TestsAndScores")}
+                  {selectedCandidate.first_name} {selectedCandidate.last_name} - {t("graphView.Candidate.TestsAndScores")}
                 </h3>
                 <canvas ref={resultChartRef} className="w-full h-full"></canvas>
               </div>

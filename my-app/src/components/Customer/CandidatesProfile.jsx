@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCandidates } from "../../actions/candidateAction";
+import { getAllCandidates, getUserCandidates } from "../../actions/candidateAction";
 import TablePagination from "../Admin/TablePagination";
 import { useTranslation } from "react-i18next";
 import { FaUserCircle } from "react-icons/fa";
@@ -15,7 +15,7 @@ const CandidateProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await dispatch(getAllCandidates());
+        await dispatch(getUserCandidates());
       } catch (err) {
         setError(err.message);
       }

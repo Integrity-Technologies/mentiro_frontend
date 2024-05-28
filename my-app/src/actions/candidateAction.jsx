@@ -86,3 +86,31 @@ export const deleteCandidate = (candidateId) => async (dispatch) => {
     return null;
   }
 };
+
+
+export const getUserCandidates = () => async (dispatch) => {
+  try {
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    const res = await axios.get("http://localhost:5000/api/candidate/user/candidates", axiosConfig);
+    console.log(res);
+
+    const formattedUsers = res.data.map((user) => ({
+        ...user,
+        created_at: user.created_at.split("T")[0], // Extract date part only
+        password: "*****",
+      }));
+
+    dispatch({ type: FETCH_CANDIDATES_SUCCESS, payload: formattedUsers });
+    
+    return formattedUsers;
+  } catch (error) {
+    const errorMessage = error.response?.data?.error || "Error fetching candidates";
+    dispatch({ type: CANDIDATE_ERROR, payload: errorMessage });
+    throw error;
+  }
+};
