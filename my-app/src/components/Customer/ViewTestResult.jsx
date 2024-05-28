@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchResults } from "../../actions/resultAction";
+import { fetchResults, getUserResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { TiChartBarOutline } from "react-icons/ti";
@@ -12,7 +12,7 @@ const ViewTestResult = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    dispatch(fetchResults()); // Dispatch the fetchResults action when component mounts
+    dispatch(getUserResults()); // Dispatch the fetchResults action when component mounts
   }, [dispatch]);
 
   const filteredResults = results.filter((candidate) =>
@@ -50,7 +50,7 @@ const ViewTestResult = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <table className="w-full table-auto border-collapse">
+      <table className="w-full table-auto border-collapse bg-white">
         <thead className="bg-blue-600 text-white">
           <tr className="border-b-2 border-blue-700">
             <th className="border px-4 py-2">#</th>

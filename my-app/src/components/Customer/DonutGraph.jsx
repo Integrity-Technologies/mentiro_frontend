@@ -33,7 +33,8 @@ const DonutGraph = () => {
         {
           label: "Count",
           data: [candidatesCount],
-          backgroundColor: ["rgba(75, 192, 192, 0.5)"],
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // Change colors here
+        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
           borderColor: ["rgba(75, 192, 192, 1)"],
           borderWidth: 1,
         },

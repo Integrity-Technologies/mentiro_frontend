@@ -12,6 +12,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   const [selectedTests, setSelectedTests] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalTestId, setModalTestId] = useState(null);
+  const [showTestSelection, setShowTestSelection] = useState(false);
   const [selectedQuestionCounts, setSelectedQuestionCounts] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -66,6 +67,12 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     setShowModal(true);
     setModalTestId(testId);
   };
+  
+  const handleBackButton = () => {
+    setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
+    setShowTestSelection(true);
+  };
+  
   
 
   const openModal = (testId) => {
@@ -237,7 +244,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   return (
     <div>
       {showQuestion ? (
-        <Preview handleBackButtonClick={handleBackButtonClick} />
+        <Preview handleBackButton={handleBackButton} />
       ) : (
         <div className="bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
           <div className="flex items-center justify-center mb-4">

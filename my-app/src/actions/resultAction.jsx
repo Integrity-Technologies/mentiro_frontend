@@ -40,3 +40,26 @@ export const fetchResults = () => {
       });
   };
 };
+
+
+
+
+export const getUserResults = () => {
+  return (dispatch) => {
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    // Simulating API call
+    axios.get('http://localhost:5000/api/result/user/results', axiosConfig)
+      .then(response => response.data)
+      .then(data => {
+        dispatch(fetchResultsSuccess(data));
+      })
+      .catch(error => {
+        dispatch(fetchResultsFailure(error.message));
+      });
+  };
+};

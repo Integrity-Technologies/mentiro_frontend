@@ -39,7 +39,7 @@ const CircleGraph = () => {
                     label: "Assessments Processed",
                     data: [assessmentsCount],
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.5)',
+                        'blue',
                     ],
                     borderColor: [
                         'rgba(75, 192, 192, 1)',

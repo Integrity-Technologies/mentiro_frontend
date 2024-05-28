@@ -139,6 +139,8 @@ const Assessment = () => {
             assessments={assessments}
             handleBackButtonClick={handleBackButtonClick}
             goToNextStep={goToNextStep}
+            currentStep={currentStep} // Add this prop
+
           />
         ) : (
           <div className="">

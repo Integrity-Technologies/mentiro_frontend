@@ -9,7 +9,7 @@ import {
 import TestSelection from "./TestSelection";
 import InviteCandidate from "./InviteCandidate";
 
-const Preview = ({ handleBackButtonClick }) => {
+const Preview = (handleBackButton) => {
   const dispatch = useDispatch();
   const [showInviteCandidate, setShowInviteCandidate] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -26,8 +26,6 @@ const Preview = ({ handleBackButtonClick }) => {
     const job_role = assessmentData.jobRole;
     const work_arrangement = assessmentData.workArrangement;
     const job_location = assessmentData.jobLocation;
-
-
 
     if (assessmentData && activeCompany && selectedTests) {
       const companyName = activeCompany.name;
@@ -80,7 +78,7 @@ const Preview = ({ handleBackButtonClick }) => {
       if (!assessmentData) {
         throw new Error("Assessment data is not available.");
       }
-  
+
       await dispatch(
         addAssessmentWithTests({
           assessment_name: assessmentData.assessmentName,
@@ -91,29 +89,25 @@ const Preview = ({ handleBackButtonClick }) => {
           tests: assessmentData.tests,
         })
       );
-  
+
       setShowPreview(false);
       setShowInviteCandidate(true);
-  
+
       await dispatch(getAllAssessments());
     } catch (error) {
       console.error(error);
     }
   };
-  
-
-  const handleBackButton = () => {
-    setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
-    setShowTestSelection(true);
-    setProgress((prevProgress) => prevProgress - 1); // Decrease progress by 1
-  };
+  // const handleBackButton = () => {
+  //   setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
+  //   setShowTestSelection(true);
+  //   setProgress((prevProgress) => prevProgress - 1); // Decrease progress by 1
+  // };
 
 
   return (
     <>
-      {showTestSelection && (
-        <TestSelection handleBackButtonClick={handleBackButtonClick} />
-      )}
+     {showTestSelection && <TestSelection handleBackButton={handleBackButton} />}
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">
           <h2 className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
@@ -213,12 +207,12 @@ const Preview = ({ handleBackButtonClick }) => {
               Submit
             </button>
             <button
-              size="lg"
-              onClick={handleBackButton}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
-            >
-              Back
-            </button>
+  size="lg"
+  onClick={handleBackButton}
+  className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
+>
+  Back
+</button>
           </div>
         </div>
       )}
