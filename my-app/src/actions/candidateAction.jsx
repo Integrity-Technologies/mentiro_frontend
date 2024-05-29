@@ -10,7 +10,13 @@ export const CANDIDATE_ERROR = "CANDIDATE_ERROR";
 
 export const getAllCandidates = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://localhost:5000/api/candidate/allCandidate");
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    const res = await axios.get("http://localhost:5000/api/candidate/allCandidate", axiosConfig);
     console.log(res);
 
     const formattedUsers = res.data.map((user) => ({

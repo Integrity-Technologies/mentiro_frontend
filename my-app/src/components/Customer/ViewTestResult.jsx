@@ -31,10 +31,10 @@ const ViewTestResult = () => {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
-  
-
   return (
-    <div className="bg-gray-100 shadow-xl rounded-xl p-6 min-h-screen transition duration-500 ease-in-out transform hover:shadow-2xl">      <div className="flex items-center mb-4">
+    <div className="bg-gray-100 shadow-xl rounded-xl p-6 min-h-screen transition duration-500 ease-in-out transform hover:shadow-2xl">
+      {" "}
+      <div className="flex items-center mb-4">
         <TiChartBarOutline className="mr-2 text-blue-500" size={24} />
         <h1 className="text-2xl font-bold text-gray-700">
           {t("candidatesResult.title")}
@@ -60,6 +60,9 @@ const ViewTestResult = () => {
             </th>
             <th className="border px-4 py-2">
               {t("candidatesResult.testName")}
+            </th>
+            <th className="border px-4 py-2">
+              {t("candidatesResult.Status")}
             </th>
             <th className="border px-4 py-2">{t("candidatesResult.Score")}</th>
           </tr>
@@ -113,13 +116,18 @@ const ViewTestResult = () => {
                       </td>
                     )}
                     <td className="border px-4 py-2">{test.name}</td>
+                    <td className="border px-4 py-2">{test.status}</td>
                     <td className="border px-4 py-2">
                       <span
-                        className={`px-2 py-1 rounded-full text-white ${
-                          test.score >= 50 ? "bg-green-500" : "bg-red-500"
+                        className={`px-2 py-1 rounded-full ${
+                          test.score
+                            ? test.score >= 50
+                              ? "bg-green-500"
+                              : "bg-red-500"
+                            : ""
                         }`}
                       >
-                        {test.score}%
+                        {test.score ? `${test.score}%` : "-"}
                       </span>
                     </td>
                   </tr>

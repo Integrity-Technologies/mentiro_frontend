@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import Chart from "chart.js/auto";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCandidates } from "../../actions/candidateAction";
 import { useTranslation } from "react-i18next";
+import Chart from "react-apexcharts";
 
 const DonutGraph = () => {
-  const chartRef = useRef(null);
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const candidates = useSelector((state) => state.candidates);
@@ -24,54 +23,25 @@ const DonutGraph = () => {
     fetchData();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (error) return; // Exit if there was an error
-
-    const data = {
-      labels: ["Candidates"],
-      datasets: [
-        {
-          label: "Count",
-          data: [candidatesCount],
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // Change colors here
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-          borderColor: ["rgba(75, 192, 192, 1)"],
-          borderWidth: 1,
-        },
-      ],
-    };
-
-    const config = {
-      type: "doughnut",
-      data: data,
-      options: {
-        plugins: {
-          legend: {
-            position: "right",
-          },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                return `${context.label}: ${context.raw}`;
-              },
-            },
-          },
+  const options = {
+    chart: {
+      type: 'donut',
+    },
+    labels: ["Candidates"],
+    colors: ['#FF6384', '#36A2EB', '#FFCE56'],
+    legend: {
+      position: 'right',
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return `${val}`;
         },
       },
-    };
+    },
+  };
 
-    let myChart;
-
-    if (chartRef.current) {
-      myChart = new Chart(chartRef.current, config);
-    }
-
-    return () => {
-      if (myChart) {
-        myChart.destroy();
-      }
-    };
-  }, [candidatesCount, error]);
+  const series = [candidatesCount];
 
   return (
     <div className="w-full h-full flex justify-center items-center">
@@ -80,7 +50,12 @@ const DonutGraph = () => {
           {error ? t("graphView.Candidate.Error") : t("graphView.Candidate.NoData")}
         </p>
       ) : (
-        <canvas ref={chartRef} className="w-full h-full"></canvas>
+        <Chart
+          options={options}
+          series={series}
+          type="donut"
+          width="380"
+        />
       )}
     </div>
   );

@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import Chart from "chart.js/auto";
+import React, { useEffect, useState } from "react";
+import ApexCharts from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserCandidates } from "../../actions/candidateAction";
-import { useTranslation } from "react-i18next";
 import { getUserResults } from "../../actions/resultAction";
+import { useTranslation } from "react-i18next";
 
 const CandidateGraph = () => {
-  const candidateChartRef = useRef(null);
-  const resultChartRef = useRef(null);
   const dispatch = useDispatch();
-  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [selectedCandidateId, setSelectedCandidateId] = useState(null);
   const [error, setError] = useState(null);
   const candidates = useSelector((state) => state.candidates);
   const results = useSelector((state) => state.results);
@@ -30,138 +28,137 @@ const CandidateGraph = () => {
 
   const handleCandidateChange = (event) => {
     const candidateId = parseInt(event.target.value, 10);
-    const candidate = candidates?.find((c) => c.id === candidateId);
-    setSelectedCandidate(candidate);
+    setSelectedCandidateId(candidateId);
   };
 
-  const createChart = (ref, data) => {
-    if (ref.current) {
-      if (Chart.getChart(ref.current)) {
-        Chart.getChart(ref.current).destroy();
-      }
-      new Chart(ref.current, {
-        type: "bar",
-        data: data,
-        options: {
-          plugins: {
-            legend: {
-              position: "right",
-            },
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return `${context.dataset.label}: ${context.raw}`;
-                },
-              },
-            },
-          },
-          scales: {
-            x: {
-              beginAtZero: true,
-            },
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
+  const generateChartData = () => {
+    if (!candidates || !results || !results.results) return { series: [] };
+
+    const data = [];
+    results.results.forEach((candidate) => {
+      candidate.assessments.forEach((assessment) => {
+        assessment.tests.forEach((test) => {
+          data.push({
+            name: candidate.candidate_name,
+            data: test.score !== null ? test.score : 0,
+            test: test.name,
+          });
+        });
       });
-    }
+    });
+
+    const heatmapData = data.reduce((acc, item) => {
+      let existing = acc.find((el) => el.name === item.test);
+      if (existing) {
+        existing.data.push({ x: item.name, y: item.data });
+      } else {
+        acc.push({ name: item.test, data: [{ x: item.name, y: item.data }] });
+      }
+      return acc;
+    }, []);
+
+    return { series: heatmapData };
   };
 
-  useEffect(() => {
-    if (error || !candidates) return;
+  const chartData = generateChartData();
 
-    const candidatesCount = candidates.length || 0;
-    const data = {
-      labels: ["Candidates"],
-      datasets: [
-        {
-          label: "Count",
-          data: [candidatesCount],
-          backgroundColor: ["rgba(75, 192, 192, 0.5)"],
-          borderColor: ["rgba(75, 192, 192, 1)"],
-          borderWidth: 1,
+  const chartOptions = {
+    chart: {
+      type: "heatmap",
+      toolbar: {
+        show: false,
+      },
+    },
+    xaxis: {
+      title: {
+        text: t("graphView.Candidate.Tests"),
+        style: {
+          fontWeight: "bold",
+          color: "#333",
         },
-      ],
-    };
-
-    createChart(candidateChartRef, data);
-
-    return () => {
-      if (candidateChartRef.current) {
-        if (Chart.getChart(candidateChartRef.current)) {
-          Chart.getChart(candidateChartRef.current).destroy();
-        }
-      }
-    };
-  }, [candidates, error]);
-
-  useEffect(() => {
-    if (!selectedCandidate || !results) return;
-
-    const candidateResults = results.filter(
-      (result) => result.candidateId === selectedCandidate.id
-    );
-
-    const testNames = candidateResults.map((result) => result.testName);
-    const scores = candidateResults.map((result) => result.score);
-
-    const data = {
-      labels: testNames,
-      datasets: [
-        {
-          label: t("graphView.Candidate.Scores"),
-          data: scores,
-          backgroundColor: "rgba(192, 75, 75, 0.5)",
-          borderColor: "rgba(192, 75, 75, 1)",
-          borderWidth: 1,
+      },
+      labels: {
+        style: {
+          colors: "#333",
+          fontSize: "12px",
         },
-      ],
-    };
-
-    createChart(resultChartRef, data);
-
-    return () => {
-      if (resultChartRef.current) {
-        if (Chart.getChart(resultChartRef.current)) {
-          Chart.getChart(resultChartRef.current).destroy();
-        }
-      }
-    };
-  }, [selectedCandidate, results, t]);
+      },
+    },
+    yaxis: {
+      title: {
+        text: t("graphView.Candidate.Scores"),
+        style: {
+          fontWeight: "bold",
+          color: "#333",
+        },
+      },
+      labels: {
+        style: {
+          colors: "#333",
+          fontSize: "12px",
+        },
+      },
+    },
+    plotOptions: {
+      heatmap: {
+        colorScale: {
+          ranges: [
+            { from: 0, to: 50, color: "#F56C6C", name: "Low" },
+            { from: 51, to: 75, color: "#E6A23C", name: "Medium" },
+            { from: 76, to: 100, color: "#67C23A", name: "High" },
+          ],
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: "12px",
+        colors: ["#333"],
+      },
+    },
+    tooltip: {
+      theme: "dark",
+    },
+    legend: {
+      horizontalAlign: "left",
+      labels: {
+        colors: "#333",
+      },
+    },
+  };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center p-4">
+    <div className="w-full h-full flex flex-col justify-center items-center p-4 bg-gray-50">
       {error ? (
-        <p className="text-red-500 font-bold">{t("graphView.Candidate.Error")}</p>
+        <p className="text-red-500 font-bold">
+            {t("graphView.Candidate.Error")}
+        </p>
       ) : (
         <>
           <div className="w-full h-64 mb-4">
-            <canvas ref={candidateChartRef} className="w-full h-full"></canvas>
+            {chartData.series.length > 0 && (
+              <ApexCharts
+                options={chartOptions}
+                series={chartData.series}
+                type="heatmap"
+                height={350}
+              />
+            )}
           </div>
-          <div className="w-full mt-4">
+          <div className="w-full mt-20 flex justify-center">
             <select
               onChange={handleCandidateChange}
-              className="p-2 border border-gray-300 rounded w-full hover:shadow-lg transition-shadow"
+              className="p-2 border border-gray-300 rounded-lg w-60 hover:shadow-lg transition-shadow bg-white"
             >
               <option value="">{t("graphView.SelectCandidate")}</option>
-              {candidates?.map((candidate) => (
+              {results.results.map((candidate) => (
                 <option key={candidate.id} value={candidate.id}>
-                  {candidate.first_name} {candidate.last_name}
+                  {candidate.candidate_name}
                 </option>
               ))}
             </select>
           </div>
-          {selectedCandidate && (
-            <div className="w-full h-full mt-4 flex flex-col md:flex-row justify-around items-center">
-              <div className="w-full h-64">
-                <h3 className="text-center mb-2 text-lg font-semibold">
-                  {selectedCandidate.first_name} {selectedCandidate.last_name} - {t("graphView.Candidate.TestsAndScores")}
-                </h3>
-                <canvas ref={resultChartRef} className="w-full h-full"></canvas>
-              </div>
-            </div>
-          )}
         </>
       )}
     </div>

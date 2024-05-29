@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Chart from 'chart.js/auto';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAssessments } from "../../actions/AssesmentAction";
 import { useTranslation } from "react-i18next";
+import Chart from "react-apexcharts";
 
-const CircleGraph = () => {
-    const chartContainer = useRef(null);
+const RadialBarGraph = () => {
     const dispatch = useDispatch();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -27,49 +26,33 @@ const CircleGraph = () => {
         fetchData();
     }, [dispatch]);
 
-    useEffect(() => {
-        if (loading || error) return;
-
-        const ctx = chartContainer.current.getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Assessments'],
-                datasets: [{
-                    label: "Assessments Processed",
-                    data: [assessmentsCount],
-                    backgroundColor: [
-                        'blue',
-                    ],
-                    borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                cutout: '50%',
-                plugins: {
-                    legend: {
-                        position: 'right'
+    const options = {
+        chart: {
+            type: 'radialBar',
+        },
+        plotOptions: {
+            radialBar: {
+                hollow: {
+                    size: '70%',
+                },
+                dataLabels: {
+                    name: {
+                        show: true,
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.label}: ${context.raw}`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
+                    value: {
+                        show: true,
+                    },
+                },
+                track: {
+                    background: '#b3e5fc', // Change track color to light blue
+                },
+            },
+        },
+        labels: ['Assessments'],
+        colors: ['#0000FF'], // Specify blue color
+    };
 
-        return () => {
-            if (myChart) {
-                myChart.destroy();
-            }
-        };
-    }, [assessmentsCount, loading, error]);
+    const series = [assessmentsCount];
 
     if (loading) {
         return <div className="text-center">Loading...</div>;
@@ -94,10 +77,15 @@ const CircleGraph = () => {
     }
 
     return (
-        <div className="w-full h-full flex justify-center items-center">
-            <canvas ref={chartContainer} className="w-full h-full"></canvas>
+        <div className="max-w-sm w-full rounded-lg " > 
+           <Chart
+                options={options}
+                series={series}
+                type="radialBar"
+                width="380"
+            />
         </div>
     );
 };
 
-export default CircleGraph;
+export default RadialBarGraph;
