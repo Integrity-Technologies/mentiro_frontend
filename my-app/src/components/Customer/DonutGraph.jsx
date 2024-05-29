@@ -39,8 +39,15 @@ const DonutGraph = () => {
         },
       },
     },
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          enabled: false,
+        },
+      },
+    },
   };
-
+  
   const series = [candidatesCount];
 
   return (
