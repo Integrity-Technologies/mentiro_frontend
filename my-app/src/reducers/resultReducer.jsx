@@ -1,4 +1,4 @@
-import { FETCH_RESULTS_REQUEST, FETCH_RESULTS_SUCCESS, FETCH_RESULTS_FAILURE } from '../actions/resultAction';
+import { FETCH_RESULTS_REQUEST, FETCH_RESULTS_SUCCESS, FETCH_RESULTS_FAILURE, CREATE_RESULT  } from '../actions/resultAction';
 
 const initialState = {
   results: [],
@@ -14,6 +14,12 @@ const resultReducer = (state = initialState, action) => {
         error: ''
       };
     case FETCH_RESULTS_FAILURE:
+      return {
+        ...state,
+        results: [],
+        error: action.payload
+      };
+      case CREATE_RESULT:
       return {
         ...state,
         results: [],

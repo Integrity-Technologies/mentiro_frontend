@@ -4,6 +4,8 @@ import { getToken } from "../actions/authActions"; // Import getToken function f
 
 export const FETCH_RESULTS_SUCCESS = 'FETCH_RESULTS_SUCCESS';
 export const FETCH_RESULTS_FAILURE = 'FETCH_RESULTS_FAILURE';
+export const CREATE_RESULT = 'CREATE_RESULT'; // Add CREATE_RESULT action type
+
 
 
 
@@ -57,6 +59,27 @@ export const getUserResults = () => {
       .then(response => response.data)
       .then(data => {
         dispatch(fetchResultsSuccess(data));
+      })
+      .catch(error => {
+        dispatch(fetchResultsFailure(error.message));
+      });
+  };
+};
+
+export const createResult = (resultData) => { // Define createResult action
+  return (dispatch) => {
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    // Simulating API call
+    axios.post('http://localhost:5000/api/result/create', resultData, axiosConfig)
+      .then(response => response.data)
+      .then(data => {
+        // Assuming the response data contains the newly created result
+        dispatch({ type: CREATE_RESULT, payload: data });
       })
       .catch(error => {
         dispatch(fetchResultsFailure(error.message));

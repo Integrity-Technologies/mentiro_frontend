@@ -6,6 +6,7 @@ export const GET_QUESTIONS = 'GET_QUESTIONS';
 export const ADD_QUESTION = 'ADD_QUESTION';
 export const DELETE_QUESTION = 'DELETE_QUESTION';
 export const EDIT_QUESTION = 'EDIT_QUESTION';
+export const ALL_QUESTION = 'ALL_QUESTION';
 
 
 
@@ -112,3 +113,24 @@ export const deleteQuestion = (Id) => async (dispatch) => {
     }
   };
   
+
+  export const getQuestionById = (id) => async (dispatch) => {
+    try {
+      const token = getToken();
+      const axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+  
+      const res = await axios.get(`http://localhost:5000/api/question/${id}`, axiosConfig);
+      dispatch({
+        type: ALL_QUESTION,
+        payload: res.data,
+      });
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      // Optionally dispatch an error action here
+    }
+  };

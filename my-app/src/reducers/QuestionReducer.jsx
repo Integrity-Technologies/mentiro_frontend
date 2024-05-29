@@ -1,7 +1,8 @@
 import { GET_QUESTIONS ,
  ADD_QUESTION ,
  DELETE_QUESTION ,
- EDIT_QUESTION 
+ EDIT_QUESTION ,
+ ALL_QUESTION
 } from "../actions/QuestionAction"
 
 
@@ -12,6 +13,11 @@ const initialState = {
 const questionReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_QUESTIONS:
+      return {
+        ...state,
+        questions: action.payload
+      };
+      case ALL_QUESTION:
       return {
         ...state,
         questions: action.payload

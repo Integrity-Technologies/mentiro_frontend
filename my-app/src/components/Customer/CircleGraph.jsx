@@ -37,20 +37,21 @@ const RadialBarGraph = () => {
                 },
                 dataLabels: {
                     name: {
-                        show: true,
+                        show: false, // This hides the label
                     },
                     value: {
                         show: true,
                     },
                 },
                 track: {
-                    background: '#b3e5fc', // Change track color to light blue
+                    background: '#b3e5fc', // Light blue track color
                 },
             },
         },
         labels: ['Assessments'],
-        colors: ['#0000FF'], // Specify blue color
+        colors: ['#0000FF'], // Blue color for the chart
     };
+    
 
     const series = [assessmentsCount];
 
@@ -89,3 +90,9 @@ const RadialBarGraph = () => {
 };
 
 export default RadialBarGraph;
+
+
+
+
+
+

@@ -34,10 +34,15 @@ const Candidate = () => {
     // Call the addCandidate action
     const data = await dispatch(addCandidate(candidateData));
 
+
     if (data) {
       // If data is returned successfully, show tests and success alert
       setShowTests(true);
       setSuccessAlert(true);
+
+      localStorage.setItem("candidateId", data.id);
+      console.log(data.id);
+
     }
   };
 
