@@ -68,6 +68,7 @@ const CandidateGraph = () => {
       toolbar: {
         show: false,
       },
+      background: '#E5E7EB', // Set background color to grey
     },
     xaxis: {
       title: {
@@ -129,14 +130,14 @@ const CandidateGraph = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center p-4 bg-gray-50">
+    <div className="w-full h-full flex flex-col justify-center items-center p-4 bg-gray-100">
       {error ? (
         <p className="text-red-500 font-bold">
-            {t("graphView.Candidate.Error")}
+          {t("graphView.Candidate.Error")}
         </p>
       ) : (
         <>
-          <div className="w-full h-64 mb-4">
+          <div className="w-full h-64 mb-4 bg-gray-100">
             {chartData.series.length > 0 && (
               <ApexCharts
                 options={chartOptions}
@@ -149,9 +150,9 @@ const CandidateGraph = () => {
           <div className="w-full mt-20 flex justify-center">
             <select
               onChange={handleCandidateChange}
-              className="p-2 border border-gray-300 rounded-lg w-60 hover:shadow-lg transition-shadow bg-white"
+              className="p-2 border border-gray-300 rounded-lg w-60 hover:shadow-lg transition-shadow bg-gray-300"
             >
-              <option value="">{t("graphView.SelectCandidate")}</option>
+              <option value="">{t("graphView.selectCandidate")}</option>
               {results.results.map((candidate) => (
                 <option key={candidate.id} value={candidate.id}>
                   {candidate.candidate_name}
