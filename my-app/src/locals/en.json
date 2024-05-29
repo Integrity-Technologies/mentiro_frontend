@@ -203,12 +203,18 @@
     "Name":"Candidate Name",
     "assessmentName": "Assessment Name",
     "testName": "Test Name",
-    "Score": "Score"
+    "Score": "Score",
+    "Status": "Status"
   },
   
   "graphView": {
+    "candidatesDetails": "Candidate Result",
     "Candidate": "Candidate",
     "Candidate.NoData":"No Candidate Data Available",
+    "selectCandidate": "Select Candidate",
+    "Candidate.Tests": "Tests",
+    "Candidate.Scores": "Scores",
+    "Candidate.Error": "No Candidate Result Found ",
     "Assessment": "Assessment",
     "Assessment.NoData":"No Assessment Data Available"
   }
