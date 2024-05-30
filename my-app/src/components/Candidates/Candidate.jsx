@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import Your_Tests from "./Your_Tests";
-import { useDispatch } from "react-redux"; // Importing useDispatch
-import { addCandidate } from "../../actions/candidateAction"; // Importing your addCandidate action
+import { addCandidate } from "../../actions/candidateAction";
 
 const Candidate = () => {
-  const dispatch = useDispatch(); // Getting dispatch function
+  const dispatch = useDispatch();
 
   const [showTests, setShowTests] = useState(false);
   const [candidateData, setCandidateData] = useState({
@@ -31,18 +30,13 @@ const Candidate = () => {
       return;
     }
 
-    // Call the addCandidate action
     const data = await dispatch(addCandidate(candidateData));
 
-
     if (data) {
-      // If data is returned successfully, show tests and success alert
       setShowTests(true);
       setSuccessAlert(true);
-
       localStorage.setItem("candidateId", data.id);
       console.log(data.id);
-
     }
   };
 
@@ -53,130 +47,98 @@ const Candidate = () => {
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
       {showTests ? (
         <Your_Tests />
       ) : (
-        <div>
-          <Container
-            className="d-flex flex-column justify-content-center align-items-center"
-            style={{ height: "100vh" }}
-          >
-            <Form className="p-4 border border-1" style={{ width: "500px" }}>
-              <h1 className="text-center mb-4">Candidate Registration</h1>
-
-              <Form.Group controlId="first_name" className="mb-3">
-                <div
-                  className={`relative ${errors.firstNameError ? "mb-3" : ""}`}
-                >
-                  <input
-                    type="text"
-                    id="first_name"
-                    className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
-                      errors.firstNameError ? "border-red-500" : ""
-                    }`}
-                    placeholder=" "
-                    value={candidateData.first_name}
-                    onChange={handleInputChange}
-                  />
-                  {errors.firstNameError && (
-                    <span className="text-red-500 text-sm">
-                      First name is required
-                    </span>
-                  )}
-                  <label
-                    htmlFor="first_name"
-                    className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform ${
-                      errors.firstNameError
-                        ? "-translate-y-8 scale-75"
-                        : "-translate-y-4 scale-100"
-                    } top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4`}
-                  >
-                    First Name
-                  </label>
-                </div>
-              </Form.Group>
-
-              <Form.Group controlId="last_name" className="mb-3">
-                <div
-                  className={`relative ${errors.lastNameError ? "mb-3" : ""}`}
-                >
-                  <input
-                    type="text"
-                    id="last_name"
-                    className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
-                      errors.lastNameError ? "border-red-500" : ""
-                    }`}
-                    placeholder=" "
-                    value={candidateData.last_name}
-                    onChange={handleInputChange}
-                  />
-                  {errors.lastNameError && (
-                    <span className="text-red-500 text-sm">
-                      Last name is required
-                    </span>
-                  )}
-                  <label
-                    htmlFor="last_name"
-                    className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform ${
-                      errors.lastNameError
-                        ? "-translate-y-8 scale-75"
-                        : "-translate-y-4 scale-100"
-                    } top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4`}
-                  >
-                    Last Name
-                  </label>
-                </div>
-              </Form.Group>
-              <Form.Group controlId="email" className="mb-3">
-                <div className={`relative ${errors.emailError ? "mb-3" : ""}`}>
-                  <input
-                    type="email"
-                    id="email"
-                    className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
-                      errors.emailError ? "border-red-500" : ""
-                    }`}
-                    placeholder=" "
-                    value={candidateData.email}
-                    onChange={handleInputChange}
-                  />
-                  {errors.emailError && (
-                    <span className="text-red-500 text-sm">
-                      Email is required
-                    </span>
-                  )}
-                  <label
-                    htmlFor="email"
-                    className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform ${
-                      errors.emailError
-                        ? "-translate-y-8 scale-75"
-                        : "-translate-y-4 scale-100"
-                    } top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4`}
-                  >
-                    Email address
-                  </label>
-                </div>
-              </Form.Group>
-
-              <Button
-                variant="dark"
-                onClick={handleSubmitButtonClick}
-                className="w-100"
+        <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+          <h1 className="text-2xl font-semibold text-center mb-6">
+            Candidate Registration
+          </h1>
+          <form>
+            <div className="mb-4">
+              <label
+                htmlFor="first_name"
+                className={`block text-sm font-medium ${
+                  errors.firstNameError ? "text-red-500" : "text-gray-700"
+                }`}
               >
-                Get Started
-              </Button>
-            </Form>
-            {successAlert && (
-              <Alert
-                variant="success"
-                className="mt-3"
-                onClose={() => setSuccessAlert(false)}
-                dismissible
+                First Name
+              </label>
+              <input
+                type="text"
+                id="first_name"
+                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
+                  errors.firstNameError ? "border-red-500" : "border-gray-300"
+                }`}
+                value={candidateData.first_name}
+                onChange={handleInputChange}
+              />
+              {errors.firstNameError && (
+                <p className="mt-1 text-sm text-red-500">First name is required</p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="last_name"
+                className={`block text-sm font-medium ${
+                  errors.lastNameError ? "text-red-500" : "text-gray-700"
+                }`}
               >
-                Candidate added successfully!
-              </Alert>
-            )}
-          </Container>
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="last_name"
+                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
+                  errors.lastNameError ? "border-red-500" : "border-gray-300"
+                }`}
+                value={candidateData.last_name}
+                onChange={handleInputChange}
+              />
+              {errors.lastNameError && (
+                <p className="mt-1 text-sm text-red-500">Last name is required</p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="email"
+                className={`block text-sm font-medium ${
+                  errors.emailError ? "text-red-500" : "text-gray-700"
+                }`}
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
+                  errors.emailError ? "border-red-500" : "border-gray-300"
+                }`}
+                value={candidateData.email}
+                onChange={handleInputChange}
+              />
+              {errors.emailError && (
+                <p className="mt-1 text-sm text-red-500">Email is required</p>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSubmitButtonClick}
+              className="w-full py-2 px-4 bg-black text-white font-semibold rounded-md shadow hover:bg-black-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Get Started
+            </button>
+          </form>
+
+          {successAlert && (
+            <div className="mt-4 p-4 bg-green-100 border-t-4 border-green-500 rounded-b text-green-700">
+              Candidate added successfully!
+            </div>
+          )}
         </div>
       )}
     </div>

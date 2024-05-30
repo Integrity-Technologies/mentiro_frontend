@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUserCircle, FaRegHandshake } from "react-icons/fa";
 import { AiOutlineBarChart, AiOutlineLineChart } from "react-icons/ai";
 import DonutGraph from "./DonutGraph";
 import { useTranslation } from "react-i18next";
 import CandidateGraph from "./Candidategraph";
 import RadialBarGraph from "./CircleGraph";
-// import CircleGraph from "./CircleGraph";
-// import BarGraph from "./CircleGraph";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import ViewTestResult from "./ViewTestResult";
 
 const DualGraphs = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate(); // Initialize navigate function
+  const [showResult, setShowResult] = useState(false); // State to control rendering of ViewTestResult
 
-  // Function to handle click event
-  const navigateToCandidatesMenu = () => {
-    navigate("/CandidatesProfile"); // Navigate to candidates menu page
+  // Function to handle click event for showing test results
+  const goToResultMenu = () => {
+    setShowResult(true); // Set showResult to true to render ViewTestResult
   };
 
+  // If showResult is true, render ViewTestResult component
+  if (showResult) {
+    return <ViewTestResult />;
+  }
+
+  // Render DualGraphs component when showResult is false
   return (
     <div className="container bg-gray-100 mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-left text-black">
@@ -27,7 +31,6 @@ const DualGraphs = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div
           className="bg-gray-200 rounded-lg shadow-md p-6 flex flex-col justify-center items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
-          onClick={navigateToCandidatesMenu} // Add click event here
         >
           <h2 className="text-xl font-bold flex items-center text-gray-800">
             <FaUserCircle className="mr-2 text-primary" />
@@ -55,6 +58,12 @@ const DualGraphs = () => {
           </span>
         </h2>
         <CandidateGraph />
+        <button
+          onClick={goToResultMenu}
+          className="p-2 border border-gray-300 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+        >
+          {t("graphView.gotoResultMenu")}
+        </button>
       </div>
     </div>
   );

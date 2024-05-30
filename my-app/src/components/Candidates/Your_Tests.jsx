@@ -53,8 +53,12 @@ const YourTests = () => {
     if (selectedTest) {
       localStorage.setItem('testId', testId);
       localStorage.setItem('questions', JSON.stringify(selectedTest.questions));
+      localStorage.setItem('total_time', selectedTest.total_time); // Save total_time to local storage
+
 
     console.log(testId + "test id for local storage");
+    console.log(selectedTest.total_time + " total time for local storage");
+
     console.log(selectedTest.questions)
     setShowTime(true);
   };
@@ -62,26 +66,29 @@ const YourTests = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {showTime ? (
-        <TestTime />
-      ) : (
-        <div className="container text-center">
-          <h1 className="text-4xl font-bold mb-8">Your Tests</h1>
+    {showTime ? (
+      <TestTime />
+    ) : (
+      <div className="container text-center">
+        <h1 className="text-4xl font-bold mb-8">Your Tests</h1>
 
-          {tests.map((test, index) => (
-            <div key={index} className="mb-4 p-4 bg-white shadow-md rounded-lg w-3/4 mx-auto flex items-center justify-between">
-              <h4 className="text-xl font-semibold">{test.test_name}:</h4>
-              <button
-                className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition duration-200"
-                onClick={() => handleTestStart(test.test_id)} // Pass test ID to the handler
-              >
-                Start
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+        {tests.map((test, index) => (
+          <div
+            key={index}
+            className="mb-4  p-4 bg-white shadow-md rounded-lg w-full mx-auto flex items-center justify-between space-x-4"
+          >
+            <h4 className="text-xl font-semibold flex-1">{test.test_name}:</h4>
+            <button
+              className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition duration-200"
+              onClick={() => handleTestStart(test.test_id)} // Pass test ID to the handler
+            >
+              Start
+            </button>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
   );
 };
 

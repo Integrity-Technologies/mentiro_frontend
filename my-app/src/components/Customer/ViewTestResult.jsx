@@ -194,7 +194,7 @@ const ViewTestResult = () => {
                     {assessment.tests.slice(0, 2).map((test, index2) => (
                       <div key={index2}>
                         {test.name}
-                        {index2 === 1 && (
+                        {index2 === 1 && assessment.tests.length > 2 && (
                           <span
                             className="text-blue-500 cursor-pointer"
                             onClick={() => handleViewMore(assessment.tests)}
@@ -220,7 +220,11 @@ const ViewTestResult = () => {
                     <span>
                       {assessment.tests.slice(0, 2).map((test, index2) => (
                         <React.Fragment key={index2}>
-                          {test.score ? `${test.score}%` : "-"}
+                          {test.score !== undefined
+                            ? test.score !== 0
+                              ? `${test.score}%`
+                              : "0"
+                            : "-"}
                           {index2 === 0 && assessment.tests.length > 1 && ", "}
                         </React.Fragment>
                       ))}
@@ -228,8 +232,10 @@ const ViewTestResult = () => {
                   </td>
                   <td className="border px-4 py-2">
                     <span>
-                      {assessment.assessment_percentage
-                        ? `${assessment.assessment_percentage}%`
+                      {assessment.assessment_percentage !== undefined
+                        ? assessment.assessment_percentage !== 0
+                          ? `${assessment.assessment_percentage}%`
+                          : "0"
                         : "-"}
                     </span>
 
