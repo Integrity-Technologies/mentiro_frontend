@@ -49,10 +49,16 @@ const YourTests = () => {
   }, [dispatch, uniqueLink]);
 
   const handleTestStart = (testId) => {
-    localStorage.setItem('testId', testId); // Save test ID to local storage
+    const selectedTest = tests.find(test => test.test_id === testId);
+    if (selectedTest) {
+      localStorage.setItem('testId', testId);
+      localStorage.setItem('questions', JSON.stringify(selectedTest.questions));
+
     console.log(testId + "test id for local storage");
+    console.log(selectedTest.questions)
     setShowTime(true);
   };
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

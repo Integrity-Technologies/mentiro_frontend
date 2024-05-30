@@ -203,9 +203,11 @@
     "Name":"Candidate Name",
     "assessmentName": "Assessment Name",
     "testName": "Test Name",
-    "Score": "Score",
+    "testScore": "Test Score",
+    "assessmentScore": "Assessment Score",
     "Status": "Status"
   },
+  
   
   "graphView": {
     "candidatesDetails": "Candidate Result",

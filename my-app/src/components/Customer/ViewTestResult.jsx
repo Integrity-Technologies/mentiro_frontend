@@ -10,6 +10,99 @@ const ViewTestResult = () => {
   const dispatch = useDispatch();
   const { results, error } = useSelector((state) => state.results);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState([]);
+
+  // const mockResult2 = [
+  //   {
+  //     id: 1,
+  //     candidate_name: "candidate1",
+  //     candidate_email: "candidate1@gmail.com",
+  //     assessments: [
+  //       {
+  //         name: "assessment1",
+  //         tests: [
+  //           {
+  //             name: "test1",
+  //             total_questions: 1,
+  //             attempted_questions: 0,
+  //             status: "Not attempted",
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     candidate_name: "candidate2",
+  //     candidate_email: "candidate2@gmail.com",
+  //     assessments: [
+  //       {
+  //         name: "assessment2",
+  //         tests: [
+  //           {
+  //             name: "testa",
+  //             total_questions: 1,
+  //             attempted_questions: 1,
+  //             score: 60,
+  //             status: "Attempted",
+  //           },
+  //           {
+  //             name: "testb",
+  //             total_questions: 1,
+  //             attempted_questions: 1,
+  //             score: 60,
+  //             status: "Attempted",
+  //           },
+  //           {
+  //             name: "testc",
+  //             total_questions: 1,
+  //             attempted_questions: 1,
+  //             score: 60,
+  //             status: "Attempted",
+  //           },
+  //         ],
+  //         assessment_score: 60,
+  //         assessment_percentage: 60,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 3,
+  //     candidate_name: "mirza",
+  //     candidate_email: "user1@gmail.com",
+  //     assessments: [
+  //       {
+  //         name: "assessment3",
+  //         tests: [
+  //           {
+  //             name: "test-alpha",
+  //             total_questions: 1,
+  //             attempted_questions: 1,
+  //             score: 80,
+  //             status: "Attempted",
+  //           },
+  //           {
+  //             name: "test-beta",
+  //             total_questions: 1,
+  //             attempted_questions: 1,
+  //             score: 20,
+  //             status: "Attempted",
+  //           },
+  //           {
+  //             name: "test-btavo",
+  //             total_questions: 1,
+  //             attempted_questions: 1,
+  //             score: 20,
+  //             status: "Attempted",
+  //           },
+  //         ],
+  //         assessment_score: 40,
+  //         assessment_percentage: 40,
+  //       },
+  //     ],
+  //   },
+  // ];
 
   useEffect(() => {
     dispatch(getUserResults()); // Dispatch the fetchResults action when component mounts
@@ -31,9 +124,13 @@ const ViewTestResult = () => {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
+  const handleViewMore = (tests) => {
+    setModalContent(tests.slice(2));
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="bg-gray-100 shadow-xl rounded-xl p-6 min-h-screen transition duration-500 ease-in-out transform hover:shadow-2xl">
-      {" "}
       <div className="flex items-center mb-4">
         <TiChartBarOutline className="mr-2 text-blue-500" size={24} />
         <h1 className="text-2xl font-bold text-gray-700">
@@ -61,17 +158,20 @@ const ViewTestResult = () => {
             <th className="border px-4 py-2">
               {t("candidatesResult.testName")}
             </th>
+            <th className="border px-4 py-2">{t("candidatesResult.Status")}</th>
             <th className="border px-4 py-2">
-              {t("candidatesResult.Status")}
+              {t("candidatesResult.testScore")}
             </th>
-            <th className="border px-4 py-2">{t("candidatesResult.Score")}</th>
+            <th className="border px-4 py-2">
+              {t("candidatesResult.assessmentScore")}
+            </th>
           </tr>
         </thead>
         <tbody>
           {filteredResults.length === 0 ? (
             <tr>
               <td
-                colSpan="5"
+                colSpan="6"
                 className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
               >
                 {t("candidatesResult.noData")}
@@ -79,46 +179,63 @@ const ViewTestResult = () => {
             </tr>
           ) : (
             currentResults.map((candidate) =>
-              candidate.assessments.map((assessment, index) =>
-                assessment.tests.map((test, index2) => (
-                  <tr
-                    key={`${candidate.id}-${index}-${index2}`}
-                    className="hover:bg-gray-100 cursor-pointer transition duration-150"
-                  >
-                    {index === 0 && index2 === 0 && (
-                      <>
-                        <td
-                          rowSpan={
-                            candidate.assessments.length *
-                            assessment.tests.length
-                          }
-                          className="border px-4 py-2"
-                        >
-                          {candidate.id}
-                        </td>
-                        <td
-                          rowSpan={
-                            candidate.assessments.length *
-                            assessment.tests.length
-                          }
-                          className="border px-4 py-2"
-                        >
-                          {candidate.candidate_name}
-                        </td>
-                      </>
-                    )}
-                    {index2 === 0 && (
-                      <td
-                        rowSpan={assessment.tests.length}
-                        className="border px-4 py-2"
-                      >
-                        {assessment.name}
-                      </td>
-                    )}
-                    <td className="border px-4 py-2">{test.name}</td>
-                    <td className="border px-4 py-2">{test.status}</td>
-                    <td className="border px-4 py-2">
+              candidate.assessments.map((assessment, index) => (
+                <tr
+                  key={`${candidate.id}-${index}`}
+                  className="hover:bg-gray-100 cursor-pointer transition duration-150"
+                >
+                  <td className="border px-4 py-2">{candidate.id}</td>
+                  <td className="border px-4 py-2">
+                    {candidate.candidate_name}
+                  </td>
+                  <td className="border px-4 py-2">{assessment.name}</td>
+
+                  <td className="border px-4 py-2" style={{ width: "300px" }}>
+                    {assessment.tests.slice(0, 2).map((test, index2) => (
+                      <div key={index2}>
+                        {test.name}
+                        {index2 === 1 && (
+                          <span
+                            className="text-blue-500 cursor-pointer"
+                            onClick={() => handleViewMore(assessment.tests)}
+                          >
+                            , view more
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </td>
+
+                  <td className="border px-4 py-2">
+                    <span>
+                      {assessment.tests.slice(0, 2).map((test, index2) => (
+                        <React.Fragment key={index2}>
+                          {test.status}
+                          {index2 === 0 && assessment.tests.length > 1 && ", "}
+                        </React.Fragment>
+                      ))}
+                    </span>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <span>
+                      {assessment.tests.slice(0, 2).map((test, index2) => (
+                        <React.Fragment key={index2}>
+                          {test.score ? `${test.score}%` : "-"}
+                          {index2 === 0 && assessment.tests.length > 1 && ", "}
+                        </React.Fragment>
+                      ))}
+                    </span>
+                  </td>
+                  <td className="border px-4 py-2">
+                    <span>
+                      {assessment.assessment_percentage
+                        ? `${assessment.assessment_percentage}%`
+                        : "-"}
+                    </span>
+
+                    {/* {assessment.tests.slice(0, 2).map((test, index2) => (
                       <span
+                        key={index2}
                         className={`px-2 py-1 rounded-full ${
                           test.score
                             ? test.score >= 50
@@ -127,12 +244,13 @@ const ViewTestResult = () => {
                             : ""
                         }`}
                       >
+                        {index2 > 0 ? ", " : ""}
                         {test.score ? `${test.score}%` : "-"}
                       </span>
-                    </td>
-                  </tr>
-                ))
-              )
+                    ))} */}
+                  </td>
+                </tr>
+              ))
             )
           )}
         </tbody>
@@ -142,6 +260,45 @@ const ViewTestResult = () => {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
+      {isModalOpen && (
+        <Modal tests={modalContent} onClose={() => setIsModalOpen(false)} />
+      )}
+    </div>
+  );
+};
+
+const Modal = ({ tests, onClose }) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg p-4 w-2/3">
+        <h2 className="text-xl font-bold mb-4">Tests</h2>
+        <table className="w-full table-auto border-collapse">
+          <thead>
+            <tr>
+              <th className="border px-4 py-2">Test Name</th>
+              <th className="border px-4 py-2">Status</th>
+              <th className="border px-4 py-2">Test Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tests.map((test, index) => (
+              <tr key={index} className="border-b">
+                <td className="border px-4 py-2">{test.name}</td>
+                <td className="border px-4 py-2">{test.status}</td>
+                <td className="border px-4 py-2">
+                  {test.score ? `${test.score}%` : "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      </div>
     </div>
   );
 };

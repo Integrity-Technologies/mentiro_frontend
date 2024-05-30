@@ -22,7 +22,6 @@ const TestTime = () => {
       assessment_id
     };
 
-    // createResult action ko dispatch kiya hai, aur local storage se retrieved data bheja hai
     dispatch(createResult(resultData));
 
     setShowQuestion(true);

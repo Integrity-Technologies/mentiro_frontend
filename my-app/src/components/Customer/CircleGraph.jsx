@@ -90,9 +90,3 @@ const RadialBarGraph = () => {
 };
 
 export default RadialBarGraph;
-
-
-
-
-
-
