@@ -26,6 +26,7 @@ const YourTests = () => {
         try {
           const data = await dispatch(getAssessmentByUniqueLink(uniqueLink));
           if (data) {
+            
             console.log(data.id);
             if (data.id) {
               setAssessmentId(data.id);

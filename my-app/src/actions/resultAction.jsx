@@ -66,7 +66,32 @@ export const getUserResults = () => {
   };
 };
 
-export const createResult = (resultData) => { // Define createResult action
+
+
+export const createResult = (resultData) => {
+  return (dispatch) => {
+    const token = localStorage.getItem('token'); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`, // Set authorization header
+      },
+    };
+    axios.post('http://localhost:5000/api/result/create', resultData, axiosConfig)
+      .then(response => response.data)
+      .then(data => {
+        // Assuming the response data contains the resultId
+        localStorage.setItem('resultId', data.result.id); // Store resultId in local storage
+        dispatch({ type: 'CREATE_RESULT', payload: data });
+      })
+      .catch(error => {
+        dispatch({ type: 'FETCH_RESULTS_FAILURE', payload: error.message });
+      });
+  };
+};
+
+
+
+export const submitAnswer = (resultData) => { // Define createResult action
   return (dispatch) => {
     const token = getToken(); // Retrieve token from local storage
     const axiosConfig = {
@@ -75,7 +100,7 @@ export const createResult = (resultData) => { // Define createResult action
       }
     };
     // Simulating API call
-    axios.post('http://localhost:5000/api/result/create', resultData, axiosConfig)
+    axios.post('http://localhost:5000/api/result/submit', resultData, axiosConfig)
       .then(response => response.data)
       .then(data => {
         // Assuming the response data contains the newly created result

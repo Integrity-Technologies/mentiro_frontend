@@ -11,9 +11,9 @@ const TestTime = () => {
 
   const handleSubmitButtonClick = () => {
     // Candidate_id, test_id, aur assessment_id ko local storage se retrieve kiya hai
-    const candidate_id = localStorage.getItem("candidateId");
-    const test_id = localStorage.getItem("testId");
-    const assessment_id = localStorage.getItem("assessmentId");
+    const candidate_id = JSON.parse(localStorage.getItem("candidateId"));
+    const test_id = JSON.parse(localStorage.getItem("testId"));
+    const assessment_id = JSON.parse(localStorage.getItem("assessmentId"));
 
     // Data jo bhejna hai API request ke sath
     const resultData = {
