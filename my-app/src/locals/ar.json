@@ -214,6 +214,9 @@
   },
 
   "Assessments": {
+    "assessmentDetails": "تفاصيل التقييم", 
+    "chooseTests": "اختر الاختبارات", 
+    "preview": "معاينة",
     "name":"اسم التقييم",
     "title": "إنشاء تقييم جديد",
     "jobrole": "الدور الوظيفي",
