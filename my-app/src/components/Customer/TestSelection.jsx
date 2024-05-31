@@ -4,8 +4,10 @@ import { fetchTests } from "../../actions/testAction";
 import Preview from "./Preview";
 import { FaPlus, FaClipboardCheck } from "react-icons/fa";
 import { MdPreview } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const tests = useSelector((state) => state.test.tests);
   const [showQuestion, setShowQuestion] = useState(false);
@@ -179,7 +181,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             </div>
           )}
           <div className="mb-4">
-            <h3 className="text-base font-semibold mb-2 text-gray-700">Easy</h3>
+            <h3 className="text-base font-semibold mb-2 text-gray-700">{t("TestSelection.easy")}</h3>
             <div className="flex items-center mb-4">
               <input
                 type="range"
@@ -196,7 +198,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
           </div>
           <div className="mb-4">
             <h3 className="text-base font-semibold mb-2 text-gray-700">
-              Medium
+            {t("TestSelection.medium")}
             </h3>
             <div className="flex items-center mb-4">
               <input
@@ -213,7 +215,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             </div>
           </div>
           <div>
-            <h3 className="text-base font-semibold mb-2 text-gray-700">Hard</h3>
+            <h3 className="text-base font-semibold mb-2 text-gray-700">{t("TestSelection.hard")}</h3>
             <div className="flex items-center mb-4">
               <input
                 type="range"
@@ -233,7 +235,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               className="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg transition-colors duration-300"
               onClick={saveQuestionCount}
             >
-              Save
+              {t("TestSelection.save")}
             </button>
           </div>
         </div>
@@ -250,8 +252,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
           <div className="flex items-center justify-center mb-4">
             <FaClipboardCheck className="mr-2 text-primary" size={22} />
             <h2 className="text-center text-xl font-bold mt-1">
-              Test Selection
-            </h2>
+            {t("TestSelection.title")}            </h2>
           </div>
           <hr className="mb-4 border-gray-400" />
           {showAlert && (
@@ -260,7 +261,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               role="alert"
             >
               <span className="block sm:inline">
-                Please select at least one test.
+              {t("TestSelection.select")}
               </span>
             </div>
           )}
@@ -292,7 +293,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                       </h5>
                     </div>
                     <h2 className="text-lg font-semibold text-gray-700 mb-2">
-                      Test Overview
+                    {t("TestSelection.overview")}
                     </h2>
                     <p className="text-gray-600 mb-2">
                       {test.test_description ||
@@ -329,13 +330,13 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"
               onClick={handleNextButtonClick}
             >
-              Next
+              {t("TestSelection.next")}
             </button>
             <button
               className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
               onClick={handleBackButtonClick}
             >
-              Back
+              {t("TestSelection.back")}
             </button>
           </div>
         </div>

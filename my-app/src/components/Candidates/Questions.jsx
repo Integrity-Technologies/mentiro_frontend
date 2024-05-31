@@ -85,7 +85,7 @@ const Questions = () => {
             </>
           )
         ) : (
-          <h2>Thank you!</h2>
+          <h2 className="text-center mt-2 text-green">Thank you!</h2>
         )}
       </Card>
     </Container>

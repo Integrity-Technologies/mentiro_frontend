@@ -168,7 +168,8 @@
     "companyList": "قائمة الشركات",
     "activatedButton": "تم التنشيط",
     "activateButton": "تنشيط",
-    "loginMessage": "الرجاء تسجيل الدخول لعرض ملفك الشخصي"
+    "loginMessage": "الرجاء تسجيل الدخول لعرض ملفك الشخصي",
+    "createCompany":"إنشاء شركة"
   },  
 
   "candidates": {
@@ -190,14 +191,67 @@
     "Name": "اسم المرشح",
     "assessmentName": "اسم التقييم",
     "testName": "اسم الاختبار",
-    "Score": "النتيجة"
+    "Score": "النتيجة",
+    "testScore": "نتيجة اختبار ",
+    "assessmentScore": "نقاط التقييم",
+    "Status": "حالة"
   },
 
   "graphView": {
+    "Welcome": "مرحبا بكم في مينتيرو",
+    "candidatesDetails": "نتيجة المرشح",
     "Candidate": "مُرَشَّح",
     "Candidate.NoData":"لا توجد بيانات مرشحة متاحة",
     "Assessment": "تقدير",
-    "Assessment.NoData":"لا توجد بيانات تقييم متاحة"
-  }
-    
+    "Assessment.NoData":"لا توجد بيانات تقييم متاحة",
+    "gotoResultMenu": "أظهر النتائج"
+
+  },
+
+  "ActiveAssessment": {
+    "title": "التقييم النشط",
+    "create": "إنشاء تقييم جديد"
+  },
+
+  "Assessment": {
+    "title": "إنشاء تقييم جديد",
+    "jobrole": "الدور الوظيفي",
+    "WorkArrangement": "ترتيب العمل",
+    "joblocation": "مكان العمل"
+  },
+
+  "TestSelection": {
+    "easy": "سهل",
+    "medium": "واسطة",
+    "hard": "صعب",
+    "title": "اختيار الاختبار",
+    "select": "الرجاء تحديد اختبار واحد",
+    "overview": "نظرة عامة على الاختبار",
+    "save": "يحفظ",
+    "next": "التالي",
+    "back": "خلف"
+},
+
+"PreviewAssessment": {
+  "title": "تقييم المعاينة",
+  "name": "اسم التقييم",
+  "category": "فئة",
+  "totaltests": "إجمالي الاختبارات",
+  "time": "وقت التقييم",
+  "selectedtests": "اختبارات مختارة",
+  "testname": "اسم الاختبار",
+  "duration": "مدة",
+  "submit": "يُقدِّم",
+  "back": "خلف"
+},
+
+"InviteCandidate": {
+  "congratulation": "تهانينا، تقييمك مباشر",
+  "name": "اسم التقييم",
+  "invite": "لدعوة المرشح، ما عليك سوى نسخ الرابط المقدم أو إرساله مباشرة عبر البريد الإلكتروني.",
+  "linkcopied": "تم نسخ الرابط",
+  "inviteviaemail": "الدعوة عبر البريد الإلكتروني"
+}
+
+
 }

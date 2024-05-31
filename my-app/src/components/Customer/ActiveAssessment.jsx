@@ -5,8 +5,10 @@ import { getAllAssessments, deleteAssessment } from "../../actions/AssesmentActi
 import Assessment from "./Assesment";
 import PreviewExistingAssessment from "./PreviewExistingAssesment";
 import { CSSTransition } from "react-transition-group";
+import { useTranslation } from "react-i18next";
 
 const ActiveAssessment = () => {
+  const { t } = useTranslation();
   const [currentView, setCurrentView] = useState("activeassessment");
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -62,14 +64,14 @@ const ActiveAssessment = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <FaClipboardList className="text-xl text-primary" />
-          <h1 className="text-2xl font-bold">Active Assessment</h1>
+          <h1 className="text-2xl font-bold">{t("ActiveAssessment.title")}</h1>
         </div>
         <button
           onClick={handleAssessment}
           className="bg-black text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105"
         >
           <FaPlus />
-          <span>Create New Assessment</span>
+          <span>{t("ActiveAssessment.create")}</span>
         </button>
       </div>
 

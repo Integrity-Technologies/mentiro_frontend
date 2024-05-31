@@ -14,10 +14,10 @@ import translationEN from './locals/en.json';
 import translationAR from './locals/ar.json';
 import Customer from "./components/Customer/Customer";
 import Logout from "./components/Logout";
-import Assessment from "./components/Customer/Assesment";
 import Candidates from "./components/Candidates/Candidate.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "./reducers/fetchUser";
+import Assessment from "./components/Customer/Assesment";
 import Company from "./components/Admin/Company.jsx";
 import CompanyProfile from "./components/Customer/CompanyProfile.jsx";
 import PreviewExistingAssessment from "./components/Customer/PreviewExistingAssesment.jsx";
@@ -65,8 +65,12 @@ console.log(user, token + "from local storage")
           <Route path="/candidates" element={<Candidates />} />
           <Route path="/admin-dashboard" element={<Admin isLanguageButton={isLanguageButton}/>} />
           <Route path="/customer-dashboard" element={<Customer  isLanguageButton={true}/>} /> 
+          <Route path="/customer-dashboard/company-profile" element={<CompanyProfile />} />
+          <Route path="/assesment" element={<Assessment />} />
+          <Route path="/candidates" element={<Candidates />} />
           <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
           <Route path="/api/assessment" element={<Candidates />} />
+
           <Route path="/customer-dashboard/Preview-Assessment" element={<PreviewExistingAssessment />} />
           {/* Admin Dashboard Route
         token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}

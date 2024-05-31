@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { MdCelebration } from "react-icons/md";
 import { FiCopy } from "react-icons/fi";
 import InviteModal from "./Invitemodal";
+import { useTranslation } from "react-i18next";
 
 const InviteCandidate = ({ handleBackButtonClick }) => {
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
 
@@ -43,16 +45,15 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
         <div className="absolute top-5 left-0 right-0 flex items-center justify-center animate__animated animate__bounceInDown">
           <MdCelebration className="text-yellow-300 animate-bounce" size={28} />
           <h2 className="ml-3 text-3xl font-semibold text-gray-800 text-center">
-            Congratulations! Your Assessment is Live
+          {t("InviteCandidate.congratulation")}
           </h2>
         </div>
       )}
       <h3 className="mt-16 text-xl font-medium text-gray-700">
-        Assessment Name: {Name}
+      {t("InviteCandidate.name")}: {Name}
       </h3>
       <p className="mt-4 text-blue-700">
-      To invite the candidate, simply copy the link provided or send it directly through email.
-
+      {t("InviteCandidate.invite")}
 </p>
 
       <div className="mt-6 flex items-center relative w-full max-w-lg">
@@ -71,8 +72,7 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
       </div>
       {copySuccess && (
         <p className="mt-2 text-green-500 animate__animated animate__fadeIn">
-          Link copied to clipboard!
-        </p>
+{t("InviteCandidate.linkcopied")}        </p>
       )}
 
       <div className="mt-8 flex space-x-4">
@@ -80,8 +80,7 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
           onClick={handleInviteButtonClick}
           className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"
         >
-          Invite via Email
-        </button>
+{t("InviteCandidate.inviteviaemail")}        </button>
         {/* <button
           onClick={redirectToDashboard}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"

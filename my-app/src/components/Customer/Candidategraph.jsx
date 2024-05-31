@@ -9,125 +9,11 @@ import ViewTestResult from "./ViewTestResult";
 const CandidateGraph = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-  const results = useSelector((state) => state.results);
+  const results = useSelector((state) => state.results.results);
+  console.log("🚀 ~ CandidateGraph ~ results:", results);
   const { t } = useTranslation();
-  const [showResult, setShowResult] = useState(false); // State to control rendering of ViewTestResult
+  const [showResult, setShowResult] = useState(false);
 
-  const mockResult = [
-    {
-        "id": 1,
-        "candidate_name": "candidate1",
-        "candidate_email": "candidate1@gmail.com",
-        "assessments": [
-            {
-                "name": "assessment1",
-                "tests": [
-                    {
-                        "name": "test1",
-                        "total_questions": 1,
-                        "attempted_questions": 0,
-                        "status": "Not attempted"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "candidate_name": "candidate2",
-        "candidate_email": "candidate2@gmail.com",
-        "assessments": [
-            {
-                "name": "assessment2",
-                "tests": [
-                    {
-                        "name": "test2",
-                        "total_questions": 1,
-                        "attempted_questions": 1,
-                        "score": 50,
-                        "status": "Attempted"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "id": 3,
-        "candidate_name": "candidate3",
-        "candidate_email": "user1@gmail.com",
-        "assessments": [
-            {
-                "name": "assessment3",
-                "tests": [
-                    {
-                        "name": "test3",
-                        "total_questions": 1,
-                        "attempted_questions": 1,
-                        "score": 60,
-                        "status": "Attempted"
-                    }
-                ]
-            }
-        ]
-    },
-	 {
-        "id": 4,
-        "candidate_name": "candidate4",
-        "candidate_email": "user1@gmail.com",
-        "assessments": [
-            {
-                "name": "assessment4",
-                "tests": [
-                    {
-                        "name": "test4",
-                        "total_questions": 1,
-                        "attempted_questions": 1,
-                        "score": 10,
-                        "status": "Attempted"
-                    }
-                ]
-            }
-        ]
-    },
-		 {
-        "id": 6,
-        "candidate_name": "candidate6",
-        "candidate_email": "user1@gmail.com",
-        "assessments": [
-            {
-                "name": "assessment6",
-                "tests": [
-                    {
-                        "name": "test6",
-                        "total_questions": 1,
-                        "attempted_questions": 1,
-                        "score": 90,
-                        "status": "Attempted"
-                    }
-                ]
-            }
-        ]
-    },
-		 {
-        "id": 7,
-        "candidate_name": "candidate7",
-        "candidate_email": "user1@gmail.com",
-        "assessments": [
-            {
-                "name": "assessment7",
-                "tests": [
-                    {
-                        "name": "test7",
-                        "total_questions": 1,
-                        "attempted_questions": 1,
-                        "score": 80,
-                        "status": "Attempted"
-                    }
-                ]
-            }
-        ]
-    }
-]
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -142,43 +28,48 @@ const CandidateGraph = () => {
   }, [dispatch]);
 
   const generateChartData = () => {
-    if (!mockResult || !mockResult) return { series: [] };
+    if (!results || results.length === 0) return { series: [], categories: [] };
 
-    const data = {};
-    mockResult.forEach((candidate) => {
+    let seriesData = [];
+    let categories = [];
+
+    results.forEach((candidate) => {
       candidate.assessments.forEach((assessment) => {
         assessment.tests.forEach((test) => {
-          if (!data[test.name]) {
-            data[test.name] = [];
-          }
-          data[test.name].push({
-            x: candidate.candidate_name,
-            y: test.score !== null ? test.score : 0,
-          });
+          categories.push(`${candidate.candidate_name} (${test.name})`);
+          seriesData.push(test.score || 0);
         });
       });
     });
 
-    return { series: Object.entries(data).map(([name, series]) => ({ name, data: series })) };
+    return {
+      series: [
+        {
+          name: t("graphView.Candidate.Scores"),
+          data: seriesData,
+        },
+      ],
+      categories,
+    };
   };
 
   const chartData = generateChartData();
 
-  // Function to handle navigation to result menu
   const goToResultMenu = () => {
-    setShowResult(true); // Set showResult to true to render ViewTestResult
+    setShowResult(true);
   };
 
   const chartOptions = {
     chart: {
-      type: "bar", // Changed chart type to "bar" for column chart
+      type: "bar",
       toolbar: {
         show: false,
       },
-      background: "#E5E7EB", // Set background color to grey
+      background: "#E5E7EB",
     },
-    colors: ['#00E396'], // Uniform bar color
+    colors: ['#00E396'],
     xaxis: {
+      categories: chartData.categories,
       title: {
         text: t("graphView.Candidate.Name"),
         style: {
@@ -234,27 +125,17 @@ const CandidateGraph = () => {
   return (
     <div className="w-full h-full flex flex-col justify-center items-center p-4 bg-gray-100">
       <div className="w-full mb-4 bg-gray-100">
-        {/* Chart Component */}
         {chartData.series.length > 0 && (
           <ApexCharts
             options={chartOptions}
             series={chartData.series}
-            type="bar" // Changed type to "bar" for column chart
+            type="bar"
             height={350}
           />
         )}
       </div>
-      {/* Conditional rendering of ViewTestResult */}
       {showResult && <ViewTestResult />}
-      {/* Button Component with onClick handler */}
-      {!showResult && (
-        <button
-          onClick={goToResultMenu}
-          className="p-2 border border-gray-300 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
-        >
-          {t("graphView.gotoResultMenu")}
-        </button>
-      )}
+      
     </div>
   );
 };

@@ -7,8 +7,10 @@ import { FaPlus, FaClipboardList } from "react-icons/fa";
 import BallProgressBar from "./BallProgressbar";
 import { getAllAssessments, getAlljobLocation, getAllworkArrangement } from "../../actions/AssesmentAction";
 import countries from "../../data/countries";
+import { useTranslation } from "react-i18next";
 
 const Assessment = () => {
+  const { t } = useTranslation();
   const [assessmentName, setAssessmentName] = useState("");
   const [companyError, setCompanyError] = useState("");
   const [jobRole, setJobRole] = useState("");
@@ -146,13 +148,13 @@ const Assessment = () => {
           <div className="">
             <div className="flex items-center mb-4 mt-5">
               <FaClipboardList className="mr-2 text-primary" size={22} />
-              <h2 className="text-xl font-bold">Create New Assessment</h2>
+              <h2 className="text-xl font-bold">{t("Assessments.title")}</h2>
             </div>
             <hr className="mb-6 border-gray-400" />
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="relative">
                 <label htmlFor="formAssessmentName" className="block mb-1 text-sm font-medium text-gray-700">
-                  Assessment Name
+                {t("Assessments.name")}
                 </label>
                 <input
                   type="text"
@@ -167,7 +169,7 @@ const Assessment = () => {
               </div>
               <div className="relative">
                 <label htmlFor="formJobRole" className="block mb-1 text-sm font-medium text-gray-700">
-                  Job Role
+                {t("Assessments.jobrole")}
                 </label>
                 <input
                   type="text"
@@ -183,7 +185,7 @@ const Assessment = () => {
             </div>
             <div className="relative mb-4">
               <label htmlFor="formWorkArrangement" className="block mb-1 text-sm font-medium text-gray-700">
-                Work Arrangement
+              {t("Assessments.WorkArrangement")}
               </label>
               <select
                 id="formWorkArrangement"
@@ -204,7 +206,7 @@ const Assessment = () => {
             </div>
             <div className="relative mb-4">
               <label htmlFor="formJobLocation" className="block mb-1 text-sm font-medium text-gray-700">
-                Job Location
+              {t("Assessments.joblocation")}
               </label>
               <select
                 id="formJobLocation"

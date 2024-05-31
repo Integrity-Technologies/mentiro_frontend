@@ -6,19 +6,38 @@ import { useTranslation } from "react-i18next";
 import CandidateGraph from "./Candidategraph";
 import RadialBarGraph from "./CircleGraph";
 import ViewTestResult from "./ViewTestResult";
+import Assessment from "./Assesment";
+import CandidateProfile from "./CandidatesProfile";
+import ActiveAssessment from "./ActiveAssessment";
 
 const DualGraphs = () => {
   const { t } = useTranslation();
   const [showResult, setShowResult] = useState(false); // State to control rendering of ViewTestResult
+  const [showAssessment, setShowAssessment] = useState(false); 
+  const [showCandidate, setShowCandidate] = useState(false)
+
 
   // Function to handle click event for showing test results
   const goToResultMenu = () => {
     setShowResult(true); // Set showResult to true to render ViewTestResult
   };
 
+  const goToAssessmentMenu = () => {
+    setShowAssessment(true); // Set showResult to true to render ViewTestResult
+  };
+  const goToCandidateMenu = () => {
+    setShowCandidate(true); // Set showResult to true to render ViewTestResult
+  };
+
   // If showResult is true, render ViewTestResult component
   if (showResult) {
     return <ViewTestResult />;
+  }
+  if (showAssessment) {
+    return <ActiveAssessment />;
+  }
+  if (showCandidate) {
+    return <CandidateProfile />;
   }
 
   // Render DualGraphs component when showResult is false
@@ -26,10 +45,10 @@ const DualGraphs = () => {
     <div className="container bg-gray-100 mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-left text-black">
         <FaRegHandshake className="inline-block mr-2" />
-        <span className="inline-block animate-pulse">Welcome to Mentiro</span>
+        <span className="inline-block animate-pulse">{t("graphView.Welcome")}</span>
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div
+        <div onClick={goToCandidateMenu}
           className="bg-gray-200 rounded-lg shadow-md p-6 flex flex-col justify-center items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
         >
           <h2 className="text-xl font-bold flex items-center text-gray-800">
@@ -40,8 +59,8 @@ const DualGraphs = () => {
           </h2>
           <DonutGraph />
         </div>
-        <div className="bg-gray-200 rounded-lg shadow-md p-6 flex flex-col justify-center items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
-          <h2 className="text-xl font-bold flex items-center text-gray-800">
+        <div onClick={goToAssessmentMenu} className="bg-gray-200 rounded-lg shadow-md p-6 flex flex-col justify-center items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+          <h2 onClick={goToAssessmentMenu} className="text-xl font-bold flex items-center text-gray-800">
             <AiOutlineLineChart className="mr-2 text-primary" />{" "}
             <span className="font-bold underline">
               {t("graphView.Assessment")}

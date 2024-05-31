@@ -210,6 +210,7 @@
   
   
   "graphView": {
+    "Welcome": "Welcome To Mentiro",
     "candidatesDetails": "Candidate Result",
     "Candidate": "Candidate",
     "Candidate.NoData":"No Candidate Data Available",
@@ -218,7 +219,55 @@
     "Candidate.Scores": "Scores",
     "Candidate.Error": "No Candidate Result Found ",
     "Assessment": "Assessment",
-    "Assessment.NoData":"No Assessment Data Available"
+    "Assessment.NoData":"No Assessment Data Available",
+    "gotoResultMenu": "Show Results",
+    "Candidate.Name": "Candidate Name"
+  },
+
+  "ActiveAssessment": {
+    "title": "Active Assessment",
+    "create": "Create New Assessment"
+  },
+
+  "Assessments": {
+    "title": "Create New Assessment",
+    "jobrole": "Job Role",
+    "WorkArrangement": "Work Arrangement",
+    "joblocation": "Job Location"
+  },
+
+
+  "TestSelection": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "title": "Test Selection",
+    "select": "Please Select One Test",
+    "overview": "Test Overview",
+    "save": "save",
+    "next": "Next",
+    "back": "Back"
+  },
+
+  "PreviewAssessment": {
+    "title": "Preview Assessment",
+    "name": "Assessment Name",
+    "category": "Category",
+    "totaltests": "Total Tests",
+    "time": "Assessment Time",
+    "selectedtests": "Selected Tests",
+    "testname": "Test Name",
+    "duration": "Duration",
+    "submit": "Submit",
+    "back": "Back"
+  },
+
+  "InviteCandidate": {
+    "congratulation": "Congratulation, Your Assessment is Live",
+    "name": "Assessment Name",
+    "invite": "To invite the candidate, simply copy the link provided or send it directly through email.",
+    "linkcopied": "link Copied",
+    "inviteviaemail": "Invite via Email"
   }
   
   

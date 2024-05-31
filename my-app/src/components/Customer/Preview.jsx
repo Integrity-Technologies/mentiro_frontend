@@ -8,8 +8,10 @@ import {
 } from "../../actions/AssesmentAction";
 import TestSelection from "./TestSelection";
 import InviteCandidate from "./InviteCandidate";
+import { useTranslation } from "react-i18next";
 
 const Preview = (handleBackButton) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [showInviteCandidate, setShowInviteCandidate] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -112,20 +114,19 @@ const Preview = (handleBackButton) => {
         <div className="mt-8">
           <h2 className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
             <FaClipboardList className="mr-2 text-primary" />
-            <span>Assessment Preview</span>
+            <span>{t("PreviewAssessment.title")}</span>
           </h2>
           <div className="grid gap-4 mb-8 md:grid-cols-2">
             <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
               <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                Assessment Name
-              </h3>
+              {t("PreviewAssessment.name")}              </h3>
               <p className="text-lg font-bold text-gray-900">
                 {assessmentData.assessmentName}
               </p>
             </div>
             <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
               <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                Category
+              {t("PreviewAssessment.category")}
               </h3>
               <div className="flex flex-wrap">
                 {assessmentData.tests.map((test, index) => (
@@ -140,16 +141,14 @@ const Preview = (handleBackButton) => {
             </div>
             <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
               <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                Total Tests
-              </h3>
+              {t("PreviewAssessment.totaltests")}              </h3>
               <p className="text-lg font-bold text-gray-900">
                 {assessmentData.tests.length}
               </p>
             </div>
             <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-3 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
               <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                Assessment Time
-              </h3>
+              {t("PreviewAssessment.time")}              </h3>
               <div className="flex items-center">
                 <span className="inline-block px-2 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full flex items-center">
                   <span className="text-lg font-bold text-gray-900 mr-2 text-white">
@@ -163,13 +162,12 @@ const Preview = (handleBackButton) => {
           <div className="mb-8">
             <h3 className="text-xl font-semibold mb-4 flex items-center">
               <FaClipboardList className="mr-2 text-primary" />
-              Selected Tests
-            </h3>
+              {t("PreviewAssessment.selectedtests")}            </h3>
             <table className="w-full border-collapse bg-white table-auto border border-gray-300">
               <thead className="bg-blue-600 text-white">
                 <tr className="border-b-2 border-blue-700">
-                  <th className="border px-4 py-2">Test Name</th>
-                  <th className="border px-4 py-2">Duration</th>
+                  <th className="border px-4 py-2">{t("PreviewAssessment.testname")}</th>
+                  <th className="border px-4 py-2">{t("PreviewAssessment.duration")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -204,14 +202,14 @@ const Preview = (handleBackButton) => {
               onClick={handleSubmitButtonClick}
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"
             >
-              Submit
+              {t("PreviewAssessment.submit")}
             </button>
             <button
   size="lg"
   onClick={handleBackButton}
   className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
 >
-  Back
+{t("PreviewAssessment.back")}
 </button>
           </div>
         </div>
