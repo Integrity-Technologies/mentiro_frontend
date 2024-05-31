@@ -163,6 +163,20 @@
     }
   },
 
+  "CustomerDashboard":{
+    "Dashboard": "لوحة التحكم",
+    "companyProfile": "الملف الشخصي للشركة",
+    "Assessment": "التقييم",
+    "candidateProfile": "الملف الشخصي للمرشح",
+    "testResult": "نتيجة الاختبار"
+  },
+
+  "toggleButton":{
+    "logoutSuccess": "تم تسجيل الخروج بنجاح",
+    "Logout": "تسجيل الخروج"
+  },
+
+
    "CompanyProfile": {
     "welcomeMessage": "مرحبًا،",
     "companyList": "قائمة الشركات",
