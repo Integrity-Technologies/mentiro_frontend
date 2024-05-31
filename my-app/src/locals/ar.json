@@ -214,6 +214,7 @@
   },
 
   "Assessments": {
+    "name":"اسم التقييم",
     "title": "إنشاء تقييم جديد",
     "jobrole": "الدور الوظيفي",
     "WorkArrangement": "ترتيب العمل",
