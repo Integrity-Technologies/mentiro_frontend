@@ -172,6 +172,19 @@
       
     }
   },
+  
+  "CustomerDashboard":{
+    "Dashboard": "Dashboard",
+    "companyProfile": "Company Profile",
+    "Assessment": "Assessment",
+    "candidateProfile": "Candidate Profile",
+    "testResult": "Test Result"
+  },
+
+  "toggleButton":{
+    "logoutSuccess": "Logout successful",
+    "Logout": "Logout"
+  },
 
  "CompanyProfile":{
     "welcomeMessage": "Welcome,",
