@@ -230,6 +230,7 @@
   },
 
   "Assessments": {
+    "createAssessment": "Create Assessment",
     "assessmentDetails": "Assessment Details", 
     "chooseTests": "Choose Tests", 
     "preview": "Preview",
