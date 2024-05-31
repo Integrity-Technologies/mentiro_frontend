@@ -41,11 +41,11 @@ const Customer = ({ isLanguageButton }) => {
 
   // Define customer menu options
   const customerMenuOptions = [
-    { label: "Dashboard", link: "/Graph", icon: <FaTachometerAlt /> },
-    { label: "Company Profile", link: "/CompanyProfile", icon: <FaBuilding /> },
-    { label: "Assessment", link: "/Assessments", icon: <FaClipboardList /> },
-    { label: "Candidate Profile", link: "/CandidatesProfile", icon: <FaUser /> },
-    { label: "Test Result", link: "/TestResult", icon: <FaFileAlt /> },
+    { label: `${t("CustomerDashboard.Dashboard")}`, link: "/Graph", icon: <FaTachometerAlt /> },
+    { label: `${t("CustomerDashboard.companyProfile")}`, link: "/CompanyProfile", icon: <FaBuilding /> },
+    { label: `${t("CustomerDashboard.Assessment")}`, link: "/Assessments", icon: <FaClipboardList /> },
+    { label: `${t("CustomerDashboard.candidateProfile")}`, link: "/CandidatesProfile", icon: <FaUser /> },
+    { label: `${t("CustomerDashboard.testResult")}`, link: "/TestResult", icon: <FaFileAlt /> },
   ];
 
   return (
