@@ -230,6 +230,7 @@
   },
 
   "Assessments": {
+    "name": "Assessment Name",
     "title": "Create New Assessment",
     "jobrole": "Job Role",
     "WorkArrangement": "Work Arrangement",
