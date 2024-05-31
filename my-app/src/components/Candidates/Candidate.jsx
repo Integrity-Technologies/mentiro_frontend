@@ -47,99 +47,102 @@ const Candidate = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      {showTests ? (
+<div className="flex justify-center items-center min-h-screen bg-gray-100">  
+    {showTests ? (
         <Your_Tests />
       ) : (
         <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-          <h1 className="text-2xl font-semibold text-center mb-6">
-            Candidate Registration
-          </h1>
-          <form>
-            <div className="mb-4">
-              <label
-                htmlFor="first_name"
-                className={`block text-sm font-medium ${
-                  errors.firstNameError ? "text-red-500" : "text-gray-700"
-                }`}
-              >
-                First Name
-              </label>
-              <input
-                type="text"
-                id="first_name"
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
-                  errors.firstNameError ? "border-red-500" : "border-gray-300"
-                }`}
-                value={candidateData.first_name}
-                onChange={handleInputChange}
-              />
-              {errors.firstNameError && (
-                <p className="mt-1 text-sm text-red-500">First name is required</p>
-              )}
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="last_name"
-                className={`block text-sm font-medium ${
-                  errors.lastNameError ? "text-red-500" : "text-gray-700"
-                }`}
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="last_name"
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
-                  errors.lastNameError ? "border-red-500" : "border-gray-300"
-                }`}
-                value={candidateData.last_name}
-                onChange={handleInputChange}
-              />
-              {errors.lastNameError && (
-                <p className="mt-1 text-sm text-red-500">Last name is required</p>
-              )}
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className={`block text-sm font-medium ${
-                  errors.emailError ? "text-red-500" : "text-gray-700"
-                }`}
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
-                  errors.emailError ? "border-red-500" : "border-gray-300"
-                }`}
-                value={candidateData.email}
-                onChange={handleInputChange}
-              />
-              {errors.emailError && (
-                <p className="mt-1 text-sm text-red-500">Email is required</p>
-              )}
-            </div>
-
-            <button
-              type="button"
-              onClick={handleSubmitButtonClick}
-              className="w-full py-2 px-4 bg-black text-white font-semibold rounded-md shadow hover:bg-black-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Get Started
-            </button>
-          </form>
-
-          {successAlert && (
-            <div className="mt-4 p-4 bg-green-100 border-t-4 border-green-500 rounded-b text-green-700">
-              Candidate added successfully!
-            </div>
-          )}
+        <div className="flex justify-center mb-6 rounded-circle">
+          <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
         </div>
+        <h1 className="text-2xl font-semibold text-center mb-6">
+          Candidate Registration
+        </h1>
+        <form>
+          <div className="mb-4">
+            <label
+              htmlFor="first_name"
+              className={`block text-sm font-medium ${
+                errors.firstNameError ? "text-red-500" : "text-gray-700"
+              }`}
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              id="first_name"
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
+                errors.firstNameError ? "border-red-500" : "border-gray-300"
+              }`}
+              value={candidateData.first_name}
+              onChange={handleInputChange}
+            />
+            {errors.firstNameError && (
+              <p className="mt-1 text-sm text-red-500">First name is required</p>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="last_name"
+              className={`block text-sm font-medium ${
+                errors.lastNameError ? "text-red-500" : "text-gray-700"
+              }`}
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="last_name"
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
+                errors.lastNameError ? "border-red-500" : "border-gray-300"
+              }`}
+              value={candidateData.last_name}
+              onChange={handleInputChange}
+            />
+            {errors.lastNameError && (
+              <p className="mt-1 text-sm text-red-500">Last name is required</p>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className={`block text-sm font-medium ${
+                errors.emailError ? "text-red-500" : "text-gray-700"
+              }`}
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm ${
+                errors.emailError ? "border-red-500" : "border-gray-300"
+              }`}
+              value={candidateData.email}
+              onChange={handleInputChange}
+            />
+            {errors.emailError && (
+              <p className="mt-1 text-sm text-red-500">Email is required</p>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleSubmitButtonClick}
+            className="w-full py-2 px-4 bg-black text-white font-semibold rounded-md shadow hover:bg-black-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Get Started
+          </button>
+        </form>
+
+        {successAlert && (
+          <div className="mt-4 p-4 bg-green-100 border-t-4 border-green-500 rounded-b text-green-700">
+            Candidate added successfully!
+          </div>
+        )}
+      </div>
       )}
     </div>
   );

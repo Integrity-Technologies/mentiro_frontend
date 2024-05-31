@@ -61,7 +61,6 @@ const CandidateProfile = () => {
       <table className="w-full table-auto border-collapse bg-white rounded-lg overflow-hidden">
         <thead className="bg-blue-600 text-white">
           <tr className="border-b-2 border-blue-700">
-            <th className="border px-4 py-2">#</th>
             <th className="border px-4 py-2">{t("candidates.firstName")}</th>
             <th className="border px-4 py-2">{t("candidates.lastName")}</th>
             <th className="border px-4 py-2">{t("candidates.email")}</th>
@@ -93,7 +92,6 @@ const CandidateProfile = () => {
                 key={candidate.id}
                 className="hover:bg-blue-100 cursor-pointer transition duration-150"
               >
-                <td className="border px-4 py-2">{candidate.id}</td>
                 <td className="border px-4 py-2">{candidate.first_name}</td>
                 <td className="border px-4 py-2">{candidate.last_name}</td>
                 <td className="border px-4 py-2">{candidate.email}</td>

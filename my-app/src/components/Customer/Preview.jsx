@@ -10,7 +10,7 @@ import TestSelection from "./TestSelection";
 import InviteCandidate from "./InviteCandidate";
 import { useTranslation } from "react-i18next";
 
-const Preview = (handleBackButton) => {
+const Preview = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [showInviteCandidate, setShowInviteCandidate] = useState(false);
@@ -100,16 +100,19 @@ const Preview = (handleBackButton) => {
       console.error(error);
     }
   };
-  // const handleBackButton = () => {
-  //   setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
-  //   setShowTestSelection(true);
-  //   setProgress((prevProgress) => prevProgress - 1); // Decrease progress by 1
-  // };
+  const handleBackButton = () => {
+    setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
+    setShowTestSelection(true);
+    setShowPreview(false);
+    setProgress((prevProgress) => prevProgress - 1);
+  };
 
 
   return (
     <>
-     {showTestSelection && <TestSelection handleBackButton={handleBackButton} />}
+     {showTestSelection && (
+      <TestSelection handleBackButton={handleBackButton} />
+    )}
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">
           <h2 className="text-3xl font-bold text-center mb-8 flex items-center justify-center">

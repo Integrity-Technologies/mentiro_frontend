@@ -150,7 +150,6 @@ const ViewTestResult = () => {
       <table className="w-full table-auto border-collapse bg-white">
         <thead className="bg-blue-600 text-white">
           <tr className="border-b-2 border-blue-700">
-            <th className="border px-4 py-2">#</th>
             <th className="border px-4 py-2">{t("candidatesResult.Name")}</th>
             <th className="border px-4 py-2">
               {t("candidatesResult.assessmentName")}
@@ -184,7 +183,6 @@ const ViewTestResult = () => {
                   key={`${candidate.id}-${index}`}
                   className="hover:bg-gray-100 cursor-pointer transition duration-150"
                 >
-                  <td className="border px-4 py-2">{candidate.id}</td>
                   <td className="border px-4 py-2">
                     {candidate.candidate_name}
                   </td>

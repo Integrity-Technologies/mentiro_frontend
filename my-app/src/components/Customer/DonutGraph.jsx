@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCandidates } from "../../actions/candidateAction";
+import { getUserCandidates } from "../../actions/candidateAction";
 import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
 
@@ -14,7 +14,7 @@ const DonutGraph = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await dispatch(getAllCandidates());
+        await dispatch(getUserCandidates());
       } catch (err) {
         setError(err.message);
       }

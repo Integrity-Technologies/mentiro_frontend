@@ -40,6 +40,10 @@ const YourTests = () => {
             }
             if (data.tests) {
               setTests(data.tests); // Assuming the data structure contains a 'tests' array
+
+              localStorage.setItem('tests', JSON.stringify(data.tests));
+              console.log(tests)
+
             }
           }
         } else {
@@ -73,37 +77,48 @@ const YourTests = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-white">
-    {showTime ? (
-      <TestTime />
-    ) : (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-5xl font-bold mb-8 text-gray-800 text-center">Your Tests</h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-          {tests.map((test, index) => (
-            <div
-              key={index}
-              className="p-8 bg-gray-100 rounded-lg shadow-lg transform transition-all hover:scale-105 flex items-center justify-between"
-            >
-              <h4 className="text-2xl font-semibold mb-4 text-gray-700">{test.test_name}</h4>
-              <button
-                className={`ml-4 py-2 px-6 rounded-lg text-white font-medium transition-colors duration-200 ${
-                  getTestStatus(test.test_id) === "Not Attempted"
-                    ? "bg-black hover:bg-blue-600"
-                    : "bg-gray-400 cursor-not-allowed"
-                }`}
-                onClick={() => handleTestStart(test.test_id)}
-                disabled={getTestStatus(test.test_id) !== "Not Attempted"}
-              >
-                {getTestStatus(test.test_id) === "Not Attempted" ? "Start Test" : "Completed"}
-              </button>
-            </div>
-          ))}
+    <div className="min-h-screen flex mt-15 bg-gray-100">
+      {showTime ? (
+        <TestTime />
+      ) : (
+        <div className="container mx-auto px-4 py-5">
+          <div className="flex justify-center mb-6 rounded-circle">
+          <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
         </div>
-      </div>
-    )}
-  </div>
+          <h1 className="text-4xl font-bold mb-10 text-gray-800 text-center">
+            Your Tests
+          </h1>
+          <div className="space-y-4 flex flex-col items-center">
+            {tests.map((test, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center bg-white p-6 rounded-lg shadow transition transform hover:-translate-y-1 hover:shadow-lg w-full max-w-4xl"
+              >
+                <div className="flex-grow">
+                  <h4 className="text-xl font-semibold text-gray-900 mb-2">
+                    {test.test_name}
+                  </h4>
+                  <p className="text-gray-600">{test.description}</p>
+                </div>
+                <button
+                  className={`ml-4 py-2 px-4 rounded-lg text-white font-medium transition ${
+                    getTestStatus(test.test_id) === "Not Attempted"
+                      ? "bg-black hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                  onClick={() => handleTestStart(test.test_id)}
+                  disabled={getTestStatus(test.test_id) !== "Not Attempted"}
+                >
+                  {getTestStatus(test.test_id) === "Not Attempted"
+                    ? "Start Test"
+                    : "Completed"}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

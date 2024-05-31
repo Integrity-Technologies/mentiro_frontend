@@ -42,6 +42,7 @@
     "forgotPassword": "Forgot Password?",
     "noAccount": "Don't have an account?",
     "signUp": "Sign Up",
+    "rememberMe": "remember Me",
     "submit": "Submit",
     "errors": {
       "emailRequired": "Please enter your email",

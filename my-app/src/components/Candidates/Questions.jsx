@@ -9,6 +9,7 @@ const Questions = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showThankYou, setShowThankYou] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [answerError, setAnswerError] = useState(false); // State variable for validation
 
   const dispatch = useDispatch();
   const questions = JSON.parse(localStorage.getItem('questions')) || [];
@@ -26,6 +27,7 @@ const Questions = () => {
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
+    setAnswerError(false); // Reset answer error when an option is selected
   };
 
   const resultId = JSON.parse(localStorage.getItem('resultId'));
@@ -38,6 +40,9 @@ const Questions = () => {
         option: selectedOption.option_text
       };
       dispatch(submitAnswer(resultData));
+    } else {
+      setAnswerError(true); // Set answer error if no option is selected
+      return; // Don't proceed if answer is not selected
     }
 
     if (currentQuestionIndex + 1 < questions.length) {
@@ -49,9 +54,11 @@ const Questions = () => {
   };
 
   const handleSkip = () => {
+    // Don't submit an answer if skipping
     if (currentQuestionIndex + 1 < questions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
+      setAnswerError(false); // Reset the error state when skipping
     } else {
       setShowThankYou(true);
     }
@@ -59,7 +66,7 @@ const Questions = () => {
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh', width: '150vh' }}>
-      <Card className="p-4 w-50">
+      <Card className="p-4 w-75 shadow-lg rounded-lg">
         {!showThankYou ? (
           currentQuestion && (
             <>
@@ -78,6 +85,7 @@ const Questions = () => {
                   </div>
                 ))}
               </Form>
+              {answerError && <p className="text-danger">Please select an answer!</p>} {/* Display error message */}
               <div className="d-flex justify-content-between mt-4">
                 <Button variant="outline-dark" onClick={handleSkip}>Skip</Button>
                 <Button variant="dark" className='w-25' onClick={handleNext}>Next</Button>

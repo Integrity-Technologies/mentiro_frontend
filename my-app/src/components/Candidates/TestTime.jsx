@@ -44,17 +44,22 @@ const TestTime = () => {
       <Questions />
     ) : (
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-        <h3 className="text-2xl font-semibold text-center mb-4">
-          You have {totalTime} minutes to answer {questionCount} questions
-        </h3>
+        <div className="flex justify-center mb-6 rounded-circle">
+          <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
+        </div>
+        <h4 className="text-2xl font-semibold text-center mb-4">
+          {/* You have  minutes to answer {questionCount} questions */}
+          You have {totalTime} minutes to answer the {questionCount} questions.
+        </h4>
         <p className="text-lg">
           <strong>Test Time:</strong> {totalTime} minutes
         </p>
-        <p className="text-lg">
+        {/* <p className="text-lg">
           <strong>Answer {questionCount} Questions</strong>
-        </p>
+        </p> */}
         <p className="text-lg">
           <strong>Instructions:</strong>
+          <p>Please read carefully and select the correct answer</p>
         </p>
         <div className="mt-6">
           <button
