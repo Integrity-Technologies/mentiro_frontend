@@ -230,6 +230,9 @@
   },
 
   "Assessments": {
+    "assessmentDetails": "Assessment Details", 
+    "chooseTests": "Choose Tests", 
+    "preview": "Preview",
     "name": "Assessment Name",
     "title": "Create New Assessment",
     "jobrole": "Job Role",
