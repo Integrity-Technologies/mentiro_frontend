@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa"; // Import the icon
 
 const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
   const currentLanguage = i18n.language;
@@ -53,7 +53,7 @@ const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
       <div className="fixed-bottom ml-md-5">
         {showAlert && (
           <div className="w-25 p-4 mb-4 text-sm text-red-700 bg-red-100 border border-red-400 rounded-md">
-            Logout successful.
+            {t("toggleButton.logoutSuccess")}
           </div>
         )}
         <div className="ml-5 w-25">
@@ -63,7 +63,7 @@ const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
             className="text-red-600 hover:text-red-800 font-bold flex no-underline"
           >
             <FaSignOutAlt className="mr-2" /> {/* Icon with margin */}
-            Logout
+            {t("toggleButton.Logout")}
           </a>
         </div>
       </div>
