@@ -36,7 +36,7 @@ const CandidateGraph = () => {
     results.forEach((candidate) => {
       candidate.assessments.forEach((assessment) => {
         assessment.tests.forEach((test) => {
-          categories.push(`${candidate.candidate_name} (${test.name})`);
+          categories.push(`${candidate.candidate_name} `);
           seriesData.push(test.score || 0);
         });
       });

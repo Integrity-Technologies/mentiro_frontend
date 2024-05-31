@@ -73,30 +73,37 @@ const YourTests = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {showTime ? (
-        <TestTime />
-      ) : (
-        <div className="container text-center">
-          <h1 className="text-4xl font-bold mb-8">Your Tests</h1>
+    <div className="h-screen flex items-center justify-center bg-white">
+    {showTime ? (
+      <TestTime />
+    ) : (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-5xl font-bold mb-8 text-gray-800 text-center">Your Tests</h1>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           {tests.map((test, index) => (
             <div
               key={index}
-              className="mb-4  p-4 bg-white shadow-md rounded-lg w-full mx-auto flex items-center justify-between space-x-4"
+              className="p-8 bg-gray-100 rounded-lg shadow-lg transform transition-all hover:scale-105 flex items-center justify-between"
             >
-              <h4 className="text-xl font-semibold flex-1">{test.test_name}:</h4>
+              <h4 className="text-2xl font-semibold mb-4 text-gray-700">{test.test_name}</h4>
               <button
-                className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition duration-200"
-                onClick={() => handleTestStart(test.test_id)} // Pass test ID to the handler
+                className={`ml-4 py-2 px-6 rounded-lg text-white font-medium transition-colors duration-200 ${
+                  getTestStatus(test.test_id) === "Not Attempted"
+                    ? "bg-black hover:bg-blue-600"
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
+                onClick={() => handleTestStart(test.test_id)}
+                disabled={getTestStatus(test.test_id) !== "Not Attempted"}
               >
                 {getTestStatus(test.test_id) === "Not Attempted" ? "Start Test" : "Completed"}
               </button>
             </div>
           ))}
         </div>
-      )}
-    </div>
+      </div>
+    )}
+  </div>
   );
 };
 

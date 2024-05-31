@@ -224,7 +224,7 @@
   
   "graphView": {
     "Welcome": "Welcome To Mentiro",
-    "candidatesDetails": "Candidate Result",
+    "candidatesDetails": "Candidate Results",
     "Candidate": "Candidate",
     "Candidate.NoData":"No Candidate Data Available",
     "selectCandidate": "Select Candidate",

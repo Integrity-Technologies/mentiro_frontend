@@ -210,7 +210,14 @@ const ViewTestResult = () => {
                     <span>
                       {assessment.tests.slice(0, 2).map((test, index2) => (
                         <React.Fragment key={index2}>
-                          {test.status}
+                          {test.status.includes("Attempted 1 questions") ||
+                          test.status.includes("Attempted 2 questions")
+                            ? "Incomplete"
+                            : test.status.includes(
+                                "Not attempted any questions from this test"
+                              )
+                            ? "Not Attempted"
+                            : test.status}
                           {index2 === 0 && assessment.tests.length > 1 && ", "}
                         </React.Fragment>
                       ))}
@@ -220,8 +227,8 @@ const ViewTestResult = () => {
                     <span>
                       {assessment.tests.slice(0, 2).map((test, index2) => (
                         <React.Fragment key={index2}>
-                          {test.score !== undefined
-                            ? test.score !== 0
+                          {test.score !== null
+                            ? test.score
                               ? `${test.score}%`
                               : "0"
                             : "-"}
@@ -232,7 +239,7 @@ const ViewTestResult = () => {
                   </td>
                   <td className="border px-4 py-2">
                     <span>
-                      {assessment.assessment_percentage !== undefined
+                      {assessment.assessment_percentage !== null
                         ? assessment.assessment_percentage !== 0
                           ? `${assessment.assessment_percentage}%`
                           : "0"
