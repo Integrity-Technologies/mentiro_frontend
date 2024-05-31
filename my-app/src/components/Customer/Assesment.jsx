@@ -24,7 +24,7 @@ const Assessment = () => {
   const totalSteps = 3;
   const [currentStep, setCurrentStep] = useState(0);
 
-  const labels = ["Assessment Details", "Choose Tests", "Preview"];
+  const labels = [`${t("Assessments.assessmentDetails")}`, `${t("Assessments.chooseTests")}`, `${t("Assessments.preview")}`];
 
   const assessments = useSelector((state) => state.assessment.assessments || []);
   const workArrangements = useSelector((state) => state.assessment.workArrangements || []);
