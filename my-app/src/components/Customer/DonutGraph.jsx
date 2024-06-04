@@ -28,7 +28,7 @@ const DonutGraph = () => {
       type: 'donut',
     },
     labels: ["Candidates"],
-    colors: ['#FF6384', '#36A2EB', '#FFCE56'],
+    colors: [ '#66FF33', '#00FF99', '#9966FF'], // Add more colors here
     legend: {
       position: 'right',
     },

@@ -7,7 +7,13 @@ import CandidateProfile from "./CandidatesProfile";
 import ViewTestResult from "./ViewTestResult";
 import LanguageToggleButton from "../Togglebutton";
 import PreviewExistingAssessment from "./PreviewExistingAssesment";
-import { FaTachometerAlt, FaBuilding, FaClipboardList, FaUser, FaFileAlt } from "react-icons/fa";
+import {
+  FaTachometerAlt,
+  FaBuilding,
+  FaClipboardList,
+  FaUser,
+  FaFileAlt,
+} from "react-icons/fa";
 import ActiveAssessment from "./ActiveAssessment";
 const logoImage = "/assets/icon.jpg";
 
@@ -36,21 +42,41 @@ const Customer = ({ isLanguageButton }) => {
       />
     ),
     "/TestResult": <ViewTestResult />,
-    "/Preview-assesment": <PreviewExistingAssessment />
+    "/Preview-assesment": <PreviewExistingAssessment />,
   };
 
   // Define customer menu options
   const customerMenuOptions = [
-    { label: `${t("CustomerDashboard.Dashboard")}`, link: "/Graph", icon: <FaTachometerAlt /> },
-    { label: `${t("CustomerDashboard.companyProfile")}`, link: "/CompanyProfile", icon: <FaBuilding /> },
-    { label: `${t("CustomerDashboard.Assessment")}`, link: "/Assessments", icon: <FaClipboardList /> },
-    { label: `${t("CustomerDashboard.candidateProfile")}`, link: "/CandidatesProfile", icon: <FaUser /> },
-    { label: `${t("CustomerDashboard.testResult")}`, link: "/TestResult", icon: <FaFileAlt /> },
+    {
+      label: `${t("CustomerDashboard.Dashboard")}`,
+      link: "/Graph",
+      icon: <FaTachometerAlt />,
+    },
+    {
+      label: `${t("CustomerDashboard.companyProfile")}`,
+      link: "/CompanyProfile",
+      icon: <FaBuilding />,
+    },
+    {
+      label: `${t("CustomerDashboard.Assessment")}`,
+      link: "/Assessments",
+      icon: <FaClipboardList />,
+    },
+    {
+      label: `${t("CustomerDashboard.candidateProfile")}`,
+      link: "/CandidatesProfile",
+      icon: <FaUser />,
+    },
+    {
+      label: `${t("CustomerDashboard.testResult")}`,
+      link: "/TestResult",
+      icon: <FaFileAlt />,
+    },
   ];
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/5 bg-gray-100 shadow h-full overflow-y-auto">
+    <div className="flex h-screen bg-gray-500 font-sans">
+      <div className="w-1/6 bg-white shadow h-full overflow-y-auto">
         <div className="text-center mb-3">
           <img
             src={logoImage}
@@ -62,15 +88,27 @@ const Customer = ({ isLanguageButton }) => {
           {customerMenuOptions.map((option) => (
             <button
               key={option.link}
-              className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left ${
-                activeLink === option.link ? "shadow-lg shadow-green-300 bg-green-100" : ""
-              } hover:bg-green-100 mb-3`}
+              className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm
+          ${
+            activeLink === option.link
+              ? "shadow-lg bg-active-link-bg shadow-green-300"
+              : ""
+          }
+          hover:bg-active-link-bg`}
               onClick={() => handleClick(option.link)}
             >
-              <span className={`mr-3 ${activeLink === option.link ? "text-green-600" : "text-gray-600"}`}>
+              <span
+                className={`mr-3 ${
+                  activeLink === option.link ? "text-black" : "text-gray-600"
+                }`}
+              >
                 {option.icon}
               </span>
-              <span className={`${activeLink === option.link ? "text-green-600" : "text-gray-600"}`}>
+              <span
+                className={`${
+                  activeLink === option.link ? "text-black" : "text-gray-600"
+                }`}
+              >
                 {t(option.label)}
               </span>
             </button>
@@ -79,18 +117,16 @@ const Customer = ({ isLanguageButton }) => {
       </div>
 
       <div className="absolute top-0 right-0 mt-2 mr-5">
-  
-          <LanguageToggleButton 
-            onLanguageChange={handleLanguageChange}
-            isLanguageButton={isLanguageButton}
-          />
+        <LanguageToggleButton
+          onLanguageChange={handleLanguageChange}
+          isLanguageButton={isLanguageButton}
+        />
       </div>
 
-      <div className="w-4/5 bg-gray-300 p-10 overflow-y-auto">
+      <div className="w-5/6 bg-customGray p-10 overflow-y-auto">
         {sections[activeLink]}
       </div>
       {/* Language Dropdown */}
-      
     </div>
   );
 };

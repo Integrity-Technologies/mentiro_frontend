@@ -47,6 +47,7 @@ const CandidateGraph = () => {
         {
           name: t("graphView.Candidate.Scores"),
           data: seriesData,
+          color: '#66FF33', // Set all lines to green color
         },
       ],
       categories,
@@ -65,9 +66,8 @@ const CandidateGraph = () => {
       toolbar: {
         show: false,
       },
-      background: "#E5E7EB",
+      background: "",
     },
-    colors: ['#00E396'],
     xaxis: {
       categories: chartData.categories,
       title: {
@@ -108,11 +108,11 @@ const CandidateGraph = () => {
       enabled: true,
       style: {
         fontSize: "12px",
-        colors: ["#333"],
+        colors: [""],
       },
     },
     tooltip: {
-      theme: "dark",
+      theme: "light",
     },
     legend: {
       horizontalAlign: "left",
@@ -123,8 +123,8 @@ const CandidateGraph = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center p-4 bg-gray-100">
-      <div className="w-full mb-4 bg-gray-100">
+    <div className="w-full h-full flex flex-col justify-center items-center ">
+      <div className="w-full ">
         {chartData.series.length > 0 && (
           <ApexCharts
             options={chartOptions}

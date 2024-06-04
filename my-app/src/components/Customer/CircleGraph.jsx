@@ -44,12 +44,12 @@ const RadialBarGraph = () => {
                     },
                 },
                 track: {
-                    background: '#b3e5fc', // Light blue track color
+                    background: '#ccffcc', // Light blue track color
                 },
             },
         },
         labels: ['Assessments'],
-        colors: ['#0000FF'], // Blue color for the chart
+        colors: ['#66FF33'], // Blue color for the chart
     };
     
 
