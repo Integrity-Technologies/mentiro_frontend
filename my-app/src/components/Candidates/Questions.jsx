@@ -4,10 +4,9 @@ import { Container, Card, Form, Button } from 'react-bootstrap';
 import { getQuestionById } from '../../actions/QuestionAction';
 import { submitAnswer } from '../../actions/resultAction';
 
-const Questions = () => {
+const Questions = ({ onComplete }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [showThankYou, setShowThankYou] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answerError, setAnswerError] = useState(false); // State variable for validation
 
@@ -49,7 +48,7 @@ const Questions = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
     } else {
-      setShowThankYou(true);
+      onComplete(); // Call onComplete when the test is completed
     }
   };
 
@@ -60,40 +59,36 @@ const Questions = () => {
       setSelectedOption(null);
       setAnswerError(false); // Reset the error state when skipping
     } else {
-      setShowThankYou(true);
+      onComplete(); // Call onComplete when the test is completed
     }
   };
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh', width: '150vh' }}>
       <Card className="p-4 w-75 shadow-lg rounded-lg">
-        {!showThankYou ? (
-          currentQuestion && (
-            <>
-              <h2 className="mb-4">{currentQuestion.question_text}</h2>
-              <Form>
-                {currentQuestion.options && currentQuestion.options.map((option, index) => (
-                  <div key={index} className="mb-2">
-                    <Form.Check
-                      type="radio"
-                      name="options"
-                      id={`option${index}`}
-                      label={option.option_text}
-                      checked={selectedOption && selectedOption.option_text === option.option_text}
-                      onChange={() => handleOptionSelect(option)}
-                    />
-                  </div>
-                ))}
-              </Form>
-              {answerError && <p className="text-danger">Please select an answer!</p>} {/* Display error message */}
-              <div className="d-flex justify-content-between mt-4">
-                <Button variant="outline-dark" onClick={handleSkip}>Skip</Button>
-                <Button variant="dark" className='w-25' onClick={handleNext}>Next</Button>
-              </div>
-            </>
-          )
-        ) : (
-          <h2 className="text-center mt-2 text-green">Thank you!</h2>
+        {currentQuestion && (
+          <>
+            <h2 className="mb-4">{currentQuestion.question_text}</h2>
+            <Form>
+              {currentQuestion.options && currentQuestion.options.map((option, index) => (
+                <div key={index} className="mb-2">
+                  <Form.Check
+                    type="radio"
+                    name="options"
+                    id={`option${index}`}
+                    label={option.option_text}
+                    checked={selectedOption && selectedOption.option_text === option.option_text}
+                    onChange={() => handleOptionSelect(option)}
+                  />
+                </div>
+              ))}
+            </Form>
+            {answerError && <p className="text-danger">Please select an answer!</p>} {/* Display error message */}
+            <div className="d-flex justify-content-between mt-4">
+              <Button variant="outline-dark" onClick={handleSkip}>Skip</Button>
+              <Button variant="dark" className='w-25' onClick={handleNext}>Next</Button>
+            </div>
+          </>
         )}
       </Card>
     </Container>

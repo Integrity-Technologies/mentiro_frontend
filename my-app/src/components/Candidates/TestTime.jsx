@@ -1,32 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux"; // useDispatch hook import kiya hai
+import { useDispatch } from "react-redux";
 import { createResult } from "../../actions/resultAction"; // createResult action import kiya hai
 import Questions from "./Questions";
 
-const TestTime = () => {
-  const [showQuestions, setShowQuestion] = useState(false);
+const TestTime = ({ onComplete }) => {
+  const [showQuestions, setShowQuestions] = useState(false);
   const [questionCount, setQuestionCount] = useState(0);
-  const [totalTime, setTotalTime] = useState(0); // State to store total time
+  const [totalTime, setTotalTime] = useState(0);
 
-  const dispatch = useDispatch(); // useDispatch hook initialize kiya hai
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // Retrieve question IDs from local storage and count them
     const questions = JSON.parse(localStorage.getItem('questions')) || [];
-    const totalTime = localStorage.getItem('total_time') || 20; // Default to 20 minutes if not found
+    const totalTime = localStorage.getItem('total_time') || 20;
 
     setQuestionCount(questions.length);
     setTotalTime(totalTime);
   }, []);
 
   const handleSubmitButtonClick = () => {
-    // Candidate_id, test_id, aur assessment_id ko local storage se retrieve kiya hai
     const candidate_id = JSON.parse(localStorage.getItem("candidateId"));
     const test_id = JSON.parse(localStorage.getItem("testId"));
     const assessment_id = JSON.parse(localStorage.getItem("assessmentId"));
 
-    // Data jo bhejna hai API request ke sath
     const resultData = {
       candidate_id,
       test_id,
@@ -35,47 +31,43 @@ const TestTime = () => {
 
     dispatch(createResult(resultData));
 
-    setShowQuestion(true);
+    setShowQuestions(true);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-    {showQuestions ? (
-      <Questions />
-    ) : (
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-        <div className="flex justify-center mb-6 rounded-circle">
-          <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
+      {showQuestions ? (
+        <Questions onComplete={onComplete} />
+      ) : (
+        <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+          <div className="flex justify-center mb-6 rounded-circle">
+            <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
+          </div>
+          <h4 className="text-2xl font-semibold text-center mb-4">
+            You have {totalTime} minutes to answer the {questionCount} questions.
+          </h4>
+          <p className="text-lg">
+            <strong>Test Time:</strong> {totalTime} minutes
+          </p>
+          <p className="text-lg">
+            <strong>Instructions:</strong>
+            <p>Please read carefully and select the correct answer</p>
+          </p>
+          <div className="mt-6">
+            <button
+              className="bg-black text-white py-2 px-4 rounded w-full mb-4"
+              onClick={handleSubmitButtonClick}
+            >
+              Start Test
+            </button>
+            <button className="border border-gray-400 text-gray-700 py-2 px-4 rounded w-full">
+              Back
+            </button>
+          </div>
         </div>
-        <h4 className="text-2xl font-semibold text-center mb-4">
-          {/* You have  minutes to answer {questionCount} questions */}
-          You have {totalTime} minutes to answer the {questionCount} questions.
-        </h4>
-        <p className="text-lg">
-          <strong>Test Time:</strong> {totalTime} minutes
-        </p>
-        {/* <p className="text-lg">
-          <strong>Answer {questionCount} Questions</strong>
-        </p> */}
-        <p className="text-lg">
-          <strong>Instructions:</strong>
-          <p>Please read carefully and select the correct answer</p>
-        </p>
-        <div className="mt-6">
-          <button
-            className="bg-black text-white py-2 px-4 rounded w-full mb-4"
-            onClick={handleSubmitButtonClick}
-          >
-            Start Test
-          </button>
-          <button className="border border-gray-400 text-gray-700 py-2 px-4 rounded w-full">
-            Back
-          </button>
-        </div>
-      </div>
-    )}
-  </div>
-  );
+)}
+</div>
+);
 };
 
 export default TestTime;
