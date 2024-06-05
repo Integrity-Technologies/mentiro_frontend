@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCandidates, getUserCandidates } from "../../actions/candidateAction";
 import TablePagination from "../Admin/TablePagination";
 import { useTranslation } from "react-i18next";
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaSearch } from "react-icons/fa";
 
 const CandidateProfile = () => {
   const dispatch = useDispatch();
@@ -50,13 +50,16 @@ const CandidateProfile = () => {
       </div>
       <hr className="mb-6 border-gray-300" />
       <div className="mb-4 relative">
-        <input
-          type="text"
-          placeholder={t("candidates.searchPlaceholder")}
-          className="border-2 border-gray-200 rounded-lg px-4 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder={t("candidates.searchPlaceholder")}
+            className="border-2 border-gray-300 rounded-lg px-10 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
