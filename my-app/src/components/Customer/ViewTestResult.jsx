@@ -4,6 +4,7 @@ import { fetchResults, getUserResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { TiChartBarOutline } from "react-icons/ti";
+import { FaSearch } from "react-icons/fa";
 
 const ViewTestResult = () => {
   const { t } = useTranslation();
@@ -79,13 +80,16 @@ const ViewTestResult = () => {
       </div>
       <hr className="mb-6 border-gray-400" />
       <div className="mb-4 relative">
-        <input
-          type="text"
-          placeholder={t("candidatesResult.searchPlaceholder")}
-          className="border-2 border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder={t("candidatesResult.searchPlaceholder")}
+            className="border-2 border-gray-300 rounded-lg px-10 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
