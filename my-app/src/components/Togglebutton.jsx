@@ -5,7 +5,11 @@ import { logout } from "../actions/authActions"; // Adjust the path as needed
 import { useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa"; // Import the icon
 
-const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
+const LanguageToggleButton = ({
+  isLanguageButton,
+  onLanguageChange,
+  isMenuCollapsed,
+}) => {
   const { t, i18n } = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
@@ -58,10 +62,14 @@ const LanguageToggleButton = ({ isLanguageButton, onLanguageChange }) => {
           <a
             href="#"
             onClick={handleLogout}
-            className="flex items-center px-4 py-2 bg-black text-white text-sm rounded hover:bg-gray-800 transition-colors no-underline"
+            className={`flex items-center text-sm rounded hover:bg-gray-800 transition-colors no-underline ${
+              isMenuCollapsed
+                ? "bg-black text-white p-2"
+                : "px-4 py-2 bg-black text-white hover:bg-gray-800"
+            }`}
           >
-            <FaSignOutAlt className="mr-2" />
-            {t("toggleButton.Logout")}
+            <FaSignOutAlt className={`${isMenuCollapsed ? "" : "mr-2"}`} />
+            {!isMenuCollapsed && t("toggleButton.Logout")}
           </a>
         </div>
       </div>
