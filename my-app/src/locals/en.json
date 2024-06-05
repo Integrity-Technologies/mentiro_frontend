@@ -195,7 +195,13 @@
     "loginMessage":"Please login to view your profile",
     "createCompany":"Create Company",
     "create": "Create",
-    "companyNamePlaceholder": "Company Name"
+    "companyNamePlaceholder": "Company Name",
+    "firstName": "First Name",
+    "lastName":"Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "CompanyInformation": "Company Information",
+    "addCompany": "Create Company"
   },
   
   "candidates": {
@@ -239,7 +245,7 @@
   },
 
   "ActiveAssessment": {
-    "title": "Active Assessment",
+    "title": "My Assessment",
     "create": "Create New Assessment"
   },
 

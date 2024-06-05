@@ -142,7 +142,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
 
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="bg-gray-200 p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
           <div className="flex items-center mb-4">
             <FaClipboardCheck className="text-blue-500 mr-2" size={24} />
             <h2 className="text-xl font-bold text-gray-700">
@@ -248,13 +248,13 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
       {showQuestion ? (
         <Preview handleBackButton={handleBackButton} />
       ) : (
-        <div className="bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
-          <div className="flex items-center justify-center mb-4">
+        <div className="min-h-screen flex flex-col px-6 py-10 relative">
+          <div className="flex items-center mb-4">
             <FaClipboardCheck className="mr-2 text-primary" size={22} />
-            <h2 className="text-center text-xl font-bold mt-1">
-            {t("TestSelection.title")}            </h2>
+            <h3 className="text-center text-1xl font-bold mt-2">
+            {t("TestSelection.title")}            </h3>
           </div>
-          <hr className="mb-4 border-gray-400" />
+          {/* <hr className="mb-4 border-gray-400" /> */}
           {showAlert && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 transition-opacity duration-500 ease-in-out"
@@ -265,12 +265,13 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               </span>
             </div>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 ">
             {tests.map((test) => (
               <div
-                key={test.id}
-                className="bg-gray-200 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border border-gray-400"
-              >
+              key={test.id}
+              className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border border-gray-950 w-100"
+            >
+            
                 <div className="relative">
                   <div className="absolute top-0 right-0 bg-green-500 text-white py-1 px-3 rounded-tr-lg rounded-bl-lg">
                     <span className="text-xs font-semibold">

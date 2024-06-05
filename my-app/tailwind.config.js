@@ -11,8 +11,7 @@ module.exports = {
         "active-link-bg": "#ccffcc", // Custom light green
       },
       fontFamily: {
-        sans: ["Open Sans"], // Ensure Open Sans is loaded
-      },
+        roboto: ['Roboto', 'sans-serif'],      },
     },
   },
   plugins: [],

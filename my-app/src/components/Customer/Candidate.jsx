@@ -15,10 +15,10 @@ const Candidate = () => {
       ) : (
         <div>
           <Container
-            className="d-flex flex-column justify-content-center align-items-center"
+            className="d-flex flex-column justify-content-center align-items-center font-roboto"
             style={{ height: "100vh" }}
           >
-            <Form className="p-4 border border-1" style={{ width: "500px" }}>
+            <Form className="p-4 border border-1 font-roboto" style={{ width: "500px" }}>
               <h1 className="text-center mb-4">Candidate Registration</h1>
 
               <Form.Group controlId="formName" className="mb-3">

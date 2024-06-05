@@ -130,10 +130,10 @@ const ViewTestResult = () => {
   };
 
   return (
-    <div className="bg-gray-100 shadow-xl rounded-xl p-6 min-h-screen transition duration-500 ease-in-out transform hover:shadow-2xl">
+    <div className=" rounded-xl p-6 min-h-screen font-roboto">
       <div className="flex items-center mb-4">
-        <TiChartBarOutline className="mr-2 text-blue-500" size={24} />
-        <h1 className="text-2xl font-bold text-gray-700">
+        <TiChartBarOutline className="mr-2" size={24} />
+        <h1 className="text-3xl font-bold mt-1 text-gray-700 font-roboto">
           {t("candidatesResult.title")}
         </h1>
       </div>
@@ -147,26 +147,26 @@ const ViewTestResult = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <table className="w-full table-auto border-collapse bg-white">
-        <thead className="bg-blue-600 text-white">
-          <tr className="border-b-2 border-blue-700">
-            <th className="border px-4 py-2">{t("candidatesResult.Name")}</th>
-            <th className="border px-4 py-2">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("candidatesResult.Name")}</th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               {t("candidatesResult.assessmentName")}
             </th>
-            <th className="border px-4 py-2">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               {t("candidatesResult.testName")}
             </th>
-            <th className="border px-4 py-2">{t("candidatesResult.Status")}</th>
-            <th className="border px-4 py-2">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("candidatesResult.Status")}</th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               {t("candidatesResult.testScore")}
             </th>
-            <th className="border px-4 py-2">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               {t("candidatesResult.assessmentScore")}
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="bg-white divide-y divide-gray-200">
           {filteredResults.length === 0 ? (
             <tr>
               <td
@@ -181,14 +181,14 @@ const ViewTestResult = () => {
               candidate.assessments.map((assessment, index) => (
                 <tr
                   key={`${candidate.id}-${index}`}
-                  className="hover:bg-gray-100 cursor-pointer transition duration-150"
-                >
-                  <td className="border px-4 py-2">
+                  className="hover:bg-active-link-bg cursor-pointer transition duration-150"
+                  >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {candidate.candidate_name}
                   </td>
-                  <td className="border px-4 py-2">{assessment.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{assessment.name}</td>
 
-                  <td className="border px-4 py-2" style={{ width: "300px" }}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" style={{ width: "300px" }}>
                     {assessment.tests.slice(0, 2).map((test, index2) => (
                       <div key={index2}>
                         {test.name}
@@ -204,7 +204,7 @@ const ViewTestResult = () => {
                     ))}
                   </td>
 
-                  <td className="border px-4 py-2">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span>
                       {assessment.tests.slice(0, 2).map((test, index2) => (
                         <React.Fragment key={index2}>
@@ -221,7 +221,7 @@ const ViewTestResult = () => {
                       ))}
                     </span>
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span>
                       {assessment.tests.slice(0, 2).map((test, index2) => (
                         <React.Fragment key={index2}>
@@ -235,7 +235,7 @@ const ViewTestResult = () => {
                       ))}
                     </span>
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span>
                       {assessment.assessment_percentage !== null
                         ? assessment.assessment_percentage !== 0

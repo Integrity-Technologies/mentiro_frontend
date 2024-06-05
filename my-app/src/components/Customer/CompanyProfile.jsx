@@ -8,6 +8,8 @@ import {
   FaEnvelope,
   FaPhone,
   FaPlus,
+  FaUserCircle
+
 } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -120,49 +122,121 @@ const CompanyProfile = () => {
   return (
     <div className="container mx-auto p-4 h-100">
       {user ? (
-        <div className="bg-gray-100 shadow-lg rounded-lg p-6 min-h-screen">
-          <h2 className="text-3xl font-semibold mb-4 flex items-center">
-            <FaUser className="mr-2 text-primary" />
-            {t("CompanyProfile.welcomeMessage")} {user.first_name}!
-          </h2>
-          <hr className="mb-6 border-gray-400" />
-
+        <div className="bg-white  rounded-lg p-6 min-h-screen">
+          <h3 className="text-2xl font-semibold flex items-center">
+          <FaUserCircle className="mr-3" size={24} />
+            Personal Information
+          </h3>
           <div className="mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center rounded justify-center bg-gray-300 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4">
-                <FaUser className="text-blue-500" size={24} />
-                <p className="ml-4 text-lg text-blue-900 font-medium">
-                  {user.last_name}
-                </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div className="flex flex-col items-start justify-center w-full">
+                <label
+                  htmlFor="firstName"
+                  className="font-medium text-black"
+                >
+                  {t("CompanyProfile.firstName")}
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  value={user.first_name}
+                  readOnly
+                  className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                />
               </div>
-              <div className="flex items-center rounded justify-center bg-gray-300 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4">
-                <FaEnvelope className="text-green-500" size={24} />
-                <p className="ml-4 text-lg text-green-900 font-medium">
-                  {user.email}
-                </p>
+              <div className="flex flex-col items-start justify-center">
+                <label
+                  htmlFor="lastName"
+                  className="font-medium text-black"
+                >
+                  {t("CompanyProfile.lastName")}
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  value={user.last_name}
+                  readOnly
+                  className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                />
               </div>
-              <div className="flex items-center rounded justify-center bg-gray-300 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4">
-                <FaPhone className="text-yellow-500" size={24} />
-                <p className="ml-4 text-lg text-yellow-900 font-medium">
-                  {user.phone}
-                </p>
+              <div className="flex flex-col items-start justify-center">
+                <label htmlFor="email" className="font-medium text-black">
+                  {t("CompanyProfile.email")}
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={user.email}
+                  readOnly
+                  className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                />
+              </div>
+              <div className="flex flex-col items-start justify-center">
+                <label htmlFor="phone" className="font-medium text-black">
+                  {t("CompanyProfile.phone")}
+                </label>
+                <input
+                  type="phone"
+                  id="phone"
+                  value={user.phone}
+                  readOnly
+                  className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                />
               </div>
             </div>
           </div>
 
           <div className="flex items-center justify-between mt-20 mb-4">
             <h3 className="text-2xl font-semibold flex items-center">
-              <FaBuilding className="mr-2 text-primary" />
+              <FaBuilding className="mr-2" />
+              {t("CompanyProfile.CompanyInformation")}
+            </h3>
+          </div>
+          <div className="mb-4 w-80 flex">
+            <div className="relative flex-grow">
+              <input
+                type="text"
+                id="companyName"
+                value={newCompanyName}
+                onChange={handleNewCompanyNameChange}
+                placeholder={t("CompanyProfile.companyNamePlaceholder")}
+                className={`block px-2 pb-1.5 pt-3 w-80 text-sm text-gray-900 bg-transparent rounded-lg border ${
+                  isCompanyNameValid ? "border-gray-300" : "border-red-500"
+                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+              />
+              <label
+                className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+              >
+                {t("CompanyProfile.companyNamePlaceholder")}
+              </label>
+              {!isCompanyNameValid && (
+                <p className="text-red-500 text-sm mt-1">{companyNameError}</p>
+              )}
+            </div>
+            <div className="ml-4">
+              <Button
+                variant="dark"
+                onClick={handleCreateCompany}
+                className="w-100 whitespace-nowrap mt-1 bg-dark hover:bg-dark"
+              >
+                {t("CompanyProfile.addCompany")}
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between mt-20 mb-4">
+            <h3 className="text-2xl font-semibold flex items-center">
+              <FaBuilding className="mr-2" />
               {t("CompanyProfile.companyList")}
             </h3>
-            <Button
+            {/* <Button
               className="bg-black text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105"
               variant="primary"
               onClick={() => setShowCreateCompanyModal(true)}
             >
               <FaPlus className="inline-block mr-1" />
               {t("CompanyProfile.createCompany")}
-            </Button>
+            </Button> */}
           </div>
           <hr className="mb-6 border-gray-400" />
 
@@ -239,9 +313,7 @@ const CompanyProfile = () => {
               {t("CompanyProfile.companyNamePlaceholder")}{" "}
             </label>
             {!isCompanyNameValid && (
-              <p className="text-red-500 text-sm mt-1">
-                {companyNameError}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{companyNameError}</p>
             )}
           </div>
         </Modal.Body>

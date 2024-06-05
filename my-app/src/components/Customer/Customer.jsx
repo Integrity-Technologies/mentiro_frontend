@@ -75,7 +75,7 @@ const Customer = ({ isLanguageButton }) => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-500 font-sans">
+    <div className="flex h-screen bg-gray-500 font-roboto">
       <div className="w-1/6 bg-white shadow h-full overflow-y-auto">
         <div className="text-center mb-3">
           <img
