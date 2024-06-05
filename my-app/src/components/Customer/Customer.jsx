@@ -13,6 +13,7 @@ import {
   FaClipboardList,
   FaUser,
   FaFileAlt,
+  FaBars,
 } from "react-icons/fa";
 import ActiveAssessment from "./ActiveAssessment";
 const logoImage = "/assets/icon.jpg";
@@ -22,6 +23,7 @@ const Customer = ({ isLanguageButton }) => {
 
   const [activeLink, setActiveLink] = useState("/Graph"); // Default active link to the graph
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
 
   const handleLanguageChange = (lng) => {
     setSelectedLanguage(lng);
@@ -29,6 +31,10 @@ const Customer = ({ isLanguageButton }) => {
 
   const handleClick = (link) => {
     setActiveLink(link);
+  };
+
+  const toggleMenuCollapse = () => {
+    setIsMenuCollapsed(!isMenuCollapsed);
   };
 
   const sections = {
@@ -76,25 +82,39 @@ const Customer = ({ isLanguageButton }) => {
 
   return (
     <div className="flex h-screen bg-gray-500 font-roboto">
-      <div className="w-1/6 bg-white shadow h-full overflow-y-auto">
-        <div className="text-center mb-3">
-          <img
-            src={logoImage}
-            alt="Logo"
-            className="rounded-full w-32 mt-5 mx-auto"
-          />
+      <div
+        className={`flex flex-col ${
+          isMenuCollapsed ? "w-20" : "w-1/6"
+        } bg-white shadow h-full overflow-y-auto transition-width duration-300`}
+      >
+        <div className="flex justify-between items-center p-3">
+          <div className="text-center mb-3">
+            {!isMenuCollapsed && (
+              <img
+                src={logoImage}
+                alt="Logo"
+                className="rounded-full w-32 mt-5 mx-auto"
+              />
+            )}
+          </div>
+          <button
+            onClick={toggleMenuCollapse}
+            className="p-2 focus:outline-none"
+          >
+            <FaBars />
+          </button>
         </div>
         <nav className="mt-10">
           {customerMenuOptions.map((option) => (
             <button
               key={option.link}
               className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm
-          ${
-            activeLink === option.link
-              ? "shadow-lg bg-active-link-bg shadow-green-300"
-              : ""
-          }
-          hover:bg-active-link-bg`}
+                ${
+                  activeLink === option.link
+                    ? "shadow-lg bg-active-link-bg shadow-green-300"
+                    : ""
+                }
+                hover:bg-active-link-bg`}
               onClick={() => handleClick(option.link)}
             >
               <span
@@ -104,13 +124,15 @@ const Customer = ({ isLanguageButton }) => {
               >
                 {option.icon}
               </span>
-              <span
-                className={`${
-                  activeLink === option.link ? "text-black" : "text-gray-600"
-                }`}
-              >
-                {t(option.label)}
-              </span>
+              {!isMenuCollapsed && (
+                <span
+                  className={`${
+                    activeLink === option.link ? "text-black" : "text-gray-600"
+                  }`}
+                >
+                  {t(option.label)}
+                </span>
+              )}
             </button>
           ))}
         </nav>
@@ -118,15 +140,19 @@ const Customer = ({ isLanguageButton }) => {
 
       <div className="absolute top-0 right-0 mt-2 mr-5">
         <LanguageToggleButton
+          isMenuCollapsed={isMenuCollapsed}
           onLanguageChange={handleLanguageChange}
           isLanguageButton={isLanguageButton}
         />
       </div>
 
-      <div className="w-5/6 bg-customGray p-10 overflow-y-auto">
+      <div
+        className={`transition-width duration-300 ${
+          isMenuCollapsed ? "w-full" : "w-5/6"
+        } bg-customGray p-10 overflow-y-auto`}
+      >
         {sections[activeLink]}
       </div>
-      {/* Language Dropdown */}
     </div>
   );
 };
