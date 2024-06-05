@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FaClipboardList, FaTrashAlt, FaPlus, FaEye } from "react-icons/fa";
+import {
+  FaClipboardList,
+  FaTrashAlt,
+  FaPlus,
+  FaEye,
+  FaSearch,
+} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import TablePagination from "../Admin/TablePagination";
 
@@ -25,6 +31,7 @@ const ActiveAssessment = () => {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const dispatch = useDispatch();
   const assessments = useSelector((state) => state.assessment.assessments);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     dispatch(getAllAssessments());
@@ -68,12 +75,12 @@ const ActiveAssessment = () => {
     }
   };
 
-  const filteredAssessment = Array.isArray(assessments) ? assessments.filter((assessment) => {
-    const fullName = `${assessment.assessment_name} ${assessment.last_name}`;
-    return fullName.toLowerCase().includes(searchTerm.toLowerCase());
-}) : [];
-
-
+  const filteredAssessment = Array.isArray(assessments?.assessments)
+    ? assessments?.assessments?.filter((assessment) => {
+        const fullName = `${assessment.assessment_name} ${assessment.last_name}`;
+        return fullName.toLowerCase().includes(searchTerm.toLowerCase());
+      })
+    : [];
 
   const handlePreview = (uniqueLink) => {
     setUniqueLink(uniqueLink);
@@ -88,6 +95,18 @@ const ActiveAssessment = () => {
   if (currentPreviewView === "preview") {
     return <PreviewExistingAssessment />;
   }
+
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(filteredAssessment.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentResults = filteredAssessment.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  console.log("🚀 ~ ActiveAssessment ~ currentResults:", currentResults);
+
+  const handlePageChange = (page) => setCurrentPage(page);
 
   return (
     <div className="min-h-screen flex flex-col px-6 py-10 relative font-roboto">
@@ -108,13 +127,16 @@ const ActiveAssessment = () => {
       </div>
 
       <div className="mb-4 relative">
-        <input
-          type="text"
-          placeholder={t("candidates.searchPlaceholder")}
-          className="border-2 border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder={t("candidates.searchPlaceholder")}
+            className="border-2 border-gray-300 rounded-lg px-10 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
       </div>
 
       <table className="min-w-full divide-y divide-gray-200">
@@ -132,13 +154,16 @@ const ActiveAssessment = () => {
             >
               Created Date
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
               Actions
             </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {assessments?.assessments?.map((assessment, index) => (
+          {currentResults.map((assessment, index) => (
             <tr
               key={index}
               className="hover:bg-active-link-bg cursor-pointer transition duration-150"
@@ -166,18 +191,20 @@ const ActiveAssessment = () => {
                 </button>
               </td>
             </tr>
-          ))
-        }
+          ))}
         </tbody>
       </table>
-      
+      <TablePagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
       <CSSTransition
         in={showDeleteConfirmation}
         timeout={300}
         classNames="fade"
         unmountOnExit
       >
-      
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <p className="mb-4 text-gray-800">
