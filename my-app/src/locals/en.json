@@ -217,7 +217,7 @@
 
   "candidatesResult":{
     "title":"Candidates Result",
-    "searchPlaceholder": "Search by candidate name",
+    "searchPlaceholder": "Search by candidate",
     "noData": "No candidate result found",
     "id": "ID",
     "Name":"Candidate Name",
