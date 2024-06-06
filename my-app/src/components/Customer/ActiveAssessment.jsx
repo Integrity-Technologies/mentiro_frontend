@@ -7,7 +7,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import TablePagination from "../Admin/TablePagination";
+import TablePagination from "./TablePagination";
 
 import {
   getAllAssessments,
@@ -112,8 +112,8 @@ const ActiveAssessment = () => {
     <div className="min-h-screen flex flex-col px-6 py-10 relative font-roboto">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <FaClipboardList className="text-3xl" />
-          <h1 className="text-3xl font-bold text-gray-800 mt-2 font-roboto">
+          <FaClipboardList className="text-3xl" size={40} />
+          <h1 className="font-bold text-gray-800 mt-2 text-20px">
             {t("ActiveAssessment.title")}
           </h1>
         </div>
@@ -140,7 +140,7 @@ const ActiveAssessment = () => {
       </div>
 
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 text-12px">
           <tr>
             <th
               scope="col"
@@ -162,7 +162,7 @@ const ActiveAssessment = () => {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {currentResults.map((assessment, index) => (
             <tr
               key={index}

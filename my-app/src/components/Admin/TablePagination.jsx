@@ -18,7 +18,7 @@ const TablePagination = ({ totalPages, currentPage, onPageChange }) => {
             key={index + 1}
             onClick={() => onPageChange(index + 1)}
             className={`px-3 py-1 mx-1 bg-gray-200 text-gray-700 rounded ${
-              index + 1 === currentPage ? "bg-green-300 text-white" : ""
+              index + 1 === currentPage ? "bg-blue-400 text-white" : ""
             }`}
           >
             {index + 1}

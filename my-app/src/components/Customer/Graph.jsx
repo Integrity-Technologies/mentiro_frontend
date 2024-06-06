@@ -1,34 +1,33 @@
 import React, { useState } from "react";
 import { FaUserCircle, FaRegHandshake } from "react-icons/fa";
-import { AiOutlineBarChart, AiOutlineLineChart } from "react-icons/ai";
+import { AiOutlineBarChart } from "react-icons/ai";
 import DonutGraph from "./DonutGraph";
 import { useTranslation } from "react-i18next";
 import CandidateGraph from "./Candidategraph";
-import RadialBarGraph from "./CircleGraph";
+import CandidateCard from "./CandidateCard";
+import CircleGraph from "./CircleGraph";
 import ViewTestResult from "./ViewTestResult";
-import Assessment from "./Assesment";
 import CandidateProfile from "./CandidatesProfile";
 import ActiveAssessment from "./ActiveAssessment";
 
 const DualGraphs = () => {
   const { t } = useTranslation();
-  const [showResult, setShowResult] = useState(false); // State to control rendering of ViewTestResult
+  const [showResult, setShowResult] = useState(false);
   const [showAssessment, setShowAssessment] = useState(false);
   const [showCandidate, setShowCandidate] = useState(false);
 
-  // Function to handle click event for showing test results
   const goToResultMenu = () => {
-    setShowResult(true); // Set showResult to true to render ViewTestResult
+    setShowResult(true);
   };
 
   const goToAssessmentMenu = () => {
-    setShowAssessment(true); // Set showResult to true to render ViewTestResult
-  };
-  const goToCandidateMenu = () => {
-    setShowCandidate(true); // Set showResult to true to render ViewTestResult
+    setShowAssessment(true);
   };
 
-  // If showResult is true, render ViewTestResult component
+  const goToCandidateMenu = () => {
+    setShowCandidate(true);
+  };
+
   if (showResult) {
     return <ViewTestResult />;
   }
@@ -39,43 +38,52 @@ const DualGraphs = () => {
     return <CandidateProfile />;
   }
 
-  // Render DualGraphs component when showResult is false
   return (
-    <div className="container bg-white  mx-auto px-4 py-8">
+    <div className="container bg-white mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-left text-black">
         <FaRegHandshake className="inline-block mr-2" />
         <span className="inline-block animate-pulse">
           {t("graphView.Welcome")}
         </span>
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div
           onClick={goToCandidateMenu}
           className="rounded-lg p-0 flex flex-col justify-center items-center"
         >
-          <h2 className="text-xl font-bold flex items-center text-center text-black">
-            <FaUserCircle className="mr-2 " />
+          {/* <h2 className="text-xl font-bold flex items-center text-center text-black">
+            <FaUserCircle className="mr-2" />
             <span className="font-bold underline">
               {t("graphView.Candidate")}
             </span>
-          </h2>
+          </h2> */}
           <DonutGraph />
         </div>
         <div
           onClick={goToAssessmentMenu}
           className="rounded-lg p-0 flex flex-col justify-center items-center"
         >
-          <h2 className="text-xl font-bold flex items-center text-center text-gray-800">
-            <AiOutlineLineChart className="mr-2" />{" "}
+          {/* <h2 className="text-xl font-bold flex items-center text-center text-gray-800">
+            <AiOutlineLineChart className="mr-2" />
             <span className="font-bold underline">
               {t("graphView.Assessment")}
             </span>
-          </h2>
-          <RadialBarGraph />
+          </h2> */}
+          <CircleGraph />
+        </div>
+        <div
+          onClick={goToResultMenu}
+          className="rounded-lg p-0 flex flex-col justify-center items-center"
+        >
+          {/* <h2 className="text-xl font-bold flex items-center text-center text-black">
+            <AiOutlineBarChart className="mr-2" />
+            <span className="font-bold underline">Results</span>
+          </h2> */}
+          <CandidateCard />
         </div>
       </div>
       <div className="rounded-lg p-0 mt-0 flex flex-col justify-center items-center">
-        <h2 className="text-xl font-bold mb-0 flex items-center text-center text-gray-800">
+        <h2 className="text-xl font-bold mb-0 flex items-center text-center text-gray-800 mt-10">
           <AiOutlineBarChart className="mr-2" />
           <span className="font-bold underline">
             {t("graphView.candidatesDetails")}

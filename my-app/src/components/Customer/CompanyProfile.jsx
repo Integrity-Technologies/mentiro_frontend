@@ -247,8 +247,8 @@ const CompanyProfile = () => {
                 className={`rounded transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4 
                 ${
                   activeCompany && activeCompany.id === company.id
-                    ? "bg-green-200"
-                    : "bg-gray-300"
+                    ? "bg-gray-100"
+                    : "bg-gray-100"
                 }
                 `}
               >
@@ -261,7 +261,7 @@ const CompanyProfile = () => {
                   ${
                     activeCompany && activeCompany.id === company.id
                       ? "bg-green-500 text-white hover:bg-green-600 focus:ring focus:ring-green-400"
-                      : "bg-blue-500 text-white hover:bg-blue-600 focus:ring focus:ring-blue-400"
+                      : "bg-black text-white hover:bg-black focus:ring focus:ring-blue-400"
                   }`}
                 >
                   {activeCompany && activeCompany.id === company.id

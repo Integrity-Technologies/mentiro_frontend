@@ -47,7 +47,7 @@ const CandidateGraph = () => {
         {
           name: t("graphView.Candidate.Scores"),
           data: seriesData,
-          color: '#66FF33', // Set all lines to green color
+          color: '#7799ff', // Set all lines to green color
         },
       ],
       categories,

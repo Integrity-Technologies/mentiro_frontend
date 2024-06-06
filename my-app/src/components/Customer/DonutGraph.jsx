@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserCandidates } from "../../actions/candidateAction";
 import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
+import { FaUserCircle } from "react-icons/fa";
 
 const DonutGraph = () => {
   const dispatch = useDispatch();
@@ -25,12 +26,12 @@ const DonutGraph = () => {
 
   const options = {
     chart: {
-      type: 'donut',
+      type: "donut",
     },
     labels: ["Candidates"],
-    colors: [ '#66FF33', '#00FF99', '#9966FF'], // Add more colors here
+    colors: ["#52dcff", "#00FF99", "#9966FF"], // Add more colors here
     legend: {
-      position: 'right',
+      position: "right",
     },
     tooltip: {
       y: {
@@ -47,23 +48,31 @@ const DonutGraph = () => {
       },
     },
   };
-  
+
   const series = [candidatesCount];
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      {error || candidatesCount === 0 ? (
-        <p className="text-red-500 font-bold">
-          {error ? t("graphView.Candidate.Error") : t("graphView.Candidate.NoData")}
-        </p>
-      ) : (
-        <Chart
-          options={options}
-          series={series}
-          type="donut"
-          width="380"
-        />
-      )}
+    <div className="max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-md p-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-extrabold text-black-600">{candidatesCount}</h2>
+          <p className="text-gray-600 flex items-center mt-2">
+            <FaUserCircle className="mr-2 text-black-600" size={30} />
+            <span className="text-lg font-semibold">Candidates</span>
+          </p>
+        </div>
+        <div>
+          {error || candidatesCount === 0 ? (
+            <p className="text-red-500 font-bold">
+              {error
+                ? t("graphView.Candidate.Error")
+                : t("graphView.Candidate.NoData")}
+            </p>
+          ) : (
+            <Chart options={options} series={series} type="donut" width="120" />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCandidates, getUserCandidates } from "../../actions/candidateAction";
-import TablePagination from "../Admin/TablePagination";
+import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { FaUserCircle, FaSearch } from "react-icons/fa";
 
@@ -43,12 +43,11 @@ const CandidateProfile = () => {
   return (
     <div className="rounded-xl p-6 min-h-screen font-roboto">
       <div className="flex items-center mb-6">
-        <FaUserCircle className="mr-3" size={24} />
-        <h1 className="text-3xl font-bold text-gray-700 mt-2">
+        <FaUserCircle className="mr-3" size={40} />
+        <h1 className="font-bold text-gray-700 mt-2 text-20px">
           {t("candidates.title")}
         </h1>
       </div>
-      <hr className="mb-6 border-gray-300" />
       <div className="mb-4 relative">
         <div className="relative">
           <input
@@ -62,22 +61,22 @@ const CandidateProfile = () => {
         </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 text-12px">
           <tr>
-            <th  scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("candidates.firstName")}</th>
+            <th  scope="col" className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.firstName")}</th>
             <th scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("candidates.lastName")}</th>
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.lastName")}</th>
             <th scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("candidates.email")}</th>
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.email")}</th>
             <th scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t("candidates.dateJoined")}</th>
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.dateJoined")}</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {error ? (
             <tr>
               <td
-                className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                className="px-6 py-4 whitespace-nowrap font-medium text-gray-900"
               >
                 {t("candidates.noData")}
               </td>
@@ -85,7 +84,7 @@ const CandidateProfile = () => {
           ) : filteredCandidates.length === 0 ? (
             <tr>
               <td
-                className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                className="px-6 py-4 whitespace-nowrap text-gray-500"
               >
                 {t("candidates.noData")}
               </td>
@@ -96,10 +95,10 @@ const CandidateProfile = () => {
                 key={candidate.id}
                 className="hover:bg-active-link-bg cursor-pointer transition duration-150"
                 >
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{candidate.first_name}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{candidate.last_name}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{candidate.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{candidate.created_at}</td>
+                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.first_name}</td>
+                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.last_name}</td>
+                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.created_at}</td>
               </tr>
             ))
           )}

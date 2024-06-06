@@ -56,16 +56,16 @@ const PreviewExistingAssessment = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-gray-100 shadow-md rounded animate__animated animate__fadeIn">
+    <div className="container mx-auto p-4 bg-white shadow-md rounded animate__animated animate__fadeIn">
       <Container>
         {assessmentData && (
           <div className="mt-8">
-            <h2 className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
-              <FaClipboardList className="mr-2 text-primary" />
+            <h3 className="text-2xl font-bold text-center mb-8 flex items-center ">
+              <FaClipboardList className="mr-2" />
               <span>Assessment Preview</span>
-            </h2>
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="flex flex-col bg-gray-200 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+              <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
                 <h3 className="text-lg font-semibold mb-2 text-gray-700">
                   Assessment Name:
                 </h3>
@@ -73,7 +73,7 @@ const PreviewExistingAssessment = () => {
                   {assessmentData.assessment_name}
                 </p>
               </div>
-              <div className="flex flex-col bg-gray-200 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+              <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
                 <h3 className="text-lg font-semibold mb-2 text-gray-700">
                   Total Tests:
                 </h3>
@@ -81,7 +81,7 @@ const PreviewExistingAssessment = () => {
                   {assessmentData.tests.length}
                 </p>
               </div>
-              <div className="flex flex-col bg-gray-200 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+              <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
                 <h3 className="text-lg font-semibold mb-2 text-gray-700">
                   Assessment Time:
                 </h3>
@@ -102,25 +102,27 @@ const PreviewExistingAssessment = () => {
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <FaClipboardList className="mr-2 text-primary" />
+                <FaClipboardList className="mr-2" />
                 Selected Tests
               </h3>
-              <table className="w-full border-collapse bg-white table-auto border border-gray-300 shadow-md rounded-lg">
-                <thead className="bg-blue-600 text-white">
-                  <tr className="border-b-2 border-blue-700">
-                    <th className="border px-4 py-2">Test Name</th>
-                    <th className="border px-4 py-2">Duration</th>
+              <table className="min-w-full divide-y divide-gray-200 shadow-md">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test Name</th>
+                    <th scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                   {assessmentData.tests &&
                     assessmentData.tests.map((test, index) => (
                       <tr
                         key={index}
-                        className="border-b border-gray-300 hover:bg-blue-100 cursor-pointer transition duration-150"
-                      >
-                        <td className="border px-4 py-2">{test.test_name}</td>
-                        <td className="border px-4 py-2 flex items-center">
+                        className="hover:bg-blue-100 cursor-pointer transition duration-150"
+                        >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{test.test_name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center">
                           {test.total_time} mins{" "}
                           <MdAccessTime className="ml-1" />
                         </td>

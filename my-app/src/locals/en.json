@@ -253,7 +253,7 @@
     "createAssessment": "Create Assessment",
     "assessmentDetails": "Assessment Details", 
     "chooseTests": "Choose Tests", 
-    "preview": "Preview",
+    "preview": "Review",
     "name": "Assessment Name",
     "title": "Create New Assessment",
     "jobrole": "Job Role",
@@ -269,7 +269,7 @@
     "title": "Test Selection",
     "select": "Please Select One Test",
     "overview": "Test Overview",
-    "save": "save",
+    "save": "Save",
     "next": "Next",
     "back": "Back"
   },

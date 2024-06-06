@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTests } from "../../actions/testAction";
 import Preview from "./Preview";
 import { FaPlus, FaClipboardCheck } from "react-icons/fa";
+import { IoCreateSharp } from "react-icons/io5";
 import { MdPreview } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 
@@ -18,31 +19,25 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   const [selectedQuestionCounts, setSelectedQuestionCounts] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-
+  const [fullDescription, setFullDescription] = useState(""); // State for full description in modal
 
   useEffect(() => {
     dispatch(fetchTests());
   }, [dispatch]);
 
   const handleNextButtonClick = async () => {
-    setShowAlert(false); // Reset showAlert state
-  
-    // Check if no tests are selected
+    setShowAlert(false);
+
     if (selectedTests.length === 0) {
       setShowAlert(true);
       return;
     }
-  
-    // Check if question counts are provided for all selected tests
-    // if (Object.keys(selectedQuestionCounts).length !== selectedTests.length) {
-    //   return;
-    // }
-  
+
     setShowQuestion(true);
-  
+
     const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
     const company_name = activeCompany.name;
-  
+
     const formattedTestsData = selectedTests.map((testId) => {
       const test = tests.find((t) => t.id === testId);
       return {
@@ -56,26 +51,22 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
         company: company_name,
       };
     });
-  
+
     localStorage.setItem("selectedTests", JSON.stringify(formattedTestsData));
-  
+
     goToNextStep();
   };
-  
-  
 
   const handleTestSelection = (testId) => {
-    setShowAlert(false); // Reset showAlert state
+    setShowAlert(false);
     setShowModal(true);
     setModalTestId(testId);
   };
-  
+
   const handleBackButton = () => {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
     setShowTestSelection(true);
   };
-  
-  
 
   const openModal = (testId) => {
     setShowModal(true);
@@ -100,6 +91,19 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     const counts = selectedQuestionCounts[testId];
     if (!counts) return 0;
     return Object.values(counts).reduce((total, count) => total + count, 0);
+  };
+
+  const truncateDescription = (description) => {
+    const words = description.split(" ");
+    if (words.length > 8) {
+      return words.slice(0, 8).join(" ") + "...";
+    }
+    return description;
+  };
+
+  const showFullDescription = (description) => {
+    setFullDescription(description);
+    setShowModal(true);
   };
 
   const Alert = ({ message }) => (
@@ -144,8 +148,8 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
           <div className="flex items-center mb-4">
-            <FaClipboardCheck className="text-blue-500 mr-2" size={24} />
-            <h2 className="text-xl font-bold text-gray-700">
+            <FaClipboardCheck className="text-black-500 mr-2" size={24} />
+            <h2 className="text-xl font-bold text-gray-700 mt-2">
               {test.test_name}
             </h2>
             <button
@@ -169,6 +173,8 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             </button>
           </div>
           <hr className="mb-6 border-gray-300" />
+          <h3 className="text-sm text-gray-500 mb-4">Questions Split</h3>
+
           {showAlert && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 transition-opacity duration-500 ease-in-out"
@@ -180,8 +186,10 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               </span>
             </div>
           )}
-          <div className="mb-4">
-            <h3 className="text-base font-semibold mb-2 text-gray-700">{t("TestSelection.easy")}</h3>
+          <div className="mb-6">
+            <h3 className="text-base font-semibold mb-2 text-gray-700">
+              {t("TestSelection.easy")}
+            </h3>
             <div className="flex items-center mb-4">
               <input
                 type="range"
@@ -191,14 +199,14 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                 onChange={(event) => handleQuestionCountChange(event, "easy")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-yellow-300"
               />
-              <div className="w-10 h-8 bg-gray-300 rounded-full flex justify-center items-center text-gray-700">
+              <div className="w-10 h-8  border-2 border-yellow-300 flex justify-center items-center text-gray-700">
                 {questionCounts["easy"]}
               </div>
             </div>
           </div>
           <div className="mb-4">
             <h3 className="text-base font-semibold mb-2 text-gray-700">
-            {t("TestSelection.medium")}
+              {t("TestSelection.medium")}
             </h3>
             <div className="flex items-center mb-4">
               <input
@@ -209,13 +217,15 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                 onChange={(event) => handleQuestionCountChange(event, "medium")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-green-300"
               />
-              <div className="w-10 h-8 bg-gray-300 rounded-full flex justify-center items-center text-gray-700">
+              <div className="w-10 h-8  border-2 border-green-500 flex justify-center items-center text-gray-700">
                 {questionCounts["medium"]}
               </div>
             </div>
           </div>
           <div>
-            <h3 className="text-base font-semibold mb-2 text-gray-700">{t("TestSelection.hard")}</h3>
+            <h3 className="text-base font-semibold mb-2 text-gray-700">
+              {t("TestSelection.hard")}
+            </h3>
             <div className="flex items-center mb-4">
               <input
                 type="range"
@@ -225,14 +235,14 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                 onChange={(event) => handleQuestionCountChange(event, "hard")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-red-500"
               />
-              <div className="w-10 h-8 bg-gray-300 rounded-full flex justify-center items-center text-gray-700">
+              <div className="w-10 h-8 border-2  border-red-500 flex justify-center items-center text-gray-700">
                 {questionCounts["hard"]}
               </div>
             </div>
           </div>
           <div className="flex justify-end mt-6">
             <button
-              className="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg transition-colors duration-300"
+              className="bg-black hover:bg-black text-white font-bold px-4 py-2 rounded-lg transition-colors duration-300"
               onClick={saveQuestionCount}
             >
               {t("TestSelection.save")}
@@ -243,6 +253,41 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     );
   };
 
+  const DescriptionModal = ({ description, onClose }) => (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
+        <div className="flex items-center mb-4">
+          <FaClipboardCheck className="text-black-500 mr-2" size={24} />
+          <h2 className="text-xl font-bold text-gray-700 mt-2">
+            Full Description
+          </h2>
+          <button
+            className="ml-auto text-gray-500 hover:text-gray-700"
+            onClick={onClose}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <hr className="mb-6 border-gray-300" />
+        <p className="text-gray-700">{description}</p>
+        <div className="flex justify-end mt-6"></div>
+      </div>
+    </div>
+  );
+
   return (
     <div>
       {showQuestion ? (
@@ -250,64 +295,72 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
       ) : (
         <div className="min-h-screen flex flex-col px-6 py-10 relative">
           <div className="flex items-center mb-4">
-            <FaClipboardCheck className="mr-2 text-primary" size={22} />
+            <FaClipboardCheck className="mr-2 " size={22} />
             <h3 className="text-center text-1xl font-bold mt-2">
-            {t("TestSelection.title")}            </h3>
+              {t("TestSelection.title")} 
+            </h3>
           </div>
-          {/* <hr className="mb-4 border-gray-400" /> */}
+          <p className="text-gray-500">{tests.length} test available </p>
+
           {showAlert && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 transition-opacity duration-500 ease-in-out"
               role="alert"
             >
               <span className="block sm:inline">
-              {t("TestSelection.select")}
+                {t("TestSelection.select")}
               </span>
             </div>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-14">
             {tests.map((test) => (
               <div
-              key={test.id}
-              className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border border-gray-950 w-100"
-            >
-            
+                key={test.id}
+                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border w-80 border-black"
+              >
                 <div className="relative">
-                  <div className="absolute top-0 right-0 bg-green-500 text-white py-1 px-3 rounded-tr-lg rounded-bl-lg">
-                    <span className="text-xs font-semibold">
-                      {test.categories.map((category, index) => (
-                        <span key={index}>
-                          {category}
-                          {index < test.categories.length - 1 && ", "}
-                        </span>
-                      ))}
-                    </span>
-                  </div>
                   <div className="p-6">
-                    <div className="flex items-center mb-4">
-                      <MdPreview
-                        className="text-gray-600 text-primary"
-                        size={22}
-                      />
-                      <h5 className="font-bold text-lg text-gray-800 ml-3">
+                    <div className="flex items-center mb-2">
+                      <MdPreview className="text-gray-600 " size={22} />
+                      <h5 className="font-bold text-lg text-gray-800 ml-3 mt-2">
                         {test.test_name}
                       </h5>
                     </div>
+                    <div className="mb-2 flex flex-wrap">
+                      {test.categories.map((category, index) => (
+                        <span
+                          key={index}
+                          className="bg-category-tag-bg text-black py-2 px-6 rounded-lg text-xs font-semibold mr-2 mb-2"
+                        >
+                          {category}
+                        </span>
+                      ))}
+                    </div>
                     <h2 className="text-lg font-semibold text-gray-700 mb-2">
-                    {t("TestSelection.overview")}
+                      {t("TestSelection.overview")}
                     </h2>
                     <p className="text-gray-600 mb-2">
-                      {test.test_description ||
-                        "This test is based on SEO questions."}
+                      {truncateDescription(test.test_description)}
+                      {test.test_description.split(" ").length > 15 && (
+                        <span
+                          className="text-blue-500 cursor-pointer ml-2"
+                          onClick={() =>
+                            showFullDescription(test.test_description)
+                          }
+                        >
+                          See More
+                        </span>
+                      )}
                     </p>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600 font-semibold">
-                        Total Questions: {calculateTotalQuestionCount(test.id)}
+                      <span className="text-sm text-gray-600 font-semibold flex items-center mt-2">
+                        <IoCreateSharp className="mr-1" />
+                         {calculateTotalQuestionCount(test.id)} Total Questions
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-100 px-6 py-2 flex justify-center items-center">
+                <div className=" px-6 py-2 flex justify-end items-center">
                   <button
                     className={`py-2 px-4 rounded font-bold text-white shadow ${
                       selectedTests.includes(test.id)
@@ -316,19 +369,15 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                     } transition-colors duration-300 flex items-center gap-2`}
                     onClick={() => handleTestSelection(test.id)}
                   >
-                    {!selectedTests.includes(test.id) && (
-                      <FaPlus className="mr-2" />
-                    )}
-                    {selectedTests.includes(test.id) ? "Selected" : "Add Test"}
+                    {selectedTests.includes(test.id) ? "Selected" : "Add"}
                   </button>
                 </div>
               </div>
             ))}
           </div>
-
           <div className="text-center mt-8">
             <button
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"
+              className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"
               onClick={handleNextButtonClick}
             >
               {t("TestSelection.next")}
@@ -342,10 +391,16 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
           </div>
         </div>
       )}
-      {showModal && (
+      {showModal && modalTestId && (
         <Modal
           test={tests.find((test) => test.id === modalTestId)}
           updateQuestionCount={updateQuestionCount}
+        />
+      )}
+      {showModal && !modalTestId && (
+        <DescriptionModal
+          description={fullDescription}
+          onClose={() => setShowModal(false)}
         />
       )}
     </div>

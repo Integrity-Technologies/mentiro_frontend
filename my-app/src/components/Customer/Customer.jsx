@@ -13,7 +13,8 @@ import {
   FaClipboardList,
   FaUser,
   FaFileAlt,
-  FaBars,
+  FaArrowLeft,
+  FaArrowRight,
 } from "react-icons/fa";
 import ActiveAssessment from "./ActiveAssessment";
 const logoImage = "/assets/icon.jpg";
@@ -87,7 +88,7 @@ const Customer = ({ isLanguageButton }) => {
           isMenuCollapsed ? "w-20" : "w-1/6"
         } bg-white shadow h-full overflow-y-auto transition-width duration-300`}
       >
-        <div className="flex justify-between items-center p-3">
+        <div className="flex justify-between items-center p-3 relative">
           <div className="text-center mb-3">
             {!isMenuCollapsed && (
               <img
@@ -99,9 +100,11 @@ const Customer = ({ isLanguageButton }) => {
           </div>
           <button
             onClick={toggleMenuCollapse}
-            className="p-2 focus:outline-none"
+            className="p-2 absolute right-0"
           >
-            <FaBars />
+            <div className="bg-gray-200 rounded-full absolute p-2 right-0">
+              {isMenuCollapsed ? <FaArrowRight /> : <FaArrowLeft />}
+            </div>
           </button>
         </div>
         <nav className="mt-10">

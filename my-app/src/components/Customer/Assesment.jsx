@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
-import { FaPlus, FaClipboardList } from "react-icons/fa";
+import { FaPlus, FaClipboardList, FaRegQuestionCircle } from "react-icons/fa";
 import BallProgressBar from "./BallProgressbar";
-import { getAllAssessments, getAlljobLocation, getAllworkArrangement } from "../../actions/AssesmentAction";
+import {
+  getAllAssessments,
+  getAlljobLocation,
+  getAllworkArrangement,
+} from "../../actions/AssesmentAction";
 import countries from "../../data/countries";
 import { useTranslation } from "react-i18next";
 
@@ -24,11 +28,21 @@ const Assessment = () => {
   const totalSteps = 3;
   const [currentStep, setCurrentStep] = useState(0);
 
-  const labels = [`${t("Assessments.assessmentDetails")}`, `${t("Assessments.chooseTests")}`, `${t("Assessments.preview")}`];
+  const labels = [
+    `${t("Assessments.assessmentDetails")}`,
+    `${t("Assessments.chooseTests")}`,
+    `${t("Assessments.preview")}`,
+  ];
 
-  const assessments = useSelector((state) => state.assessment.assessments || []);
-  const workArrangements = useSelector((state) => state.assessment.workArrangements || []);
-  const jobLocations = useSelector((state) => state.assessment.jobLocations || []);
+  const assessments = useSelector(
+    (state) => state.assessment.assessments || []
+  );
+  const workArrangements = useSelector(
+    (state) => state.assessment.workArrangements || []
+  );
+  const jobLocations = useSelector(
+    (state) => state.assessment.jobLocations || []
+  );
 
   const token = useSelector(getToken);
   const dispatch = useDispatch();
@@ -42,11 +56,14 @@ const Assessment = () => {
   useEffect(() => {
     const checkCompanyExists = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/company/myCompanies", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "http://localhost:5000/api/company/myCompanies",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const data = await response.json();
         if (data.length === 0) {
           setCompanyError("Please create a company first.");
@@ -133,28 +150,42 @@ const Assessment = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-gray-100 min-h-screen flex flex-col px-6 py-10 relative">
-      <>
-        <BallProgressBar steps={totalSteps} currentStep={currentStep} labels={labels} />
+    <>
+      <div className="container bg-white  mx-auto p-4  min-h-screen flex flex-col px-6 py-10 relative">
+        <BallProgressBar
+          steps={totalSteps}
+          currentStep={currentStep}
+          labels={labels}
+        />
         {showTestSelection ? (
           <TestSelection
             assessments={assessments}
             handleBackButtonClick={handleBackButtonClick}
             goToNextStep={goToNextStep}
             currentStep={currentStep} // Add this prop
-
           />
         ) : (
           <div className="">
             <div className="flex items-center mb-4 mt-5">
-              <FaClipboardList className="mr-2 text-primary" size={22} />
-              <h2 className="text-xl font-bold">{t("Assessments.title")}</h2>
+              <FaClipboardList className="mr-2 " size={22} />
+              <h2 className="text-22px font-bold mt-2">
+                {t("Assessments.title")}
+              </h2>
             </div>
             <hr className="mb-6 border-gray-400" />
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="relative">
-                <label htmlFor="formAssessmentName" className="block mb-1 text-sm font-medium text-gray-700">
-                {t("Assessments.name")}
+                <label
+                  htmlFor="formAssessmentName"
+                  className=" mb-1 text-sm font-medium text-gray-700 flex items-center"
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>{'test'}</Tooltip>}
+                  >
+                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
+                  </OverlayTrigger>
+                  {t("Assessments.name")}
                 </label>
                 <input
                   type="text"
@@ -165,11 +196,22 @@ const Assessment = () => {
                   value={assessmentName}
                   onChange={(e) => setAssessmentName(e.target.value)}
                 />
-                {companyError && <p className="mt-2 text-sm text-red-600">{companyError}</p>}
+                {companyError && (
+                  <p className="mt-2 text-sm text-red-600">{companyError}</p>
+                )}
               </div>
               <div className="relative">
-                <label htmlFor="formJobRole" className="block mb-1 text-sm font-medium text-gray-700">
-                {t("Assessments.jobrole")}
+                <label
+                  htmlFor="formJobRole"
+                  className="flex mb-1 text-sm font-medium text-gray-700"
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>{'jobroleTooltip'}</Tooltip>}
+                  >
+                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
+                  </OverlayTrigger>
+                  {t("Assessments.jobrole")}
                 </label>
                 <input
                   type="text"
@@ -180,62 +222,94 @@ const Assessment = () => {
                   value={jobRole}
                   onChange={(e) => setJobRole(e.target.value)}
                 />
-                {jobRoleError && <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>}
+                {jobRoleError && (
+                  <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
+                )}
               </div>
-            </div>
-            <div className="relative mb-4">
-              <label htmlFor="formWorkArrangement" className="block mb-1 text-sm font-medium text-gray-700">
-              {t("Assessments.WorkArrangement")}
-              </label>
-              <select
-                id="formWorkArrangement"
-                className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                  workArrangementError ? "border-red-500" : ""
-                }`}
-                value={workArrangement}
-                onChange={(e) => setWorkArrangement(e.target.value)}
-              >
-                <option value="">Select...</option>
-                {workArrangements.map((option) => (
-                  <option key={option.id} value={option.name}>
-                    {option.name}
-                  </option>
-                ))}
-              </select>
-              {workArrangementError && <p className="mt-2 text-sm text-red-600">{workArrangementError}</p>}
-            </div>
-            <div className="relative mb-4">
-              <label htmlFor="formJobLocation" className="block mb-1 text-sm font-medium text-gray-700">
-              {t("Assessments.joblocation")}
-              </label>
-              <select
-                id="formJobLocation"
-                className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                  jobLocationError ? "border-red-500" : ""
-                }`}
-                value={jobLocation}
-                onChange={(e) => setJobLocation(e.target.value)}
-              >
-                <option value="">Select...</option>
-                {jobLocations.map((option) => (
-                  <option key={option.id} value={option.name}>
-                    {option.name}
-                  </option>
-                ))}
-              </select>
-              {jobLocationError && <p className="mt-2 text-sm text-red-600">{jobLocationError}</p>}
+              <div className="relative">
+                <label
+                  htmlFor="formWorkArrangement"
+                  className="flex mb-1 text-sm font-medium text-gray-700"
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>{t("Assessments.workArrangementTooltip")}</Tooltip>}
+                  >
+                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
+                  </OverlayTrigger>
+                  {t("Assessments.WorkArrangement")}
+                </label>
+                <select
+                  id="formWorkArrangement"
+                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                    workArrangementError ? "border-red-500" : ""
+                  }`}
+                  value={workArrangement}
+                  onChange={(e) => setWorkArrangement(e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  {workArrangements.map((option) => (
+                    <option key={option.id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+                {workArrangementError && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {workArrangementError}
+                  </p>
+                )}
+              </div>
+              <div className="relative">
+                <label
+                  htmlFor="formJobLocation"
+                  className="flex mb-1 text-sm font-medium text-gray-700"
+                >
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>{t("Assessments.joblocationTooltip")}</Tooltip>}
+                  >
+                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
+                  </OverlayTrigger>
+                  {t("Assessments.joblocation")}
+                </label>
+                <select
+                  id="formJobLocation"
+                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                    jobLocationError ? "border-red-500" : ""
+                  }`}
+                  value={jobLocation}
+                  onChange={(e) => setJobLocation(e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  {jobLocations.map((option) => (
+                    <option key={option.id} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+                {jobLocationError && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {jobLocationError}
+                  </p>
+                )}
+              </div>
             </div>
             <Button
               onClick={handleAddAssessment}
-              className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2"
+              className="bg-black hover:bg-black text-white justify-center font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
             >
               <FaPlus className="inline-block mr-2" />
-              <span className="inline-block">{showTestSelection ? `${t("Assessments.createAssessment")}` : `${t("Assessments.createAssessment")}`}</span>
+              <span className="inline-block">
+                {showTestSelection
+                  ? `${t("Assessments.createAssessment")}`
+                  : `${t("Assessments.createAssessment")}`}
+              </span>
             </Button>
           </div>
         )}
-      </>
-    </div>
+      </div>
+    </>
   );
 };
 

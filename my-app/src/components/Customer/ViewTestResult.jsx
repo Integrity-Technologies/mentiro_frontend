@@ -5,6 +5,8 @@ import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { TiChartBarOutline } from "react-icons/ti";
 import { FaSearch } from "react-icons/fa";
+import { AiOutlineClose } from "react-icons/ai"; // Import the close icon
+import { FaInfoCircle } from "react-icons/fa"; // Importing the info icon component from react-icons
 
 const ViewTestResult = () => {
   const { t } = useTranslation();
@@ -21,17 +23,6 @@ const ViewTestResult = () => {
   const filteredResults = results.filter((candidate) =>
     candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Collect all unique test names
-  const testNames = [
-    ...new Set(
-      results.flatMap((candidate) =>
-        candidate.assessments.flatMap((assessment) =>
-          assessment.tests.map((test) => test.name)
-        )
-      )
-    ),
-  ];
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -58,9 +49,8 @@ const ViewTestResult = () => {
   };
 
   const openModal = (tests) => {
-    if (tests.length > 2) {
-      const filteredTests = tests.slice(2); // Filter out the first two tests
-      setSelectedTests(filteredTests);
+    if (tests.length > 0) {
+      setSelectedTests(tests);
       setIsModalOpen(true);
     }
   };
@@ -73,12 +63,11 @@ const ViewTestResult = () => {
   return (
     <div className="rounded-xl p-6 min-h-screen font-roboto">
       <div className="flex items-center mb-4">
-        <TiChartBarOutline className="mr-2" size={24} />
-        <h1 className="text-3xl font-bold mt-1 text-gray-700 font-roboto">
+        <TiChartBarOutline className="mr-2" size={40} />
+        <h1 className="font-bold mt-1 text-gray-700 text-20px">
           {t("candidatesResult.title")}
         </h1>
       </div>
-      <hr className="mb-6 border-gray-400" />
       <div className="mb-4 relative">
         <div className="relative">
           <input
@@ -92,42 +81,43 @@ const ViewTestResult = () => {
         </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 text-12px">
           <tr>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
             >
               {t("candidatesResult.Name")}
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider relative flex items-center"
             >
               {t("candidatesResult.assessmentName")}
+              <div className="group inline-block ml-2">
+                <span className="relative z-10 block text-lg">
+                  <FaInfoCircle size={14} />{" "}
+                  {/* Render the info icon component */}
+                </span>
+                <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                  Click on 'Candidates Result' to view the test details of
+                  assessments.
+                </div>
+              </div>
             </th>
-            {testNames.slice(0, 2).map((testName, index) => (
-              <th
-                key={index}
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                {testName}
-              </th>
-            ))}
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
             >
               {t("candidatesResult.assessmentScore")}
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {filteredResults.length === 0 ? (
             <tr>
               <td
-                colSpan="6"
+                colSpan="3"
                 className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
               >
                 {t("candidatesResult.noData")}
@@ -139,40 +129,15 @@ const ViewTestResult = () => {
                 <tr
                   key={`${candidate.id}-${index}`}
                   className="hover:bg-active-link-bg cursor-pointer transition duration-150"
+                  onClick={() => openModal(assessment.tests)} // Add onClick event
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap  text-gray-500">
                     {candidate.candidate_name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap  text-gray-500">
                     {assessment.name}
                   </td>
-                  {testNames.slice(0, 2).map((testName, index2) => {
-                    const test = assessment.tests.find(
-                      (test) => test.name === testName
-                    );
-                    return (
-                      <td
-                        key={index2}
-                        className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                        onClick={() => openModal(assessment.tests)} // Add onClick event
-                      >
-                        {test ? (
-                          <>
-                            {test.score ? `${test.score}%` : "0%"}
-                            <span
-                              className="px-2 py-1 ml-2 rounded"
-                              style={{ backgroundColor: "#ccffcc" }}
-                            >
-                              {getStatusMessage(test.status)}
-                            </span>
-                          </>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                    );
-                  })}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap  text-gray-500">
                     <span>
                       {assessment.assessment_percentage !== null
                         ? assessment.assessment_percentage !== 0
@@ -193,35 +158,67 @@ const ViewTestResult = () => {
         onPageChange={handlePageChange}
       />
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-4 w-2/3">
-            <h2 className="text-xl font-bold mb-4">Tests</h2>
-            <table className="w-full table-auto border-collapse">
-              <thead>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
+          <div className="bg-white rounded-lg shadow-lg p-4 w-2/3 relative">
+            <AiOutlineClose
+              className="absolute top-4 right-6 text-gray-500 cursor-pointer"
+              size={12}
+              onClick={closeModal}
+            />
+            <h2 className="text-14px font-bold mb-4">Included tests</h2>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50 text-12px">
                 <tr>
-                  <th className="border px-4 py-2">Test Name</th>
-                  <th className="border px-4 py-2">Status</th>
-                  <th className="border px-4 py-2">Test Score</th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Test
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Test Score
+                  </th>
                 </tr>
               </thead>
-              <tbody>
-                {selectedTests.map((test, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="border px-4 py-2">{test.name}</td>
-                    <td className="border px-4 py-2">{test.status}</td>
-                    <td className="border px-4 py-2">
-                      {test.score ? `${test.score}%` : "-"}
+              <tbody className="bg-white divide-y divide-gray-200 text-14px">
+                {selectedTests.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="3"
+                      className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+                    >
+                      No Tests Available
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  selectedTests.map((test, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-active-link-bg cursor-pointer transition duration-150"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                        {test.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                        {getStatusMessage(test.status)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                        {test.score ? `${test.score}%` : "-"}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
-            <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={closeModal}
-            >
-              Close
-            </button>
           </div>
         </div>
       )}
