@@ -8,11 +8,13 @@ const TestTime = ({ onComplete }) => {
   const [questionCount, setQuestionCount] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
 
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     const questions = JSON.parse(localStorage.getItem('questions')) || [];
     const totalTime = localStorage.getItem('total_time') || 20;
+    
 
     setQuestionCount(questions.length);
     setTotalTime(totalTime);
@@ -35,15 +37,16 @@ const TestTime = ({ onComplete }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center ">
       {showQuestions ? (
         <Questions onComplete={onComplete} />
       ) : (
-        <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+        <div className="bg-white  rounded-lg p-8 max-w-md w-full">
           <div className="flex justify-center mb-6 rounded-circle">
             <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
           </div>
-          <h4 className="text-2xl font-semibold text-center mb-4">
+
+          <h4 className="text-1xl font-semibold  mb-4">
             You have {totalTime} minutes to answer the {questionCount} questions.
           </h4>
           <p className="text-lg">
@@ -51,7 +54,7 @@ const TestTime = ({ onComplete }) => {
           </p>
           <p className="text-lg">
             <strong>Instructions:</strong>
-            <p>Please read carefully and select the correct answer</p>
+            <p className="text-lg">Please read carefully and select the correct answer</p>
           </p>
           <div className="mt-6">
             <button

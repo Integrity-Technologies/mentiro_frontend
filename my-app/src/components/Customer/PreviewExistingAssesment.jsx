@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { getAssessmentByUniqueLink } from "../../actions/AssesmentAction";
 import InviteModal from "./Invitemodal";
 import { FiCopy } from "react-icons/fi";
-import { FaClipboardList } from "react-icons/fa";
+import { FaClipboardList, FaUser } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
 import { Container } from "react-bootstrap";
 
@@ -86,8 +86,8 @@ const PreviewExistingAssessment = () => {
                   Assessment Time:
                 </h3>
                 <div className="flex items-center">
-                  <span className="inline-block px-2 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full flex items-center">
-                    <span className="text-lg font-bold text-gray-900 mr-2 text-white">
+                  <span className="inline-block px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
+                    <span className="text-lg font-bold  mr-2 text-black">
                       {assessmentData.assessment_time}
                     </span>
                     mins <MdAccessTime className="ml-1" />
@@ -108,10 +108,18 @@ const PreviewExistingAssessment = () => {
               <table className="min-w-full divide-y divide-gray-200 shadow-md">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test Name</th>
-                    <th scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Test Name
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Duration
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -120,8 +128,10 @@ const PreviewExistingAssessment = () => {
                       <tr
                         key={index}
                         className="hover:bg-blue-100 cursor-pointer transition duration-150"
-                        >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{test.test_name}</td>
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {test.test_name}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center">
                           {test.total_time} mins{" "}
                           <MdAccessTime className="ml-1" />
@@ -133,36 +143,42 @@ const PreviewExistingAssessment = () => {
             </div>
           </div>
         )}
-        <div className="mt-8 p-6 bg-blue-100 rounded-lg shadow-lg">
-          <h3 className="text-2xl font-bold text-center mb-4 text-blue-800">
-          Invite Candidate          </h3>
-          <p className="text-sm text-center text-blue-700 mb-4">
-          To invite the candidate, simply copy the link provided or send it directly through email.          </p>
+        <div className="mt-8 p-6  rounded-lg shadow-lg">
+        <div className="flex items-center mb-4">
+  <FaUser className="-mt-1 text-2xl mr-2" />
+  <h3 className="text-2xl font-bold text-black mt-1">Invite Candidate</h3>
+</div>
+          <p className="text-sm  text-black mb-4">
+            To invite the candidate, simply copy the link provided or send it
+            directly through email.{" "}
+          </p>
 
-          <div className="flex items-center justify-center relative w-full max-w-lg mx-auto mb-4">
+          <div className="mt-6 flex items-center relative w-full max-w-lg">
             <input
               type="text"
               value={assessmentData?.shareablelink || ""}
               readOnly
-              className="flex-1 border border-blue-300 rounded-lg py-2 pl-4 pr-10 bg-white text-gray-700 shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="flex-1 border border-gray-300 rounded-lg py-2 pl-4 pr-10 bg-white-100 text-white-700 shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <button
               onClick={copyToClipboard}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-200 hover:bg-blue-300 text-blue-600 p-2 rounded transition duration-300 ease-in-out"
+              className="text-gray-600 flex p-2 rounded transition duration-300 ease-in-out bg-gray-200 hover:bg-gray-300"
             >
               <FiCopy size={20} />
+              <span className="ml-2">Copy Link</span>
             </button>
           </div>
+
           {copySuccess && (
-            <p className="text-center text-green-500 animate__animated animate__fadeIn">
-              Link copied to clipboard!
+            <p className=" text-green-500 animate__animated animate__fadeIn mt-1">
+              Source link copied!
             </p>
           )}
 
-          <div className="flex justify-center space-x-4">
+          <div className="flex justify-end space-x-4">
             <button
               onClick={handleInviteButtonClick}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"
+              className="bg-black hover:bg-black text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"
             >
               Invite via Email
             </button>

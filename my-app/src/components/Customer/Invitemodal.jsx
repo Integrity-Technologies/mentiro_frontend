@@ -56,12 +56,13 @@ const InviteModal = ({ showModal, handleClose }) => {
   }, [showAlert]);
 
   return (
-    <Modal show={showModal} onHide={handleClose} size="lg">
+<Modal show={showModal} onHide={handleClose} size="lg">
       <Modal.Header closeButton>
         <Modal.Title className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
           <FaUser className="mr-2" /> Invite Candidate
         </Modal.Title>
       </Modal.Header>
+
       <Modal.Body>
         {!emailSent && (
           <Form>
