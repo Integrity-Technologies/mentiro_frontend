@@ -9,6 +9,7 @@ const Questions = ({ onComplete }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answerError, setAnswerError] = useState(false); // State variable for validation
+  const [progressPercentage, setProgressPercentage] = useState(0);
 
   const dispatch = useDispatch();
   const questions = JSON.parse(localStorage.getItem('questions')) || [];
@@ -23,6 +24,12 @@ const Questions = ({ onComplete }) => {
       fetchQuestionData(questions[currentQuestionIndex].question_id);
     }
   }, [dispatch, currentQuestionIndex, questions]);
+
+  useEffect(() => {
+    // Calculate progress percentage
+    const percentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+    setProgressPercentage(percentage);
+  }, [currentQuestionIndex, questions]);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -65,6 +72,16 @@ const Questions = ({ onComplete }) => {
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh', width: '150vh' }}>
+      <div className="progress" style={{ width: '50%' }}>
+        <div
+          className="progress-bar"
+          role="progressbar"
+          style={{ width: `${progressPercentage}%` }}
+          aria-valuenow={progressPercentage}
+          aria-valuemin="0"
+          aria-valuemax="100"
+        />
+      </div>
       <Card className="p-4 w-75 shadow-lg rounded-lg">
         {currentQuestion && (
           <>

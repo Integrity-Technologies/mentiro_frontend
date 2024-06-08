@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTests } from "../../actions/testAction";
 import Preview from "./Preview";
-import { FaPlus, FaClipboardCheck } from "react-icons/fa";
+import { FaPlus, FaClipboardCheck, FaTimes, FaSearch } from "react-icons/fa";
 import { IoCreateSharp } from "react-icons/io5";
 import { MdPreview } from "react-icons/md";
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,9 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   const [selectedQuestionCounts, setSelectedQuestionCounts] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [fullDescription, setFullDescription] = useState(""); // State for full description in modal
+  const [fullDescription, setFullDescription] = useState("");
+  const [searchInput, setSearchInput] = useState(""); // State for search input
+
 
   useEffect(() => {
     dispatch(fetchTests());
@@ -59,8 +61,12 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
 
   const handleTestSelection = (testId) => {
     setShowAlert(false);
-    setShowModal(true);
-    setModalTestId(testId);
+    if (selectedTests.includes(testId)) {
+      setSelectedTests(selectedTests.filter((id) => id !== testId));
+    } else {
+      setShowModal(true);
+      setModalTestId(testId);
+    }
   };
 
   const handleBackButton = () => {
@@ -288,6 +294,32 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     </div>
   );
 
+  const SelectedTestCard = ({ test, removeTest }) => (
+    <div className="flex justify-between items-center bg-blue-100 p-4 rounded-lg shadow mb-4 w-full sm:w-auto sm:flex-1">
+      <div>
+        <span className="font-semibold text-blue-900">{test.test_name}</span>
+        <span className="text-sm text-gray-600 font-semibold flex items-center mt-2">
+          <IoCreateSharp className="mr-1" />
+          {calculateTotalQuestionCount(test.id)} Questions
+        </span>
+      </div>
+      <button
+        className="text-blue-900 hover:text-blue-700"
+        onClick={() => removeTest(test.id)}
+      >
+        <FaTimes size={20} />
+      </button>
+    </div>
+  );
+
+  const removeTest = (testId) => {
+    setSelectedTests(selectedTests.filter((id) => id !== testId));
+  };
+
+    const filteredTests = tests.filter(test =>
+    test.test_name.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
   return (
     <div>
       {showQuestion ? (
@@ -295,12 +327,26 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
       ) : (
         <div className="min-h-screen flex flex-col px-6 py-10 relative">
           <div className="flex items-center mb-4">
-            <FaClipboardCheck className="mr-2 " size={22} />
+            <FaClipboardCheck className="mr-2" size={22} />
             <h3 className="text-center text-1xl font-bold mt-2">
-              {t("TestSelection.title")} 
+              {t("TestSelection.title")}
             </h3>
           </div>
-          <p className="text-gray-500">{tests.length} test available </p>
+
+          <div className="mb-4 relative">
+        <div className="relative">
+        <input
+          type="text"
+          placeholder="Search test..."
+          className="border-2 border-gray-300 rounded-lg px-10 py-2 w-full md:w-1/3 lg:w-1/4 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-300 hover:border-blue-400"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)} // Update search input value
+        />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
+      </div>
+          
+          <p className="text-gray-500">{filteredTests.length} test available </p>
 
           {showAlert && (
             <div
@@ -312,8 +358,23 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               </span>
             </div>
           )}
+
+<div className="grid grid-cols-4 gap-4 mb-6">
+  {selectedTests.map((testId) => {
+    const test = tests.find((test) => test.id === testId);
+    return (
+      <SelectedTestCard
+        key={test.id}
+        test={test}
+        removeTest={removeTest}
+      />
+    );
+  })}
+</div>
+
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-14">
-            {tests.map((test) => (
+            {filteredTests.map((test) => (
               <div
                 key={test.id}
                 className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border w-80 border-black"
@@ -321,7 +382,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                 <div className="relative">
                   <div className="p-6">
                     <div className="flex items-center mb-2">
-                      <MdPreview className="text-gray-600 " size={22} />
+                      <MdPreview className="text-gray-600" size={22} />
                       <h5 className="font-bold text-lg text-gray-800 ml-3 mt-2">
                         {test.test_name}
                       </h5>
@@ -352,15 +413,15 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
                         </span>
                       )}
                     </p>
-                    <div className="flex justify-between items-center">
+                    {/* <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600 font-semibold flex items-center mt-2">
                         <IoCreateSharp className="mr-1" />
-                         {calculateTotalQuestionCount(test.id)} Total Questions
+                        {calculateTotalQuestionCount(test.id)} Total Questions
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
-                <div className=" px-6 py-2 flex justify-end items-center">
+                <div className="px-6 py-2 flex justify-end items-center">
                   <button
                     className={`py-2 px-4 rounded font-bold text-white shadow ${
                       selectedTests.includes(test.id)

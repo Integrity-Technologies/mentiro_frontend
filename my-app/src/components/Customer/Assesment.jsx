@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { getToken } from "../../actions/authActions";
 import TestSelection from "./TestSelection";
-import { FaPlus, FaClipboardList, FaRegQuestionCircle } from "react-icons/fa";
+import { FaPlus, FaClipboardList, FaInfoCircle } from "react-icons/fa";
 import BallProgressBar from "./BallProgressbar";
 import {
   getAllAssessments,
   getAlljobLocation,
   getAllworkArrangement,
 } from "../../actions/AssesmentAction";
-import countries from "../../data/countries";
 import { useTranslation } from "react-i18next";
 
 const Assessment = () => {
@@ -151,7 +150,7 @@ const Assessment = () => {
 
   return (
     <>
-      <div className="container bg-white  mx-auto p-4  min-h-screen flex flex-col px-6 py-10 relative">
+      <div className="container bg-white mx-auto p-4 min-h-screen flex flex-col px-6 py-10 relative">
         <BallProgressBar
           steps={totalSteps}
           currentStep={currentStep}
@@ -167,7 +166,7 @@ const Assessment = () => {
         ) : (
           <div className="">
             <div className="flex items-center mb-4 mt-5">
-              <FaClipboardList className="mr-2 " size={22} />
+              <FaClipboardList className="mr-2" size={22} />
               <h2 className="text-22px font-bold mt-2">
                 {t("Assessments.title")}
               </h2>
@@ -177,14 +176,16 @@ const Assessment = () => {
               <div className="relative">
                 <label
                   htmlFor="formAssessmentName"
-                  className=" mb-1 text-sm font-medium text-gray-700 flex items-center"
+                  className="mb-1 text-sm font-medium text-gray-700 flex items-center"
                 >
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>{'test'}</Tooltip>}
-                  >
-                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
-                  </OverlayTrigger>
+                  <div className="group inline-block ml-2 mr-2">
+                    <span className="relative z-10 block text-lg">
+                      <FaInfoCircle size={14} />{" "}
+                    </span>
+                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                      Enter the name of the assessment.
+                    </div>
+                  </div>
                   {t("Assessments.name")}
                 </label>
                 <input
@@ -205,12 +206,15 @@ const Assessment = () => {
                   htmlFor="formJobRole"
                   className="flex mb-1 text-sm font-medium text-gray-700"
                 >
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>{'jobroleTooltip'}</Tooltip>}
-                  >
-                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
-                  </OverlayTrigger>
+                  <div className="group inline-block ml-2  mr-2">
+                    <span className="relative z-10 block text-lg">
+                      <FaInfoCircle size={14} />{" "}
+                    </span>
+                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                      Specify the job role for which this assessment is
+                      intended.
+                    </div>
+                  </div>
                   {t("Assessments.jobrole")}
                 </label>
                 <input
@@ -231,12 +235,15 @@ const Assessment = () => {
                   htmlFor="formWorkArrangement"
                   className="flex mb-1 text-sm font-medium text-gray-700"
                 >
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>{t("Assessments.workArrangementTooltip")}</Tooltip>}
-                  >
-                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
-                  </OverlayTrigger>
+                  <div className="group inline-block ml-2 mr-2">
+                    <span className="relative z-10 block text-lg">
+                      <FaInfoCircle size={14} />{" "}
+                    </span>
+                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                      Choose the type of work arrangement for the job role, such
+                      as remote or on-site.
+                    </div>
+                  </div>
                   {t("Assessments.WorkArrangement")}
                 </label>
                 <select
@@ -265,12 +272,14 @@ const Assessment = () => {
                   htmlFor="formJobLocation"
                   className="flex mb-1 text-sm font-medium text-gray-700"
                 >
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip>{t("Assessments.joblocationTooltip")}</Tooltip>}
-                  >
-                    <FaRegQuestionCircle className="mr-2 text-gray-400" />
-                  </OverlayTrigger>
+                  <div className="group inline-block ml-2 mr-2">
+                    <span className="relative z-10 block text-lg">
+                      <FaInfoCircle size={14} />{" "}
+                    </span>
+                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                      Select the location where the job will be based.
+                    </div>
+                  </div>
                   {t("Assessments.joblocation")}
                 </label>
                 <select

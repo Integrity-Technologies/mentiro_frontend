@@ -69,42 +69,44 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
 </h3> */}
 
       <p className="mt-4 text-black">{t("InviteCandidate.invite")}</p>
-
-      <div className="mt-6 flex items-center relative w-full max-w-lg">
-        <input
-          type="text"
-          value={link}
-          readOnly
-          className="flex-1 border border-gray-300 rounded-lg py-2 pl-4 pr-10 bg-white-100 text-white-700 shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        />
-        <button
-          onClick={copyToClipboard}
-          className="text-gray-600 flex p-2 rounded transition duration-300 ease-in-out bg-gray-200 hover:bg-gray-300"
-        >
-          <FiCopy size={20} />
-          <span className="ml-2">Copy Link</span>
-        </button>
-      </div>
+      <div className="mt-2 w-full max-w-lg">
+  <h2 className="text-lg font-semibold mb-2">URL</h2>
+  <div className="flex items-center relative">
+    <input
+      type="text"
+      value={link}
+      readOnly
+      className="flex-1 border border-gray-300 rounded-lg py-2 pl-4 pr-10 bg-white-100 text-white-700 shadow-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    />
+    <button
+      onClick={copyToClipboard}
+      className="text-gray-600 ml-3 flex p-2 rounded transition duration-300 ease-in-out bg-gray-200 hover:bg-gray-300"
+    >
+      <FiCopy size={20} />
+      <span className="ml-2">Copy Link</span>
+    </button>
+  </div>
+</div>
       {copySuccess && (
-        <p className="mt-2 text-green-500 animate__animated animate__fadeIn">
+        <p className="mt-2 text-black animate__animated animate__fadeIn">
           {t("InviteCandidate.linkcopied")}{" "}
         </p>
       )}
 
-      <div className="mt-8 flex justify-end space-x-4">
+      {/* <div className="mt-8 flex justify-end space-x-4">
         <button
           onClick={handleInviteButtonClick}
           className="bg-black hover:bg-black text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"
         >
           {t("InviteCandidate.inviteviaemail")}{" "}
-        </button>
+        </button> */}
         {/* <button
           onClick={redirectToDashboard}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"
         >
           Back to Dashboard
         </button> */}
-      </div>
+      {/* </div> */}
 
       <InviteModal showModal={showModal} handleClose={handleCloseModal} />
     </div>

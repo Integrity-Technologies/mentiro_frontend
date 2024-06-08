@@ -10,6 +10,7 @@ const YourTests = () => {
   const [assessmentId, setAssessmentId] = useState(null);
   const [userResults, setUserResults] = useState([]);
   const [showQuestions, setShowQuestions] = useState(false);
+  const [showTestTime, setShowTestTime] = useState(false);
   const [completedTests, setCompletedTests] = useState(new Set());
 
   const dispatch = useDispatch();
@@ -74,6 +75,10 @@ const YourTests = () => {
     }
   };
 
+  const handleBack = () => {
+    setShowTestTime(false);
+  };
+
   const getTestStatus = (testId) => {
     if (completedTests.has(testId)) {
       return "Completed";
@@ -89,13 +94,11 @@ const YourTests = () => {
   return (
     <div className="min-h-screen flex items-center justify-center font-roboto">
         {showQuestions ? (
-          <TestTime onComplete={handleTestCompletion} />
+          <TestTime onComplete={handleTestCompletion} onBack={handleBack} />
         ) : (
           <>
-
+         <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-md">
             {showTestsSection && (
-                    <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-
               <div className="container mx-auto px-4 py-3">
                 <div className="flex justify-center mb-6">
                   <img
@@ -113,38 +116,40 @@ const YourTests = () => {
                     assessment.
                   </p>
                 </div>
-                <div className="space-y-4 flex flex-col items-center">
-                  {tests.map((test, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center bg-white p-6 rounded-lg shadow transition transform hover:-translate-y-1 hover:shadow-lg w-full max-w-4xl"
-                    >
-                      <div className="flex-grow">
-                        <h4 className="text-xl font-semibold text-gray-900 mb-2">
-                          {test.test_name}
-                        </h4>
-                        <p className="text-gray-600">{test.description}</p>
-                      </div>
-                      <button
-                        className={`ml-4 py-2 px-4 rounded-lg text-white font-medium transition ${
-                          getTestStatus(test.test_id) === "Not Attempted"
-                            ? "bg-black hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            : "bg-green-600 cursor-not-allowed"
-                        }`}
-                        onClick={() => handleTestStart(index)}
-                        disabled={
-                          getTestStatus(test.test_id) !== "Not Attempted"
-                        }
-                      >
-                        {getTestStatus(test.test_id) === "Not Attempted"
-                          ? "Start Test"
-                          : "Completed"}
-                      </button>
-                    </div>
-                  ))}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white">
+                    <thead>
+                      <tr className="bg-gray-200">
+                        <th className="py-2 px-4 border-b text-left">Test Name</th>
+                        <th className="py-2 px-4 border-b text-left ml-5">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tests.map((test, index) => (
+                        <tr key={index} className="hover:bg-gray-100">
+                          <td className="py-2 px-4 border-b">{test.test_name}</td>
+                          <td className="py-2 px-4 border-b">
+                            <button
+                              className={`py-2 px-4 rounded-lg text-white font-medium transition ${
+                                getTestStatus(test.test_id) === "Not Attempted"
+                                  ? "bg-black hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                  : "bg-green-600 cursor-not-allowed"
+                              }`}
+                              onClick={() => handleTestStart(index)}
+                              disabled={getTestStatus(test.test_id) !== "Not Attempted"}
+                            >
+                              {getTestStatus(test.test_id) === "Not Attempted"
+                                ? "Start Test"
+                                : "Completed"}
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            
+            )}
             {!showTestsSection && (
               <div className="container mx-auto px-4 py-5 flex flex-col items-center justify-center">
                 <div className="flex justify-center mb-6 rounded-circle">
@@ -162,13 +167,11 @@ const YourTests = () => {
                 </p>
               </div>
             )}
-      </div>
-)}
+         </div>
+
           </>
-          
-)}
-          </div>
-      
+        )}
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { createResult } from "../../actions/resultAction"; // createResult action import kiya hai
 import Questions from "./Questions";
 
-const TestTime = ({ onComplete }) => {
+const TestTime = ({ onComplete, onBack  }) => {
   const [showQuestions, setShowQuestions] = useState(false);
   const [questionCount, setQuestionCount] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
@@ -41,7 +41,7 @@ const TestTime = ({ onComplete }) => {
       {showQuestions ? (
         <Questions onComplete={onComplete} />
       ) : (
-        <div className="bg-white  rounded-lg p-8 max-w-md w-full">
+        <div className="bg-white max-w-4xl  rounded-lg p-8  w-full">
           <div className="flex justify-center mb-6 rounded-circle">
             <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
           </div>
@@ -63,7 +63,7 @@ const TestTime = ({ onComplete }) => {
             >
               Start Test
             </button>
-            <button className="border border-gray-400 text-gray-700 py-2 px-4 rounded w-full">
+            <button className="border border-gray-400 text-gray-700 py-2 px-4 rounded w-full"  onClick={onBack}>
               Back
             </button>
           </div>

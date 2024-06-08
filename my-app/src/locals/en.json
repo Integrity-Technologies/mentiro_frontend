@@ -201,7 +201,8 @@
     "email": "Email",
     "phone": "Phone",
     "CompanyInformation": "Company Information",
-    "addCompany": "Create Company"
+    "addCompany": "Create Company",
+    "companyNameError":"Enter Company Name"
   },
   
   "candidates": {
@@ -241,7 +242,8 @@
     "Assessment": "Assessment",
     "Assessment.NoData":"No Assessment Data Available",
     "gotoResultMenu": "Show Results",
-    "Candidate.Name": "Candidate Name"
+    "Candidate.Name": "Candidate Name",
+    "Candidate.Assessment": "Assessment Name"
   },
 
   "ActiveAssessment": {

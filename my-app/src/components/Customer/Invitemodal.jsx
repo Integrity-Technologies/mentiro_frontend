@@ -57,18 +57,19 @@ const InviteModal = ({ showModal, handleClose }) => {
 
   return (
 <Modal show={showModal} onHide={handleClose} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
-          <FaUser className="mr-2" /> Invite Candidate
-        </Modal.Title>
-      </Modal.Header>
+<Modal.Header closeButton>
+  <Modal.Title className="text-3xl font-bold text-center mb-8 flex items-center justify-center">
+    <FaUser className="mr-2" /> Invite Candidate
+  </Modal.Title>
+</Modal.Header>
+
 
       <Modal.Body>
         {!emailSent && (
           <Form>
             <table className="w-full mb-4 border-separate border border-gray-300" style={{ borderSpacing: '0 15px' }}>
               <thead>
-                <tr className="bg-gray-200 border border-gray-300 ">
+                <tr className="bg-gray-200 border border-gray-300">
                   <th className="text-left px-2 py-2 border border-gray-300">First Name</th>
                   <th className="text-left px-2 py-2 border border-gray-300">Last Name</th>
                   <th className="text-left px-2 py-2 border border-gray-300">Email</th>

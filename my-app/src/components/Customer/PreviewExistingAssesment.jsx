@@ -60,7 +60,7 @@ const PreviewExistingAssessment = () => {
       <Container>
         {assessmentData && (
           <div className="mt-8">
-            <h3 className="text-2xl font-bold text-center mb-8 flex items-center ">
+            <h3 className="text-3xl font-bold text-center justify-center mb-8 flex items-center ">
               <FaClipboardList className="mr-2" />
               <span>Assessment Preview</span>
             </h3>
@@ -162,7 +162,7 @@ const PreviewExistingAssessment = () => {
             />
             <button
               onClick={copyToClipboard}
-              className="text-gray-600 flex p-2 rounded transition duration-300 ease-in-out bg-gray-200 hover:bg-gray-300"
+              className="text-gray-600 flex p-2 ml-3 rounded transition duration-300 ease-in-out bg-gray-200 hover:bg-gray-300"
             >
               <FiCopy size={20} />
               <span className="ml-2">Copy Link</span>
@@ -170,25 +170,25 @@ const PreviewExistingAssessment = () => {
           </div>
 
           {copySuccess && (
-            <p className=" text-green-500 animate__animated animate__fadeIn mt-1">
+            <p className=" text-black animate__animated animate__fadeIn mt-2">
               Source link copied!
             </p>
           )}
 
-          <div className="flex justify-end space-x-4">
+          {/* <div className="flex justify-end space-x-4">
             <button
               onClick={handleInviteButtonClick}
               className="bg-black hover:bg-black text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"
             >
               Invite via Email
-            </button>
+            </button> */}
             {/* <button
               onClick={redirectToDashboard}
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition transform duration-300 ease-in-out hover:scale-105 shadow-lg"
             >
               Back to Dashboard
             </button> */}
-          </div>
+          {/* </div> */}
         </div>
 
         <InviteModal showModal={showModal} handleClose={handleCloseModal} />
