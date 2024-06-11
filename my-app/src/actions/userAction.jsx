@@ -13,7 +13,7 @@ export const USER_ERROR = "USER_ERROR";
 export const getAllUsers = () => async (dispatch) => {
   try {
     // Fetch users data from the API
-    const res = await axios.get("http://localhost:5000/api/users/Allusers");
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/Allusers`);
 
     // Format created_at field for each user
     const formattedUsers = res.data.map((user) => ({
@@ -50,7 +50,7 @@ export const addUser = (newUser) => async (dispatch) => {
     };
     console.log(token);
     console.log(newUser);
-    const response = await axios.post("http://localhost:5000/api/users/add", newUser, axiosConfig);
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/users/add`, newUser, axiosConfig);
     const data =  response.data;
     dispatch({ type: ADD_USER_SUCCESS, payload: data });
     return data;
@@ -73,7 +73,7 @@ export const editUser = (userId, updatedUser) => async dispatch => {
     };
     console.log(token);
     const response = await axios.put(
-      `http://localhost:5000/api/users/update/${userId}`, { first_name: updatedUser.first_name, last_name: updatedUser.last_name, email: updatedUser.email, password: updatedUser.password, phone: updatedUser.phone }, axiosConfig
+      `${process.env.REACT_APP_API_URL}/users/update/${userId}`, { first_name: updatedUser.first_name, last_name: updatedUser.last_name, email: updatedUser.email, password: updatedUser.password, phone: updatedUser.phone }, axiosConfig
     );
     const data = response.data;
     dispatch({ type: EDIT_USER_SUCCESS, payload: data });
@@ -96,7 +96,7 @@ export const deleteUser = userId => async dispatch => {
     };
     console.log(token);
     const response = await axios.delete(
-      `http://localhost:5000/api/users/delete/${userId}`, axiosConfig
+      `${process.env.REACT_APP_API_URL}/users/delete/${userId}`, axiosConfig
     );
     const data = await response.json();
     dispatch({ type: DELETE_USER_SUCCESS, payload: response.data });

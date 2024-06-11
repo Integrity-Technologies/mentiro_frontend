@@ -17,7 +17,7 @@ export const getToken = () => {
 // Action creators
 export const signUp = (userData) => async (dispatch) => {
   try {
-    const res = await axios.post(`${baseURL}/users/signup`, userData);
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/signup`, userData);
     dispatch({ type: SIGNUP_SUCCESS, payload: res.data });
     return { success: true, data: res.data };
   } catch (error) {
@@ -37,7 +37,7 @@ export const signUp = (userData) => async (dispatch) => {
 
 export const login = (userData) => async (dispatch) => {
   try {
-    const res = await axios.post(`${baseURL}/users/login`, userData);
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, userData);
     const { result, token } = res.data;
 
     // Store user data as a string in localStorage
@@ -67,7 +67,7 @@ export const login = (userData) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    const res = await axios.get(`${baseURL}/users/logout`);
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`);
     console.log("~ logout ~ res:", res);
 
     localStorage.removeItem("token");
@@ -86,7 +86,7 @@ export const clearToken = () => {
 
 export const forgotPassword = (userData) => async (dispatch) => {
   try {
-    const res = await axios.post(`${baseURL}/users/password/forgot`, userData);
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/password/forgot`, userData);
     dispatch({
       type: FORGOT_PASSWORD_SUCCESS,
       payload: res.data, // Assuming the backend returns success message upon successful password reset request
@@ -107,7 +107,7 @@ export const resetPassword = (passwordData) => async (dispatch) => {
   try {
     const { token, newPassword, confirmPassword } = passwordData; // Destructure passwordData object
     console.log(token);
-    const res = await axios.put(`${baseURL}/users/password/reset/:token`, {
+    const res = await axios.put(`${process.env.REACT_APP_API_URL}/users/password/reset/:token`, {
       newPassword,
       confirmPassword,
       token,

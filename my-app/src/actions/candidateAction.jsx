@@ -16,7 +16,7 @@ export const getAllCandidates = () => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    const res = await axios.get("http://localhost:5000/api/candidate/allCandidate", axiosConfig);
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/candidate/allCandidate`, axiosConfig);
     console.log(res);
 
     const formattedUsers = res.data.map((user) => ({
@@ -43,7 +43,7 @@ export const addCandidate = (newCandidate) => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    const response = await axios.post("http://localhost:5000/api/candidate/create", newCandidate, axiosConfig);
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/candidate/create`, newCandidate, axiosConfig);
     const data = response.data;
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: data });
     return data;
@@ -62,7 +62,7 @@ export const editCandidate = (candidateId, updatedCandidate) => async (dispatch)
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    const response = await axios.put(`http://localhost:5000/api/candidate/edit/${candidateId}`, updatedCandidate, axiosConfig);
+    const response = await axios.put(`${process.env.REACT_APP_API_URL}/candidate/edit/${candidateId}`, updatedCandidate, axiosConfig);
     const data = response.data;
     dispatch({ type: EDIT_CANDIDATE_SUCCESS, payload: data });
     return data;
@@ -81,7 +81,7 @@ export const deleteCandidate = (candidateId) => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    const response = await axios.delete(`http://localhost:5000/api/candidate/delete/${candidateId}`, axiosConfig);
+    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/candidate/delete/${candidateId}`, axiosConfig);
     console.log(candidateId);
     const data = response.data;
     dispatch({ type: DELETE_CANDIDATE_SUCCESS, payload: data });
@@ -102,7 +102,7 @@ export const getUserCandidates = () => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    const res = await axios.get("http://localhost:5000/api/candidate/user/candidates", axiosConfig);
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/candidate/user/candidates`, axiosConfig);
     console.log(res);
 
     const formattedUsers = res.data.map((user) => ({

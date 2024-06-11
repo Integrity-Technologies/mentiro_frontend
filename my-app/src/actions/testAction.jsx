@@ -45,7 +45,7 @@ export const fetchTests = () => async (dispatch) => {
           Authorization: `Bearer ${token}` // Set authorization header
         }
       };
-      const response = await axios.get('http://localhost:5000/api/test/allTests', axiosConfig);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/test/allTests`, axiosConfig);
       dispatch(fetchTestsSuccess(response.data));
       console.log(response.data);
     } catch (error) {
@@ -61,7 +61,7 @@ export const fetchTests = () => async (dispatch) => {
             Authorization: `Bearer ${token}` // Set authorization header
           }
         };
-      const response = await axios.post('http://localhost:5000/api/test/create/test', newTest, axiosConfig);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/test/create/test`, newTest, axiosConfig);
       dispatch(addTestSuccess(response.data));
       console.log(response.data);
     } catch (error) {
@@ -78,7 +78,7 @@ export const fetchTests = () => async (dispatch) => {
           Authorization: `Bearer ${token}` // Set authorization header
         }
       };
-      const response = await axios.put(`http://localhost:5000/api/test/edit/test/${id}`, updatedTest, axiosConfig);
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/test/edit/test/${id}`, updatedTest, axiosConfig);
       dispatch(editTestSuccess(response.data));
       console.log(response.data);
     } catch (error) {
@@ -95,7 +95,7 @@ export const fetchTests = () => async (dispatch) => {
           Authorization: `Bearer ${token}` // Set authorization header
         }
       };
-      await axios.delete(`http://localhost:5000/api/test/delete/test/${id}`, axiosConfig);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/test/delete/test/${id}`, axiosConfig);
       dispatch(deleteTestSuccess(id));
       console.log(id);
     } catch (error) {

@@ -14,7 +14,7 @@ export const ALL_QUESTION = 'ALL_QUESTION';
 export const getQuestions = () => async (dispatch) => {
   try {
     
-    const res = await axios.get('http://localhost:5000/api/question/AllQuestion'); // Adjust the endpoint according to your API
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/question/AllQuestion`); // Adjust the endpoint according to your API
     dispatch({
       type: GET_QUESTIONS,
       payload: res.data
@@ -36,7 +36,7 @@ export const addQuestion = (newQuestion) => async (dispatch) => {
         }
       };
       // Make an API request to add the new question
-      const res = await axios.post('http://localhost:5000/api/question/create/question', newQuestion, axiosConfig); // Adjust the endpoint according to your API
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/question/create/question`, newQuestion, axiosConfig); // Adjust the endpoint according to your API
       dispatch({
         type: ADD_QUESTION,
         payload: res.data // Assuming the response contains the newly added question
@@ -73,7 +73,7 @@ export const deleteQuestion = (Id) => async (dispatch) => {
         }
       };
   
-      const res = await axios.delete(`http://localhost:5000/api/question/delete/${Id}`, axiosConfig);
+      const res = await axios.delete(`${process.env.REACT_APP_API_URL}/question/delete/${Id}`, axiosConfig);
       // Check if deletion was successful (status code 2xx)
       if (res.status >= 200 && res.status < 300) {
         dispatch({ type: DELETE_QUESTION, payload: Id });
@@ -102,7 +102,7 @@ export const deleteQuestion = (Id) => async (dispatch) => {
         console.log(updatedQuestion);
 
       // Make an API request to update the question
-      const res = await axios.put(`http://localhost:5000/api/question/update/${Id}`, updatedQuestion, axiosConfig); // Adjust the endpoint according to your API
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}/question/update/${Id}`, updatedQuestion, axiosConfig); // Adjust the endpoint according to your API
       dispatch({
         type: EDIT_QUESTION,
         payload: { Id, updatedQuestion: res.data } // Send the updated question object to the reducer
@@ -123,7 +123,7 @@ export const deleteQuestion = (Id) => async (dispatch) => {
         },
       };
   
-      const res = await axios.get(`http://localhost:5000/api/question/${id}`, axiosConfig);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/question/${id}`, axiosConfig);
       dispatch({
         type: ALL_QUESTION,
         payload: res.data,

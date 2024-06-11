@@ -38,12 +38,12 @@ const CompanyProfile = () => {
       };
 
       axios
-        .get("http://localhost:5000/api/users/me", config)
+        .get(`${process.env.REACT_APP_API_URL}/users/me`, config)
         .then((response) => {
           setUser(response.data.user);
 
           axios
-            .get("http://localhost:5000/api/company/myCompanies", config)
+            .get(`${process.env.REACT_APP_API_URL}/company/myCompanies`, config)
             .then((companyResponse) => {
               setCompanyList(companyResponse.data);
 
@@ -100,7 +100,7 @@ const CompanyProfile = () => {
           },
         };
         axios
-          .get("http://localhost:5000/api/company/myCompanies", config)
+          .get(`${process.env.REACT_APP_API_URL}/company/myCompanies`, config)
           .then((companyResponse) => {
             setCompanyList(companyResponse.data);
             setNewCompanyName("");

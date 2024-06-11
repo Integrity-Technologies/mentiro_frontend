@@ -20,7 +20,7 @@ export const getAllCategories = () => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    const res = await axios.get(`${baseURL}/category/Allcategory`, axiosConfig);
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/category/Allcategory`, axiosConfig);
     console.log(res, token);
     dispatch({ type: GET_ALL_CATEGORIES_SUCCESS, payload: res.data });
     return res.data;
@@ -42,7 +42,7 @@ export const addCategory = (categoryData) => async (dispatch) => {
     };
     console.log(token);
    
-    const res = await axios.post(`${baseURL}/category/create`, { category_name: categoryData }, axiosConfig);
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/category/create`, { category_name: categoryData }, axiosConfig);
     console.log(res, token)
     dispatch({ type: ADD_CATEGORY_SUCCESS, payload: res.data });
     return res.data;
@@ -61,7 +61,7 @@ export const editCategory = (categoryId, categoryData) => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    const res = await axios.put(`${baseURL}/category/edit/${categoryId}`, { category_name: categoryData }, axiosConfig);
+    const res = await axios.put(`${process.env.REACT_APP_API_URL}/category/edit/${categoryId}`, { category_name: categoryData }, axiosConfig);
     if (res.status >= 200 && res.status < 300) {
       dispatch({ type: EDIT_CATEGORY_SUCCESS, payload: categoryId });
     } else {
@@ -85,7 +85,7 @@ export const deleteCategory = (categoryId) => async (dispatch) => {
       }
     };
 
-    const res = await axios.delete(`${baseURL}/category/delete/${categoryId}`, axiosConfig);
+    const res = await axios.delete(`${process.env.REACT_APP_API_URL}/category/delete/${categoryId}`, axiosConfig);
     // Check if deletion was successful (status code 2xx)
     if (res.status >= 200 && res.status < 300) {
       dispatch({ type: DELETE_CATEGORY_SUCCESS, payload: categoryId });

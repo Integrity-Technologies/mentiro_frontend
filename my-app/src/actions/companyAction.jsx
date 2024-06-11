@@ -37,7 +37,7 @@ export const companyError = (error) => ({
 export const fetchCompanies = () => async (dispatch) => {
   try {
     const response = await axios.get(
-      "http://localhost:5000/api/company/AllCompany"
+      `${process.env.REACT_APP_API_URL}/company/AllCompany`
     );
     dispatch(fetchCompaniesSuccess(response.data));
   } catch (error) {
@@ -57,7 +57,7 @@ export const addCompany = (companyData) => async (dispatch) => {
     console.log(token);
 
     const response = await axios.post(
-      "http://localhost:5000/api/company/create/company",
+      `${process.env.REACT_APP_API_URL}/company/create/company`,
       companyData, axiosConfig
     );
     dispatch(addCompanySuccess(response.data));
@@ -77,7 +77,7 @@ export const editCompany = (companyId, updatedCompanyData) => async (dispatch) =
     };
     console.log(token);
     const response = await axios.put(
-      `http://localhost:5000/api/company/update/company/${companyId}`,
+      `${process.env.REACT_APP_API_URL}/company/update/company/${companyId}`,
       updatedCompanyData, axiosConfig
     );
     dispatch(editCompanySuccess(companyId, response.data));
@@ -96,7 +96,7 @@ export const deleteCompany = (companyId) => async (dispatch) => {
       }
     };
     console.log(token);
-    await axios.delete(`http://localhost:5000/api/company/delete/company/${companyId}`, axiosConfig);
+    await axios.delete(`${process.env.REACT_APP_API_URL}/company/delete/company/${companyId}`, axiosConfig);
     dispatch(deleteCompanySuccess(companyId));
   } catch (error) {
     dispatch(companyError(error.message));

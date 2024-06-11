@@ -7,7 +7,8 @@ export const FETCH_RESULTS_FAILURE = 'FETCH_RESULTS_FAILURE';
 export const CREATE_RESULT = 'CREATE_RESULT'; // Add CREATE_RESULT action type
 
 
-
+const apiUrl = process.env.REACT_APP_API_URL;
+    console.log(`API URL: ${apiUrl}`);
 
 export const fetchResultsSuccess = (results) => {
   return {
@@ -32,7 +33,7 @@ export const fetchResults = () => {
       }
     };
     // Simulating API call
-    axios.get('http://localhost:5000/api/result/allResults', axiosConfig)
+    axios.get(`${process.env.REACT_APP_API_URL}/result/user/results`, axiosConfig)
       .then(response => response.data)
       .then(data => {
         dispatch(fetchResultsSuccess(data));
@@ -55,7 +56,7 @@ export const getUserResults = () => {
       }
     };
     // Simulating API call
-    axios.get('http://localhost:5000/api/result/user/results', axiosConfig)
+    axios.get(`${process.env.REACT_APP_API_URL}/result/user/results`, axiosConfig)
       .then(response => response.data)
       .then(data => {
         dispatch(fetchResultsSuccess(data));
@@ -76,7 +77,7 @@ export const createResult = (resultData) => {
         Authorization: `Bearer ${token}`, // Set authorization header
       },
     };
-    axios.post('http://localhost:5000/api/result/create', resultData, axiosConfig)
+    axios.post(`${process.env.REACT_APP_API_URL}/result/create`, resultData, axiosConfig)
       .then(response => response.data)
       .then(data => {
         // Assuming the response data contains the resultId
@@ -100,7 +101,7 @@ export const submitAnswer = (resultData) => { // Define createResult action
       }
     };
     // Simulating API call
-    axios.post('http://localhost:5000/api/result/submit', resultData, axiosConfig)
+    axios.post(`${process.env.REACT_APP_API_URL}/result/submit`, resultData, axiosConfig)
       .then(response => response.data)
       .then(data => {
         // Assuming the response data contains the newly created result
