@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCandidates, getUserCandidates } from "../../actions/candidateAction";
+import {
+  getAllCandidates,
+  getUserCandidates,
+} from "../../actions/candidateAction";
 import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { FaUserCircle, FaSearch } from "react-icons/fa";
@@ -63,30 +66,42 @@ const CandidateProfile = () => {
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50 text-12px">
           <tr>
-            <th  scope="col" className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.firstName")}</th>
-            <th scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.lastName")}</th>
-            <th scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.email")}</th>
-            <th scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t("candidates.dateJoined")}</th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+            >
+              {t("candidates.firstName")}
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+            >
+              {t("candidates.lastName")}
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+            >
+              {t("candidates.email")}
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+            >
+              {t("candidates.dateJoined")}
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {error ? (
             <tr>
-            <td
-              colSpan="3"
-              className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
-            >
-              {t("candidates.noData")}
-            </td>
-          </tr>
+              <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                {t("candidates.noData")}
+              </td>
+            </tr>
           ) : filteredCandidates.length === 0 ? (
             <tr>
-              <td
-                className="px-6 py-4 whitespace-nowrap text-gray-500"
-              >
+              <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                 {t("candidates.noData")}
               </td>
             </tr>
@@ -94,12 +109,20 @@ const CandidateProfile = () => {
             currentCandidates.map((candidate) => (
               <tr
                 key={candidate.id}
-                className="hover:bg-active-link-bg cursor-pointer transition duration-150"
-                >
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.first_name}</td>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.last_name}</td>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap  text-gray-500">{candidate.created_at}</td>
+                className="hover:bg-active-link-bg cursor-pointer transition duration-150 hover:text-white group"
+              >
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  {candidate.first_name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  {candidate.last_name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  {candidate.email}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  {candidate.created_at}
+                </td>
               </tr>
             ))
           )}
