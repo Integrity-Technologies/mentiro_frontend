@@ -48,8 +48,8 @@ export const addUser = (newUser) => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    console.log(token);
-    console.log(newUser);
+    // console.log(token);
+    // console.log(newUser);
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/users/add`, newUser, axiosConfig);
     const data =  response.data;
     dispatch({ type: ADD_USER_SUCCESS, payload: data });
@@ -63,7 +63,7 @@ export const addUser = (newUser) => async (dispatch) => {
 
 
 export const editUser = (userId, updatedUser) => async dispatch => {
-  console.log(updatedUser);
+  // console.log(updatedUser);
   try {
     const token = getToken(); // Retrieve token from local storage
     const axiosConfig = {
@@ -71,7 +71,7 @@ export const editUser = (userId, updatedUser) => async dispatch => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    console.log(token);
+    // console.log(token);
     const response = await axios.put(
       `${process.env.REACT_APP_API_URL}/users/update/${userId}`, { first_name: updatedUser.first_name, last_name: updatedUser.last_name, email: updatedUser.email, password: updatedUser.password, phone: updatedUser.phone }, axiosConfig
     );
@@ -87,14 +87,14 @@ export const editUser = (userId, updatedUser) => async dispatch => {
 
 export const deleteUser = userId => async dispatch => {
   try {
-    console.log(userId);
+    // console.log(userId);
     const token = getToken(); // Retrieve token from local storage
     const axiosConfig = {
       headers: {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    console.log(token);
+    // console.log(token);
     const response = await axios.delete(
       `${process.env.REACT_APP_API_URL}/users/delete/${userId}`, axiosConfig
     );

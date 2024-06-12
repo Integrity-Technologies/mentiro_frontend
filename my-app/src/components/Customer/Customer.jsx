@@ -121,7 +121,9 @@ const Customer = ({ isLanguageButton }) => {
             >
               <span
                 className={`mr-3 ${
-                  activeLink === option.link ? "text-white" : "text-gray-600"
+                  activeLink === option.link
+                    ? "text-white"
+                    : "text-gray-600"
                 }`}
               >
                 {option.icon}
@@ -129,7 +131,9 @@ const Customer = ({ isLanguageButton }) => {
               {!isMenuCollapsed && (
                 <span
                   className={`${
-                    activeLink === option.link ? "text-white" : "text-gray-600"
+                    activeLink === option.link
+                      ? "text-white"
+                      : "text-gray-600"
                   }`}
                 >
                   {t(option.label)}

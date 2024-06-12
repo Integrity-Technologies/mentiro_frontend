@@ -47,7 +47,7 @@ export const fetchTests = () => async (dispatch) => {
       };
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/test/allTests`, axiosConfig);
       dispatch(fetchTestsSuccess(response.data));
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       dispatch(testError(error.message));
     }
@@ -63,14 +63,14 @@ export const fetchTests = () => async (dispatch) => {
         };
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/test/create/test`, newTest, axiosConfig);
       dispatch(addTestSuccess(response.data));
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       dispatch(testError(error.message));
     }
   };
   
   export const editTest = (id, updatedTest) => async (dispatch) => {
-    console.log(updatedTest, id + "From edit test action");
+    // console.log(updatedTest, id + "From edit test action");
     try {
       const token = getToken(); // Retrieve token from local storage
       const axiosConfig = {
@@ -80,7 +80,7 @@ export const fetchTests = () => async (dispatch) => {
       };
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/test/edit/test/${id}`, updatedTest, axiosConfig);
       dispatch(editTestSuccess(response.data));
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       dispatch(testError(error.message));
     }
@@ -97,7 +97,7 @@ export const fetchTests = () => async (dispatch) => {
       };
       await axios.delete(`${process.env.REACT_APP_API_URL}/test/delete/test/${id}`, axiosConfig);
       dispatch(deleteTestSuccess(id));
-      console.log(id);
+      // console.log(id);
     } catch (error) {
       dispatch(testError(error.message));
     }

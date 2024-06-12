@@ -249,7 +249,8 @@
 
   "ActiveAssessment": {
     "title": "My Assessments",
-    "create": "Create New Assessment"
+    "create": "Create New Assessment",
+    "noData": "No Assessment Found"
   },
 
   "Assessments": {

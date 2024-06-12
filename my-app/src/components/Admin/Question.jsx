@@ -75,7 +75,7 @@ const Question = () => {
 //   const handleShowEditModal = () => setShowEditModal(true);
   const EditQuestion = async (newQuestion) => {
     if(selectedQuestion){
-        console.log(selectedQuestion.id);
+        // console.log(selectedQuestion.id);
         await dispatch(editQuestion(selectedQuestion.id, newQuestion)); // Call editQuestion action
         await dispatch(getQuestions());
     }

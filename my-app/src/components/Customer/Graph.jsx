@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { FaUserCircle, FaRegHandshake } from "react-icons/fa";
+import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineBarChart } from "react-icons/ai";
-import DonutGraph from "./DonutGraph";
 import { useTranslation } from "react-i18next";
 import CandidateGraph from "./Candidategraph";
-import CandidateCard from "./CandidateCard";
-import CircleGraph from "./CircleGraph";
 import ViewTestResult from "./ViewTestResult";
 import CandidateProfile from "./CandidatesProfile";
 import ActiveAssessment from "./ActiveAssessment";
+import ResultCard from "./ResultCard";
+import Assessmentgraph from "./Assessmentgraph";
+import CandidateCard from "./CandidateCard";
 
 const DualGraphs = () => {
   const { t } = useTranslation();
@@ -30,9 +30,9 @@ const DualGraphs = () => {
 
   const handleRowClick = (candidate, assessment, test) => {
     // Handle the row click logic here, for example:
-    console.log("Candidate:", candidate);
-    console.log("Assessment:", assessment);
-    console.log("Test:", test);
+    // console.log("Candidate:", candidate);
+    // console.log("Assessment:", assessment);
+    // console.log("Test:", test);
     setShowResult(true); // Navigate to Candidate Results menu
   };
 
@@ -65,7 +65,7 @@ const DualGraphs = () => {
               {t("graphView.Candidate")}
             </span>
           </h2> */}
-          <DonutGraph />
+          <CandidateCard />
         </div>
         <div
           onClick={goToAssessmentMenu}
@@ -77,7 +77,7 @@ const DualGraphs = () => {
               {t("graphView.Assessment")}
             </span>
           </h2> */}
-          <CircleGraph />
+          <Assessmentgraph />
         </div>
         <div
           onClick={goToResultMenu}
@@ -87,7 +87,7 @@ const DualGraphs = () => {
             <AiOutlineBarChart className="mr-2" />
             <span className="font-bold underline">Results</span>
           </h2> */}
-          <CandidateCard />
+          <ResultCard />
         </div>
       </div>
       <div className="rounded-lg p-0 mt-0 flex flex-col justify-center items-center">

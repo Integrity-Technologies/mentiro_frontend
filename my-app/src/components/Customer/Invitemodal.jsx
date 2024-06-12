@@ -35,7 +35,7 @@ const InviteModal = ({ showModal, handleClose }) => {
 
     try {
       const responseData = await dispatch(InviteAssessment(invitationData));
-      console.log("Invitation sent successfully:", responseData);
+      // console.log("Invitation sent successfully:", responseData);
       setEmailSent(true);
       setShowAlert(true);
     } catch (error) {

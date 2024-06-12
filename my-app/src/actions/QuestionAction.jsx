@@ -28,7 +28,7 @@ export const getQuestions = () => async (dispatch) => {
 // Action to add a new question
 export const addQuestion = (newQuestion) => async (dispatch) => {
     try {
-        console.log(newQuestion);
+        // console.log(newQuestion);
         const token = getToken();
       const axiosConfig = {
         headers: {
@@ -65,7 +65,7 @@ export const addQuestion = (newQuestion) => async (dispatch) => {
 
 export const deleteQuestion = (Id) => async (dispatch) => {
     try {
-        console.log(Id);
+        // console.log(Id);
       const token = getToken();
       const axiosConfig = {
         headers: {
@@ -84,7 +84,7 @@ export const deleteQuestion = (Id) => async (dispatch) => {
       return res.data;
     } catch (error) {
       const errorMessage = JSON.stringify(error.response.data.error);
-      console.log(errorMessage);
+      // console.log(errorMessage);
       throw error;
     }
   };
@@ -99,7 +99,7 @@ export const deleteQuestion = (Id) => async (dispatch) => {
             Authorization: `Bearer ${token}`
           }
         };
-        console.log(updatedQuestion);
+        // console.log(updatedQuestion);
 
       // Make an API request to update the question
       const res = await axios.put(`${process.env.REACT_APP_API_URL}/question/update/${Id}`, updatedQuestion, axiosConfig); // Adjust the endpoint according to your API

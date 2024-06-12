@@ -62,7 +62,7 @@ export const addCompany = (companyData) => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    console.log(token);
+    // console.log(token);
 
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/company/create/company`,
@@ -83,7 +83,7 @@ export const editCompany = (companyId, updatedCompanyData) => async (dispatch) =
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    console.log(token);
+    // console.log(token);
     const response = await axios.put(
       `${process.env.REACT_APP_API_URL}/company/update/company/${companyId}`,
       updatedCompanyData, axiosConfig
@@ -103,7 +103,7 @@ export const deleteCompany = (companyId) => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
-    console.log(token);
+    // console.log(token);
     await axios.delete(`${process.env.REACT_APP_API_URL}/company/delete/company/${companyId}`, axiosConfig);
     dispatch(deleteCompanySuccess(companyId));
   } catch (error) {

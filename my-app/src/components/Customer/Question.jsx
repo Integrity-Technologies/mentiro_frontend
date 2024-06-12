@@ -12,7 +12,7 @@ const Question = ({ handleBackButtonClick }) => {
   const [showPreview, setShowPreview] = useState(false); // State to manage preview visibility
 
   const questions = useSelector((state) => state.question.questions);
-  console.log("🚀 ~ Question ~ questions:", questions)
+  // console.log("🚀 ~ Question ~ questions:", questions)
 
   useEffect(() => {
     dispatch(getQuestions());

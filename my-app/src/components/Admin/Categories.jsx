@@ -90,8 +90,8 @@ const Category = () => {
       }
 
       const responseData = await dispatch(addCategory(newCategory));
-      console.log(responseData);
-      console.log(token); // Console log the token
+      // console.log(responseData);
+      // console.log(token); // Console log the token
       handleCloseAddModal();
       await dispatch(getAllCategories());
     } catch (error) {

@@ -7,8 +7,8 @@ export const FETCH_RESULTS_FAILURE = 'FETCH_RESULTS_FAILURE';
 export const CREATE_RESULT = 'CREATE_RESULT'; // Add CREATE_RESULT action type
 
 
-const apiUrl = process.env.REACT_APP_API_URL;
-    console.log(`API URL: ${apiUrl}`);
+// const apiUrl = process.env.REACT_APP_API_URL;
+    // console.log(`API URL: ${apiUrl}`);
 
 export const fetchResultsSuccess = (results) => {
   return {

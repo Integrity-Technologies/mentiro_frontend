@@ -35,7 +35,7 @@ const Candidate = () => {
       setShowTests(true);
       setSuccessAlert(true);
       localStorage.setItem("candidateId", data.id);
-      console.log(data.id);
+      // console.log(data.id);
     }
   };
   const handleInputChange = (e) => {

@@ -10,7 +10,7 @@ const CandidateGraph = ({ onRowClick }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const results = useSelector((state) => state.results.results);
-  console.log("🚀 ~ CandidateGraph ~ results:", results);
+  // console.log("🚀 ~ CandidateGraph ~ results:", results);
   const { t } = useTranslation();
   const [showResult, setShowResult] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");

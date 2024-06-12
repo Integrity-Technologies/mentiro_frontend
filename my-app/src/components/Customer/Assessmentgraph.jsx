@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
 import { AiOutlineLineChart } from "react-icons/ai";
 
-const CircleGraph = () => {
+const Assessmentgraph = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,17 +59,7 @@ const CircleGraph = () => {
     return <div className="text-center">Loading...</div>;
   }
 
-  if (error) {
-    return (
-      <div className="text-center text-red-500">
-        {error.response?.status === 500
-          ? "Server error, please try again later."
-          : "An error occurred, please try again."}
-      </div>
-    );
-  }
-
-  if (assessmentsCount === 0) {
+  if (error && assessmentsCount === 0) {
     return (
       <div className="text-center text-yellow-700">
         {t("graphView.Assessment.NoData")}
@@ -100,4 +90,4 @@ const CircleGraph = () => {
   );
 };
 
-export default CircleGraph;
+export default Assessmentgraph;

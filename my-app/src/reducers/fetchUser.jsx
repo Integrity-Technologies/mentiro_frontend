@@ -30,7 +30,7 @@ export const fetchUser = () => {
   return (dispatch) => {
     dispatch(fetchUserRequest());
     axios
-      .get("http://localhost:5000/api/users/me") // Change the URL to match your backend route for fetching user data
+      .get(`${process.env.REACT_APP_API_URL}/users/me`) // Change the URL to match your backend route for fetching user data
       .then((response) => {
         // If the request is successful, dispatch fetchUserSuccess action with user data
         dispatch(fetchUserSuccess(response.data));

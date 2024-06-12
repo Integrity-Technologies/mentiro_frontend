@@ -10,7 +10,7 @@ const CategoryDropdown = ({ categories }) => {
 
   const handleCheckboxChange = (category) => {
     // Handle checkbox change logic here
-    console.log("Category selected:", category);
+    // console.log("Category selected:", category);
   };
 
   return (

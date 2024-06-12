@@ -31,11 +31,11 @@ function App() {
     dispatch(fetchUser());
   }, [dispatch]); // Run this effect only once on component mount
 
-  console.log("User:", user);
-  console.log("Token:", token);
+  // console.log("User:", user);
+  // console.log("Token:", token);
   
 
-console.log(user, token + "from local storage")
+// console.log(user, token + "from local storage")
 
   i18n
   .use(initReactI18next) // Bind react-i18next to i18next

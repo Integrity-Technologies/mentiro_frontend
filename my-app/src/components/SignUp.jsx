@@ -29,7 +29,7 @@ const SignUp = () => {
       password: formData.get("password"),
       confirm_password: formData.get("confirm_password"),
     };
-    console.log(":rocket: ~ handleSubmit ~ phone:", userData);
+    // console.log(":rocket: ~ handleSubmit ~ phone:", userData);
     let newErrors = {};
     if (!userData.first_name) {
       newErrors.first_name = t("signup.errors.firstNameRequired");
@@ -62,7 +62,7 @@ const SignUp = () => {
       try {
         setShowAlert(true);
         const newresult = await dispatch(signUp(userData));
-        console.log(newresult);
+        // console.log(newresult);
         if (newresult?.success) {
           navigate("/");
         }

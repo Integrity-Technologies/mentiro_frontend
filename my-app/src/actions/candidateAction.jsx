@@ -17,7 +17,7 @@ export const getAllCandidates = () => async (dispatch) => {
       }
     };
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/candidate/allCandidate`, axiosConfig);
-    console.log(res);
+    // console.log(res);
 
     const formattedUsers = res.data.map((user) => ({
         ...user,
@@ -82,7 +82,7 @@ export const deleteCandidate = (candidateId) => async (dispatch) => {
       }
     };
     const response = await axios.delete(`${process.env.REACT_APP_API_URL}/candidate/delete/${candidateId}`, axiosConfig);
-    console.log(candidateId);
+    // console.log(candidateId);
     const data = response.data;
     dispatch({ type: DELETE_CANDIDATE_SUCCESS, payload: data });
     return data;
@@ -103,7 +103,7 @@ export const getUserCandidates = () => async (dispatch) => {
       }
     };
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/candidate/user/candidates`, axiosConfig);
-    console.log(res);
+    // console.log(res);
 
     const formattedUsers = res.data.map((user) => ({
         ...user,

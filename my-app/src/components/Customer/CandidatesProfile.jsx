@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllCandidates,
-  getUserCandidates,
-} from "../../actions/candidateAction";
+import { getUserCandidates } from "../../actions/candidateAction";
 import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { FaUserCircle, FaSearch } from "react-icons/fa";
@@ -27,9 +24,17 @@ const CandidateProfile = () => {
     fetchData();
   }, [dispatch]);
 
+  // Get the active company from local storage
+  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+
+  // Filter candidates based on the active company
   const filteredCandidates = candidates.filter((candidate) => {
-    const fullName = `${candidate.first_name} ${candidate.last_name}`;
-    return fullName.toLowerCase().includes(searchTerm.toLowerCase());
+    return (
+      candidate.companies.includes(activeCompany.id) &&
+      (`${candidate.first_name} ${candidate.last_name}`)
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,16 +100,22 @@ const CandidateProfile = () => {
         <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {error ? (
             <tr>
-              <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+              <td
+                colSpan="4"
+                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+              >
                 {t("candidates.noData")}
               </td>
             </tr>
           ) : filteredCandidates.length === 0 ? (
             <tr>
-              <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                {t("candidates.noData")}
-              </td>
-            </tr>
+            <td
+              colSpan="3"
+              className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+            >
+              {t("ActiveAssessment.noData")}
+            </td>
+          </tr>
           ) : (
             currentCandidates.map((candidate) => (
               <tr

@@ -28,10 +28,10 @@ const Login = () => {
       try {
         setShowAlert(true);
         const newresult = await dispatch(login({ email, password }));
-        console.log(newresult);
+        // console.log(newresult);
         setTimeout(() => setShowAlert(false), 3000); // success
         const permissions = localStorage.getItem("user");
-        console.log(permissions);
+        // console.log(permissions);
         if (permissions === "true") {
           navigate("/admin-dashboard");
         } else {
