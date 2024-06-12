@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import TablePagination from "./TablePagination";
-
 import {
   getAllAssessments,
   deleteAssessment,
@@ -23,7 +22,6 @@ const ActiveAssessment = () => {
   const [currentView, setCurrentView] = useState("activeassessment");
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [uniqueLink, setUniqueLink] = useState("");
   const [currentPreviewView, setCurrentPreviewView] =
@@ -75,10 +73,15 @@ const ActiveAssessment = () => {
     }
   };
 
-  const filteredAssessment = Array.isArray(assessments?.assessments)
+  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+
+  const filteredAssessments = Array.isArray(assessments?.assessments)
     ? assessments?.assessments?.filter((assessment) => {
         const fullName = `${assessment.assessment_name} ${assessment.last_name}`;
-        return fullName.toLowerCase().includes(searchTerm.toLowerCase());
+        return (
+          fullName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          assessment.company_id === activeCompany?.id
+        );
       })
     : [];
 
@@ -97,14 +100,13 @@ const ActiveAssessment = () => {
   }
 
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(filteredAssessment.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredAssessments.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentResults = filteredAssessment.slice(
+  const currentResults = filteredAssessments.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
-  console.log("🚀 ~ ActiveAssessment ~ currentResults:", currentResults);
 
   const handlePageChange = (page) => setCurrentPage(page);
 
@@ -229,12 +231,12 @@ const ActiveAssessment = () => {
       </CSSTransition>
 
       {deleteSuccess && (
-        <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg">
-          Assessment deleted successfully!
-        </div>
-      )}
-    </div>
-  );
+        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-md transition duration-300">
+        Assessment deleted successfully!
+      </div>
+    )}
+  </div>
+);
 };
 
 export default ActiveAssessment;

@@ -27,6 +27,7 @@ const CompanyProfile = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -40,7 +41,7 @@ const CompanyProfile = () => {
       axios
         .get(`${process.env.REACT_APP_API_URL}/users/me`, config)
         .then((response) => {
-          setUser(response.data.user);
+          setUser(response.data);
 
           axios
             .get(`${process.env.REACT_APP_API_URL}/company/myCompanies`, config)

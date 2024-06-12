@@ -75,12 +75,13 @@ const CandidateProfile = () => {
         <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {error ? (
             <tr>
-              <td
-                className="px-6 py-4 whitespace-nowrap font-medium text-gray-900"
-              >
-                {t("candidates.noData")}
-              </td>
-            </tr>
+            <td
+              colSpan="3"
+              className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+            >
+              {t("candidates.noData")}
+            </td>
+          </tr>
           ) : filteredCandidates.length === 0 ? (
             <tr>
               <td

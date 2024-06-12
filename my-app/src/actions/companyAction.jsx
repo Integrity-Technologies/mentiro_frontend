@@ -7,6 +7,14 @@ export const ADD_COMPANY_SUCCESS = "ADD_COMPANY_SUCCESS";
 export const EDIT_COMPANY_SUCCESS = "EDIT_COMPANY_SUCCESS";
 export const DELETE_COMPANY_SUCCESS = "DELETE_COMPANY_SUCCESS";
 export const COMPANY_ERROR = "COMPANY_ERROR";
+export const SET_ACTIVE_COMPANY = 'SET_ACTIVE_COMPANY'; // New action type for setting active company
+
+// Action creator to set active company
+export const setActiveCompany = (company) => ({
+    type: SET_ACTIVE_COMPANY,
+    payload: company,
+});
+
 
 export const fetchCompaniesSuccess = (companies) => ({
   type: FETCH_COMPANIES_SUCCESS,

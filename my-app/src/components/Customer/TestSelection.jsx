@@ -295,11 +295,11 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   );
 
   const SelectedTestCard = ({ test, removeTest }) => (
-    <div className="flex justify-between items-center bg-blue-100 p-4 rounded-lg shadow mb-4 w-full sm:w-auto sm:flex-1">
+    <div className="flex justify-between items-center bg-custom-gold p-3 rounded-lg custom-height shadow mb-4 custom-width sm:w-auto sm:flex-1">
       <div>
-        <span className="font-semibold text-blue-900">{test.test_name}</span>
+        <span className="font-semibold text-black justify-center">{test.test_name}</span>
         <span className="text-sm text-gray-600 font-semibold flex items-center mt-2">
-          <IoCreateSharp className="mr-1" />
+          <IoCreateSharp className="mr-1 text-black" />
           {calculateTotalQuestionCount(test.id)} Questions
         </span>
       </div>

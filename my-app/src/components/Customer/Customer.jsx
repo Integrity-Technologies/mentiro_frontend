@@ -114,15 +114,14 @@ const Customer = ({ isLanguageButton }) => {
               className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm
                 ${
                   activeLink === option.link
-                    ? "shadow-lg bg-active-link-bg shadow-green-300"
-                    : ""
-                }
-                hover:bg-active-link-bg`}
+                    ? "shadow-lg bg-blue-500 text-white shadow-green-300"
+                    : "hover:bg-blue-500 hover:text-white"
+                }`}
               onClick={() => handleClick(option.link)}
             >
               <span
                 className={`mr-3 ${
-                  activeLink === option.link ? "text-black" : "text-gray-600"
+                  activeLink === option.link ? "text-white" : "text-gray-600"
                 }`}
               >
                 {option.icon}
@@ -130,7 +129,7 @@ const Customer = ({ isLanguageButton }) => {
               {!isMenuCollapsed && (
                 <span
                   className={`${
-                    activeLink === option.link ? "text-black" : "text-gray-600"
+                    activeLink === option.link ? "text-white" : "text-gray-600"
                   }`}
                 >
                   {t(option.label)}

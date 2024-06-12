@@ -10,7 +10,15 @@ module.exports = {
         "sidebar-bg": "#F5F6F6", // Custom light grey
         "active-link-bg": "#7799ff", // Custom light green
         "category-tag-bg": "#E9F0F1",
+        "custom-gold": '#CCA457'
       },
+      width: {
+        'custom-width': '231.594px',
+      },
+      height: {
+        'custom-height': '52px',
+      },
+
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],      },
         fontSize: {
