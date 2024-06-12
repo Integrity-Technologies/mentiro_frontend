@@ -8,6 +8,7 @@ import BallProgressBar from "./BallProgressbar";
 import {
   getAllAssessments,
   getAlljobLocation,
+  getAlljobRole,
   getAllworkArrangement,
 } from "../../actions/AssesmentAction";
 import { useTranslation } from "react-i18next";
@@ -43,6 +44,8 @@ const Assessment = () => {
     (state) => state.assessment.jobLocations || []
   );
 
+  const jobRoles = useSelector((state) => state.assessment.jobRoles || []);
+
   const token = useSelector(getToken);
   const dispatch = useDispatch();
 
@@ -50,6 +53,7 @@ const Assessment = () => {
     dispatch(getAllAssessments());
     dispatch(getAllworkArrangement());
     dispatch(getAlljobLocation());
+    dispatch(getAlljobRole());
   }, [dispatch]);
 
   useEffect(() => {
@@ -201,7 +205,7 @@ const Assessment = () => {
                   <p className="mt-2 text-sm text-red-600">{companyError}</p>
                 )}
               </div>
-              <div className="relative">
+              {/* <div className="relative">
                 <label
                   htmlFor="formJobRole"
                   className="flex mb-1 text-sm font-medium text-gray-700"
@@ -226,6 +230,41 @@ const Assessment = () => {
                   value={jobRole}
                   onChange={(e) => setJobRole(e.target.value)}
                 />
+                {jobRoleError && (
+                  <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
+                )}
+              </div> */}
+              <div className="relative">
+                <label
+                  htmlFor="formJobRole"
+                  className="flex mb-1 text-sm font-medium text-gray-700"
+                >
+                  <div className="group inline-block ml-2 mr-2">
+                    <span className="relative z-10 block text-lg">
+                      <FaInfoCircle size={14} />{" "}
+                    </span>
+                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                      Specify the job role for which this assessment is
+                      intended.
+                    </div>
+                  </div>
+                  {t("Assessments.jobrole")}
+                </label>
+                <select
+                  id="formJobRole"
+                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                    jobRoleError ? "border-red-500" : ""
+                  }`}
+                  value={jobRole}
+                  onChange={(e) => setJobRole(e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  {jobRoles.map((role) => (
+                    <option key={role.id} value={role.name}>
+                      {role.name}
+                    </option>
+                  ))}
+                </select>
                 {jobRoleError && (
                   <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
                 )}
