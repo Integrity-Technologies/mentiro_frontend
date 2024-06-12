@@ -28,6 +28,14 @@ const DualGraphs = () => {
     setShowCandidate(true);
   };
 
+  const handleRowClick = (candidate, assessment, test) => {
+    // Handle the row click logic here, for example:
+    console.log("Candidate:", candidate);
+    console.log("Assessment:", assessment);
+    console.log("Test:", test);
+    setShowResult(true); // Navigate to Candidate Results menu
+  };
+
   if (showResult) {
     return <ViewTestResult />;
   }
@@ -83,19 +91,20 @@ const DualGraphs = () => {
         </div>
       </div>
       <div className="rounded-lg p-0 mt-0 flex flex-col justify-center items-center">
-        <h2 className="text-xl font-bold mb-0 flex items-center text-center text-gray-800 mt-10">
+        <h2 className="text-xl font-bold mb-4 flex items-center text-center text-gray-800 mt-10">
           <AiOutlineBarChart className="mr-2" />
           <span className="font-bold underline">
             {t("graphView.candidatesDetails")}
           </span>
         </h2>
-        <CandidateGraph />
-        <button
+        <div className="mb-4"></div> {/* Add this line for additional space */}
+        <CandidateGraph onRowClick={handleRowClick} />
+        {/* <button
           onClick={goToResultMenu}
           className="px-4 py-2 border border-gray-300 rounded-lg bg-black text-white hover:bg-blue-600"
         >
           {t("graphView.gotoResultMenu")}
-        </button>
+        </button> */}
       </div>
     </div>
   );
