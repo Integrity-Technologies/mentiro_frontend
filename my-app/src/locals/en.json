@@ -238,6 +238,7 @@
     "selectCandidate": "Select Candidate",
     "Candidate.Tests": "Tests",
     "Candidate.Scores": "Scores",
+    "Candidate.Date":"Date",
     "Candidate.Error": "No Candidate Result Found ",
     "Assessment": "Assessment",
     "Assessment.NoData":"No Assessment Data Available",
