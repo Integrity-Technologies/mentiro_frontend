@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import ViewTestResult from "./ViewTestResult";
 import TablePagination from "./TablePagination";
 
-const CandidateGraph = () => {
+const CandidateGraph = ({ onRowClick }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const results = useSelector((state) => state.results.results);
@@ -43,10 +43,19 @@ const CandidateGraph = () => {
   const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentResults = filteredResults.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+
+  // Helper function to compare assessment dates
+  const compareDates = (a, b) => {
+    const dateA = new Date(a.assessments[0].started_at);
+    const dateB = new Date(b.assessments[0].started_at);
+    return dateB - dateA;
+  };
+
+  // Sorting filteredResults array based on assessment date
+  const sortedResults = filteredResults.sort(compareDates);
+
+  // Using sortedResults instead of filteredResults
+  const currentResults = sortedResults.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
@@ -65,13 +74,20 @@ const CandidateGraph = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("graphView.Candidate.Scores")}
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("graphView.Candidate.Date")}
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {currentResults.map((candidate) =>
                   candidate.assessments.map((assessment) =>
                     assessment.tests.map((test, index) => (
-                      <tr key={`${candidate.id}-${assessment.id}-${index}`} className="hover:bg-active-link-bg cursor-pointer transition duration-150 group">
+                      <tr
+                        key={`${candidate.id}-${assessment.id}-${index}`}
+                        className="hover:bg-active-link-bg cursor-pointer transition duration-150 group"
+                        onClick={() => onRowClick(candidate, assessment, test)}
+                      >
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 group-hover:text-white">
                           {candidate.candidate_name}
                         </td>
@@ -79,7 +95,14 @@ const CandidateGraph = () => {
                           {assessment.name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 group-hover:text-white">
-                          {test.score === null ? "0%" : test.score === undefined ? "-" : `${test.score}%`}
+                          {test.score === null
+                            ? "0%"
+                            : test.score === undefined
+                            ? "-"
+                            : `${test.score}%`}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 group-hover:text-white">
+                          {new Date(assessment.started_at).toLocaleDateString()}
                         </td>
                       </tr>
                     ))
