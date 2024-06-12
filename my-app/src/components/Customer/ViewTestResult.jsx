@@ -128,20 +128,22 @@ const ViewTestResult = () => {
               candidate.assessments.map((assessment, index) => (
                 <tr
                   key={`${candidate.id}-${index}`}
-                  className="hover:bg-active-link-bg cursor-pointer transition duration-150"
+                  className="hover:bg-active-link-bg cursor-pointer transition duration-150 hover:text-white group"
                   onClick={() => openModal(assessment.tests)} // Add onClick event
                 >
-                  <td className="px-6 py-4 whitespace-nowrap  text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                     {candidate.candidate_name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap  text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                     {assessment.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap  text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                     <span>
                       {assessment.assessment_percentage !== null
                         ? assessment.assessment_percentage !== 0
-                          ? `${assessment.assessment_percentage}%`
+                          ? assessment.assessment_percentage % 1 !== 0 // Check if not a whole number
+                            ? `${assessment.assessment_percentage.toFixed(1)}%`
+                            : `${assessment.assessment_percentage}%` // Display without decimal and trailing zero
                           : "0%"
                         : "-"}
                     </span>
@@ -203,15 +205,15 @@ const ViewTestResult = () => {
                   selectedTests.map((test, index) => (
                     <tr
                       key={index}
-                      className="hover:bg-active-link-bg cursor-pointer transition duration-150"
+                      className="hover:bg-active-link-bg cursor-pointer transition duration-150 group"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                         {test.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                         {getStatusMessage(test.status)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                         {test.score ? `${test.score}%` : "-"}
                       </td>
                     </tr>
