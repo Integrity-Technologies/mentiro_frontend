@@ -10,9 +10,7 @@ export const ASSESSMENT_ERROR = "ASSESSMENT_ERROR";
 export const INVITE_ASSESSMENT_SUCCESS = "INVITE_ASSESSMENT_SUCCESS";
 export const GET_WORK_ARRANGEMENTS_SUCCESS = "GET_WORK_ARRANGEMENTS_SUCCESS";
 export const GET_ALL_JOB_LOCATION_SUCCESS = "GET_ALL_JOB_LOCATION_SUCCESS";
-
-
-
+export const GET_ALL_JOB_ROLE_SUCCESS = "GET_ALL_JOB_ROLE_SUCCESS";
 
 
 export const getAllAssessments = () => async (dispatch) => {
@@ -23,7 +21,7 @@ export const getAllAssessments = () => async (dispatch) => {
           Authorization: `Bearer ${token}` // Set authorization header
         }
       };
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/Assessments/my/assessments`, axiosConfig);
+      const res = await axios.get("http://localhost:5000/api/Assessments/my/assessments", axiosConfig);
       console.log(res, token);
       dispatch({
         type: GET_ALL_ASSESSMENTS_SUCCESS,
@@ -47,7 +45,7 @@ export const getAllAssessments = () => async (dispatch) => {
         },
       };
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/Assessments/create/assessment`,
+        "http://localhost:5000/api/Assessments/create/assessment",
         assessmentData,
         axiosConfig
       );
@@ -83,7 +81,7 @@ export const editAssessment = (assessmentId, assessmentData) => async (
       }
     };
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/Assessments/assessment/${assessmentId}`,
+      `http://localhost:5000/api/Assessments/assessment/${assessmentId}`,
       assessmentData, axiosConfig
     );
     dispatch({
@@ -108,7 +106,7 @@ export const deleteAssessment = (assessmentId) => async (dispatch) => {
       };
 
     await axios.delete(
-      `${process.env.REACT_APP_API_URL}/Assessments/assessment/${assessmentId}` , axiosConfig
+      `http://localhost:5000/api/Assessments/assessment/${assessmentId}` , axiosConfig
     );
     dispatch({
       type: DELETE_ASSESSMENT_SUCCESS,
@@ -132,7 +130,7 @@ export const InviteAssessment = (assessmentData) => async (dispatch) => {
         },
       };
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/Assessments/invite/candidate`,
+        "http://localhost:5000/api/Assessments/invite/candidate",
         assessmentData,
         axiosConfig
       );
@@ -166,7 +164,7 @@ export const getAssessmentByUniqueLink = (assessmentData) => async (dispatch) =>
     console.log(assessmentData);
 
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/Assessments/assessment/${assessmentData}`,
+      `http://localhost:5000/api/Assessments/assessment/${assessmentData}`,
       
       axiosConfig
     );
@@ -188,7 +186,7 @@ export const getAssessmentByUniqueLink = (assessmentData) => async (dispatch) =>
 
 export const getAllworkArrangement = () => async (dispatch) => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/workArrangement/`);
+    const res = await axios.get("http://localhost:5000/api/workArrangement/");
     dispatch({
       type: GET_WORK_ARRANGEMENTS_SUCCESS,
       payload: res.data,
@@ -204,7 +202,7 @@ export const getAllworkArrangement = () => async (dispatch) => {
 
 export const getAlljobLocation = () => async (dispatch) => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/jobLocation/`);
+    const res = await axios.get("http://localhost:5000/api/jobLocation/");
     dispatch({
       type: GET_ALL_JOB_LOCATION_SUCCESS,
       payload: res.data,
@@ -217,5 +215,17 @@ export const getAlljobLocation = () => async (dispatch) => {
   }
 };
 
-
-
+export const getAlljobRole = () => async (dispatch) => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/jobRole/");
+    dispatch({
+      type: GET_ALL_JOB_ROLE_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ASSESSMENT_ERROR,
+      payload: error?.response?.data?.error,
+    });
+  }
+};
