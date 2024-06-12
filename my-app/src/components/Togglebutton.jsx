@@ -54,9 +54,9 @@ const LanguageToggleButton = ({
 
       <div className="fixed-bottom ml-md-5">
         {showAlert && (
-          <div className="w-25 p-4 mb-4 text-sm text-red-700 bg-red-100 border border-red-400 rounded-md">
-            {t("toggleButton.logoutSuccess")}
-          </div>
+          <div className="inline-block p-2 mb-2 ml-6 text-sm text-red-700 bg-red-100 border border-red-400 rounded-md text-center">
+          {t("toggleButton.logoutSuccess")}
+        </div>
         )}
         <div className="flex ml-5 items-center mb-2">
           <a
