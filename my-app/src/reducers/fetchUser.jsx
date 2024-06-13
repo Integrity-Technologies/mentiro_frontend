@@ -1,4 +1,6 @@
 import axios from "axios";
+import { getToken } from "../actions/authActions"; // Import getToken function from authActions
+
 
 // Action Types
 export const FETCH_USER_REQUEST = "FETCH_USER_REQUEST";
@@ -28,9 +30,15 @@ export const fetchUserFailure = (error) => {
 
 export const fetchUser = () => {
   return (dispatch) => {
+    const token = getToken();
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     dispatch(fetchUserRequest());
     axios
-      .get(`${process.env.REACT_APP_API_URL}/users/me`) // Change the URL to match your backend route for fetching user data
+      .get(`${process.env.REACT_APP_API_URL}/users/me`, axiosConfig) // Change the URL to match your backend route for fetching user data
       .then((response) => {
         // If the request is successful, dispatch fetchUserSuccess action with user data
         dispatch(fetchUserSuccess(response.data));

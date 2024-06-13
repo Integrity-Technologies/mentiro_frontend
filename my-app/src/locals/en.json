@@ -244,7 +244,8 @@
     "Assessment.NoData":"No Assessment Data Available",
     "gotoResultMenu": "Show Results",
     "Candidate.Name": "Candidate Name",
-    "Candidate.Assessment": "Assessment Name"
+    "Candidate.Assessment": "Assessment Name",
+    "noData":  "No Candidate Result Found"
   },
 
   "ActiveAssessment": {

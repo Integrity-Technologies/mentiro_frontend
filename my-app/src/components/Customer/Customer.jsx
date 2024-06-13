@@ -98,10 +98,7 @@ const Customer = ({ isLanguageButton }) => {
               />
             )}
           </div>
-          <button
-            onClick={toggleMenuCollapse}
-            className="p-2 absolute right-0"
-          >
+          <button onClick={toggleMenuCollapse} className="p-2 absolute right-0">
             <div className="bg-gray-200 rounded-full absolute p-2 right-0">
               {isMenuCollapsed ? <FaArrowRight /> : <FaArrowLeft />}
             </div>
@@ -111,19 +108,17 @@ const Customer = ({ isLanguageButton }) => {
           {customerMenuOptions.map((option) => (
             <button
               key={option.link}
-              className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm hover:text-white
-                ${
-                  activeLink === option.link
-                    ? "shadow-lg bg-blue-500 text-white shadow-green-300"
-                    : "hover:bg-blue-500 hover:text-white"
-                }`}
+              className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm transition-colors
+        ${
+          activeLink === option.link
+            ? "shadow-lg bg-blue-500 text-white shadow-green-300"
+            : "hover:bg-blue-500 hover:text-white text-gray-600"
+        }`}
               onClick={() => handleClick(option.link)}
             >
               <span
                 className={`mr-3 ${
-                  activeLink === option.link
-                    ? "text-white"
-                    : "text-gray-600"
+                  activeLink === option.link ? "text-white" : "hover:text-white"
                 }`}
               >
                 {option.icon}
@@ -131,9 +126,7 @@ const Customer = ({ isLanguageButton }) => {
               {!isMenuCollapsed && (
                 <span
                   className={`${
-                    activeLink === option.link
-                      ? "text-white"
-                      : "text-gray-600"
+                    activeLink === option.link ? "text-white" : "hover:text-white"
                   }`}
                 >
                   {t(option.label)}
