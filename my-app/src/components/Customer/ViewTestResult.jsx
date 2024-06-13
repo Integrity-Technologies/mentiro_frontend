@@ -1,28 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchResults, getUserResults } from "../../actions/resultAction";
+import { getUserResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { TiChartBarOutline } from "react-icons/ti";
-import { FaSearch } from "react-icons/fa";
-import { AiOutlineClose } from "react-icons/ai"; // Import the close icon
-import { FaInfoCircle } from "react-icons/fa"; // Importing the info icon component from react-icons
+import { FaSearch, FaInfoCircle } from "react-icons/fa";
+import { AiOutlineClose } from "react-icons/ai";
 
 const ViewTestResult = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { results, error } = useSelector((state) => state.results);
+  const { results } = useSelector((state) => state.results);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTests, setSelectedTests] = useState([]);
+  const [filteredResults, setFilteredResults] = useState([]);
+
+  // Get the active company from local storage
+  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
 
   useEffect(() => {
-    dispatch(getUserResults()); // Dispatch the fetchResults action when component mounts
+    dispatch(getUserResults()); // Fetch results on component mount
   }, [dispatch]);
 
-  const filteredResults = results.filter((candidate) =>
-    candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    // Filter results based on active company
+    if (activeCompany) {
+      const filtered = results.filter((result) =>
+        result.companies.includes(activeCompany.id)
+      );
+      setFilteredResults(filtered);
+    }
+  }, [results, activeCompany]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -96,12 +105,10 @@ const ViewTestResult = () => {
               {t("candidatesResult.assessmentName")}
               <div className="group inline-block ml-2">
                 <span className="relative z-10 block text-lg">
-                  <FaInfoCircle size={14} />{" "}
-                  {/* Render the info icon component */}
+                  <FaInfoCircle size={14} />
                 </span>
                 <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                  Click on 'Candidates Result' to view the test details of
-                  assessments.
+                  Click on 'Candidates Result' to view the test details of assessments.
                 </div>
               </div>
             </th>
@@ -129,7 +136,7 @@ const ViewTestResult = () => {
                 <tr
                   key={`${candidate.id}-${index}`}
                   className="hover:bg-active-link-bg cursor-pointer transition duration-150 hover:text-white group"
-                  onClick={() => openModal(assessment.tests)} // Add onClick event
+                  onClick={() => openModal(assessment.tests)}
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                     {candidate.candidate_name}
@@ -141,9 +148,9 @@ const ViewTestResult = () => {
                     <span>
                       {assessment.assessment_percentage !== null
                         ? assessment.assessment_percentage !== 0
-                          ? assessment.assessment_percentage % 1 !== 0 // Check if not a whole number
+                          ? assessment.assessment_percentage % 1 !== 0
                             ? `${assessment.assessment_percentage.toFixed(1)}%`
-                            : `${assessment.assessment_percentage}%` // Display without decimal and trailing zero
+                            : `${assessment.assessment_percentage}%`
                           : "0%"
                         : "-"}
                     </span>

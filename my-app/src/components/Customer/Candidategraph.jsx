@@ -10,7 +10,6 @@ const CandidateGraph = ({ onRowClick }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const results = useSelector((state) => state.results.results);
-  // console.log("🚀 ~ CandidateGraph ~ results:", results);
   const { t } = useTranslation();
   const [showResult, setShowResult] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,10 +38,13 @@ const CandidateGraph = ({ onRowClick }) => {
     candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // Get the active company from local storage
+  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+
+  // Filter results based on active company
+  const filteredByCompany = filteredResults.filter((result) =>
+    result.companies.includes(activeCompany.id)
+  );
 
   // Helper function to compare assessment dates
   const compareDates = (a, b) => {
@@ -51,16 +53,20 @@ const CandidateGraph = ({ onRowClick }) => {
     return dateB - dateA;
   };
 
-  // Sorting filteredResults array based on assessment date
-  const sortedResults = filteredResults.sort(compareDates);
+  // Sorting filtered results array based on assessment date
+  const sortedResults = filteredByCompany.sort(compareDates);
 
-  // Using sortedResults instead of filteredResults
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(sortedResults.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
   const currentResults = sortedResults.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
       <div className="w-full">
-        {results && results.length > 0 ? (
+        {sortedResults && sortedResults.length > 0 ? (
           <>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">

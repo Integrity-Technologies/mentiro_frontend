@@ -8,8 +8,18 @@ import { AiOutlineBarChart } from "react-icons/ai";
 const ResultCard = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-  const results = useSelector((state) => state.results.results);
+  const results = useSelector((state) => state.results.results || []);
   const { t } = useTranslation();
+
+  // Get the active company from local storage
+  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+
+  // Filter results based on the active company
+  const filteredResults = results.filter((result) => {
+    return result.companies.includes(activeCompany.id);
+  });
+
+  const resultCount = filteredResults.length;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,12 +35,11 @@ const ResultCard = () => {
   }, [dispatch]);
 
   const calculatePercentageChange = () => {
-    // Logic to calculate percentage change compared to last week
-    // Placeholder logic here, should be replaced with actual calculation
-    return 1.5;
+    // Placeholder logic to calculate percentage change compared to last week
+    // Replace with actual calculation based on your data
+    return 1.5; // Example value
   };
 
-  const resultCount = results ? results.length : 0;
   const percentageChange = calculatePercentageChange();
 
   return (

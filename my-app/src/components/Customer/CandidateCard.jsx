@@ -8,9 +8,18 @@ import { FaUserCircle } from "react-icons/fa";
 const CandidateCard = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-  const candidates = useSelector((state) => state.candidates);
-  const candidatesCount = candidates?.candidates?.length || 0;
+  const candidates = useSelector((state) => state.candidates?.candidates || []);
   const { t } = useTranslation();
+
+  // Get the active company from local storage
+  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+
+  // Filter candidates based on the active company
+  const filteredCandidates = candidates.filter((candidate) => {
+    return candidate.companies.includes(activeCompany.id);
+  });
+
+  const candidatesCount = filteredCandidates.length;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,11 +71,7 @@ const CandidateCard = () => {
           </p>
         </div>
         <div>
-          {candidatesCount === 0 ? (
-            <Chart options={options} series={[0]} type="donut" width="120" />
-          ) : (
-            <Chart options={options} series={series} type="donut" width="120" />
-          )}
+          <Chart options={options} series={series} type="donut" width="120" />
         </div>
       </div>
     </div>

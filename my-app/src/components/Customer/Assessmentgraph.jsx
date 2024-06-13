@@ -10,8 +10,17 @@ const Assessmentgraph = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const assessments = useSelector((state) => state.assessment);
-  const assessmentsCount = assessments?.assessments?.assessments?.length || 0;
   const { t } = useTranslation();
+
+  // Assuming activeCompany is fetched from localStorage as in your ActiveAssessment component
+  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+
+  // Filter assessments based on active company ID
+  const filteredAssessments = assessments?.assessments?.assessments?.filter(
+    (assessment) => assessment.company_id === activeCompany?.id
+  );
+
+  const assessmentsCount = filteredAssessments?.length || 0;
 
   useEffect(() => {
     const fetchData = async () => {

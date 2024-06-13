@@ -109,11 +109,11 @@ const CandidateProfile = () => {
             </tr>
           ) : filteredCandidates.length === 0 ? (
             <tr>
-            <td
-              colSpan="3"
+           <td
+              colSpan="4"
               className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
             >
-              {t("ActiveAssessment.noData")}
+              {t("candidates.noData")}
             </td>
           </tr>
           ) : (

@@ -111,7 +111,7 @@ const Customer = ({ isLanguageButton }) => {
           {customerMenuOptions.map((option) => (
             <button
               key={option.link}
-              className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm
+              className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm hover:text-white
                 ${
                   activeLink === option.link
                     ? "shadow-lg bg-blue-500 text-white shadow-green-300"
