@@ -99,7 +99,7 @@ const Customer = ({ isLanguageButton }) => {
             )}
           </div>
           <button onClick={toggleMenuCollapse} className="p-2 absolute right-0">
-            <div className="bg-gray-200 rounded-full absolute p-2 right-0">
+            <div className="bg-gray-200 rounded-full absolute p-2 right-0 mt-3">
               {isMenuCollapsed ? <FaArrowRight /> : <FaArrowLeft />}
             </div>
           </button>
@@ -137,7 +137,7 @@ const Customer = ({ isLanguageButton }) => {
         </nav>
       </div>
 
-      <div className="absolute top-0 right-0 mt-2 mr-5">
+      <div className="fixed top-0 left-0 ml-2">
         <LanguageToggleButton
           isMenuCollapsed={isMenuCollapsed}
           onLanguageChange={handleLanguageChange}

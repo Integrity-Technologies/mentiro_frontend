@@ -16,7 +16,7 @@ const CandidateCard = () => {
 
   // Filter candidates based on the active company
   const filteredCandidates = candidates.filter((candidate) => {
-    return candidate.companies.includes(activeCompany.id);
+    return candidate.companies.includes(activeCompany?.id);
   });
 
   const candidatesCount = filteredCandidates.length;
