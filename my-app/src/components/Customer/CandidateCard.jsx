@@ -15,9 +15,10 @@ const CandidateCard = () => {
   const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
 
   // Filter candidates based on the active company
-  const filteredCandidates = candidates.filter((candidate) => {
-    return candidate.companies.includes(activeCompany?.id);
-  });
+    // Filter candidates based on the active company
+    const filteredCandidates = candidates.filter((candidate) => {
+      return candidate?.companies?.includes(activeCompany?.id);
+    });
 
   const candidatesCount = filteredCandidates.length;
 
