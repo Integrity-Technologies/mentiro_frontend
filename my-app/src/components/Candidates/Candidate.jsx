@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Your_Tests from "./Your_Tests";
 import { addCandidate } from "../../actions/candidateAction";
+import { isEmail } from "validator"; // Import validator for email format validation
+
 const Candidate = () => {
   const dispatch = useDispatch();
+
   const [showTests, setShowTests] = useState(false);
   const [candidateData, setCandidateData] = useState({
     first_name: "",
@@ -14,7 +17,12 @@ const Candidate = () => {
   const [successAlert, setSuccessAlert] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [acceptMarketing, setAcceptMarketing] = useState(false);
+
   const handleSubmitButtonClick = async () => {
+    // Reset previous errors
+    setErrors({});
+
+    // Basic validation
     if (
       !candidateData.first_name ||
       !candidateData.last_name ||
@@ -22,7 +30,6 @@ const Candidate = () => {
       !acceptTerms
     ) {
       setErrors({
-        ...errors,
         firstNameError: !candidateData.first_name,
         lastNameError: !candidateData.last_name,
         emailError: !candidateData.email,
@@ -30,19 +37,39 @@ const Candidate = () => {
       });
       return;
     }
+
+    // Email format validation
+    if (!isEmail(candidateData.email)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emailError: true,
+      }));
+      return;
+    }
+
+    // Attempt to add candidate
     const data = await dispatch(addCandidate(candidateData));
+
     if (data) {
       setShowTests(true);
       setSuccessAlert(true);
       localStorage.setItem("candidateId", data.id);
-      // console.log(data.id);
+    } else {
+      // Handle case where email is already registered
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emailError: true,
+        emailErrorMessage: "Email is already registered",
+      }));
     }
   };
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setCandidateData({ ...candidateData, [id]: value });
     setErrors({ ...errors, [id + "Error"]: false });
   };
+
   const handleCheckboxChange = (e) => {
     const { id, checked } = e.target;
     if (id === "acceptTerms") {
@@ -131,7 +158,10 @@ const Candidate = () => {
                 onChange={handleInputChange}
               />
               {errors.emailError && (
-                <p className="mt-1 text-sm text-red-500">Email is required</p>
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.emailErrorMessage ||
+                    "Please enter a valid email address"}
+                </p>
               )}
             </div>
             <div className="mb-4">
@@ -145,10 +175,7 @@ const Candidate = () => {
                 />
                 <span className="ml-2 text-black">
                   I have read and accept the{" "}
-                  <a
-                    href="#"
-                    className="text-blue-600 hover:underline"
-                  >
+                  <a href="#" className="text-blue-600 hover:underline">
                     test terms
                   </a>
                   .
@@ -179,12 +206,3 @@ const Candidate = () => {
   );
 };
 export default Candidate;
-
-
-
-
-
-
-
-
-
