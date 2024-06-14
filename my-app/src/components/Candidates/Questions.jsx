@@ -11,8 +11,8 @@ const Questions = ({ onComplete }) => {
   const [answerError, setAnswerError] = useState(false);
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(60);
-  const [skippedQuestions, setSkippedQuestions] = useState([]);
-  const [attemptedQuestions, setAttemptedQuestions] = useState([]);
+  const [skippedQuestionIndexes, setSkippedQuestionIndexes] = useState([]);
+  const [attemptedQuestionIndexes, setAttemptedQuestionIndexes] = useState([]);
   const [reviewingSkipped, setReviewingSkipped] = useState(false);
   const [showEndModal, setShowEndModal] = useState(false);
 
@@ -26,10 +26,11 @@ const Questions = ({ onComplete }) => {
       setCurrentQuestion(data);
     };
 
-    if (questions.length > 0 && currentQuestionIndex < questions.length) {
-      fetchQuestionData(questions[currentQuestionIndex].question_id);
+    const questionList = reviewingSkipped ? skippedQuestionIndexes.map(index => questions[index]) : questions;
+    if (questionList.length > 0 && currentQuestionIndex < questionList.length) {
+      fetchQuestionData(questionList[currentQuestionIndex].question_id);
     }
-  }, [dispatch, currentQuestionIndex, questions]);
+  }, [dispatch, currentQuestionIndex, questions, skippedQuestionIndexes, reviewingSkipped]);
 
   useEffect(() => {
     const percentage = ((currentQuestionIndex + 1) / questions.length) * 100;
@@ -70,13 +71,14 @@ const Questions = ({ onComplete }) => {
         option: selectedOption.option_text,
       };
       dispatch(submitAnswer(resultData));
-      setAttemptedQuestions((prevAttempted) => [...prevAttempted, currentQuestionIndex]);
+      setAttemptedQuestionIndexes((prevAttempted) => [...prevAttempted, currentQuestionIndex]);
     } else {
       setAnswerError(true);
       return;
     }
 
-    if (currentQuestionIndex + 1 < questions.length) {
+    const questionList = reviewingSkipped ? skippedQuestionIndexes.map(index => questions[index]) : questions;
+    if (currentQuestionIndex + 1 < questionList.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
     } else {
@@ -85,7 +87,7 @@ const Questions = ({ onComplete }) => {
   };
 
   const handleSkip = () => {
-    setSkippedQuestions((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
+    setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
 
     if (currentQuestionIndex + 1 < questions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -97,7 +99,7 @@ const Questions = ({ onComplete }) => {
   };
 
   const handleEndOfQuestions = () => {
-    if (skippedQuestions.length > 0 && !reviewingSkipped) {
+    if (skippedQuestionIndexes.length > 0 && !reviewingSkipped) {
       setShowEndModal(true);
     } else {
       onComplete();
@@ -106,7 +108,7 @@ const Questions = ({ onComplete }) => {
 
   const handleReviewSkipped = () => {
     setReviewingSkipped(true);
-    setCurrentQuestionIndex(skippedQuestions[0]);
+    setCurrentQuestionIndex(0);
     setShowEndModal(false);
   };
 
@@ -123,9 +125,9 @@ const Questions = ({ onComplete }) => {
       <div className="flex justify-center items-center">
         {questions.map((_, index) => {
           let ballColor = 'bg-gray-300';
-          if (attemptedQuestions.includes(index)) {
+          if (attemptedQuestionIndexes.includes(index)) {
             ballColor = 'bg-green-500';
-          } else if (skippedQuestions.includes(index)) {
+          } else if (skippedQuestionIndexes.includes(index)) {
             ballColor = 'bg-gray-500';
           }
 
@@ -144,11 +146,11 @@ const Questions = ({ onComplete }) => {
   };
 
   return (
-    <Container fluid className="flex flex-col justify-center items-center min-h-screen">
+    <Container fluid className="flex flex-col justify-center items-center ">
       <div className="flex justify-between items-center w-full">
         {renderProgressBalls()}
         <div className="ml-2">
-          {currentQuestionIndex + 1}/{questions.length}
+          {currentQuestionIndex + 1}/{reviewingSkipped ? skippedQuestionIndexes.length : questions.length}
         </div>
       </div>
       <Card className="p-6 w-full shadow-lg rounded-lg mt-3 bg-white">

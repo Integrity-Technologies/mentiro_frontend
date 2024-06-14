@@ -126,7 +126,9 @@ const Customer = ({ isLanguageButton }) => {
               {!isMenuCollapsed && (
                 <span
                   className={`${
-                    activeLink === option.link ? "text-white" : "hover:text-white"
+                    activeLink === option.link
+                      ? "text-white"
+                      : "hover:text-white"
                   }`}
                 >
                   {t(option.label)}
@@ -135,16 +137,14 @@ const Customer = ({ isLanguageButton }) => {
             </button>
           ))}
         </nav>
+        <div className="mt-3 ml-2">
+          <LanguageToggleButton
+            isMenuCollapsed={isMenuCollapsed}
+            onLanguageChange={handleLanguageChange}
+            isLanguageButton={isLanguageButton}
+          />
+        </div>
       </div>
-
-      <div className="fixed top-0 left-0 ml-2">
-        <LanguageToggleButton
-          isMenuCollapsed={isMenuCollapsed}
-          onLanguageChange={handleLanguageChange}
-          isLanguageButton={isLanguageButton}
-        />
-      </div>
-
       <div
         className={`transition-width duration-300 ${
           isMenuCollapsed ? "w-full" : "w-5/6"
