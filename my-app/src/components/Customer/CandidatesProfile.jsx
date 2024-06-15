@@ -30,8 +30,8 @@ const CandidateProfile = () => {
   // Filter candidates based on the active company
  const filteredCandidates = candidates?.filter((candidate) => {
     return (
-       candidate?.companies?.includes(activeCompany.id) &&
-      (`${candidate.first_name} ${candidate.last_name}`)
+      candidate?.companies?.includes(activeCompany?.id) &&
+      `${candidate?.first_name} ${candidate?.last_name}`
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
     );
