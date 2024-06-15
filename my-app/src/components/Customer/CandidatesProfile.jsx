@@ -28,9 +28,9 @@ const CandidateProfile = () => {
   const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
 
   // Filter candidates based on the active company
-  const filteredCandidates = candidates.filter((candidate) => {
+ const filteredCandidates = candidates?.filter((candidate) => {
     return (
-      candidate.companies.includes(activeCompany.id) &&
+       candidate?.companies?.includes(activeCompany.id) &&
       (`${candidate.first_name} ${candidate.last_name}`)
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
