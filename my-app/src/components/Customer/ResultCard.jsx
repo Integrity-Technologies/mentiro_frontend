@@ -11,15 +11,7 @@ const ResultCard = () => {
   const results = useSelector((state) => state.results.results || []);
   const { t } = useTranslation();
 
-  // Get the active company from local storage
-  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
-
-  // Filter results based on the active company
-  const filteredResults = results.filter((result) => {
-    return result.companies.includes(activeCompany.id);
-  });
-
-  const resultCount = filteredResults.length;
+  const resultCount = results.length;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,7 +67,6 @@ const ResultCard = () => {
           </svg>
         </div>
       </div>
-      {/* Remove the error message from rendering */}
     </div>
   );
 };

@@ -10,7 +10,7 @@ const Questions = ({ onComplete }) => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answerError, setAnswerError] = useState(false);
   const [progressPercentage, setProgressPercentage] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(60);
+  const [timeRemaining, setTimeRemaining] = useState(parseInt(localStorage.getItem('total_time')) * 60);
   const [skippedQuestionIndexes, setSkippedQuestionIndexes] = useState([]);
   const [attemptedQuestionIndexes, setAttemptedQuestionIndexes] = useState([]);
   const [reviewingSkipped, setReviewingSkipped] = useState(false);
@@ -41,12 +41,12 @@ const Questions = ({ onComplete }) => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    setTimeRemaining(60);
 
     timerRef.current = setInterval(() => {
       setTimeRemaining((prevTime) => {
         if (prevTime <= 1) {
-          handleSkip();
+          clearInterval(timerRef.current);
+          onComplete();
           return 0;
         }
         return prevTime - 1;
@@ -54,7 +54,8 @@ const Questions = ({ onComplete }) => {
     }, 1000);
 
     return () => clearInterval(timerRef.current);
-  }, [currentQuestionIndex]);
+  }, []);
+
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -145,6 +146,15 @@ const Questions = ({ onComplete }) => {
     );
   };
 
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  const timerStyle = timeRemaining <= 120 ? 'text-red-500' : 'text-black';
+  
+
   return (
     <Container fluid className="flex flex-col justify-center items-center ">
       <div className="flex justify-between items-center w-full">
@@ -153,7 +163,7 @@ const Questions = ({ onComplete }) => {
           {currentQuestionIndex + 1}/{reviewingSkipped ? skippedQuestionIndexes.length : questions.length}
         </div>
       </div>
-      <Card className="p-6 w-full shadow-lg rounded-lg mt-3 bg-white">
+      <Card className="p-6 shadow-lg rounded-lg mt-3 bg-white" style={{  width: '600px', overflowY: 'auto' }}>
         {currentQuestion && (
           <>
             <h2 className="mb-4">{currentQuestion.question_text}</h2>
@@ -181,8 +191,7 @@ const Questions = ({ onComplete }) => {
                 Next
               </Button>
             </div>
-            <div className="mt-3 text-center">Time remaining: {timeRemaining}s</div>
-          </>
+            <div className={`mt-3 text-center ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>          </>
         )}
       </Card>
 

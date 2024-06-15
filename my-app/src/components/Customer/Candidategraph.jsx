@@ -38,14 +38,6 @@ const CandidateGraph = ({ onRowClick }) => {
     candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Get the active company from local storage
-  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
-
-  // Filter results based on active company
-  const filteredByCompany = filteredResults.filter((result) =>
-    result.companies.includes(activeCompany.id)
-  );
-
   // Helper function to compare assessment dates
   const compareDates = (a, b) => {
     const dateA = new Date(a.assessments[0].started_at);
@@ -54,7 +46,7 @@ const CandidateGraph = ({ onRowClick }) => {
   };
 
   // Sorting filtered results array based on assessment date
-  const sortedResults = filteredByCompany.sort(compareDates);
+  const sortedResults = filteredResults.sort(compareDates);
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(sortedResults.length / itemsPerPage);

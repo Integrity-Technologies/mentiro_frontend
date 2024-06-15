@@ -31,12 +31,6 @@ function App() {
     dispatch(fetchUser());
   }, [dispatch]); // Run this effect only once on component mount
 
-  // console.log("User:", user);
-  // console.log("Token:", token);
-  
-
-// console.log(user, token + "from local storage")
-
   i18n
   .use(initReactI18next) // Bind react-i18next to i18next
   .init({
@@ -51,47 +45,55 @@ function App() {
   });
 
   const [isLanguageButton, setIsLanguageButton] = useState(false);
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          
           <Route path="/company-profile" element={<CompanyProfile />} />
           <Route path="/" element={<Login />} />
-          <Route path="/Signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/assesment" element={<Assessment />} />
+          <Route path="/assessment" element={<Assessment />} />
           <Route path="/candidates" element={<Candidates />} />
           <Route path="/admin-dashboard" element={<Admin isLanguageButton={isLanguageButton}/>} />
-          <Route path="/customer-dashboard" element={<Customer  isLanguageButton={true}/>} /> 
+          <Route path="/customer-dashboard" element={<Customer isLanguageButton={true}/>} />
+          <Route path="/api/users/password/reset" element={<ResetPasswordForm />} />
           <Route path="/customer-dashboard/company-profile" element={<CompanyProfile />} />
-          <Route path="/assesment" element={<Assessment />} />
-          <Route path="/candidates" element={<Candidates />} />
-          <Route path="/api/users/password/reset" element={<ResetPasswordForm />} /> 
+          <Route path="/customer-dashboard/preview-assessment" element={<PreviewExistingAssessment />} />
           <Route path="/api/assessment" element={<Candidates />} />
 
-          <Route path="/customer-dashboard/Preview-Assessment" element={<PreviewExistingAssessment />} />
-          {/* Admin Dashboard Route
-        token && user === "true" && <Route path="/admin-dashboard" element={<Admin />} />}
-        {/* Customer Dashboard Route */}
-         {/* {token && user === "false" && <Route path="/customer-dashboard" element={<Customer/>} />} 
-         {user === "true" && <Route path="/admin-dashboard" element={<Admin/>} />}
-
-
-        {/* Redirect Unauthenticated Users to Login */}
-         {/* {!token && <Route path="*" element={<Navigate to="/" />} />}  */} 
-           {/* <Route
+          {/* Protected Routes */}
+          <Route
             path="/admin-dashboard"
             element={
-              <ProtectedRoute
-                user={user}
-                token={token}
-                adminComponent={<Admin />}
-                userComponent={<Customer />}
-              /> */}
-            {/* }
-          />  */}
+              token ? (
+                <ProtectedRoute
+                  user={user}
+                  token={token}
+                  adminComponent={<Admin />}
+                  userComponent={<Customer />}
+                />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          
+          <Route
+            path="/customer-dashboard"
+            element={
+              token ? (
+                <Customer isLanguageButton={true} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          {/* Redirect Unauthenticated Users to Login */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </>

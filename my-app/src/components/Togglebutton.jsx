@@ -23,6 +23,7 @@ const LanguageToggleButton = ({
   };
 
   const handleLogout = () => {
+    localStorage.clear(); // Clear all items from local storage
     dispatch(logout());
     setShowAlert(true);
     setTimeout(() => {
