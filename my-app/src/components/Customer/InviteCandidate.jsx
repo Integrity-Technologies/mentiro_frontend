@@ -10,8 +10,8 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
   const [copySuccess, setCopySuccess] = useState(false);
 
   const assessmentData = JSON.parse(localStorage.getItem("assessmentResponse"));
-  const link = assessmentData.shareablelink;
-  const Name = assessmentData.assessment_name;
+  const link = assessmentData?.shareablelink;
+  const Name = assessmentData?.assessment_name;
 
   const handleInviteButtonClick = () => {
     setShowModal(true);
