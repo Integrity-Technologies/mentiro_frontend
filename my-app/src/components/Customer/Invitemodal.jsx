@@ -14,7 +14,7 @@ const InviteModal = ({ showModal, handleClose }) => {
   const dispatch = useDispatch();
 
   const assessmentData = JSON.parse(localStorage.getItem("assessmentResponse"));
-  const assessmentId = assessmentData.id;
+  const assessmentId = assessmentData?.id;
 
   const handleSendInvite = async () => {
     if (!firstName.trim() || !candidateName.trim() || !candidateEmail.trim()) {
