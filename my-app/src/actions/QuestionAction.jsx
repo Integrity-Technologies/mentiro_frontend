@@ -14,7 +14,14 @@ export const ALL_QUESTION = 'ALL_QUESTION';
 export const getQuestions = () => async (dispatch) => {
   try {
     
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/question/AllQuestion`); // Adjust the endpoint according to your API
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/question/AllQuestion`, axiosConfig); // Adjust the endpoint according to your API
     dispatch({
       type: GET_QUESTIONS,
       payload: res.data

@@ -44,8 +44,14 @@ export const companyError = (error) => ({
 // Async action creator for fetching companies
 export const fetchCompanies = () => async (dispatch) => {
   try {
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/company/AllCompany`
+      `${process.env.REACT_APP_API_URL}/company/AllCompany`, axiosConfig
     );
     dispatch(fetchCompaniesSuccess(response.data));
   } catch (error) {

@@ -63,7 +63,6 @@ const LanguageToggleButton = ({
         )}
         <div className="flex ml-5 items-center mb-2">
           <a
-            href="#"
             onClick={handleLogout}
             className={`flex items-center text-sm rounded hover:bg-gray-800 transition-colors no-underline ${
               isMenuCollapsed

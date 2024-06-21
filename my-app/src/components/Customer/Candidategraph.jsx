@@ -22,16 +22,16 @@ const CandidateGraph = ({ onRowClick }) => {
         await dispatch(getUserCandidates());
         await dispatch(getUserResults());
       } catch (err) {
-        setError(err.message);
+        setError("No Candidate Result Found");
       }
     };
 
     fetchData();
   }, [dispatch]);
 
-  const goToResultMenu = () => {
-    setShowResult(true);
-  };
+  // const goToResultMenu = () => {
+  //   setShowResult(true);
+  // };
 
   const handlePageChange = (page) => setCurrentPage(page);
 

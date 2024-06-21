@@ -33,7 +33,7 @@ export const fetchResults = () => {
       }
     };
     // Simulating API call
-    axios.get(`${process.env.REACT_APP_API_URL}/result/user/results`, axiosConfig)
+    axios.get(`${process.env.REACT_APP_API_URL}/result/allResults`, axiosConfig)
       .then(response => response.data)
       .then(data => {
         dispatch(fetchResultsSuccess(data));

@@ -14,9 +14,13 @@ const ViewTestResult = () => {
   }, [dispatch]);
 
   // Filter results based on search term
-  const filteredResults = results.filter((candidate) =>
-    candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredResults = Array.isArray(results)
+  ? results.filter((candidate) =>
+      candidate.candidate_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    )
+  : [];
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);

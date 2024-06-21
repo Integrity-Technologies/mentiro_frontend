@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Assesment from "./Assesment";
+// import Assesment from "./Assesment";
 import DualLineGraph from "./Graph";
 import CompanyProfile from "./CompanyProfile";
 import CandidateProfile from "./CandidatesProfile";

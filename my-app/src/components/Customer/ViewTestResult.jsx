@@ -25,7 +25,7 @@ const ViewTestResult = () => {
 
   useEffect(() => {
     // Filter results based on active company
-    if (activeCompany) {
+    if (Array.isArray(results) && activeCompany) {
       const filtered = results.filter((result) =>
         result.companies.includes(activeCompany.id)
       );

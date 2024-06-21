@@ -13,8 +13,14 @@ export const USER_ERROR = "USER_ERROR";
 export const getAllUsers = () => async (dispatch) => {
   try {
     // Fetch users data from the API
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/Allusers`);
-
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/Allusers`, axiosConfig);
+    
     // Format created_at field for each user
     const formattedUsers = res.data.map((user) => ({
       ...user,

@@ -10,7 +10,6 @@ const YourTests = () => {
   const [assessmentId, setAssessmentId] = useState(null);
   const [userResults, setUserResults] = useState([]);
   const [showQuestions, setShowQuestions] = useState(false);
-  const [showTestTime, setShowTestTime] = useState(false);
   const [completedTests, setCompletedTests] = useState(new Set());
 
   const dispatch = useDispatch();
@@ -76,7 +75,7 @@ const YourTests = () => {
   };
 
   const handleBack = () => {
-    setShowTestTime(false);
+    setShowQuestions(false);
   };
 
   const getTestStatus = (testId) => {
@@ -89,7 +88,7 @@ const YourTests = () => {
   const totalTests = tests.length;
   const completedTestCount = Array.from(completedTests).length;
 
-  const showTestsSection = totalTests !== completedTestCount;
+  const showTestsSection = totalTests > completedTestCount;
 
   return (
     <div className="min-h-screen flex items-center justify-center font-roboto">

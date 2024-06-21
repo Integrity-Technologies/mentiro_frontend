@@ -12,7 +12,7 @@ import {
   getAllworkArrangement,
 } from "../../actions/AssesmentAction";
 import { useTranslation } from "react-i18next";
-import Select from 'react-select';
+import Select from "react-select";
 
 const Assessment = () => {
   const { t } = useTranslation();
@@ -96,14 +96,14 @@ const Assessment = () => {
       setJobRoleError("");
     }
 
-    if (workArrangement.trim() === "") {
+    if (!workArrangement) {
       setWorkArrangementError("Work arrangement is required.");
       error = true;
     } else {
       setWorkArrangementError("");
     }
 
-    if (jobLocation.trim() === "") {
+    if (!jobLocation) {
       setJobLocationError("Job location is required.");
       error = true;
     } else {
@@ -118,8 +118,8 @@ const Assessment = () => {
     const assessmentData = {
       assessment_name: assessmentName.trim(),
       jobRole: jobRole.value,
-      workArrangement: workArrangement.trim(),
-      jobLocation: jobLocation.trim(),
+      workArrangement: workArrangement.value,
+      jobLocation: jobLocation.value,
     };
 
     // Stringify the object before saving to local storage
@@ -147,6 +147,23 @@ const Assessment = () => {
     value: role.name,
     label: role.name,
   }));
+
+  const workArrangementOptions = workArrangements.map((arrangement) => ({
+    value: arrangement.name,
+    label: arrangement.name,
+  }));
+
+  const jobLocationOptions = jobLocations.map((location) => ({
+    value: location.name,
+    label: location.name,
+  }));
+
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+    }),
+  };
 
   return (
     <>
@@ -207,7 +224,7 @@ const Assessment = () => {
                   className="flex mb-1 text-sm font-medium text-gray-700"
                 >
                   <div className="group inline-block ml-2 mr-2">
-                    <span className="relative z-10 block text-lg">
+                    <span className="relative z-10 block text-lg overflow-hidden">
                       <FaInfoCircle size={14} />{" "}
                     </span>
                     <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
@@ -219,17 +236,19 @@ const Assessment = () => {
                 </label>
                 <Select
                   id="formJobRole"
-                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600 ${
                     jobRoleError ? "border-red-500" : ""
                   }`}
                   value={jobRole}
                   onChange={(selectedOption) => setJobRole(selectedOption)}
                   options={jobRoleOptions}
+                  styles={customStyles} // Apply custom styles here
                 />
                 {jobRoleError && (
                   <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
                 )}
               </div>
+
               <div className="relative">
                 <label
                   htmlFor="formWorkArrangement"
@@ -246,21 +265,18 @@ const Assessment = () => {
                   </div>
                   {t("Assessments.WorkArrangement")}
                 </label>
-                <select
+                <Select
                   id="formWorkArrangement"
-                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600 ${
                     workArrangementError ? "border-red-500" : ""
                   }`}
                   value={workArrangement}
-                  onChange={(e) => setWorkArrangement(e.target.value)}
-                >
-                  <option value="">{t("Assessments.SelectworkArrangement")}</option>
-                  {workArrangements.map((arrangement) => (
-                    <option key={arrangement._id} value={arrangement.name}>
-                      {arrangement.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(selectedOption) =>
+                    setWorkArrangement(selectedOption)
+                  }
+                  options={workArrangementOptions}
+                  styles={customStyles} // Apply custom styles here
+                />
                 {workArrangementError && (
                   <p className="mt-2 text-sm text-red-600">
                     {workArrangementError}
@@ -282,21 +298,16 @@ const Assessment = () => {
                   </div>
                   {t("Assessments.joblocation")}
                 </label>
-                <select
+                <Select
                   id="formJobLocation"
-                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600 ${
                     jobLocationError ? "border-red-500" : ""
                   }`}
                   value={jobLocation}
-                  onChange={(e) => setJobLocation(e.target.value)}
-                >
-                  <option value="">{t("Assessments.SelectJobLocation")}</option>
-                  {jobLocations.map((location) => (
-                    <option key={location._id} value={location.name}>
-                      {location.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(selectedOption) => setJobLocation(selectedOption)}
+                  options={jobLocationOptions}
+                  styles={customStyles} // Apply custom styles here
+                />
                 {jobLocationError && (
                   <p className="mt-2 text-sm text-red-600">
                     {jobLocationError}
@@ -305,17 +316,17 @@ const Assessment = () => {
               </div>
             </div>
             <div className="flex justify-end">
-            <Button
-              onClick={handleAddAssessment}
-              className="bg-black hover:bg-black text-white justify-center font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
-            >
-              <FaPlus className="inline-block mr-2" />
-              <span className="inline-block">
-                {showTestSelection
-                  ? `${t("Assessments.createAssessment")}`
-                  : `${t("Assessments.createAssessment")}`}
-              </span>
-            </Button>
+              <Button
+                onClick={handleAddAssessment}
+                className="bg-black hover:bg-black text-white justify-center font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
+              >
+                <FaPlus className="inline-block mr-2" />
+                <span className="inline-block">
+                  {showTestSelection
+                    ? `${t("Assessments.createAssessment")}`
+                    : `${t("Assessments.createAssessment")}`}
+                </span>
+              </Button>
             </div>
           </div>
         )}

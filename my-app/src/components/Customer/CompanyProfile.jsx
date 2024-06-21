@@ -3,11 +3,8 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import {
-  FaUser,
+  
   FaBuilding,
-  FaEnvelope,
-  FaPhone,
-  FaPlus,
   FaUserCircle
 
 } from "react-icons/fa";
