@@ -13,9 +13,9 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
   const link = assessmentData?.shareablelink;
   const Name = assessmentData?.assessment_name;
 
-  // const handleInviteButtonClick = () => {
-  //   setShowModal(true);
-  // };
+  const handleInviteButtonClick = () => {
+    setShowModal(true);
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -35,9 +35,9 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
     );
   };
 
-  // const redirectToDashboard = () => {
-  //   window.location.href = "/customer-dashboard"; // Redirect using window.location
-  // };
+  const redirectToDashboard = () => {
+    window.location.href = "/customer-dashboard"; // Redirect using window.location
+  };
 
   return (
     <div className="bg-white min-h-screen flex flex-col mt-10  px-6 py-10 relative animate__animated animate__fadeIn">
