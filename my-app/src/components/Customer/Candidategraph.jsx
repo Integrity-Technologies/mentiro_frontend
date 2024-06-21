@@ -83,8 +83,7 @@ const CandidateGraph = ({ onRowClick }) => {
                   colSpan="4"
                   className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
                 >
-                  {error.includes("404") ? "No Assessment Found" : error}
-                </td>
+                  {error.includes("404") ? `${t("graphView.noData")}` : error}                </td>
               </tr>
             ) : currentResults.length > 0 ? (
               currentResults.map((candidate) =>

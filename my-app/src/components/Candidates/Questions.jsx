@@ -56,7 +56,6 @@ const Questions = ({ onComplete }) => {
     return () => clearInterval(timerRef.current);
   }, []);
 
-
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
     setAnswerError(false);
@@ -64,6 +63,18 @@ const Questions = ({ onComplete }) => {
 
   const resultId = JSON.parse(localStorage.getItem('resultId'));
 
+  const handleSkip = () => {
+    setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
+  
+    if (currentQuestionIndex + 1 < questions.length) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setSelectedOption(null);
+      setAnswerError(false);
+    } else {
+      handleEndOfQuestions();
+    }
+  };
+  
   const handleNext = () => {
     if (selectedOption !== null) {
       const resultData = {
@@ -77,23 +88,11 @@ const Questions = ({ onComplete }) => {
       setAnswerError(true);
       return;
     }
-
+  
     const questionList = reviewingSkipped ? skippedQuestionIndexes.map(index => questions[index]) : questions;
     if (currentQuestionIndex + 1 < questionList.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
-    } else {
-      handleEndOfQuestions();
-    }
-  };
-
-  const handleSkip = () => {
-    setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
-
-    if (currentQuestionIndex + 1 < questions.length) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null);
-      setAnswerError(false);
     } else {
       handleEndOfQuestions();
     }
@@ -106,11 +105,11 @@ const Questions = ({ onComplete }) => {
       onComplete();
     }
   };
-
+  
   const handleReviewSkipped = () => {
     setReviewingSkipped(true);
-    setCurrentQuestionIndex(0);
-    setShowEndModal(false);
+    setCurrentQuestionIndex(0); // Start reviewing from the first skipped question
+    setShowEndModal(false); // Close the modal after choosing to review
   };
 
   const handleBallClick = (index) => {
@@ -153,7 +152,6 @@ const Questions = ({ onComplete }) => {
   };
 
   const timerStyle = timeRemaining <= 120 ? 'text-red-500' : 'text-black';
-  
 
   return (
     <Container fluid className="flex flex-col justify-center items-center ">
@@ -163,7 +161,7 @@ const Questions = ({ onComplete }) => {
           {currentQuestionIndex + 1}/{reviewingSkipped ? skippedQuestionIndexes.length : questions.length}
         </div>
       </div>
-      <Card className="p-6 shadow-lg rounded-lg mt-3 bg-white" style={{  width: '600px', overflowY: 'auto' }}>
+      <Card className="p-6 shadow-lg rounded-lg mt-3 bg-white" style={{ width: '600px', overflowY: 'auto' }}>
         {currentQuestion && (
           <>
             <h2 className="mb-4">{currentQuestion.question_text}</h2>
@@ -191,26 +189,28 @@ const Questions = ({ onComplete }) => {
                 Next
               </Button>
             </div>
-            <div className={`mt-3 text-center ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>          </>
+            <div className={`mt-3 text-center ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>
+          </>
         )}
       </Card>
 
       <Modal show={showEndModal} onHide={() => setShowEndModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>End of Quiz</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>You have skipped some questions. Do you want to review them or submit the results?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => onComplete()}>
-            Submit
-          </Button>
-          <Button variant="primary" onClick={handleReviewSkipped}>
-            Review Skipped Questions
-          </Button>
-        </Modal.Footer>
-      </Modal>
+  <Modal.Header closeButton>
+    <Modal.Title>End of Test</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <p>You have skipped some questions. Do you want to review them or submit the results?</p>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => onComplete()}>
+      Submit
+    </Button>
+    <Button variant="primary" onClick={handleReviewSkipped}>
+      Review Skipped Questions
+    </Button>
+  </Modal.Footer>
+</Modal>
+
     </Container>
   );
 };

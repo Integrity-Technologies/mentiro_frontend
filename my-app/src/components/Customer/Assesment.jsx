@@ -12,12 +12,13 @@ import {
   getAllworkArrangement,
 } from "../../actions/AssesmentAction";
 import { useTranslation } from "react-i18next";
+import Select from 'react-select';
 
 const Assessment = () => {
   const { t } = useTranslation();
   const [assessmentName, setAssessmentName] = useState("");
   const [companyError, setCompanyError] = useState("");
-  const [jobRole, setJobRole] = useState("");
+  const [jobRole, setJobRole] = useState(null);
   const [jobRoleError, setJobRoleError] = useState("");
   const [workArrangement, setWorkArrangement] = useState("");
   const [workArrangementError, setWorkArrangementError] = useState("");
@@ -88,7 +89,7 @@ const Assessment = () => {
       setCompanyError("");
     }
 
-    if (jobRole.trim() === "") {
+    if (!jobRole) {
       setJobRoleError("Job role is required.");
       error = true;
     } else {
@@ -113,20 +114,10 @@ const Assessment = () => {
       return;
     }
 
-    // const isDuplicate = assessments?.some(
-    //   (assessment) =>
-    //     assessment.assessment_name.toLowerCase() === assessmentName.trim().toLowerCase()
-    // );
-
-    // if (isDuplicate) {
-    //   setCompanyError("Assessment name already exists.");
-    //   return;
-    // }
-
     // Create an object to store in local storage
     const assessmentData = {
       assessment_name: assessmentName.trim(),
-      jobRole: jobRole.trim(),
+      jobRole: jobRole.value,
       workArrangement: workArrangement.trim(),
       jobLocation: jobLocation.trim(),
     };
@@ -151,6 +142,11 @@ const Assessment = () => {
   const goToNextStep = () => {
     setCurrentStep((prev) => (prev < totalSteps - 1 ? prev + 1 : prev));
   };
+
+  const jobRoleOptions = jobRoles.map((role) => ({
+    value: role.name,
+    label: role.name,
+  }));
 
   return (
     <>
@@ -205,35 +201,6 @@ const Assessment = () => {
                   <p className="mt-2 text-sm text-red-600">{companyError}</p>
                 )}
               </div>
-              {/* <div className="relative">
-                <label
-                  htmlFor="formJobRole"
-                  className="flex mb-1 text-sm font-medium text-gray-700"
-                >
-                  <div className="group inline-block ml-2  mr-2">
-                    <span className="relative z-10 block text-lg">
-                      <FaInfoCircle size={14} />{" "}
-                    </span>
-                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                      Specify the job role for which this assessment is
-                      intended.
-                    </div>
-                  </div>
-                  {t("Assessments.jobrole")}
-                </label>
-                <input
-                  type="text"
-                  id="formJobRole"
-                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                    jobRoleError ? "border-red-500" : ""
-                  }`}
-                  value={jobRole}
-                  onChange={(e) => setJobRole(e.target.value)}
-                />
-                {jobRoleError && (
-                  <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
-                )}
-              </div> */}
               <div className="relative">
                 <label
                   htmlFor="formJobRole"
@@ -250,21 +217,15 @@ const Assessment = () => {
                   </div>
                   {t("Assessments.jobrole")}
                 </label>
-                <select
+                <Select
                   id="formJobRole"
-                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
                     jobRoleError ? "border-red-500" : ""
                   }`}
                   value={jobRole}
-                  onChange={(e) => setJobRole(e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  {jobRoles.map((role) => (
-                    <option key={role.id} value={role.name}>
-                      {role.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(selectedOption) => setJobRole(selectedOption)}
+                  options={jobRoleOptions}
+                />
                 {jobRoleError && (
                   <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
                 )}
@@ -293,10 +254,10 @@ const Assessment = () => {
                   value={workArrangement}
                   onChange={(e) => setWorkArrangement(e.target.value)}
                 >
-                  <option value="">Select...</option>
-                  {workArrangements.map((option) => (
-                    <option key={option.id} value={option.name}>
-                      {option.name}
+                  <option value="">{t("Assessments.SelectworkArrangement")}</option>
+                  {workArrangements.map((arrangement) => (
+                    <option key={arrangement._id} value={arrangement.name}>
+                      {arrangement.name}
                     </option>
                   ))}
                 </select>
@@ -316,7 +277,7 @@ const Assessment = () => {
                       <FaInfoCircle size={14} />{" "}
                     </span>
                     <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                      Select the location where the job will be based.
+                      Enter the location where the job will be based.
                     </div>
                   </div>
                   {t("Assessments.joblocation")}
@@ -329,10 +290,10 @@ const Assessment = () => {
                   value={jobLocation}
                   onChange={(e) => setJobLocation(e.target.value)}
                 >
-                  <option value="">Select...</option>
-                  {jobLocations.map((option) => (
-                    <option key={option.id} value={option.name}>
-                      {option.name}
+                  <option value="">{t("Assessments.SelectJobLocation")}</option>
+                  {jobLocations.map((location) => (
+                    <option key={location._id} value={location.name}>
+                      {location.name}
                     </option>
                   ))}
                 </select>
@@ -343,6 +304,7 @@ const Assessment = () => {
                 )}
               </div>
             </div>
+            <div className="flex justify-end">
             <Button
               onClick={handleAddAssessment}
               className="bg-black hover:bg-black text-white justify-center font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
@@ -354,6 +316,7 @@ const Assessment = () => {
                   : `${t("Assessments.createAssessment")}`}
               </span>
             </Button>
+            </div>
           </div>
         )}
       </div>

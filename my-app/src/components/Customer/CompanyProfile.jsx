@@ -187,7 +187,7 @@ const CompanyProfile = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-20 mb-4">
+          {/* <div className="flex items-center justify-between mt-20 mb-4">
             <h3 className="text-2xl font-semibold flex items-center">
               <FaBuilding className="mr-2" />
               {t("CompanyProfile.CompanyInformation")}
@@ -223,13 +223,13 @@ const CompanyProfile = () => {
                 {t("CompanyProfile.addCompany")}
               </Button>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex items-center justify-between mt-20 mb-4">
-            <h3 className="text-2xl font-semibold flex items-center">
+            {/* <h3 className="text-2xl font-semibold flex items-center">
               <FaBuilding className="mr-2" />
               {t("CompanyProfile.companyList")}
-            </h3>
+            </h3> */}
             {/* <Button
               className="bg-black text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105"
               variant="primary"
