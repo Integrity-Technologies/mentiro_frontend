@@ -116,3 +116,35 @@ export const deleteCompany = (companyId) => async (dispatch) => {
     dispatch(companyError(error.message));
   }
 };
+
+
+export const fetchJobTitles = async () => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/jobTitle/`); // Adjust the endpoint as per your backend setup
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Failed to fetch job titles");
+    }
+  } catch (error) {
+    console.error("Error fetching job titles:", error.message);
+    return [];
+  }
+};
+
+// Function to fetch company sizes from the backend
+export const fetchCompanySizes = async () => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/companySize/`); // Adjust the endpoint as per your backend setup
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Failed to fetch company sizes");
+    }
+  } catch (error) {
+    console.error("Error fetching company sizes:", error.message);
+    return [];
+  }
+};

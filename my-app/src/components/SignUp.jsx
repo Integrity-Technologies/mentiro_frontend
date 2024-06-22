@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
 import { NavLink, useNavigate } from "react-router-dom";
+import Select from "react-select";
+import getIpInfo from "../actions/IPAction"; // Import IP fetch function
 import { useTranslation } from "react-i18next";
 import countries from "./../data/countries";
+import { fetchJobTitles, fetchCompanySizes } from "../actions/companyAction"; // Import data fetching functions
 const logoImage = "/assets/icon.jpg";
 const loginimg =
   "/assets/flat-illustration-design-communacation-concept-online-with-smartphone_540641-468-removebg-preview.png";
@@ -15,88 +18,172 @@ const SignUp = () => {
   const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [countryCode, setCountryCode] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    companyName: "",
+    companySize: "",
+    jobTitle: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  // State variables to hold fetched data
+  const [jobTitles, setJobTitles] = useState([]);
+  console.log("🚀 ~ SignUp ~ jobTitles:", jobTitles);
+  const [companySizes, setCompanySizes] = useState([]);
+  console.log("🚀 ~ SignUp ~ companySizes:", companySizes);
+
+  // Fetch job titles and company sizes on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedJobTitles = await fetchJobTitles();
+      const fetchedCompanySizes = await fetchCompanySizes();
+      setJobTitles(fetchedJobTitles);
+      setCompanySizes(fetchedCompanySizes);
+    };
+    fetchData();
+
+    // Fetch user location and set country code
+    const fetchLocation = async () => {
+      try {
+        const ipInfo = await getIpInfo();
+        console.log("IP Information:", ipInfo);
+        if (ipInfo && ipInfo.country) {
+          const country = countries.find((c) => c.country_code === ipInfo.country);
+          if (country) {
+            setCountryCode(country.country_phone_code);
+          } else {
+            console.warn('Country code not found for IP:', ipInfo.country);
+            // Fallback to default country code or handle as necessary
+          }
+        } else {
+          console.warn('Country information not available in IP response:', ipInfo);
+          // Handle case where country information is not available
+        }
+      } catch (error) {
+        console.error("Failed to fetch user location", error);
+        // Handle error fetching IP information
+        // Fallback to default country code or handle as necessary
+      }
+    };
+    fetchLocation();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const userData = {
-      first_name: formData.get("firstName"),
-      last_name: formData.get("lastName"),
-      email: formData.get("email"),
-      phone: `+${countryCode}${formData.get("phone")}`,
-      password: formData.get("password"),
-      confirm_password: formData.get("confirm_password"),
-    };
-    // console.log(":rocket: ~ handleSubmit ~ phone:", userData);
     let newErrors = {};
-    if (!userData.first_name) {
-      newErrors.first_name = t("signup.errors.firstNameRequired");
+    if (currentPage === 1) {
+      if (!formData.email) {
+        newErrors.email = t("signup.errors.emailRequired");
+      } else if (!validateEmail(formData.email)) {
+        newErrors.email = t("signup.errors.emailInvalid");
+      }
+    } else if (currentPage === 2) {
+      if (!formData.firstName) {
+        newErrors.firstName = t("signup.errors.firstNameRequired");
+      }
+      if (!formData.lastName) {
+        newErrors.lastName = t("signup.errors.lastNameRequired");
+      }
+      if (!formData.phone) {
+        newErrors.phone = t("signup.errors.phoneRequired");
+      } else if (formData.phone.length < 10 || formData.phone.length > 15) {
+        newErrors.phone = t("signup.errors.phoneLength");
+      } else if (!validatePhoneNumber(formData.phone)) {
+        newErrors.phone = t("signup.errors.phoneInvalid");
+      }
+      if (!formData.password) {
+        newErrors.password = t("signup.errors.passwordRequired");
+      } else if (formData.password.length < 6) {
+        newErrors.password = t("signup.errors.passwordLength");
+      } else if (!/(?=.*[A-Z])/.test(formData.password)) {
+        newErrors.password = t("signup.errors.passwordUppercase");
+      } else if (!/(?=.*[a-z])/.test(formData.password)) {
+        newErrors.password = t("signup.errors.passwordLowercase");
+      } else if (!/(?=.*[0-9])/.test(formData.password)) {
+        newErrors.password = t("signup.errors.passwordNumber");
+      } else if (!/(?=.*[!@#$%^&*])/.test(formData.password)) {
+        newErrors.password = t("signup.errors.passwordSpecialChar");
+      }
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = t("signup.errors.confirmPasswordRequired");
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = t("signup.errors.confirmPasswordMismatch");
+      }
+    } else if (currentPage === 3) {
+      if (!formData.companyName) {
+        newErrors.companyName = t("signup.errors.companyNameRequired");
+      }
+      if (!formData.companySize) {
+        newErrors.companySize = t("signup.errors.companySizeRequired");
+      }
+      if (!formData.jobTitle) {
+        newErrors.jobTitle = t("signup.errors.jobTitleRequired");
+      }
     }
-    if (!userData.last_name) {
-      newErrors.last_name = t("signup.errors.lastNameRequired");
-    }
-    if (!userData.email) {
-      newErrors.email = t("signup.errors.emailRequired");
-    } else if (!validateEmail(userData.email)) {
-      newErrors.email = t("signup.errors.emailInvalid");
-    }
-    if (!formData.get("phone")) {
-      newErrors.phone = t("signup.errors.phoneRequired");
-    } else if (userData.phone.length < 10 || userData.phone.length > 15) {
-      newErrors.phone = t("signup.errors.phoneLength");
-    } else if (!validatePhoneNumber(userData.phone)) {
-      newErrors.phone = t("signup.errors.phoneInvalid");
-    }
-    // Password validation
-    if (!userData.password) {
-      newErrors.password = t("signup.errors.passwordRequired");
-    } else if (userData.password.length < 6) {
-      newErrors.password = t("signup.errors.passwordLength");
-    } else if (!/(?=.*[A-Z])/.test(userData.password)) {
-      newErrors.password = t("signup.errors.passwordUppercase");
-    } else if (!/(?=.*[a-z])/.test(userData.password)) {
-      newErrors.password = t("signup.errors.passwordLowercase");
-    } else if (!/(?=.*[0-9])/.test(userData.password)) {
-      newErrors.password = t("signup.errors.passwordNumber");
-    } else if (!/(?=.*[!@#$%^&*])/.test(userData.password)) {
-      newErrors.password = t("signup.errors.passwordSpecialChar");
-    }
-    if (!confirmPassword) {
-      newErrors.confirmPassword = t("signup.errors.confirmPasswordRequired");
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = t("signup.errors.confirmPasswordMismatch");
-    }
+
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      try {
-        setShowAlert(true);
-        const newresult = await dispatch(signUp(userData));
-        // console.log(newresult);
-        if (newresult?.success) {
-          navigate("/");
+      if (currentPage < 3) {
+        setCurrentPage(currentPage + 1);
+      } else {
+        try {
+          setShowAlert(true);
+          const userData = {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: `+${countryCode}${formData.phone}`,
+            company_name: formData.companyName,
+            company_size: formData.companySize,
+            job_title: formData.jobTitle,
+            password: formData.password,
+            confirm_password: formData.confirmPassword,
+          };
+          const newresult = await dispatch(signUp(userData));
+          if (newresult?.success) {
+            navigate("/");
+          }
+          setTimeout(() => setShowAlert(false), 2000);
+        } catch (error) {
+          setTimeout(() => setShowAlert(false), 2000);
         }
-        setTimeout(() => setShowAlert(false), 2000);
-      } catch (error) {
-        setTimeout(() => setShowAlert(false), 2000);
       }
     }
   };
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
+
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^\+?[0-9]+$/;
     return phoneRegex.test(phone);
   };
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
+
+  const handleJobTitleChange = (selectedOption) => {
+    setFormData({ ...formData, jobTitle: selectedOption.value });
+    setErrors({ ...errors, jobTitle: "" }); // Clear the validation error
   };
+
+  const handleCompanySizeChange = (selectedOption) => {
+    setFormData({ ...formData, companySize: selectedOption.value });
+    setErrors({ ...errors, companySize: "" }); // Clear the validation error
+  };
+
   const handleCountryCodeChange = (e) => {
     setCountryCode(e.target.value);
   };
@@ -117,173 +204,296 @@ const SignUp = () => {
               </h1>
             </div>
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <div className="flex flex-wrap mb-3">
-                <div className="w-full md:w-1/2 md:pr-2 mb-3 md:mb-0">
+              {currentPage === 1 && (
+                <div className="mb-3">
                   <div className="relative">
                     <input
-                      type="text"
-                      name="firstName"
-                      id="firstName"
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                       placeholder=" "
                     />
                     <label
-                      htmlFor="firstName"
+                      htmlFor="email"
                       className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
                     >
-                      {t("signup.first_name")}
+                      {t("signup.email")}
                     </label>
-                    {errors.first_name && (
+                    {errors.email && (
                       <span className="text-danger text-sm">
-                        {errors.first_name}
+                        {errors.email}
                       </span>
                     )}
                   </div>
                 </div>
-                <div className="w-full md:w-1/2 md:pl-2">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      placeholder=" "
-                    />
-                    <label
-                      htmlFor="lastName"
-                      className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
-                    >
-                      {t("signup.last_name")}
-                    </label>
-                    {errors.last_name && (
-                      <span className="text-danger text-sm">
-                        {errors.last_name}
-                      </span>
-                    )}
+              )}
+              {currentPage === 2 && (
+                <>
+                  <div className="flex flex-wrap mb-3">
+                    <div className="w-full md:w-1/2 md:pr-2 mb-3 md:mb-0">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          name="firstName"
+                          value={formData.firstName}
+                          onChange={handleChange}
+                          className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                          placeholder=" "
+                        />
+                        <label
+                          htmlFor="firstName"
+                          className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                        >
+                          {t("signup.first_name")}
+                        </label>
+                        {errors.firstName && (
+                          <span className="text-danger text-sm">
+                            {errors.firstName}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="w-full md:w-1/2 md:pl-2">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          name="lastName"
+                          value={formData.lastName}
+                          onChange={handleChange}
+                          className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                          placeholder=" "
+                        />
+                        <label
+                          htmlFor="lastName"
+                          className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                        >
+                          {t("signup.last_name")}
+                        </label>
+                        {errors.lastName && (
+                          <span className="text-danger text-sm">
+                            {errors.lastName}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="mb-3">
-                <div className="relative">
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" "
-                  />
-                  <label
-                    htmlFor="email"
-                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
-                  >
-                    {t("signup.email")}
-                  </label>
-                  {errors.email && (
-                    <span className="text-danger text-sm">{errors.email}</span>
-                  )}
-                </div>
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="phone"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  {t("signup.phone")} <span className="text-danger">*</span>
-                </label>
-                <div className="flex">
-                  <select
-                    value={countryCode}
-                    onChange={handleCountryCodeChange}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 w-36"
-                  >
-                    {countries?.map((country, index) => (
-                      <option key={index} value={country.country_phone_code}>
-                        {`+${country.country_phone_code} (${country.country_name})`}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="phone"
-                    name="phone"
-                    placeholder={t("signup.enterPhone")}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  />
-                </div>
-                {errors.phone && (
-                  <span className="text-danger text-sm">{errors.phone}</span>
-                )}
-              </div>
-              <div className="mb-3">
-                <div className="relative">
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    onChange={handlePasswordChange}
-                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" "
-                  />
-                  <label
-                    htmlFor="password"
-                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
-                  >
-                    {t("signup.password")}
-                  </label>
-                  {errors.password && (
-                    <span className="text-danger text-sm">
-                      {errors.password}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="mb-3">
-                <div className="relative">
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    onChange={handleConfirmPasswordChange}
-                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" "
-                  />
-                  <label
-                    htmlFor="confirmPassword"
-                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
-                  >
-                    {t("signup.confirm_password")}
-                  </label>
-                  {errors.confirmPassword && (
-                    <span className="text-danger text-sm">
-                      {errors.confirmPassword}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-start mb-3">
-                <div className="flex items-center h-5">
-                  <input
-                    id="terms"
-                    aria-describedby="terms"
-                    type="checkbox"
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                    required
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="terms" className="font-light text-gray-500">
-                    I accept the{" "}
-                    <a className="font-medium text-primary-600 hover:underline">
-                      Terms and Conditions
-                    </a>
-                  </label>
-                </div>
-              </div>
+                  <div className="mb-3">
+                    <div className="relative">
+                      <select
+                        name="countryCode"
+                        value={countryCode} // Ensure this is bound correctly
+                        onChange={handleCountryCodeChange}
+                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                      >
+                        {countries.map((country) => (
+                          <option
+                            key={country.country_code}
+                            value={country.country_phone_code}
+                          >
+                            {country.flag} +{country.country_phone_code}
+                          </option>
+                        ))}
+                      </select>
+
+                      <label
+                        htmlFor="countryCode"
+                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                      >
+                        {t("signup.countryCode")}
+                      </label>
+
+                      {errors.countryCode && (
+                        <span className="text-danger text-sm">
+                          {errors.countryCode}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
+                      />
+
+                      <label
+                        htmlFor="phone"
+                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                      >
+                        {t("signup.phone")}
+                      </label>
+
+                      {errors.phone && (
+                        <span className="text-danger text-sm">
+                          {errors.phone}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <div className="relative">
+                      <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
+                      />
+                      <label
+                        htmlFor="password"
+                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                      >
+                        {t("signup.password")}
+                      </label>
+                      {errors.password && (
+                        <span className="text-danger text-sm">
+                          {errors.password}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <div className="relative">
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
+                      />
+                      <label
+                        htmlFor="confirmPassword"
+                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                      >
+                        {t("signup.confirm_password")}
+                      </label>
+                      {errors.confirmPassword && (
+                        <span className="text-danger text-sm">
+                          {errors.confirmPassword}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+              {currentPage === 3 && (
+                <>
+                  <div className="mb-3">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleChange}
+                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
+                      />
+                      <label
+                        htmlFor="companyName"
+                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                      >
+                        {t("signup.company_name")}
+                      </label>
+                      {errors.companyName && (
+                        <span className="text-danger text-sm">
+                          {errors.companyName}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <div className="relative">
+                      <Select
+                        name="companySize"
+                        value={companySizes.find(
+                          (option) => option.value === formData.companySize
+                        )}
+                        onChange={handleCompanySizeChange}
+                        options={companySizes.map((size) => ({
+                          value: size.size_range,
+                          label: size.size_range,
+                        }))}
+                        className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder={t("signup.select_company_size")}
+                      />
+                      {errors.companySize && (
+                        <span className="text-danger text-sm">
+                          {errors.companySize}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <div className="relative">
+                      <Select
+                        name="jobTitle"
+                        value={jobTitles.find(
+                          (option) => option.value === formData.jobTitle
+                        )}
+                        onChange={handleJobTitleChange}
+                        options={jobTitles.map((title) => ({
+                          value: title.title,
+                          label: title.title,
+                        }))}
+                        className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder={t("signup.select_job_title")}
+                      />
+                      {errors.jobTitle && (
+                        <span className="text-danger text-sm">
+                          {errors.jobTitle}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-start mb-3">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="terms"
+                        aria-describedby="terms"
+                        type="checkbox"
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
+                        required
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label
+                        htmlFor="terms"
+                        className="font-light text-gray-500"
+                      >
+                        I accept the{" "}
+                        <a className="font-medium text-primary-600 hover:underline">
+                          Terms and Conditions
+                        </a>
+                      </label>
+                    </div>
+                  </div>
+                </>
+              )}
               <button
                 type="submit"
                 className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                {t("signup.submit")}
+                {currentPage < 3 ? t("signup.next") : t("signup.submit")}
               </button>
+              {currentPage > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  className="w-full text-white bg-black hover:bg-black focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-2"
+                >
+                  {t("signup.back")}
+                </button>
+              )}
               <p className="text-sm font-light text-gray-500">
                 {t("signup.alreadyHaveAccount")}{" "}
                 <NavLink to="/">{t("signup.login")}</NavLink>
@@ -308,8 +518,8 @@ const SignUp = () => {
               ))}
           </div>
         </div>
-        <div className="hidden md:flex flex-col  w-full md:w-1/2 bg-peach ">
-          <div className="text-center w-full max-w-lg  rounded-r-lg  p-6">
+        <div className="hidden md:flex flex-col w-full md:w-1/2 bg-peach">
+          <div className="text-center w-full max-w-lg rounded-r-lg p-6">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Revolutionize Your Hiring with Data-Driven Insights
             </h1>
@@ -330,4 +540,5 @@ const SignUp = () => {
     </>
   );
 };
+
 export default SignUp;

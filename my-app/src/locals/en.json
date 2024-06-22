@@ -1,6 +1,8 @@
 {
   "signup": {
     "title": "Sign Up",
+    "select_job_title":"Select Job Title",
+    "select_company_size":"Select Company Size",
     "first_name": "First Name",
     "enterFirstName": "Enter first name",
     "enterLastName": "Enter last name",
@@ -202,7 +204,10 @@
     "phone": "Phone",
     "CompanyInformation": "Company Information",
     "addCompany": "Create Company",
-    "companyNameError":"Enter Company Name"
+    "companyNameError":"Enter Company Name",
+    "select_job_title":"Select Job Title",
+    "select_company_size":"Select Company Size"
+
   },
   
   "candidates": {

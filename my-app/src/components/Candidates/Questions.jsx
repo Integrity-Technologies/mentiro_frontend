@@ -167,18 +167,23 @@ const Questions = ({ onComplete }) => {
             <h2 className="mb-4">{currentQuestion.question_text}</h2>
             <Form>
               {currentQuestion.options &&
-                currentQuestion.options.map((option, index) => (
-                  <div key={index} className="mb-2">
-                    <Form.Check
-                      type="radio"
-                      name="options"
-                      id={`option${index}`}
-                      label={option.option_text}
-                      checked={selectedOption && selectedOption.option_text === option.option_text}
-                      onChange={() => handleOptionSelect(option)}
-                    />
-                  </div>
-                ))}
+                currentQuestion.options.map((option, index) =>
+                  option.option_text ? (
+                    <div key={index} className="mb-2">
+                      <Form.Check
+                        type="radio"
+                        name="options"
+                        id={`option${index}`}
+                        label={option.option_text}
+                        checked={
+                          selectedOption &&
+                          selectedOption.option_text === option.option_text
+                        }
+                        onChange={() => handleOptionSelect(option)}
+                      />
+                    </div>
+                  ) : null
+                )}
             </Form>
             {answerError && <p className="text-red-500">Please select an answer!</p>}
             <div className="flex justify-between mt-4">
