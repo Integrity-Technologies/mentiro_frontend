@@ -202,7 +202,7 @@
     "lastName":"Last Name",
     "email": "Email",
     "phone": "Phone",
-    "CompanyInformation": "Company Information",
+    "companyInformation": "Company Information",
     "addCompany": "Create Company",
     "companyNameError":"Enter Company Name",
     "select_job_title":"Select Job Title",

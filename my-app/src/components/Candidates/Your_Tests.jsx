@@ -11,13 +11,24 @@ const YourTests = () => {
   const [userResults, setUserResults] = useState([]);
   const [showQuestions, setShowQuestions] = useState(false);
   const [completedTests, setCompletedTests] = useState(new Set());
+  const [uniqueLink, setUniqueLink] = useState(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const searchParams = window.location.search;
+    if (searchParams.startsWith("?")) {
+      const uniqueLinkParam = searchParams.substring(1); // Remove the "?" at the start
+      setUniqueLink(uniqueLinkParam);
+      console.log("Extracted uniqueLink:", uniqueLinkParam);
+    } else {
+      console.error("uniqueLink parameter is missing in the URL");
+    }
+  }, []);
+  
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const uniqueLink = localStorage.getItem("uniqueLink");
         if (uniqueLink) {
           const data = await dispatch(getAssessmentByUniqueLink(uniqueLink));
           if (data) {
@@ -50,7 +61,7 @@ const YourTests = () => {
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, uniqueLink]);
 
   const handleTestStart = (index) => {
     const selectedTest = tests[index];
@@ -92,11 +103,11 @@ const YourTests = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center font-roboto">
-        {showQuestions ? (
-          <TestTime onComplete={handleTestCompletion} onBack={handleBack} />
-        ) : (
-          <>
-         <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-md">
+      {showQuestions ? (
+        <TestTime onComplete={handleTestCompletion} onBack={handleBack} />
+      ) : (
+        <>
+          <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-md">
             {showTestsSection && (
               <div className="container mx-auto px-4 py-3">
                 <div className="flex justify-center mb-6">
@@ -166,10 +177,9 @@ const YourTests = () => {
                 </p>
               </div>
             )}
-         </div>
-
-          </>
-        )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -81,7 +81,7 @@ function App() {
             }
           />
           
-          <Route
+          {/* <Route
             path="/customer-dashboard"
             element={
               token ? (
@@ -90,7 +90,7 @@ function App() {
                 <Navigate to="/" />
               )
             }
-          />
+          /> */}
 
           {/* Redirect Unauthenticated Users to Login */}
           <Route path="*" element={<Navigate to="/" />} />

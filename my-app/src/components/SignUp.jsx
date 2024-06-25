@@ -3,10 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
 import { NavLink, useNavigate } from "react-router-dom";
 import Select from "react-select";
-import getIpInfo from "../actions/IPAction"; // Import IP fetch function
+
 import { useTranslation } from "react-i18next";
 import countries from "./../data/countries";
-import { fetchJobTitles, fetchCompanySizes } from "../actions/companyAction"; // Import data fetching functions
+import {
+  addCompany,
+  fetchJobTitles,
+  fetchCompanySizes,
+} from "../actions/companyAction";
 const logoImage = "/assets/icon.jpg";
 const loginimg =
   "/assets/flat-illustration-design-communacation-concept-online-with-smartphone_540641-468-removebg-preview.png";
@@ -34,9 +38,9 @@ const SignUp = () => {
 
   // State variables to hold fetched data
   const [jobTitles, setJobTitles] = useState([]);
-  console.log("🚀 ~ SignUp ~ jobTitles:", jobTitles);
+  // console.log("🚀 ~ SignUp ~ jobTitles:", jobTitles);
   const [companySizes, setCompanySizes] = useState([]);
-  console.log("🚀 ~ SignUp ~ companySizes:", companySizes);
+  // console.log("🚀 ~ SignUp ~ companySizes:", companySizes);
 
   // Fetch job titles and company sizes on component mount
   useEffect(() => {
@@ -51,24 +55,16 @@ const SignUp = () => {
     // Fetch user location and set country code
     const fetchLocation = async () => {
       try {
-        const ipInfo = await getIpInfo();
-        console.log("IP Information:", ipInfo);
-        if (ipInfo && ipInfo.country) {
-          const country = countries.find((c) => c.country_code === ipInfo.country);
-          if (country) {
-            setCountryCode(country.country_phone_code);
-          } else {
-            console.warn('Country code not found for IP:', ipInfo.country);
-            // Fallback to default country code or handle as necessary
-          }
-        } else {
-          console.warn('Country information not available in IP response:', ipInfo);
-          // Handle case where country information is not available
+        const response = await fetch(
+          "https://ipinfo.io/json?token=15f12699e3dd0b"
+        );
+        const data = await response.json();
+        const country = countries.find((c) => c.country_code === data.country);
+        if (country) {
+          setCountryCode(country.country_phone_code);
         }
       } catch (error) {
         console.error("Failed to fetch user location", error);
-        // Handle error fetching IP information
-        // Fallback to default country code or handle as necessary
       }
     };
     fetchLocation();
@@ -139,15 +135,29 @@ const SignUp = () => {
             last_name: formData.lastName,
             email: formData.email,
             phone: `+${countryCode}${formData.phone}`,
-            company_name: formData.companyName,
-            company_size: formData.companySize,
-            job_title: formData.jobTitle,
             password: formData.password,
             confirm_password: formData.confirmPassword,
           };
           const newresult = await dispatch(signUp(userData));
           if (newresult?.success) {
-            navigate("/");
+            const companyData = {
+              name: formData.companyName,
+              job_title: formData.jobTitle,
+              company_size: formData.companySize,
+            };
+            const response = await dispatch(addCompany(companyData));
+
+
+    // Store company name in localStorage
+    localStorage.setItem("company", JSON.stringify(response.company));
+
+
+            console.log("🚀 ~ handleSubmit ~ response:", response)
+            if (response?.success) {
+              navigate("/customer-dashboard");
+            } else {
+              console.error("Failed to create company", await response.text());
+            }
           }
           setTimeout(() => setShowAlert(false), 2000);
         } catch (error) {
@@ -217,7 +227,7 @@ const SignUp = () => {
                     />
                     <label
                       htmlFor="email"
-                      className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                      className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                     >
                       {t("signup.email")}
                     </label>
@@ -244,7 +254,7 @@ const SignUp = () => {
                         />
                         <label
                           htmlFor="firstName"
-                          className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                          className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                         >
                           {t("signup.first_name")}
                         </label>
@@ -267,7 +277,7 @@ const SignUp = () => {
                         />
                         <label
                           htmlFor="lastName"
-                          className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                          className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                         >
                           {t("signup.last_name")}
                         </label>
@@ -283,7 +293,7 @@ const SignUp = () => {
                     <div className="relative">
                       <select
                         name="countryCode"
-                        value={countryCode} // Ensure this is bound correctly
+                        value={countryCode}
                         onChange={handleCountryCodeChange}
                         className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                       >
@@ -299,7 +309,7 @@ const SignUp = () => {
 
                       <label
                         htmlFor="countryCode"
-                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
                         {t("signup.countryCode")}
                       </label>
@@ -325,7 +335,7 @@ const SignUp = () => {
 
                       <label
                         htmlFor="phone"
-                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
                         {t("signup.phone")}
                       </label>
@@ -349,7 +359,7 @@ const SignUp = () => {
                       />
                       <label
                         htmlFor="password"
-                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
                         {t("signup.password")}
                       </label>
@@ -372,7 +382,7 @@ const SignUp = () => {
                       />
                       <label
                         htmlFor="confirmPassword"
-                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
                         {t("signup.confirm_password")}
                       </label>
@@ -399,7 +409,7 @@ const SignUp = () => {
                       />
                       <label
                         htmlFor="companyName"
-                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
                         {t("signup.company_name")}
                       </label>

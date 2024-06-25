@@ -155,19 +155,12 @@ export const InviteAssessment = (assessmentData) => async (dispatch) => {
 
 export const getAssessmentByUniqueLink = (assessmentData) => async (dispatch) => {
   try {
-    const token = getToken();
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+   
     // console.log(assessmentData);
 
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/Assessments/assessment/${assessmentData}`,
-      
-      axiosConfig
-    );
+          );
 
     // Save the response data to local storage
     dispatch({

@@ -71,13 +71,8 @@ export const getUserResults = () => {
 
 export const createResult = (resultData) => {
   return (dispatch) => {
-    const token = localStorage.getItem('token'); // Retrieve token from local storage
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${token}`, // Set authorization header
-      },
-    };
-    axios.post(`${process.env.REACT_APP_API_URL}/result/create`, resultData, axiosConfig)
+    
+    axios.post(`${process.env.REACT_APP_API_URL}/result/create`, resultData)
       .then(response => response.data)
       .then(data => {
         // Assuming the response data contains the resultId

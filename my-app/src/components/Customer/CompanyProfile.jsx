@@ -3,10 +3,8 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import {
-  
   FaBuilding,
   FaUserCircle
-
 } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -23,7 +21,6 @@ const CompanyProfile = () => {
   const [success, setSuccess] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -50,6 +47,12 @@ const CompanyProfile = () => {
               );
               if (storedActiveCompany) {
                 setActiveCompany(storedActiveCompany);
+              } else if (companyResponse.data.length > 0) {
+                setActiveCompany(companyResponse.data[0]);
+                localStorage.setItem(
+                  "activeCompany",
+                  JSON.stringify(companyResponse.data[0])
+                );
               }
             })
             .catch((error) => {
@@ -61,11 +64,6 @@ const CompanyProfile = () => {
         });
     }
   }, []);
-
-  const handleActivateCompany = (company) => {
-    localStorage.setItem("activeCompany", JSON.stringify(company));
-    setActiveCompany(company);
-  };
 
   const handleNewCompanyNameChange = (event) => {
     setNewCompanyName(event.target.value);
@@ -107,6 +105,14 @@ const CompanyProfile = () => {
             setTimeout(() => {
               setSuccess(false);
             }, 3000); // Hide message after 3 seconds
+
+            if (companyResponse.data.length > 0) {
+              setActiveCompany(companyResponse.data[0]);
+              localStorage.setItem(
+                "activeCompany",
+                JSON.stringify(companyResponse.data[0])
+              );
+            }
           })
           .catch((error) => {
             console.error("Error fetching updated company data:", error);
@@ -120,11 +126,13 @@ const CompanyProfile = () => {
   return (
     <div className="container mx-auto p-4 h-100">
       {user ? (
-        <div className="bg-white  rounded-lg p-6 min-h-screen">
-          <h3 className="text-2xl font-semibold flex items-center">
-          <FaUserCircle className="mr-3" size={24} />
-            Personal Information
-          </h3>
+        <div className="bg-white rounded-lg p-6 min-h-screen">
+          <div className="flex items-center mb-6">
+            <FaUserCircle className="mr-3" size={24} />
+            <h3 className="text-2xl font-semibold">
+              {t("CompanyProfile.personalInformation")}
+            </h3>
+          </div>
           <div className="mb-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <div className="flex flex-col items-start justify-center w-full">
@@ -184,91 +192,54 @@ const CompanyProfile = () => {
             </div>
           </div>
 
-          {/* <div className="flex items-center justify-between mt-20 mb-4">
-            <h3 className="text-2xl font-semibold flex items-center">
-              <FaBuilding className="mr-2" />
-              {t("CompanyProfile.CompanyInformation")}
-            </h3>
-          </div>
-          <div className="mb-4 w-80 flex">
-            <div className="relative flex-grow">
-              <input
-                type="text"
-                id="companyName"
-                value={newCompanyName}
-                onChange={handleNewCompanyNameChange}
-                placeholder={t("CompanyProfile.companyNamePlaceholder")}
-                className={`block px-2 pb-1.5 pt-3 w-80 text-sm text-gray-900 bg-transparent rounded-lg border ${
-                  isCompanyNameValid ? "border-gray-300" : "border-red-500"
-                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
-              />
-              <label
-                className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-              >
-                {t("CompanyProfile.companyNamePlaceholder")}
-              </label>
-              {!isCompanyNameValid && (
-                <p className="text-red-500 text-sm mt-1">{companyNameError}</p>
-              )}
-            </div>
-            <div className="ml-4">
-              <Button
-                variant="dark"
-                onClick={handleCreateCompany}
-                className="w-100 whitespace-nowrap mt-1 bg-dark hover:bg-dark"
-              >
-                {t("CompanyProfile.addCompany")}
-              </Button>
-            </div>
-          </div> */}
+          <hr className="my-8 border-gray-400" />
 
-          <div className="flex items-center justify-between mt-20 mb-4">
-            {/* <h3 className="text-2xl font-semibold flex items-center">
-              <FaBuilding className="mr-2" />
-              {t("CompanyProfile.companyList")}
-            </h3> */}
-            {/* <Button
-              className="bg-black text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105"
-              variant="primary"
-              onClick={() => setShowCreateCompanyModal(true)}
-            >
-              <FaPlus className="inline-block mr-1" />
-              {t("CompanyProfile.createCompany")}
-            </Button> */}
-          </div>
-          <hr className="mb-6 border-gray-400" />
 
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mt-12">
+            <div className="flex items-center mb-4">
+              <FaBuilding className="mr-3" size={24} />
+              <h3 className="text-2xl font-semibold">
+                {t("CompanyProfile.companyInformation")}
+              </h3>
+            </div>
+            {activeCompany && (
+              <div className="mb-4">
+                <div className="flex items-center">
+                <div className="flex flex-col items-start justify-center">
+                <label htmlFor="phone" className="font-medium text-black">
+                  {t("CompanyProfile.companyNamePlaceholder")}
+                </label>
+                <input
+                  type="text"
+                  id="text"
+                  value={activeCompany.name}
+                  readOnly
+                  className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                />
+              </div>
+                </div>
+                {/* You can add more fields here for other company information */}
+              </div>
+            )}
+          </div>
+
+
+          {/* <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {companyList.map((company) => (
               <li
                 key={company.id}
-                className={`rounded transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4 
-                ${
+                className={`rounded transition duration-300 transform hover:-translate-y-1 hover:shadow-lg p-4 ${
                   activeCompany && activeCompany.id === company.id
                     ? "bg-gray-100"
                     : "bg-gray-100"
-                }
-                `}
+                }`}
               >
                 <p className="text-lg font-semibold text-gray-900">
                   {company.name}
                 </p>
-                <button
-                  onClick={() => handleActivateCompany(company)}
-                  className={`mt-2 w-full px-4 py-2 rounded focus:outline-none 
-                  ${
-                    activeCompany && activeCompany.id === company.id
-                      ? "bg-green-500 text-white hover:bg-green-600 focus:ring focus:ring-green-400"
-                      : "bg-black text-white hover:bg-black focus:ring focus:ring-blue-400"
-                  }`}
-                >
-                  {activeCompany && activeCompany.id === company.id
-                    ? `${t("CompanyProfile.activatedButton")}`
-                    : `${t("CompanyProfile.activateButton")}`}
-                </button>
               </li>
             ))}
-          </ul>
+          </ul> */}
         </div>
       ) : (
         <p className="text-lg font-semibold text-center text-primary">
