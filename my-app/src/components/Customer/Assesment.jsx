@@ -243,6 +243,7 @@ const Assessment = () => {
                   onChange={(selectedOption) => setJobRole(selectedOption)}
                   options={jobRoleOptions}
                   styles={customStyles} // Apply custom styles here
+                  placeholder="Job Role"
                 />
                 {jobRoleError && (
                   <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
@@ -276,6 +277,7 @@ const Assessment = () => {
                   }
                   options={workArrangementOptions}
                   styles={customStyles} // Apply custom styles here
+                  placeholder="Work Arrangement"
                 />
                 {workArrangementError && (
                   <p className="mt-2 text-sm text-red-600">
@@ -307,6 +309,7 @@ const Assessment = () => {
                   onChange={(selectedOption) => setJobLocation(selectedOption)}
                   options={jobLocationOptions}
                   styles={customStyles} // Apply custom styles here
+                  placeholder="Job Location"
                 />
                 {jobLocationError && (
                   <p className="mt-2 text-sm text-red-600">
