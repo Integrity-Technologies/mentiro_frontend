@@ -139,6 +139,7 @@ const SignUp = () => {
             confirm_password: formData.confirmPassword,
           };
           const newresult = await dispatch(signUp(userData));
+          // console.log("🚀 ~ handleSubmit ~ newresult:", newresult);
           if (newresult?.success) {
             const companyData = {
               name: formData.companyName,
@@ -146,13 +147,11 @@ const SignUp = () => {
               company_size: formData.companySize,
             };
             const response = await dispatch(addCompany(companyData));
+            // console.log("🚀 ~ handleSubmit ~ response:", response)
 
+            // Store company name in localStorage
+            localStorage.setItem("company", JSON.stringify(response.company));
 
-    // Store company name in localStorage
-    localStorage.setItem("company", JSON.stringify(response.company));
-
-
-            console.log("🚀 ~ handleSubmit ~ response:", response)
             if (response?.success) {
               navigate("/customer-dashboard");
             } else {

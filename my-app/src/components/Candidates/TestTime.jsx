@@ -41,7 +41,7 @@ const TestTime = ({ onComplete, onBack  }) => {
       {showQuestions ? (
         <Questions onComplete={onComplete} />
       ) : (
-        <div className="bg-white max-w-4xl  rounded-lg p-8  w-full">
+        <div className="bg-white max-w-4xl  rounded-lg p-6" style={{ width: '900px', overflowY: 'auto' }}>
           <div className="flex justify-center mb-6 rounded-circle">
             <img src="/assets/icon.jpg" alt="Mentiro Logo" className="h-24 rounded-circle" />
           </div>

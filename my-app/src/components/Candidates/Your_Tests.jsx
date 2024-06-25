@@ -107,7 +107,7 @@ const YourTests = () => {
         <TestTime onComplete={handleTestCompletion} onBack={handleBack} />
       ) : (
         <>
-          <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-md">
+          <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-md" style={{ width: '900px', overflowY: 'auto' }}>
             {showTestsSection && (
               <div className="container mx-auto px-4 py-3">
                 <div className="flex justify-center mb-6">

@@ -69,14 +69,16 @@ export const addCompany = (companyData) => async (dispatch) => {
       }
     };
     // console.log(token);
-
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/company/create/company`,
       companyData, axiosConfig
     );
     dispatch(addCompanySuccess(response.data));
+    return { success: true, data: response.data };
+
   } catch (error) {
     dispatch(companyError(error.message));
+    return { success: false, error: error.message };
   }
 };
 

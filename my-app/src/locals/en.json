@@ -204,9 +204,10 @@
     "phone": "Phone",
     "companyInformation": "Company Information",
     "addCompany": "Create Company",
-    "companyNameError":"Enter Company Name",
+    "companyNameError":"Company Name",
     "select_job_title":"Select Job Title",
-    "select_company_size":"Select Company Size"
+    "select_company_size":"Select Company Size",
+    "personalInformation": "Personal Information"
 
   },
   

@@ -37,9 +37,9 @@ const Questions = ({ onComplete }) => {
       }
     };
 
-    const questionList = reviewingSkipped ? skippedQuestionIndexes.map(index => questions[index]) : questions;
+    const questionList = reviewingSkipped ? skippedQuestionIndexes.map(index => questions[index].question_id) : questions.map(q => q.question_id);
     if (questionList.length > 0 && currentQuestionIndex < questionList.length) {
-      fetchQuestionData(questionList[currentQuestionIndex].question_id);
+      fetchQuestionData(questionList[currentQuestionIndex]);
     }
   }, [dispatch, currentQuestionIndex, questions, skippedQuestionIndexes, reviewingSkipped, questionCache]);
 
@@ -69,11 +69,14 @@ const Questions = ({ onComplete }) => {
 
   const resultId = JSON.parse(localStorage.getItem('resultId'));
 
- const handleSkip = () => {
-    setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
-  
-    if (currentQuestionIndex + 1 < questions.length) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+  const handleSkip = () => {
+    if (!skippedQuestionIndexes.includes(currentQuestionIndex)) {
+      setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
+    }
+
+    const nextIndex = getNextQuestionIndex();
+    if (nextIndex !== null) {
+      setCurrentQuestionIndex(nextIndex);
       setSelectedOption(null);
       setAnswerError(false);
     } else {
@@ -101,13 +104,23 @@ const Questions = ({ onComplete }) => {
       return;
     }
 
-    const questionList = reviewingSkipped ? skippedQuestionIndexes.map(index => questions[index]) : questions;
-    if (currentQuestionIndex + 1 < questionList.length) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    const nextIndex = getNextQuestionIndex();
+    if (nextIndex !== null) {
+      setCurrentQuestionIndex(nextIndex);
       setSelectedOption(null);
     } else {
       handleEndOfQuestions();
     }
+  };
+
+  const getNextQuestionIndex = () => {
+    const questionList = reviewingSkipped ? skippedQuestionIndexes : questions.map((_, index) => index);
+    for (let i = currentQuestionIndex + 1; i < questionList.length; i++) {
+      if (!attemptedQuestionIndexes.includes(i)) {
+        return i;
+      }
+    }
+    return null;
   };
 
   const handleEndOfQuestions = () => {
@@ -116,27 +129,15 @@ const Questions = ({ onComplete }) => {
 
   const handleReviewSkipped = () => {
     setReviewingSkipped(true);
-    // Ensure skippedQuestionIndexes are correctly updated
-    setSkippedQuestionIndexes(
-      questions.reduce((acc, _, index) => {
-        if (!attemptedQuestionIndexes.includes(index)) {
-          acc.push(index);
-        }
-        return acc;
-      }, [])
-    );
-    setCurrentQuestionIndex(0); // Start reviewing from the first skipped question
+    setCurrentQuestionIndex(skippedQuestionIndexes[0] || 0); // Start reviewing from the first skipped question
     setShowPreviewPage(false); // Close the preview page after choosing to review
   };
-  
-  const handleBallClick = (index) => {
-    if (index !== currentQuestionIndex) {
-      setCurrentQuestionIndex(index);
-      setSelectedOption(null);
-      setAnswerError(false);
-    }
-  };
 
+  const handleBallClick = (index) => {
+    setCurrentQuestionIndex(index);
+    setSelectedOption(null);
+    setAnswerError(false);
+  };
 
   const renderProgressBalls = () => {
     return (
@@ -182,12 +183,11 @@ const Questions = ({ onComplete }) => {
         />
       ) : (
         <>
-         <div className="flex">
-              <BiTimeFive className="text-xl mr-2" /> {/* Clock icon */}
-              <div className={`mr-2 ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>
-            </div>
+          <div className="flex">
+            <BiTimeFive className="text-xl mr-2" /> {/* Clock icon */}
+            <div className={`mr-2 ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>
+          </div>
           <div className="flex justify-between items-center w-full">
-         
             {renderProgressBalls()}
             <div className="ml-2">
               {currentQuestionIndex + 1}/{questions.length}
