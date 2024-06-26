@@ -215,6 +215,8 @@
     "email": "Email",
     "phone": "Phone",
     "companyInformation": "Company Information",
+    "companySize": "Company Size",
+    "jobTitle": "Job Title",
     "addCompany": "Create Company",
     "companyNameError":"Company Name",
     "select_job_title":"Job Title",

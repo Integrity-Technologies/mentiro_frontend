@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
 import { NavLink, useNavigate } from "react-router-dom";
 import Select from "react-select";
-
+import Flag from "react-world-flags";
 import { useTranslation } from "react-i18next";
 import countries from "./../data/countries";
 import {
@@ -12,6 +12,7 @@ import {
   fetchCompanySizes,
 } from "../actions/companyAction";
 const logoImage = "/assets/icon.jpg";
+
 const loginimg =
   "/assets/flat-illustration-design-communacation-concept-online-with-smartphone_540641-468-removebg-preview.png";
 
@@ -20,9 +21,11 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const authError = useSelector((state) => state.auth.error);
   const [errors, setErrors] = useState({});
+  const [currentCountry, setCurrentCountry] = useState(null); // State to hold current country details
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
   const [countryCode, setCountryCode] = useState("");
+
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -59,9 +62,12 @@ const SignUp = () => {
           "https://ipinfo.io/json?token=15f12699e3dd0b"
         );
         const data = await response.json();
-        const country = countries.find((c) => c.country_code === data.country);
+        const country = countries.find(
+          (c) => c.country_short_name === data.country
+        );
         if (country) {
-          setCountryCode(country.country_phone_code);
+          setCountryCode(`${country.country_phone_code}`);
+          setCurrentCountry(country);
         }
       } catch (error) {
         console.error("Failed to fetch user location", error);
@@ -69,6 +75,11 @@ const SignUp = () => {
     };
     fetchLocation();
   }, []);
+
+  const handleCountryChange = (selectedCountry) => {
+    setCountryCode(`${selectedCountry.country_phone_code}`);
+    setCurrentCountry(selectedCountry);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -134,7 +145,7 @@ const SignUp = () => {
             first_name: formData.firstName,
             last_name: formData.lastName,
             email: formData.email,
-            phone: `+${countryCode}${formData.phone}`,
+            phone: `${countryCode}${formData.phone}`,
             password: formData.password,
             confirm_password: formData.confirmPassword,
           };
@@ -195,6 +206,13 @@ const SignUp = () => {
 
   const handleCountryCodeChange = (e) => {
     setCountryCode(e.target.value);
+  };
+
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+    }),
   };
 
   return (
@@ -288,62 +306,56 @@ const SignUp = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mb-3">
-                    <div className="relative">
-                      <select
-                        name="countryCode"
-                        value={countryCode}
-                        onChange={handleCountryCodeChange}
-                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                      >
-                        {countries.map((country) => (
-                          <option
-                            key={country.country_code}
-                            value={country.country_phone_code}
-                          >
-                            {country.flag} +{country.country_phone_code}
-                          </option>
-                        ))}
-                      </select>
-
+                  <div className="flex flex-wrap -mx-3 mb-6">
+                    <div className="w-full px-3">
                       <label
-                        htmlFor="countryCode"
-                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                      >
-                        {t("signup.countryCode")}
-                      </label>
-
-                      {errors.countryCode && (
-                        <span className="text-danger text-sm">
-                          {errors.countryCode}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="relative">
-                      <input
-                        type="text"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "
-                      />
-
-                      <label
+                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                         htmlFor="phone"
-                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
-                        {t("signup.phone")}
+                        {t("signup.phone_number")}
                       </label>
-
-                      {errors.phone && (
-                        <span className="text-danger text-sm">
-                          {errors.phone}
-                        </span>
-                      )}
+                      <div className="flex items-center space-x-4">
+                        {" "}
+                        {/* Added space-x-4 for spacing */}
+                        <Select
+                        value={currentCountry}
+                        onChange={handleCountryChange}
+                        options={countries}
+                        getOptionLabel={(option) => (
+                          <div className="flex items-center">
+                            <Flag code={option.country_short_name} height="5" width="25%" />
+                            <span className="ml-2">{` ${option.country_phone_code}`}</span>
+                          </div>
+                        )}
+                        getOptionValue={(option) => option.country_short_name}
+                        styles={customStyles}
+                        className="w-3/6"
+                        placeholder={t("signup.select_country")}
+                      />
+                        <div className="relative flex-1">
+                          {" "}
+                          {/* Added flex-1 to make input stretch */}
+                          <input
+                            type="text"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                          />
+                          <label
+                            htmlFor="phone"
+                            className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                          >
+                            {t("signup.phone")}
+                          </label>
+                          {errors.phone && (
+                            <span className="text-danger text-sm">
+                              {errors.phone}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="mb-3">

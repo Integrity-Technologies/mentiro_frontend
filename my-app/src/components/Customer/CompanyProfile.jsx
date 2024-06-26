@@ -193,8 +193,8 @@ const CompanyProfile = () => {
               </h3>
             </div>
             {activeCompany && (
-              <div className="mb-4 flex">
-                <div className="flex flex-col items-start justify-center mr-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="flex flex-col items-start justify-center w-full">
                   <label
                     htmlFor="companyName"
                     className="font-medium text-black"
@@ -209,7 +209,30 @@ const CompanyProfile = () => {
                     className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
                   />
                 </div>
-               
+                <div className="flex flex-col items-start justify-center w-full">
+                  <label htmlFor="companySize" className="font-medium text-black">
+                    {t("CompanyProfile.companySize")}
+                  </label>
+                  <input
+                    type="text"
+                    id="companySize"
+                    value={activeCompany.company_size}
+                    readOnly
+                    className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                  />
+                </div>
+                <div className="flex flex-col items-start justify-center w-full">
+                  <label htmlFor="jobTitle" className="font-medium text-black">
+                    {t("CompanyProfile.jobTitle")}
+                  </label>
+                  <input
+                    type="text"
+                    id="jobTitle"
+                    value={activeCompany.job_title}
+                    readOnly
+                    className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                  />
+                </div>
                 {/* Add more fields for other company information */}
               </div>
             )}
