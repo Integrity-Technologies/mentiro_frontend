@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Container, Card, Form, Button } from 'react-bootstrap';
 import { getQuestionById } from '../../actions/QuestionAction';
 import { submitAnswer } from '../../actions/resultAction';
-import { BiTimeFive } from 'react-icons/bi'; // Import clock icon
+import { BiTimeFive } from 'react-icons/bi';
 import PreviewPage from './PreviewQuestions';
 
 const Questions = ({ onComplete }) => {
@@ -73,15 +73,7 @@ const Questions = ({ onComplete }) => {
     if (!skippedQuestionIndexes.includes(currentQuestionIndex)) {
       setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
     }
-
-    const nextIndex = getNextQuestionIndex();
-    if (nextIndex !== null) {
-      setCurrentQuestionIndex(nextIndex);
-      setSelectedOption(null);
-      setAnswerError(false);
-    } else {
-      handleEndOfQuestions();
-    }
+    moveToNextQuestion();
   };
 
   const handleNext = () => {
@@ -99,28 +91,39 @@ const Questions = ({ onComplete }) => {
       if (reviewingSkipped) {
         setSkippedQuestionIndexes((prevSkipped) => prevSkipped.filter(index => index !== currentQuestionIndex));
       }
+
+      setSelectedOption(null);
+      moveToNextQuestion();
     } else {
       setAnswerError(true);
-      return;
-    }
-
-    const nextIndex = getNextQuestionIndex();
-    if (nextIndex !== null) {
-      setCurrentQuestionIndex(nextIndex);
-      setSelectedOption(null);
-    } else {
-      handleEndOfQuestions();
     }
   };
 
-  const getNextQuestionIndex = () => {
+  const moveToNextQuestion = () => {
     const questionList = reviewingSkipped ? skippedQuestionIndexes : questions.map((_, index) => index);
-    for (let i = currentQuestionIndex + 1; i < questionList.length; i++) {
-      if (!attemptedQuestionIndexes.includes(i)) {
-        return i;
+    let nextIndex = currentQuestionIndex + 1;
+
+    if (reviewingSkipped) {
+      // Move to the next skipped question
+      const nextSkippedIndex = skippedQuestionIndexes.find(index => index > currentQuestionIndex);
+      if (nextSkippedIndex !== undefined) {
+        setCurrentQuestionIndex(nextSkippedIndex);
+        return;
+      }
+    } else {
+      // Move to the next non-skipped question
+      while (nextIndex < questionList.length && (attemptedQuestionIndexes.includes(questionList[nextIndex]) || skippedQuestionIndexes.includes(questionList[nextIndex]))) {
+        nextIndex++;
       }
     }
-    return null;
+
+    if (nextIndex < questionList.length) {
+      setCurrentQuestionIndex(questionList[nextIndex]);
+    } else if (reviewingSkipped && skippedQuestionIndexes.length > 0) {
+      setCurrentQuestionIndex(skippedQuestionIndexes[0]);
+    } else {
+      handleEndOfQuestions();
+    }
   };
 
   const handleEndOfQuestions = () => {
@@ -129,7 +132,7 @@ const Questions = ({ onComplete }) => {
 
   const handleReviewSkipped = () => {
     setReviewingSkipped(true);
-    setCurrentQuestionIndex(skippedQuestionIndexes[0] || 0); // Start reviewing from the first skipped question
+    setCurrentQuestionIndex(skippedQuestionIndexes[0]); // Start reviewing from the first skipped question
     setShowPreviewPage(false); // Close the preview page after choosing to review
   };
 
@@ -183,7 +186,7 @@ const Questions = ({ onComplete }) => {
         />
       ) : (
         <>
-          <div className="flex">
+          <div className="flex mb-4">
             <BiTimeFive className="text-xl mr-2" /> {/* Clock icon */}
             <div className={`mr-2 ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>
           </div>

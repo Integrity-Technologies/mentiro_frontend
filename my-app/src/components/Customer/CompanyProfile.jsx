@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import {
-  FaBuilding,
-  FaUserCircle
-} from "react-icons/fa";
+import { FaBuilding, FaUserCircle } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { addCompany } from "../../actions/companyAction"; // Adjust the import path as necessary
@@ -136,10 +133,7 @@ const CompanyProfile = () => {
           <div className="mb-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <div className="flex flex-col items-start justify-center w-full">
-                <label
-                  htmlFor="firstName"
-                  className="font-medium text-black"
-                >
+                <label htmlFor="firstName" className="font-medium text-black">
                   {t("CompanyProfile.firstName")}
                 </label>
                 <input
@@ -151,10 +145,7 @@ const CompanyProfile = () => {
                 />
               </div>
               <div className="flex flex-col items-start justify-center">
-                <label
-                  htmlFor="lastName"
-                  className="font-medium text-black"
-                >
+                <label htmlFor="lastName" className="font-medium text-black">
                   {t("CompanyProfile.lastName")}
                 </label>
                 <input
@@ -194,7 +185,6 @@ const CompanyProfile = () => {
 
           <hr className="my-8 border-gray-400" />
 
-
           <div className="mt-12">
             <div className="flex items-center mb-4">
               <FaBuilding className="mr-3" size={24} />
@@ -203,26 +193,27 @@ const CompanyProfile = () => {
               </h3>
             </div>
             {activeCompany && (
-              <div className="mb-4">
-                <div className="flex items-center">
-                <div className="flex flex-col items-start justify-center">
-                <label htmlFor="phone" className="font-medium text-black">
-                  {t("CompanyProfile.companyNamePlaceholder")}
-                </label>
-                <input
-                  type="text"
-                  id="text"
-                  value={activeCompany.name}
-                  readOnly
-                  className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
-                />
-              </div>
+              <div className="mb-4 flex">
+                <div className="flex flex-col items-start justify-center mr-4">
+                  <label
+                    htmlFor="companyName"
+                    className="font-medium text-black"
+                  >
+                    {t("CompanyProfile.companyNamePlaceholder")}
+                  </label>
+                  <input
+                    type="text"
+                    id="companyName"
+                    value={activeCompany.name}
+                    readOnly
+                    className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
+                  />
                 </div>
-                {/* You can add more fields here for other company information */}
+               
+                {/* Add more fields for other company information */}
               </div>
             )}
           </div>
-
 
           {/* <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {companyList.map((company) => (

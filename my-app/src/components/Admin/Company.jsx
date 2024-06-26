@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Table, Form, FormControl, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
+import { useTranslation } from "react-i18next";
 import {
   addCompany,
   deleteCompany,
   editCompany,
   fetchCompanies,
+  fetchJobTitles,
+  fetchCompanySizes,
 } from "../../actions/companyAction";
 import { getToken } from "../../actions/authActions"; // Import getToken function
 import TablePagination from "./TablePagination"; // Import your TablePagination component
 
 const Company = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const companies = useSelector((state) => state.company.companies);
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,20 +24,35 @@ const Company = () => {
   const token = useSelector(getToken); // Get token from Redux store
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const [newCompany, setNewCompany] = useState({ name: "", website: "" });
+  const [newCompany, setNewCompany] = useState({ name: "", website: "", jobTitle: "", companySize: "" });
+  const [errors, setErrors] = useState({});
+
   const [companyError, setCompanyError] = useState("");
   const [websiteError, setWebsiteError] = useState("");
+
+  const [jobTitles, setJobTitles] = useState([]);
+  const [companySizes, setCompanySizes] = useState([]);
 
   useEffect(() => {
     dispatch(fetchCompanies());
   }, [dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedJobTitles = await fetchJobTitles();
+      const fetchedCompanySizes = await fetchCompanySizes();
+      setJobTitles(fetchedJobTitles);
+      setCompanySizes(fetchedCompanySizes);
+    };
+    fetchData();
+  }, []);
 
   const handleShowAddModal = () => setShowAddModal(true);
   const handleCloseAddModal = () => setShowAddModal(false);
 
   const handleShowEditModal = (company) => {
     setSelectedCompany(company);
-    setNewCompany({ name: company.name, website: company.website }); // Set initial state with company values
+    setNewCompany({ name: company.name, website: company.website, jobTitle: company.jobTitle, companySize: company.companySize });
     setShowEditModal(true);
   };
   const handleCloseEditModal = () => setShowEditModal(false);
@@ -75,7 +95,7 @@ const Company = () => {
     }
 
     await dispatch(addCompany(newCompany));
-    setNewCompany({ name: "", website: "" });
+    setNewCompany({ name: "", website: "", jobTitle: "", companySize: "" });
     await dispatch(fetchCompanies()); // Add this line to fetch updated company data
     handleCloseAddModal();
   };
@@ -83,7 +103,7 @@ const Company = () => {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     await dispatch(editCompany(selectedCompany.id, newCompany));
-    setNewCompany({ name: "", website: "" }); // Remove this line
+    setNewCompany({ name: "", website: "", jobTitle: "", companySize: "" });
     await dispatch(fetchCompanies()); // Add this line to fetch updated company data
     handleCloseEditModal();
   };
@@ -110,7 +130,17 @@ const Company = () => {
     indexOfLastItem
   );
   const handlePageChange = (page) => setCurrentPage(page);
-  
+
+  const handleJobTitleChange = (selectedOption) => {
+    setNewCompany({ ...newCompany, jobTitle: selectedOption.value });
+    setErrors({ ...errors, jobTitle: "" }); // Clear the validation error
+  };
+
+  const handleCompanySizeChange = (selectedOption) => {
+    setNewCompany({ ...newCompany, companySize: selectedOption.value });
+    setErrors({ ...errors, companySize: "" }); // Clear the validation error
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-3xl font-semibold mb-4">Companies</h1>
@@ -177,7 +207,6 @@ const Company = () => {
         onHide={handleCloseAddModal}
         className="fixed inset-0 flex items-center justify-center"
       >
-        
         <Modal.Header closeButton>
           <Modal.Title>Add Company</Modal.Title>
         </Modal.Header>
@@ -198,6 +227,51 @@ const Company = () => {
                 <div className="text-danger">{companyError}</div>
               )}
             </Form.Group>
+            <div className="mb-6 mt-4">
+              <div className="relative">
+                <Select
+                  name="companySize"
+                  value={companySizes.find(
+                    (option) => option.value === newCompany.companySize
+                  )}
+                  onChange={handleCompanySizeChange}
+                  options={companySizes.map((size) => ({
+                    value: size.size_range,
+                    label: size.size_range,
+                  }))}
+                  className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder={t("signup.select_company_size")}
+                />
+                {errors.companySize && (
+                  <span className="text-danger text-sm">
+                    {errors.companySize}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <div className="relative">
+                <Select
+                  name="jobTitle"
+                  value={jobTitles.find(
+                    (option) => option.value === newCompany.jobTitle
+                  )}
+                  onChange={handleJobTitleChange}
+                  options={jobTitles.map((title) => ({
+                    value: title.title,
+                    label: title.title,
+                  }))}
+                  className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder={t("signup.select_job_title")}
+                />
+                {errors.jobTitle && (
+                  <span className="text-danger text-sm">
+                    {errors.jobTitle}
+                  </span>
+                )}
+              </div>
+            </div>
             <Form.Group controlId="formCompanyWebsite">
               <Form.Label>Website</Form.Label>
               <Form.Control
@@ -238,6 +312,51 @@ const Company = () => {
                 }
               />
             </Form.Group>
+            <div className="mb-6 mt-4">
+              <div className="relative">
+                <Select
+                  name="companySize"
+                  value={companySizes.find(
+                    (option) => option.value === newCompany.companySize
+                  )}
+                  onChange={handleCompanySizeChange}
+                  options={companySizes.map((size) => ({
+                    value: size.size_range,
+                    label: size.size_range,
+                  }))}
+                  className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder={t("signup.select_company_size")}
+                />
+                {errors.companySize && (
+                  <span className="text-danger text-sm">
+                    {errors.companySize}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <div className="relative">
+                <Select
+                  name="jobTitle"
+                  value={jobTitles.find(
+                    (option) => option.value === newCompany.jobTitle
+                  )}
+                  onChange={handleJobTitleChange}
+                  options={jobTitles.map((title) => ({
+                    value: title.title,
+                    label: title.title,
+                  }))}
+                  className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder={t("signup.select_job_title")}
+                />
+                {errors.jobTitle && (
+                  <span className="text-danger text-sm">
+                    {errors.jobTitle}
+                  </span>
+                )}
+              </div>
+            </div>
             <Form.Group controlId="formEditCompanyWebsite">
               <Form.Label>Website</Form.Label>
               <Form.Control

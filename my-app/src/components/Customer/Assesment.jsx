@@ -323,11 +323,11 @@ const Assessment = () => {
                 onClick={handleAddAssessment}
                 className="bg-black hover:bg-black text-white justify-center font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
               >
-                <FaPlus className="inline-block mr-2" />
+                {/* <FaPlus className="inline-block mr-2" /> */}
                 <span className="inline-block">
                   {showTestSelection
                     ? `${t("Assessments.createAssessment")}`
-                    : `${t("Assessments.createAssessment")}`}
+                    : `${t("Assessments.next")}`}
                 </span>
               </Button>
             </div>
