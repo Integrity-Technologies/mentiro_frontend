@@ -21,6 +21,10 @@
     "login": "Log in",
     "submit": "Submit",
     "successmessage": "User Signup Sucessfully",
+    "countryCode":"Country Code",
+    "company_name":"Company Name",
+    "next": "Next",
+    "back": "Back",
     "errors": {
       "firstNameRequired": "Please enter your first name",
       "lastNameRequired": "Please enter your last name",
@@ -30,8 +34,15 @@
       "phoneInvalid": "Please enter a valid phone number using digits only",
       "passwordRequired": "Please enter your password",
       "passwordLength": "Password must be at least 6 characters long",
-      "confirmPasswordRequired":"Please enter your confirm password",
-      "companyNameRequired": "Please enter your company name"
+      "passwordUppercase": "Password must contain at least one uppercase letter",
+      "passwordLowercase": "Password must contain at least one lowercase letter",
+      "passwordNumber": "Password must contain at least one number",
+      "passwordSpecialChar": "Password must contain at least one special character",
+      "confirmPasswordRequired": "Please enter your confirm password",
+      "confirmPasswordMismatch": "Passwords do not match",
+      "companyNameRequired": "Please enter your company name",
+      "companySizeRequired": "Please enter your company size",
+      "jobTitleRequired": "Please enter your job title"
     }
   },
 
