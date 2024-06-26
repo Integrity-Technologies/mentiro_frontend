@@ -32,6 +32,7 @@
       "emailInvalid": "Please enter a valid email address",
       "phoneRequired": "Please enter your phone number",
       "phoneInvalid": "Please enter a valid phone number using digits only",
+      "phoneLength": "Phone number must be between 10 and 15 digits long",
       "passwordRequired": "Please enter your password",
       "passwordLength": "Password must be at least 6 characters long",
       "passwordUppercase": "Password must contain at least one uppercase letter",
