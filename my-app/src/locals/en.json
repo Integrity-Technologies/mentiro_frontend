@@ -34,7 +34,7 @@
       "phoneInvalid": "Please enter a valid phone number using digits only",
       "phoneLength": "Phone number must be between 10 and 15 digits long",
       "passwordRequired": "Please enter your password",
-      "passwordLength": "Password must be at least 6 characters long",
+      "passwordLength": "Password must be at least 6 characters",
       "passwordUppercase": "Password must contain at least one uppercase letter",
       "passwordLowercase": "Password must contain at least one lowercase letter",
       "passwordNumber": "Password must contain at least one number",
