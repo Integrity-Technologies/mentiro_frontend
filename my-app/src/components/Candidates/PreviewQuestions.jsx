@@ -11,7 +11,7 @@ const PreviewPage = ({ attemptedCount, skippedCount, onSubmit, onReviewSkipped }
       </div>
       <div className="flex justify-around mt-4">
         <Button variant="secondary" onClick={onReviewSkipped}>
-          Continue Test
+          Review Skipped Questions
         </Button>
         <Button variant="primary" onClick={onSubmit}>
           Submit

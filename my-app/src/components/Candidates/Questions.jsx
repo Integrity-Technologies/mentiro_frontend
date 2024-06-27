@@ -12,8 +12,8 @@ const Questions = ({ onComplete }) => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answerError, setAnswerError] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(parseInt(localStorage.getItem('total_time')) * 60);
-  const [skippedQuestionIndexes, setSkippedQuestionIndexes] = useState([]);
   const [attemptedQuestionIndexes, setAttemptedQuestionIndexes] = useState([]);
+  const [skippedQuestionIndexes, setSkippedQuestionIndexes] = useState([]);
   const [reviewingSkipped, setReviewingSkipped] = useState(false);
   const [showPreviewPage, setShowPreviewPage] = useState(false);
   const [questionCache, setQuestionCache] = useState({});
@@ -37,11 +37,11 @@ const Questions = ({ onComplete }) => {
       }
     };
 
-    const questionList = reviewingSkipped ? skippedQuestionIndexes.map(index => questions[index].question_id) : questions.map(q => q.question_id);
+    const questionList = questions.map(q => q.question_id);
     if (questionList.length > 0 && currentQuestionIndex < questionList.length) {
       fetchQuestionData(questionList[currentQuestionIndex]);
     }
-  }, [dispatch, currentQuestionIndex, questions, skippedQuestionIndexes, reviewingSkipped, questionCache]);
+  }, [dispatch, currentQuestionIndex, questions, questionCache]);
 
   useEffect(() => {
     if (timerRef.current) {
@@ -69,13 +69,6 @@ const Questions = ({ onComplete }) => {
 
   const resultId = JSON.parse(localStorage.getItem('resultId'));
 
-  const handleSkip = () => {
-    if (!skippedQuestionIndexes.includes(currentQuestionIndex)) {
-      setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
-    }
-    moveToNextQuestion();
-  };
-
   const handleNext = () => {
     if (selectedOption !== null) {
       const resultData = {
@@ -88,10 +81,6 @@ const Questions = ({ onComplete }) => {
         setAttemptedQuestionIndexes((prevAttempted) => [...prevAttempted, currentQuestionIndex]);
       }
 
-      if (reviewingSkipped) {
-        setSkippedQuestionIndexes((prevSkipped) => prevSkipped.filter(index => index !== currentQuestionIndex));
-      }
-
       setSelectedOption(null);
       moveToNextQuestion();
     } else {
@@ -99,41 +88,43 @@ const Questions = ({ onComplete }) => {
     }
   };
 
-  const moveToNextQuestion = () => {
-    const questionList = reviewingSkipped ? skippedQuestionIndexes : questions.map((_, index) => index);
-    let nextIndex = currentQuestionIndex + 1;
-
-    if (reviewingSkipped) {
-      // Move to the next skipped question
-      const nextSkippedIndex = skippedQuestionIndexes.find(index => index > currentQuestionIndex);
-      if (nextSkippedIndex !== undefined) {
-        setCurrentQuestionIndex(nextSkippedIndex);
-        return;
-      }
-    } else {
-      // Move to the next non-skipped question
-      while (nextIndex < questionList.length && (attemptedQuestionIndexes.includes(questionList[nextIndex]) || skippedQuestionIndexes.includes(questionList[nextIndex]))) {
-        nextIndex++;
-      }
+  const handleSkip = () => {
+    if (!skippedQuestionIndexes.includes(currentQuestionIndex)) {
+      setSkippedQuestionIndexes((prevSkipped) => [...prevSkipped, currentQuestionIndex]);
     }
+    moveToNextQuestion();
+  };
 
-    if (nextIndex < questionList.length) {
-      setCurrentQuestionIndex(questionList[nextIndex]);
-    } else if (reviewingSkipped && skippedQuestionIndexes.length > 0) {
-      setCurrentQuestionIndex(skippedQuestionIndexes[0]);
+  const moveToNextQuestion = () => {
+    let nextIndex = currentQuestionIndex + 1;
+    while (nextIndex < questions.length && (attemptedQuestionIndexes.includes(nextIndex) || skippedQuestionIndexes.includes(nextIndex))) {
+      nextIndex++;
+    }
+    if (nextIndex < questions.length) {
+      setCurrentQuestionIndex(nextIndex);
     } else {
       handleEndOfQuestions();
     }
   };
 
   const handleEndOfQuestions = () => {
-    setShowPreviewPage(true);
+    if (reviewingSkipped && skippedQuestionIndexes.length > 0) {
+      setCurrentQuestionIndex(skippedQuestionIndexes[0]);
+      setSkippedQuestionIndexes(skippedQuestionIndexes.slice(1));
+    } else {
+      setShowPreviewPage(true);
+    }
   };
 
   const handleReviewSkipped = () => {
+    setShowPreviewPage(false);
     setReviewingSkipped(true);
-    setCurrentQuestionIndex(skippedQuestionIndexes[0]); // Start reviewing from the first skipped question
-    setShowPreviewPage(false); // Close the preview page after choosing to review
+    if (skippedQuestionIndexes.length > 0) {
+      setCurrentQuestionIndex(skippedQuestionIndexes[0]);
+      setSkippedQuestionIndexes(skippedQuestionIndexes.slice(1));
+    } else {
+      setShowPreviewPage(true);
+    }
   };
 
   const handleBallClick = (index) => {
@@ -150,7 +141,7 @@ const Questions = ({ onComplete }) => {
           if (attemptedQuestionIndexes.includes(index)) {
             ballColor = 'bg-green-500';
           } else if (skippedQuestionIndexes.includes(index)) {
-            ballColor = 'bg-gray-500';
+            ballColor = 'bg-yellow-500';
           }
 
           return (
@@ -222,7 +213,7 @@ const Questions = ({ onComplete }) => {
                 </Form>
                 {answerError && <p className="text-red-500">Please select an answer!</p>}
                 <div className="flex justify-between mt-4">
-                  <Button variant="outline-dark" onClick={handleSkip}>
+                  <Button variant="dark" className="w-1/4" onClick={handleSkip}>
                     Skip
                   </Button>
                   <Button variant="dark" className="w-1/4" onClick={handleNext}>
