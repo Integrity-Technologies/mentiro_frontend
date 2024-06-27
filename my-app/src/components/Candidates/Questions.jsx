@@ -110,23 +110,27 @@ const Questions = ({ onComplete }) => {
   const handleEndOfQuestions = () => {
     if (reviewingSkipped && skippedQuestionIndexes.length > 0) {
       setCurrentQuestionIndex(skippedQuestionIndexes[0]);
-      setSkippedQuestionIndexes(skippedQuestionIndexes.slice(1));
+      // Reset skipped questions state after revisiting
+      setSkippedQuestionIndexes([]);
     } else {
       setShowPreviewPage(true);
     }
   };
-
+  
   const handleReviewSkipped = () => {
     setShowPreviewPage(false);
     setReviewingSkipped(true);
+    // Reset skipped questions state when reviewing skipped questions
+    setSkippedQuestionIndexes([]);
     if (skippedQuestionIndexes.length > 0) {
       setCurrentQuestionIndex(skippedQuestionIndexes[0]);
-      setSkippedQuestionIndexes(skippedQuestionIndexes.slice(1));
+      // Reset skipped questions state after revisiting
+      setSkippedQuestionIndexes([]);
     } else {
       setShowPreviewPage(true);
     }
   };
-
+  
   const handleBallClick = (index) => {
     setCurrentQuestionIndex(index);
     setSelectedOption(null);

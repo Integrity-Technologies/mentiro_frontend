@@ -43,6 +43,8 @@ const SignUp = () => {
   const [jobTitles, setJobTitles] = useState([]);
   // console.log("🚀 ~ SignUp ~ jobTitles:", jobTitles);
   const [companySizes, setCompanySizes] = useState([]);
+  const [jobTitleCustom, setJobTitleCustom] = useState(""); // Add this line
+
   // console.log("🚀 ~ SignUp ~ companySizes:", companySizes);
 
   // Fetch job titles and company sizes on component mount
@@ -154,7 +156,10 @@ const SignUp = () => {
           if (newresult?.success) {
             const companyData = {
               name: formData.companyName,
-              job_title: formData.jobTitle,
+              job_title:
+                formData.jobTitle === "Other"
+                  ? jobTitleCustom
+                  : formData.jobTitle,
               company_size: formData.companySize,
             };
             const response = await dispatch(addCompany(companyData));
@@ -177,6 +182,7 @@ const SignUp = () => {
     }
   };
 
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
@@ -188,16 +194,18 @@ const SignUp = () => {
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (name === "jobTitleCustom") {
+      setJobTitleCustom(value);
+    }
   };
-
   const handleJobTitleChange = (selectedOption) => {
     setFormData({ ...formData, jobTitle: selectedOption.value });
     setErrors({ ...errors, jobTitle: "" }); // Clear the validation error
   };
+
+  
 
   const handleCompanySizeChange = (selectedOption) => {
     setFormData({ ...formData, companySize: selectedOption.value });
@@ -469,6 +477,18 @@ const SignUp = () => {
                         className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder={t("signup.select_job_title")}
                       />
+                      {formData.jobTitle === "Other" && (
+                        <div className="mb-3">
+                          <input
+                            type="text"
+                            name="jobTitleCustom"
+                            value={jobTitleCustom} // Ensure this is linked to the jobTitleCustom state
+                            onChange={handleChange} // and uses handleChange
+                            className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder="Enter your job title"
+                          />
+                        </div>
+                      )}
                       {errors.jobTitle && (
                         <span className="text-danger text-sm">
                           {errors.jobTitle}
