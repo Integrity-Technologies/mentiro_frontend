@@ -38,7 +38,9 @@ const ResultCard = () => {
     <div className="max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-extrabold text-black-600">{resultCount}</h2>
+          <h2 className="text-3xl font-extrabold text-black-600">
+            {resultCount === 0 ? "0" : resultCount}
+          </h2>
           <p className="text-gray-600 flex items-center mt-2">
             <AiOutlineBarChart className="mr-2 text-black-600" size={30} />
             <span className="text-lg font-semibold">{t("Results")}</span>

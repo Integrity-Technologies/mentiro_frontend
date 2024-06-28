@@ -35,9 +35,7 @@ const CandidateGraph = ({ onRowClick }) => {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
-  const filteredResults = results.filter((candidate) =>
-    candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredResults = Array.isArray(results) ? results.filter((candidate) => candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase()) ) : [];
 
   // Helper function to compare assessment dates
   const compareDates = (a, b) => {
