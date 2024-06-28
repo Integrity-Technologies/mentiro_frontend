@@ -478,7 +478,7 @@ const SignUp = () => {
                         placeholder={t("signup.select_job_title")}
                       />
                       {formData.jobTitle === "Other" && (
-                        <div className="mb-3">
+                        <div className="mb-3 mt-3">
                           <input
                             type="text"
                             name="jobTitleCustom"

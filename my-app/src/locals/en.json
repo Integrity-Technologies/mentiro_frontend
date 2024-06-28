@@ -10,6 +10,7 @@
     "email": "Email",
     "enterEmail": "example@gmail.com",
     "phone": "Phone",
+    "phone_number": "Phone Number",
     "enterPhone": "(XXX) XXX-XXXX",
     "password": "Password",
     "confirm_password": "Confirm Password",
