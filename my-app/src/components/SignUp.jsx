@@ -182,7 +182,6 @@ const SignUp = () => {
     }
   };
 
-
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
@@ -205,8 +204,6 @@ const SignUp = () => {
     setErrors({ ...errors, jobTitle: "" }); // Clear the validation error
   };
 
-  
-
   const handleCompanySizeChange = (selectedOption) => {
     setFormData({ ...formData, companySize: selectedOption.value });
     setErrors({ ...errors, companySize: "" }); // Clear the validation error
@@ -220,6 +217,44 @@ const SignUp = () => {
     menu: (provided) => ({
       ...provided,
       zIndex: 9999,
+    }),
+    control: (provided) => ({
+      ...provided,
+      minHeight: "40px", // Set this to match your input field's height
+      height: "52px", // Set this to match your input field's height
+    }),
+  };
+
+  const customSelectStyles = {
+    control: (provided) => ({
+      ...provided,
+      minHeight: '56px', // Match the height of the input
+      height: '100px', // Explicitly set height to match input
+      borderColor: 'rgba(209, 213, 219)', // Border color to match input
+      borderWidth: '1px', // Border width to match input
+      borderRadius: '0.375rem', // Border radius to match input
+      backgroundColor: 'transparent',
+      boxShadow: 'none',
+      '&:hover': {
+        borderColor: '#3b82f6', // Border color on focus to match input
+      },
+    }),
+    valueContainer: (provided) => ({
+      ...provided,
+      height: '56px', // Ensure the height matches the input
+      padding: '0 2.5px', // Adjust padding to match input
+      display: 'flex',
+      alignItems: 'center', // Center the text vertically
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      fontSize: '0.875rem', // Font size to match input
+      color: 'rgba(156, 163, 175)', // Placeholder color to match input
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      fontSize: '0.875rem', // Font size to match input
+      color: 'rgba(17, 24, 39)', // Text color to match input
     }),
   };
 
@@ -316,30 +351,28 @@ const SignUp = () => {
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full px-3">
-                      <label
-                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        htmlFor="phone"
-                      >
-                        {t("signup.phone_number")}
-                      </label>
                       <div className="flex items-center space-x-4">
                         {" "}
                         {/* Added space-x-4 for spacing */}
                         <Select
-                        value={currentCountry}
-                        onChange={handleCountryChange}
-                        options={countries}
-                        getOptionLabel={(option) => (
-                          <div className="flex items-center">
-                            <Flag code={option.country_short_name} height="5" width="25%" />
-                            <span className="ml-2">{` ${option.country_phone_code}`}</span>
-                          </div>
-                        )}
-                        getOptionValue={(option) => option.country_short_name}
-                        styles={customStyles}
-                        className="w-3/6"
-                        placeholder={t("signup.select_country")}
-                      />
+                          value={currentCountry}
+                          onChange={handleCountryChange}
+                          options={countries}
+                          getOptionLabel={(option) => (
+                            <div className="flex items-center">
+                              <Flag
+                                code={option.country_short_name}
+                                height="16"
+                                width="24"
+                              />
+                              <span className="ml-2">{` ${option.country_short_name} ${option.country_phone_code}`}</span>
+                            </div>
+                          )}
+                          getOptionValue={(option) => option.country_short_name}
+                          styles={customStyles}
+                          className="w-1/3"
+                          placeholder={t("signup.select_country")}
+                        />
                         <div className="relative flex-1">
                           {" "}
                           {/* Added flex-1 to make input stretch */}
@@ -451,7 +484,7 @@ const SignUp = () => {
                           value: size.size_range,
                           label: size.size_range,
                         }))}
-                        className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        className={customSelectStyles}
                         placeholder={t("signup.select_company_size")}
                       />
                       {errors.companySize && (
@@ -474,7 +507,7 @@ const SignUp = () => {
                           value: title.title,
                           label: title.title,
                         }))}
-                        className="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        className={customSelectStyles}
                         placeholder={t("signup.select_job_title")}
                       />
                       {formData.jobTitle === "Other" && (
