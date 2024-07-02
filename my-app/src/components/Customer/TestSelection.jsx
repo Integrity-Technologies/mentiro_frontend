@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTests } from "../../actions/testAction";
 import Preview from "./Preview";
-import { FaPlus, FaClipboardCheck, FaTimes, FaSearch } from "react-icons/fa";
+import { FaClipboardCheck, FaTimes, FaSearch } from "react-icons/fa";
 import { IoCreateSharp } from "react-icons/io5";
 import { MdPreview } from "react-icons/md";
 import { useTranslation } from "react-i18next";
@@ -74,10 +74,10 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     setShowTestSelection(true);
   };
 
-  const openModal = (testId) => {
-    setShowModal(true);
-    setModalTestId(testId);
-  };
+  // const openModal = (testId) => {
+  //   setShowModal(true);
+  //   setModalTestId(testId);
+  // };
 
   const closeModal = () => {
     setShowModal(false);
@@ -112,15 +112,15 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     setShowModal(true);
   };
 
-  const Alert = ({ message }) => (
-    <div
-      className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-      role="alert"
-    >
-      <strong className="font-bold">Error:</strong>
-      <span className="block sm:inline ml-2">{message}</span>
-    </div>
-  );
+  // const Alert = ({ message }) => (
+  //   <div
+  //     className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+  //     role="alert"
+  //   >
+  //     <strong className="font-bold">Error:</strong>
+  //     <span className="block sm:inline ml-2">{message}</span>
+  //   </div>
+  // );
 
   const Modal = ({ test, updateQuestionCount }) => {
     const [questionCounts, setQuestionCounts] = useState({

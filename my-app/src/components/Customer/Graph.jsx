@@ -3,9 +3,7 @@ import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineBarChart } from "react-icons/ai";
 import { useTranslation } from "react-i18next";
 import CandidateGraph from "./Candidategraph";
-import ViewTestResult from "./ViewTestResult";
-import CandidateProfile from "./CandidatesProfile";
-import ActiveAssessment from "./ActiveAssessment";
+
 import ResultCard from "./ResultCard";
 import Assessmentgraph from "./Assessmentgraph";
 import CandidateCard from "./CandidateCard";

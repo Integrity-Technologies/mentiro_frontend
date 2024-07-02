@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { InviteAssessment } from "../../actions/AssesmentAction";
+// import { useDispatch } from "react-redux";
+// import { InviteAssessment } from "../../actions/AssesmentAction";
 
 const InviteModal = ({ showModal, handleClose }) => {
   const [candidateName, setCandidateName] = useState("");
@@ -11,7 +11,7 @@ const InviteModal = ({ showModal, handleClose }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [errors, setErrors] = useState({});
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const assessmentData = JSON.parse(localStorage.getItem("assessmentResponse"));
   const assessmentId = assessmentData?.id;
@@ -26,15 +26,15 @@ const InviteModal = ({ showModal, handleClose }) => {
       return;
     }
 
-    const invitationData = {
-      firstName: firstName.trim(),
-      lastName: candidateName.trim(),
-      candidateEmail: candidateEmail.trim(),
-      assessmentId
-    };
+    // const invitationData = {
+    //   firstName: firstName.trim(),
+    //   lastName: candidateName.trim(),
+    //   candidateEmail: candidateEmail.trim(),
+    //   assessmentId
+    // };
 
     try {
-      const responseData = await dispatch(InviteAssessment(invitationData));
+      // const responseData = await dispatch(InviteAssessment(invitationData));
       // console.log("Invitation sent successfully:", responseData);
       setEmailSent(true);
       setShowAlert(true);

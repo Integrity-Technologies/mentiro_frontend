@@ -13,9 +13,9 @@ const PreviewExistingAssessment = () => {
   const dispatch = useDispatch();
   const [assessmentData, setAssessmentData] = useState(null);
 
-  const handleInviteButtonClick = () => {
-    setShowModal(true);
-  };
+  // const handleInviteButtonClick = () => {
+  //   setShowModal(true);
+  // };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -51,9 +51,9 @@ const PreviewExistingAssessment = () => {
     );
   };
 
-  const redirectToDashboard = () => {
-    window.location.href = "/customer-dashboard";
-  };
+  // const redirectToDashboard = () => {
+  //   window.location.href = "/customer-dashboard";
+  // };
 
   return (
     <div className="container mx-auto p-4 bg-white shadow-md rounded animate__animated animate__fadeIn">
@@ -86,7 +86,7 @@ const PreviewExistingAssessment = () => {
                   Assessment Time:
                 </h3>
                 <div className="flex items-center">
-                  <span className="inline-block px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
+                  <span className=" px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
                     <span className="text-lg font-bold  mr-2 text-black">
                       {assessmentData.assessment_time}
                     </span>

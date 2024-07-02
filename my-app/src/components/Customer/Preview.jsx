@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FaClipboardList, FaUser } from "react-icons/fa";
-import { BiCategory } from "react-icons/bi"
+import { FaClipboardList } from "react-icons/fa";
+// import { BiCategory } from "react-icons/bi"
 import { MdAccessTime } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import {
@@ -218,9 +218,9 @@ const Preview = () => {
                 {t("PreviewAssessment.time")}{" "}
               </h3>
               <div className="flex items-center">
-                <span className="inline-block px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
+                <span className=" px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
                 <MdAccessTime className="ml-1 mr-1" />
-                  <span className="text-lg font-bold text-gray-900 mr-2 text-black">
+                  <span className="text-lg font-bold  mr-2 text-black">
                     {assessmentData.assessmentTime}  mins
                   </span>
                   
