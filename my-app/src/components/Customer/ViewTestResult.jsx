@@ -16,22 +16,19 @@ const ViewTestResult = () => {
   const [selectedTests, setSelectedTests] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
 
-  // Get the active company from local storage
-  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
-
   useEffect(() => {
     dispatch(getUserResults()); // Fetch results on component mount
   }, [dispatch]);
 
   useEffect(() => {
-    // Filter results based on active company
-    if (Array.isArray(results) && activeCompany) {
+    // Filter results if activeCompany is set
+    if (Array.isArray(results)) {
       const filtered = results.filter((result) =>
-        result.companies.includes(activeCompany.id)
+        result.companies && result.companies.length > 0
       );
       setFilteredResults(filtered);
     }
-  }, [results, activeCompany]);
+  }, [results]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;

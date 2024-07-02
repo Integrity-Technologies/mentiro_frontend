@@ -11,16 +11,7 @@ const CandidateCard = () => {
   const candidates = useSelector((state) => state.candidates?.candidates || []);
   const { t } = useTranslation();
 
-  // Get the active company from local storage
-  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
-
-  // Filter candidates based on the active company
-    // Filter candidates based on the active company
-    const filteredCandidates = candidates.filter((candidate) => {
-      return candidate?.companies?.includes(activeCompany?.id);
-    });
-
-  const candidatesCount = filteredCandidates.length;
+  const candidatesCount = candidates.length;
 
   useEffect(() => {
     const fetchData = async () => {

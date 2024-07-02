@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../actions/authActions"; // Adjust the path as needed
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function Logout() {

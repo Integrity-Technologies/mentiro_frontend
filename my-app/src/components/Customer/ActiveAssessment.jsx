@@ -73,17 +73,16 @@ const ActiveAssessment = () => {
     }
   };
 
-  const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+  // const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
 
   const filteredAssessments = Array.isArray(assessments?.assessments)
-    ? assessments?.assessments?.filter((assessment) => {
-        const fullName = `${assessment.assessment_name} ${assessment.last_name}`;
-        return (
-          fullName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          assessment.company_id === activeCompany?.id
-        );
-      })
-    : [];
+  ? assessments?.assessments?.filter((assessment) => {
+      const fullName = `${assessment.assessment_name} ${assessment.last_name}`;
+      // Modify or remove the condition based on your updated logic
+      return fullName.toLowerCase().includes(searchTerm.toLowerCase());
+    })
+  : [];
+
 
   const handlePreview = (uniqueLink) => {
     setUniqueLink(uniqueLink);

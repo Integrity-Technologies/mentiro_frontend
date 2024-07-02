@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-// import Assesment from "./Assesment";
-import DualLineGraph from "./Graph";
-import CompanyProfile from "./CompanyProfile";
-import CandidateProfile from "./CandidatesProfile";
-import ViewTestResult from "./ViewTestResult";
-import LanguageToggleButton from "../Togglebutton";
-import PreviewExistingAssessment from "./PreviewExistingAssesment";
+import { Link, useLocation, Outlet } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaBuilding,
@@ -16,13 +10,13 @@ import {
   FaArrowLeft,
   FaArrowRight,
 } from "react-icons/fa";
-import ActiveAssessment from "./ActiveAssessment";
+import LanguageToggleButton from "../Togglebutton";
+
 const logoImage = "/assets/icon.jpg";
 
 const Customer = ({ isLanguageButton }) => {
   const { t, i18n } = useTranslation();
-
-  const [activeLink, setActiveLink] = useState("/Graph"); // Default active link to the graph
+  const location = useLocation();
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
 
@@ -30,53 +24,34 @@ const Customer = ({ isLanguageButton }) => {
     setSelectedLanguage(lng);
   };
 
-  const handleClick = (link) => {
-    setActiveLink(link);
-  };
-
   const toggleMenuCollapse = () => {
     setIsMenuCollapsed(!isMenuCollapsed);
   };
 
-  const sections = {
-    "/Graph": <DualLineGraph />,
-    "/CompanyProfile": <CompanyProfile />,
-    "/Assessments": <ActiveAssessment />,
-    "/CandidatesProfile": (
-      <CandidateProfile
-        language={selectedLanguage}
-        onLanguageChange={handleLanguageChange}
-      />
-    ),
-    "/TestResult": <ViewTestResult />,
-    "/Preview-assesment": <PreviewExistingAssessment />,
-  };
-
-  // Define customer menu options
   const customerMenuOptions = [
     {
       label: `${t("CustomerDashboard.Dashboard")}`,
-      link: "/Graph",
+      link: "graph",
       icon: <FaTachometerAlt />,
     },
     {
       label: `${t("CustomerDashboard.companyProfile")}`,
-      link: "/CompanyProfile",
+      link: "company-profile",
       icon: <FaBuilding />,
     },
     {
       label: `${t("CustomerDashboard.Assessment")}`,
-      link: "/Assessments",
+      link: "assessments",
       icon: <FaClipboardList />,
     },
     {
       label: `${t("CustomerDashboard.candidateProfile")}`,
-      link: "/CandidatesProfile",
+      link: "candidates-profile",
       icon: <FaUser />,
     },
     {
       label: `${t("CustomerDashboard.testResult")}`,
-      link: "/TestResult",
+      link: "test-result",
       icon: <FaFileAlt />,
     },
   ];
@@ -106,35 +81,46 @@ const Customer = ({ isLanguageButton }) => {
         </div>
         <nav className="mt-10">
           {customerMenuOptions.map((option) => (
-            <button
-              key={option.link}
-              className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm transition-colors
-        ${
-          activeLink === option.link
-            ? "shadow-lg bg-blue-500 text-white shadow-green-300"
-            : "hover:bg-blue-500 hover:text-white text-gray-600"
-        }`}
-              onClick={() => handleClick(option.link)}
-            >
-              <span
-                className={`mr-3 ${
-                  activeLink === option.link ? "text-white" : "hover:text-white"
-                }`}
+            <Link to={option.link} key={option.link}  style={{
+              textDecoration: "none", // Remove underline decoration
+              listStyle: "none", // Remove list-style decoration
+              outline: "none", // Remove outline on focus
+            }}>
+              <button
+                className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm transition-colors
+                  ${
+                    location.pathname.includes(option.link)
+                      ? "shadow-lg bg-blue-500 text-white shadow-green-300"
+                      : "hover:bg-blue-500 hover:text-white text-gray-600"
+                  }`}
+                style={{
+                  textDecoration: "none", // Remove underline decoration
+                  listStyle: "none", // Remove list-style decoration
+                  outline: "none", // Remove outline on focus
+                }}
               >
-                {option.icon}
-              </span>
-              {!isMenuCollapsed && (
                 <span
-                  className={`${
-                    activeLink === option.link
+                  className={`mr-3 ${
+                    location.pathname.includes(option.link)
                       ? "text-white"
                       : "hover:text-white"
                   }`}
                 >
-                  {t(option.label)}
+                  {option.icon}
                 </span>
-              )}
-            </button>
+                {!isMenuCollapsed && (
+                  <span
+                    className={`${
+                      location.pathname.includes(option.link)
+                        ? "text-white"
+                        : "hover:text-white"
+                    }`}
+                  >
+                    {t(option.label)}
+                  </span>
+                )}
+              </button>
+            </Link>
           ))}
         </nav>
         <div className="mt-3 ml-2">
@@ -150,7 +136,7 @@ const Customer = ({ isLanguageButton }) => {
           isMenuCollapsed ? "w-full" : "w-5/6"
         } bg-customGray p-10 overflow-y-auto`}
       >
-        {sections[activeLink]}
+        <Outlet />
       </div>
     </div>
   );

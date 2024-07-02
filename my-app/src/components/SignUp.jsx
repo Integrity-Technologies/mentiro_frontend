@@ -209,9 +209,9 @@ const SignUp = () => {
     setErrors({ ...errors, companySize: "" }); // Clear the validation error
   };
 
-  const handleCountryCodeChange = (e) => {
-    setCountryCode(e.target.value);
-  };
+  // const handleCountryCodeChange = (e) => {
+  //   setCountryCode(e.target.value);
+  // };
 
   const customStyles = {
     menu: (provided) => ({
@@ -228,8 +228,8 @@ const SignUp = () => {
   const customSelectStyles = {
     control: (provided) => ({
       ...provided,
-      minHeight: '56px', // Match the height of the input
-      height: '100px', // Explicitly set height to match input
+      minHeight: '120px', // Match the height of the input
+      height: '120px', // Explicitly set height to match input
       borderColor: 'rgba(209, 213, 219)', // Border color to match input
       borderWidth: '1px', // Border width to match input
       borderRadius: '0.375rem', // Border radius to match input
@@ -241,7 +241,7 @@ const SignUp = () => {
     }),
     valueContainer: (provided) => ({
       ...provided,
-      height: '56px', // Ensure the height matches the input
+      height: '100px', // Ensure the height matches the input
       padding: '0 2.5px', // Adjust padding to match input
       display: 'flex',
       alignItems: 'center', // Center the text vertically

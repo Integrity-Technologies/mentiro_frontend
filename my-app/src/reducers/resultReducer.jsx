@@ -1,4 +1,4 @@
-import { FETCH_RESULTS_REQUEST, FETCH_RESULTS_SUCCESS, FETCH_RESULTS_FAILURE, CREATE_RESULT  } from '../actions/resultAction';
+import {  FETCH_RESULTS_SUCCESS, FETCH_RESULTS_FAILURE, CREATE_RESULT  } from '../actions/resultAction';
 
 const initialState = {
   results: [],
