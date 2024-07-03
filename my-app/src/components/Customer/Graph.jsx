@@ -41,7 +41,7 @@ const DualGraphs = () => {
   };
 
   return (
-    <div className="container bg-white mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-left text-black">
         <FaRegHandshake className="inline-block mr-2" />
         <span className="inline-block animate-pulse">
@@ -68,10 +68,9 @@ const DualGraphs = () => {
           <ResultCard />
         </div>
       </div>
-      <div className="rounded-lg p-0 mt-0 flex flex-col justify-center items-center">
-        <h2 className="text-xl font-bold mb-4 flex items-center text-center text-gray-800 mt-10">
-          <AiOutlineBarChart className="mr-2" />
-          <span className="font-bold underline">
+      <div className="rounded-lg p-0 mt-0 flex flex-col ">
+        <h2 className="text-xl font-bold mb-2 flex  text-gray-800 mt-5">
+          <span className="font-bold">
             {t("graphView.candidatesDetails")}
           </span>
         </h2>

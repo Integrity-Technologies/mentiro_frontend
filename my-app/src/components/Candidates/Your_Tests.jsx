@@ -25,7 +25,7 @@ const YourTests = () => {
       console.error("uniqueLink parameter is missing in the URL");
     }
   }, []);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -101,83 +101,115 @@ const YourTests = () => {
 
   const showTestsSection = totalTests > completedTestCount;
 
+  const [timeExpired, setTimeExpired] = useState(false);
+
+  const handleTimeExpired = () => {
+    setTimeExpired(true);
+    setShowQuestions(false);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center font-roboto">
       {showQuestions ? (
-        <TestTime onComplete={handleTestCompletion} onBack={handleBack} />
+        <TestTime
+          onComplete={handleTestCompletion}
+          onBack={handleBack}
+          onTimeExpired={handleTimeExpired}
+        />
       ) : (
         <>
-          <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-md" style={{ width: '900px', overflowY: 'auto' }}>
-            {showTestsSection && (
-              <div className="container mx-auto px-4 py-3">
-                <div className="flex justify-center mb-6">
-                  <img
-                    src="/assets/icon.jpg"
-                    alt="Mentiro Logo"
-                    className="h-24 rounded-full"
-                  />
+          {timeExpired ? (
+            <div className="container mx-auto px-4 py-5 flex flex-col items-center justify-center">
+              <h1 className="text-4xl font-bold mb-4 text-gray-800 text-center">
+                Your time has expired. Would you like to retake the test?
+              </h1>
+            </div>
+          ) : (
+            <div
+              className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-md"
+              style={{ width: "900px", overflowY: "auto" }}
+            >
+              {showTestsSection && (
+                <div className="container mx-auto px-4 py-3">
+                  <div className="flex justify-center mb-6">
+                    <img
+                      src="/assets/icon.jpg"
+                      alt="Mentiro Logo"
+                      className="h-24 rounded-full"
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <h1 className="text-4xl font-bold mb-4 text-gray-800 text-center">
+                      Your Tests
+                    </h1>
+                    <p className="text-center mt-2">
+                      Click the Start button when you are ready to continue your
+                      assessment.
+                    </p>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white">
+                      <thead>
+                        <tr className="bg-gray-200">
+                          <th className="py-2 px-4 border-b text-left">
+                            Test Name
+                          </th>
+                          <th className="py-2 px-4 border-b text-left ml-5">
+                            Action
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tests.map((test, index) => (
+                          <tr key={index} className="hover:bg-gray-100">
+                            <td className="py-2 px-4 border-b">
+                              {test.test_name}
+                            </td>
+                            <td className="py-2 px-4 border-b">
+                              <button
+                                className={`py-2 px-4 rounded-lg text-white font-medium transition ${
+                                  getTestStatus(test.test_id) ===
+                                  "Not Attempted"
+                                    ? "bg-black hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    : "bg-green-600 cursor-not-allowed"
+                                }`}
+                                onClick={() => handleTestStart(index)}
+                                disabled={
+                                  getTestStatus(test.test_id) !==
+                                  "Not Attempted"
+                                }
+                              >
+                                {getTestStatus(test.test_id) === "Not Attempted"
+                                  ? "Start Test"
+                                  : "Completed"}
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div className="mb-2">
+              )}
+              {!showTestsSection && (
+                <div className="container mx-auto px-4 py-5 flex flex-col items-center justify-center">
+                  <div className="flex justify-center mb-6 rounded-circle">
+                    <img
+                      src="/assets/icon.jpg"
+                      alt="Mentiro Logo"
+                      className="h-24 rounded-circle"
+                    />
+                  </div>
                   <h1 className="text-4xl font-bold mb-4 text-gray-800 text-center">
-                    Your Tests
+                    Thank you for completing the tests!
                   </h1>
-                  <p className="text-center mt-2">
-                    Click the Start button when you are ready to continue your
-                    assessment.
+                  <p className="text-xl text-gray-600 text-center">
+                    We appreciate your time and effort.
                   </p>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full bg-white">
-                    <thead>
-                      <tr className="bg-gray-200">
-                        <th className="py-2 px-4 border-b text-left">Test Name</th>
-                        <th className="py-2 px-4 border-b text-left ml-5">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tests.map((test, index) => (
-                        <tr key={index} className="hover:bg-gray-100">
-                          <td className="py-2 px-4 border-b">{test.test_name}</td>
-                          <td className="py-2 px-4 border-b">
-                            <button
-                              className={`py-2 px-4 rounded-lg text-white font-medium transition ${
-                                getTestStatus(test.test_id) === "Not Attempted"
-                                  ? "bg-black hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                  : "bg-green-600 cursor-not-allowed"
-                              }`}
-                              onClick={() => handleTestStart(index)}
-                              disabled={getTestStatus(test.test_id) !== "Not Attempted"}
-                            >
-                              {getTestStatus(test.test_id) === "Not Attempted"
-                                ? "Start Test"
-                                : "Completed"}
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-            {!showTestsSection && (
-              <div className="container mx-auto px-4 py-5 flex flex-col items-center justify-center">
-                <div className="flex justify-center mb-6 rounded-circle">
-                  <img
-                    src="/assets/icon.jpg"
-                    alt="Mentiro Logo"
-                    className="h-24 rounded-circle"
-                  />
-                </div>
-                <h1 className="text-4xl font-bold mb-4 text-gray-800 text-center">
-                  Thank you for completing the tests!
-                </h1>
-                <p className="text-xl text-gray-600 text-center">
-                  We appreciate your time and effort.
-                </p>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </>
       )}
     </div>

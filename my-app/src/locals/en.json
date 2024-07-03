@@ -1,6 +1,6 @@
 {
   "signup": {
-    "title": "Sign Up",
+    "title": "Sign Up for an Account on MENTIRO",
     "select_job_title":"Job Title",
     "select_company_size":"Company Size",
     "first_name": "First Name",
@@ -20,7 +20,7 @@
     "enterCompanyName": "Enter company name",
     "alreadyHaveAccount": "Already a user?",
     "login": "Log in",
-    "submit": "Submit",
+    "submit": "Sign Up",
     "successmessage": "User Signup Sucessfully",
     "countryCode":"Country Code",
     "company_name":"Company Name",
@@ -58,10 +58,10 @@
     "noAccount": "Don't have an account?",
     "signUp": "Sign Up",
     "rememberMe": "remember Me",
-    "submit": "Submit",
+    "submit": "Log In",
     "errors": {
       "emailRequired": "Please enter your email",
-      "emailInvalid": "Please enter a valid email address",
+      "emailInvalid": "Please enter a valid email address", 
       "passwordRequired": "Please enter your password"
     }
   },
@@ -253,7 +253,7 @@
   
   "graphView": {
     "Welcome": "Welcome To Mentiro",
-    "candidatesDetails": "Candidate Results",
+    "candidatesDetails": "Results",
     "Candidate": "Candidate",
     "Candidate.NoData":"No Candidate Data Available",
     "selectCandidate": "Select Candidate",

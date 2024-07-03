@@ -58,18 +58,18 @@ const CandidateGraph = ({ onRowClick }) => {
     <div className="w-full h-full flex flex-col justify-center items-center">
       <div className="w-full">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-white">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("graphView.Candidate.Name")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("graphView.Candidate.Assessment")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("graphView.Candidate.Scores")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("graphView.Candidate.Date")}
               </th>
             </tr>

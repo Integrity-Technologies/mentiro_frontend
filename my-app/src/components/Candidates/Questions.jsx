@@ -6,7 +6,7 @@ import { submitAnswer } from '../../actions/resultAction';
 import { BiTimeFive } from 'react-icons/bi';
 import PreviewPage from './PreviewQuestions';
 
-const Questions = ({ onComplete }) => {
+const Questions = ({ onComplete, onTimeExpired }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(null);
@@ -52,7 +52,7 @@ const Questions = ({ onComplete }) => {
       setTimeRemaining((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timerRef.current);
-          onComplete();
+          onTimeExpired(); // Call onTimeExpired instead of onComplete
           return 0;
         }
         return prevTime - 1;
@@ -60,7 +60,7 @@ const Questions = ({ onComplete }) => {
     }, 1000);
 
     return () => clearInterval(timerRef.current);
-  }, [onComplete]);
+  }, [onTimeExpired]); // Dependency should include onTimeExpired
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);

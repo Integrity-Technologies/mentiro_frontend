@@ -52,15 +52,32 @@ const CandidateCard = () => {
 
   const series = [candidatesCount];
 
+  if (candidates.length === 0) {
+    return <div className="text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500">
+        Error fetching candidates: {error}
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-extrabold text-black-600">{candidatesCount}</h2>
-          <p className="text-gray-600 flex items-center mt-2">
-            <FaUserCircle className="mr-2 text-black-600" size={30} />
+        <p className="text-gray-600 mt-2">
             <span className="text-lg font-semibold">Candidates</span>
           </p>
+          <h2 className="text-3xl font-extrabold text-black-600">
+            {candidatesCount}
+          </h2>
+         
+        </div>
+        <div className="bg-blue-100 rounded-full p-2 ml-28">
+          <FaUserCircle className="text-blue-500" size={28} />
         </div>
         <div>
           <Chart options={options} series={series} type="donut" width="120" />

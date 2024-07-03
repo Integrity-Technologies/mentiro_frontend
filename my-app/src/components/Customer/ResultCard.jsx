@@ -35,38 +35,19 @@ const ResultCard = () => {
   const percentageChange = calculatePercentageChange();
 
   return (
-    <div className="max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center">
+    <div className="max-w-xs w-100 bg-white border border-gray-200 rounded-lg shadow-md p-6">
+      <div className="flex items-center justify-between">
         <div>
+        <p className="text-gray-600 mt-2">
+            <span className="text-lg font-semibold">{t("Results")}</span>
+          </p>
           <h2 className="text-3xl font-extrabold text-black-600">
             {resultCount === 0 ? "0" : resultCount}
           </h2>
-          <p className="text-gray-600 flex items-center mt-2">
-            <AiOutlineBarChart className="mr-2 text-black-600" size={30} />
-            <span className="text-lg font-semibold">{t("Results")}</span>
-          </p>
+         
         </div>
-        <div>
-          <svg className="w-20 h-20" viewBox="0 0 36 36">
-            <path
-              className="text-gray-300"
-              d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-            <path
-              className="text-blue-500"
-              d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeDasharray={`${percentageChange * 20}, 100`} // Example value, adjust based on actual data
-            />
-          </svg>
+        <div className="bg-blue-100 rounded-full p-2">
+          <AiOutlineBarChart className="text-blue-500" size={28} />
         </div>
       </div>
     </div>

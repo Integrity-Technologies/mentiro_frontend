@@ -5,16 +5,15 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Flag from "react-world-flags";
 import { useTranslation } from "react-i18next";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 import countries from "./../data/countries";
 import {
   addCompany,
   fetchJobTitles,
   fetchCompanySizes,
 } from "../actions/companyAction";
-const logoImage = "/assets/icon.jpg";
-
-const loginimg =
-  "/assets/flat-illustration-design-communacation-concept-online-with-smartphone_540641-468-removebg-preview.png";
+const loginimg = "/assets/loginimg.png";
+const logo = "/assets/logo.png";
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -23,6 +22,7 @@ const SignUp = () => {
   const [errors, setErrors] = useState({});
   const [currentCountry, setCurrentCountry] = useState(null); // State to hold current country details
   const [showAlert, setShowAlert] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [countryCode, setCountryCode] = useState("");
 
@@ -182,6 +182,21 @@ const SignUp = () => {
     }
   };
 
+  const handleBack = () => {
+    setCurrentPage(currentPage - 1);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      companyName: "",
+      companySize: "",
+      jobTitle: "",
+      password: "",
+      confirmPassword: "",
+    });
+  };
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
@@ -213,6 +228,10 @@ const SignUp = () => {
   //   setCountryCode(e.target.value);
   // };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const customStyles = {
     menu: (provided) => ({
       ...provided,
@@ -228,50 +247,72 @@ const SignUp = () => {
   const customSelectStyles = {
     control: (provided) => ({
       ...provided,
-      minHeight: '120px', // Match the height of the input
-      height: '120px', // Explicitly set height to match input
-      borderColor: 'rgba(209, 213, 219)', // Border color to match input
-      borderWidth: '1px', // Border width to match input
-      borderRadius: '0.375rem', // Border radius to match input
-      backgroundColor: 'transparent',
-      boxShadow: 'none',
-      '&:hover': {
-        borderColor: '#3b82f6', // Border color on focus to match input
+      minHeight: "120px", // Match the height of the input
+      height: "120px", // Explicitly set height to match input
+      borderColor: "rgba(209, 213, 219)", // Border color to match input
+      borderWidth: "1px", // Border width to match input
+      borderRadius: "0.375rem", // Border radius to match input
+      backgroundColor: "transparent",
+      boxShadow: "none",
+      "&:hover": {
+        borderColor: "#3b82f6", // Border color on focus to match input
       },
     }),
     valueContainer: (provided) => ({
       ...provided,
-      height: '100px', // Ensure the height matches the input
-      padding: '0 2.5px', // Adjust padding to match input
-      display: 'flex',
-      alignItems: 'center', // Center the text vertically
+      height: "100px", // Ensure the height matches the input
+      padding: "0 2.5px", // Adjust padding to match input
+      display: "flex",
+      alignItems: "center", // Center the text vertically
     }),
     placeholder: (provided) => ({
       ...provided,
-      fontSize: '0.875rem', // Font size to match input
-      color: 'rgba(156, 163, 175)', // Placeholder color to match input
+      fontSize: "0.875rem", // Font size to match input
+      color: "rgba(156, 163, 175)", // Placeholder color to match input
     }),
     singleValue: (provided) => ({
       ...provided,
-      fontSize: '0.875rem', // Font size to match input
-      color: 'rgba(17, 24, 39)', // Text color to match input
+      fontSize: "0.875rem", // Font size to match input
+      color: "rgba(17, 24, 39)", // Text color to match input
     }),
   };
 
   return (
     <>
-      <section className="flex flex-col md:flex-row justify-between items-center min-h-screen bg-blue-100">
+      <section className="flex flex-col md:flex-row min-h-screen font-roboto">
+        <div className="relative hidden md:flex flex-col justify-center items-center w-full md:w-1/2 bg-blue-900 text-white p-10">
+          <img src={logo} alt="Mentiro Logo" className="mb-6" />
+          <div className="text-center max-w-lg z-10 relative">
+            <h1 className="text-4xl font-bold mb-4">
+              Revolutionize Your Hiring with Data-Driven Insights
+            </h1>
+            <p className="text-lg mb-8">
+              With our <span className="bg-blue-400">Free</span> plan, you can
+              efficiently screen candidates for essential skills, ensuring you
+              select the best fit for a wide range of job roles. Start making
+              smarter, evidence-based hiring decisions today!
+            </p>
+          </div>
+          <img
+            src={loginimg}
+            alt="Shadow Lady"
+            className="absolute inset-0 w-full h-full object-cover opacity-20"
+          />
+        </div>
         <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-6">
-          <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-6">
-            <div className="text-center mb-4">
-              <img
+          <div className="w-full max-w-lg  rounded-lg  p-6">
+            <div className=" mb-4">
+              {/* <img
                 className="w-24 h-24 mx-auto mb-4 rounded-circle"
                 src={logoImage}
                 alt="logo"
-              />
+              /> */}
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 {t("signup.title")}
               </h1>
+              <p className="text-lg text-gray-700">
+                Only companies can create accounts
+              </p>
             </div>
             <form className="space-y-4" onSubmit={handleSubmit}>
               {currentPage === 1 && (
@@ -402,7 +443,7 @@ const SignUp = () => {
                   <div className="mb-3">
                     <div className="relative">
                       <input
-                        type="password"
+                        type={showPassword ? "text" : "password"} 
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
@@ -416,16 +457,28 @@ const SignUp = () => {
                         {t("signup.password")}
                       </label>
                       {errors.password && (
-                        <span className="text-danger text-sm">
-                          {errors.password}
-                        </span>
+                        <p className="text-red-500 text-sm">{errors.password}</p>
                       )}
+                      {/* Eye icon for toggling password visibility */}
+                      <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+                        {showPassword ? (
+                          <FaEyeSlash
+                            className="text-gray-500 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          />
+                        ) : (
+                          <FaEye
+                            className="text-gray-500 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          />
+                        )}
+                      </span>
                     </div>
                   </div>
                   <div className="mb-3">
                     <div className="relative">
                       <input
-                        type="password"
+                        type={showPassword ? "text" : "password"} 
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
@@ -439,10 +492,22 @@ const SignUp = () => {
                         {t("signup.confirm_password")}
                       </label>
                       {errors.confirmPassword && (
-                        <span className="text-danger text-sm">
-                          {errors.confirmPassword}
-                        </span>
+                        <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
                       )}
+                      {/* Eye icon for toggling password visibility */}
+                      <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+                        {showPassword ? (
+                          <FaEyeSlash
+                            className="text-gray-500 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          />
+                        ) : (
+                          <FaEye
+                            className="text-gray-500 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          />
+                        )}
+                      </span>
                     </div>
                   </div>
                 </>
@@ -555,14 +620,14 @@ const SignUp = () => {
               )}
               <button
                 type="submit"
-                className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="w-full text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 {currentPage < 3 ? t("signup.next") : t("signup.submit")}
               </button>
               {currentPage > 1 && (
                 <button
                   type="button"
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={handleBack} // Change this line
                   className="w-full text-white bg-black hover:bg-black focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-2"
                 >
                   {t("signup.back")}
@@ -570,7 +635,9 @@ const SignUp = () => {
               )}
               <p className="text-sm font-light text-gray-500">
                 {t("signup.alreadyHaveAccount")}{" "}
-                <NavLink to="/">{t("signup.login")}</NavLink>
+                <NavLink className="text-blue-900" to="/">
+                  {t("signup.login")}
+                </NavLink>
               </p>
             </form>
             {showAlert &&
@@ -590,24 +657,6 @@ const SignUp = () => {
                   has been created successfully.
                 </div>
               ))}
-          </div>
-        </div>
-        <div className="hidden md:flex flex-col w-full md:w-1/2 bg-peach">
-          <div className="text-center w-full max-w-lg rounded-r-lg p-6">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Revolutionize Your Hiring with Data-Driven Insights
-            </h1>
-            <p className="text-lg text-gray-600 mb-8">
-              With our Free plan, you can efficiently screen candidates for
-              essential skills, ensuring you select the best fit for a wide
-              range of job roles. Start making smarter, evidence-based hiring
-              decisions today!{" "}
-            </p>
-            <img
-              className="w-full rounded h-96 rounded-r-lg object-cover"
-              src={loginimg}
-              alt="Login"
-            />
           </div>
         </div>
       </section>

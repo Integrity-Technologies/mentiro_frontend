@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, Outlet } from "react-router-dom";
+import { IoHomeOutline } from "react-icons/io5";
+import { FaListCheck } from "react-icons/fa6";
+import { IoBarChartOutline } from "react-icons/io5";
+import { LuUser } from "react-icons/lu";
 import {
-  FaTachometerAlt,
+  
   FaBuilding,
-  FaClipboardList,
-  FaUser,
-  FaFileAlt,
-  FaArrowLeft,
-  FaArrowRight,
+  
+  FaBars,
 } from "react-icons/fa";
 import LanguageToggleButton from "../Togglebutton";
 
-const logoImage = "/assets/icon.jpg";
+const logo = "/assets/logo.png";
 
 const Customer = ({ isLanguageButton }) => {
   const { t, i18n } = useTranslation();
@@ -32,7 +33,7 @@ const Customer = ({ isLanguageButton }) => {
     {
       label: `${t("CustomerDashboard.Dashboard")}`,
       link: "graph",
-      icon: <FaTachometerAlt />,
+      icon: <IoHomeOutline />      ,
     },
     {
       label: `${t("CustomerDashboard.companyProfile")}`,
@@ -42,17 +43,17 @@ const Customer = ({ isLanguageButton }) => {
     {
       label: `${t("CustomerDashboard.Assessment")}`,
       link: "assessments",
-      icon: <FaClipboardList />,
+      icon: <FaListCheck />      ,
     },
     {
       label: `${t("CustomerDashboard.candidateProfile")}`,
       link: "candidates-profile",
-      icon: <FaUser />,
+      icon: <LuUser />      ,
     },
     {
       label: `${t("CustomerDashboard.testResult")}`,
       link: "test-result",
-      icon: <FaFileAlt />,
+      icon: <IoBarChartOutline />      ,
     },
   ];
 
@@ -61,33 +62,37 @@ const Customer = ({ isLanguageButton }) => {
       <div
         className={`flex flex-col ${
           isMenuCollapsed ? "w-20" : "w-1/6"
-        } bg-white shadow h-full overflow-y-auto transition-width duration-300`}
+        } bg-customGray shadow h-full text-white overflow-y-auto transition-width duration-300`}
       >
         <div className="flex justify-between items-center p-3 relative">
           <div className="text-center mb-3">
             {!isMenuCollapsed && (
               <img
-                src={logoImage}
+                src={logo}
                 alt="Logo"
                 className="rounded-full w-32 mt-5 mx-auto"
               />
             )}
           </div>
           <button onClick={toggleMenuCollapse} className="p-2 absolute right-0">
-            <div className="bg-gray-200 rounded-full absolute p-2 right-0 mt-3">
-              {isMenuCollapsed ? <FaArrowRight /> : <FaArrowLeft />}
+            <div className=" rounded-full absolute p-2 right-0 mt-0">
+              <FaBars />
             </div>
           </button>
         </div>
         <nav className="mt-10">
           {customerMenuOptions.map((option) => (
-            <Link to={option.link} key={option.link}  style={{
-              textDecoration: "none", // Remove underline decoration
-              listStyle: "none", // Remove list-style decoration
-              outline: "none", // Remove outline on focus
-            }}>
+            <Link
+              to={option.link}
+              key={option.link}
+              style={{
+                textDecoration: "none", // Remove underline decoration
+                listStyle: "none", // Remove list-style decoration
+                outline: "none", // Remove outline on focus
+              }}
+            >
               <button
-                className={`flex items-center px-4 md:px-20 py-2 mb-3 w-full text-left text-sm transition-colors
+                className={`flex items-center px-4 md:px-20 py-2 text-white mb-3 w-full text-left text-sm transition-colors
                   ${
                     location.pathname.includes(option.link)
                       ? "shadow-lg bg-blue-500 text-white shadow-green-300"
@@ -134,7 +139,7 @@ const Customer = ({ isLanguageButton }) => {
       <div
         className={`transition-width duration-300 ${
           isMenuCollapsed ? "w-full" : "w-5/6"
-        } bg-customGray p-10 overflow-y-auto`}
+        } bg-blue-100 p-10 overflow-y-auto`}
       >
         <Outlet />
       </div>
