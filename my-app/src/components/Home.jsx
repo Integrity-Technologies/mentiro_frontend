@@ -1,12 +1,12 @@
-import React from 'react'
-import { NavbarComp } from './NavbarComp'
+// import React from 'react'
+// import { NavbarComp } from './NavbarComp'
 
-const Home = () => {
-  return (
-    <div>
-      <NavbarComp />
-    </div>
-  )
-}
+// const Home = () => {
+//   return (
+//     <div>
+//       <NavbarComp />
+//     </div>
+//   )
+// }
 
-export default Home
+// export default Home

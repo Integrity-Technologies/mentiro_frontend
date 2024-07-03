@@ -48,7 +48,7 @@ const DualGraphs = () => {
           {t("graphView.Welcome")}
         </span>
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div
           onClick={goToCandidateMenu}
           className="rounded-lg p-0 flex flex-col justify-center items-center cursor-pointer"

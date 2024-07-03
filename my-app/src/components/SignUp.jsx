@@ -147,7 +147,7 @@ const SignUp = () => {
             first_name: formData.firstName,
             last_name: formData.lastName,
             email: formData.email,
-            phone: `${countryCode}${formData.phone}`,
+            phone: `+${countryCode}${formData.phone}`,
             password: formData.password,
             confirm_password: formData.confirmPassword,
           };
@@ -406,12 +406,11 @@ const SignUp = () => {
                                 height="16"
                                 width="24"
                               />
-                              <span className="ml-2">{` ${option.country_short_name} ${option.country_phone_code}`}</span>
-                            </div>
+                              <span className="ml-2">{` ${option.country_short_name} - +${option.country_phone_code}`}</span>                            </div>
                           )}
                           getOptionValue={(option) => option.country_short_name}
                           styles={customStyles}
-                          className="w-1/3"
+                          className="w-1/3.5"
                           placeholder={t("signup.select_country")}
                         />
                         <div className="relative flex-1">

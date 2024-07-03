@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserCandidates } from "../../actions/candidateAction";
 import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
-import { FaUserCircle } from "react-icons/fa";
+import { LuUser } from "react-icons/lu";
 
 const CandidateCard = () => {
   const dispatch = useDispatch();
@@ -11,6 +11,7 @@ const CandidateCard = () => {
   const candidates = useSelector((state) => state.candidates?.candidates || []);
   const { t } = useTranslation();
 
+  // Set candidatesCount to 0 if there's an error or the candidates array is empty
   const candidatesCount = candidates.length;
 
   useEffect(() => {
@@ -52,32 +53,20 @@ const CandidateCard = () => {
 
   const series = [candidatesCount];
 
-  if (candidates.length === 0) {
-    return <div className="text-center">Loading...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="text-center text-red-500">
-        Error fetching candidates: {error}
-      </div>
-    );
-  }
-
   return (
-    <div className="max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between">
+    <div className="max-w-xs w-full bg-white border border-gray-200 rounded-lg shadow-md p-6 font-roboto">
+      <div className="flex items-start justify-between">
+        
         <div>
-        <p className="text-gray-600 mt-2">
-            <span className="text-lg font-semibold">Candidates</span>
+          <p className="text-gray-600 mt-2">
+            <span className="text-lg font-semibold">{t("Candidates")}</span>
           </p>
-          <h2 className="text-3xl font-extrabold text-black-600">
-            {candidatesCount}
+          <h2 className="text-3xl font-extrabold text-black">
+            {candidatesCount || 0}
           </h2>
-         
         </div>
-        <div className="bg-blue-100 rounded-full p-2 ml-28">
-          <FaUserCircle className="text-blue-500" size={28} />
+        <div className="flex items-center bg-blue-100 p-3 ml-28">
+          <LuUser className="text-blue-500" size={24} />
         </div>
         <div>
           <Chart options={options} series={series} type="donut" width="120" />

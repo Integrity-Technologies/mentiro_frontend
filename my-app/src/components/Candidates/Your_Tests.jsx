@@ -120,10 +120,12 @@ const YourTests = () => {
         <>
           {timeExpired ? (
             <div className="container mx-auto px-4 py-5 flex flex-col items-center justify-center">
-              <h1 className="text-4xl font-bold mb-4 text-gray-800 text-center">
-                Your time has expired. Would you like to retake the test?
-              </h1>
-            </div>
+            <h1 className="text-4xl font-bold mb-4 text-gray-800 text-center">
+              Thank you for participating in the assessment. Unfortunately, the allotted time for the test has ended. Your responses have been saved.
+
+              You may reattempt the assessment by simply opening the link again at your convenience.
+            </h1>
+          </div>
           ) : (
             <div
               className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-md"

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllAssessments } from "../../actions/AssesmentAction";
 import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
-import { AiOutlineLineChart } from "react-icons/ai";
+import { FaListCheck } from "react-icons/fa6";
 
 const Assessmentgraph = () => {
   const dispatch = useDispatch();
@@ -77,8 +77,8 @@ const Assessmentgraph = () => {
   }
 
   return (
-    <div className="max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between">
+    <div className="max-w-xs w-full bg-white border border-gray-200 rounded-lg shadow-md p-6">
+      <div className="flex items-start justify-between">
         <div>
         <p className="text-gray-600 mt-2">
             <span className="text-lg font-semibold">Assessments</span>
@@ -88,8 +88,8 @@ const Assessmentgraph = () => {
           </h2>
           
         </div>
-        <div className="bg-blue-100 rounded-full p-2 ml-24">
-          <AiOutlineLineChart className="text-blue-500" size={28} />
+        <div className="flex items-center bg-blue-100 p-3 ml-24">
+          <FaListCheck className="text-blue-500" size={24} />
         </div>
         <div>
           <Chart options={options} series={series} type="radialBar" width="120" />

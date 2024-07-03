@@ -61,7 +61,7 @@ const LanguageToggleButton = ({
             {t("toggleButton.logoutSuccess")}
           </div>
         )}
-        <div className="flex ml-5 items-center mb-2">
+        {/* <div className="flex ml-5 items-center mb-2">
           <a
             onClick={handleLogout}
             className={`flex items-center text-sm rounded hover:bg-gray-800 transition-colors no-underline ${
@@ -73,7 +73,7 @@ const LanguageToggleButton = ({
             <FaSignOutAlt className={`${isMenuCollapsed ? "" : "ltr:mr-2 rtl:ml-2"}`} />
             {!isMenuCollapsed && t("toggleButton.Logout")}
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

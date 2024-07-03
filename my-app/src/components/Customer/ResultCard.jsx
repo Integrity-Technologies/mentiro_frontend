@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserCandidates } from "../../actions/candidateAction";
 import { getUserResults } from "../../actions/resultAction";
 import { useTranslation } from "react-i18next";
-import { AiOutlineBarChart } from "react-icons/ai";
+import { IoBarChartOutline } from "react-icons/io5";
 
 const ResultCard = () => {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const ResultCard = () => {
 
   return (
     <div className="max-w-xs w-100 bg-white border border-gray-200 rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between">
         <div>
         <p className="text-gray-600 mt-2">
             <span className="text-lg font-semibold">{t("Results")}</span>
@@ -46,8 +46,8 @@ const ResultCard = () => {
           </h2>
          
         </div>
-        <div className="bg-blue-100 rounded-full p-2">
-          <AiOutlineBarChart className="text-blue-500" size={28} />
+        <div className="flex items-center bg-blue-100 p-3 ml-28">
+          <IoBarChartOutline className="text-blue-500" size={24} />
         </div>
       </div>
     </div>

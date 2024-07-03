@@ -5,13 +5,9 @@ import { IoHomeOutline } from "react-icons/io5";
 import { FaListCheck } from "react-icons/fa6";
 import { IoBarChartOutline } from "react-icons/io5";
 import { LuUser } from "react-icons/lu";
-import {
-  
-  FaBuilding,
-  
-  FaBars,
-} from "react-icons/fa";
+import { FaBuilding, FaBars } from "react-icons/fa";
 import LanguageToggleButton from "../Togglebutton";
+import Navbar from "../NavbarComp"; // Import the Navbar component
 
 const logo = "/assets/logo.png";
 
@@ -33,35 +29,35 @@ const Customer = ({ isLanguageButton }) => {
     {
       label: `${t("CustomerDashboard.Dashboard")}`,
       link: "graph",
-      icon: <IoHomeOutline />      ,
+      icon: <IoHomeOutline />,
     },
-    {
-      label: `${t("CustomerDashboard.companyProfile")}`,
-      link: "company-profile",
-      icon: <FaBuilding />,
-    },
+    // {
+    //   label: `${t("CustomerDashboard.companyProfile")}`,
+    //   link: "company-profile",
+    //   icon: <FaBuilding />,
+    // },
     {
       label: `${t("CustomerDashboard.Assessment")}`,
       link: "assessments",
-      icon: <FaListCheck />      ,
+      icon: <FaListCheck />,
     },
     {
       label: `${t("CustomerDashboard.candidateProfile")}`,
       link: "candidates-profile",
-      icon: <LuUser />      ,
+      icon: <LuUser />,
     },
     {
       label: `${t("CustomerDashboard.testResult")}`,
       link: "test-result",
-      icon: <IoBarChartOutline />      ,
+      icon: <IoBarChartOutline />,
     },
   ];
 
   return (
-    <div className="flex h-screen bg-gray-500 font-roboto">
+    <div className="flex h-screen font-roboto">
       <div
         className={`flex flex-col ${
-          isMenuCollapsed ? "w-20" : "w-1/6"
+          isMenuCollapsed ? "w-20" : "w-1/5"
         } bg-customGray shadow h-full text-white overflow-y-auto transition-width duration-300`}
       >
         <div className="flex justify-between items-center p-3 relative">
@@ -98,50 +94,34 @@ const Customer = ({ isLanguageButton }) => {
                       ? "shadow-lg bg-blue-500 text-white shadow-green-300"
                       : "hover:bg-blue-500 hover:text-white text-gray-600"
                   }`}
-                style={{
-                  textDecoration: "none", // Remove underline decoration
-                  listStyle: "none", // Remove list-style decoration
-                  outline: "none", // Remove outline on focus
-                }}
               >
-                <span
-                  className={`mr-3 ${
-                    location.pathname.includes(option.link)
-                      ? "text-white"
-                      : "hover:text-white"
-                  }`}
-                >
-                  {option.icon}
-                </span>
+                <span className="mr-3">{option.icon}</span>
                 {!isMenuCollapsed && (
-                  <span
-                    className={`${
-                      location.pathname.includes(option.link)
-                        ? "text-white"
-                        : "hover:text-white"
-                    }`}
-                  >
-                    {t(option.label)}
-                  </span>
+                  <span>{t(option.label)}</span>
                 )}
               </button>
             </Link>
           ))}
         </nav>
-        <div className="mt-3 ml-2">
+        {/* <div className="mt-3 ml-2">
           <LanguageToggleButton
             isMenuCollapsed={isMenuCollapsed}
             onLanguageChange={handleLanguageChange}
             isLanguageButton={isLanguageButton}
           />
-        </div>
+        </div> */}
       </div>
-      <div
-        className={`transition-width duration-300 ${
-          isMenuCollapsed ? "w-full" : "w-5/6"
-        } bg-blue-100 p-10 overflow-y-auto`}
-      >
-        <Outlet />
+      <div className="flex flex-col w-full">
+        <Navbar /> {/* Include the Navbar component here */}
+        <div className="flex-grow overflow-y-auto">
+          <div
+            className={`transition-width duration-300 ${
+              isMenuCollapsed ? "w-full" : "w-full"
+            } bg-blue-100 p-0`}
+          >
+            <Outlet />
+          </div>
+        </div>
       </div>
     </div>
   );
