@@ -64,7 +64,7 @@ const Navbar = ({
         {showDropdown && (
           <div className="absolute right-0 mt-40 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-10">
             <Link
-              to="/user-info"
+              to="/customer-dashboard/user-info"
               className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100"
               style={{
                 textDecoration: "none", // Remove underline decoration

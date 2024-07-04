@@ -410,7 +410,7 @@ const SignUp = () => {
                           )}
                           getOptionValue={(option) => option.country_short_name}
                           styles={customStyles}
-                          className="w-1/3.5"
+                          className="w-40"
                           placeholder={t("signup.select_country")}
                         />
                         <div className="relative flex-1">
@@ -520,7 +520,7 @@ const SignUp = () => {
                         name="companyName"
                         value={formData.companyName}
                         onChange={handleChange}
-                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        className="block px-2.5 pb-2 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
                       />
                       <label
@@ -581,7 +581,7 @@ const SignUp = () => {
                             name="jobTitleCustom"
                             value={jobTitleCustom} // Ensure this is linked to the jobTitleCustom state
                             onChange={handleChange} // and uses handleChange
-                            className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            className="block px-2.5 pb-2 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder="Enter your job title"
                           />
                         </div>

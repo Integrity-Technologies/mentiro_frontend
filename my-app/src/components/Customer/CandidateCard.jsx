@@ -4,6 +4,7 @@ import { getUserCandidates } from "../../actions/candidateAction";
 import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
 import { LuUser } from "react-icons/lu";
+import {FaChevronRight} from "react-icons/fa"
 
 const CandidateCard = () => {
   const dispatch = useDispatch();
@@ -68,10 +69,13 @@ const CandidateCard = () => {
         <div className="flex items-center bg-blue-100 p-3 ml-28">
           <LuUser className="text-blue-500" size={24} />
         </div>
+      
         <div>
+          
           <Chart options={options} series={series} type="donut" width="120" />
         </div>
       </div>
+      
     </div>
   );
 };

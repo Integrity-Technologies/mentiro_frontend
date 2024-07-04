@@ -51,13 +51,12 @@ const CandidateProfile = () => {
   return (
     <div className="rounded-xl p-6 min-h-screen font-roboto">
       <div className="flex items-center mb-6">
-        <FaUserCircle className="mr-3" size={40} />
-        <h1 className="font-bold text-gray-700 mt-2 text-20px">
+        <h1 className="font-bold text-gray-700 mt-2 text-3xl">
           {t("candidates.title")}
         </h1>
       </div>
-      <div className="mb-4 relative">
-        <div className="relative">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="relative flex-1">
           <input
             type="text"
             placeholder={t("candidates.searchPlaceholder")}
@@ -67,13 +66,20 @@ const CandidateProfile = () => {
           />
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
+
+        <div className="flex space-x-2 mr-5 mt-4">
+        
+          <button className="bg-blue-900 text-white px-4 py-2 rounded-md border border-blue-900 hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+            Filter
+          </button>
+        </div>
       </div>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50 text-12px">
           <tr>
             <th
               scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-4 text-left font-medium text-gray-500 uppercase tracking-wider"
             >
               {t("candidates.firstName")}
             </th>

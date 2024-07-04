@@ -24,6 +24,7 @@ import DualLineGraph from "./components/Customer/Graph";
 import ActiveAssessment from "./components/Customer/ActiveAssessment";
 import ViewTestResult from "./components/Customer/ViewTestResult";
 import CandidateProfile from "./components/Customer/CandidatesProfile";
+import UserInfo from "./components/Customer/User-info.jsx";
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
           <Route path="candidates-profile" element={<CandidateProfile />} />
           <Route path="test-result" element={<ViewTestResult />} />
           <Route path="preview-assessment" element={<PreviewExistingAssessment />} />
+          <Route path="user-info" element={<UserInfo />} />
           <Route path="" element={<DualLineGraph />} /> {/* Default route */}
         </Route>
 

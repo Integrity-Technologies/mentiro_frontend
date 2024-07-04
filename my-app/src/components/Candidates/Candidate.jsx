@@ -17,6 +17,7 @@ const Candidate = () => {
   const [successAlert, setSuccessAlert] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [acceptMarketing, setAcceptMarketing] = useState(false);
+  const [verifyEmailMessage, setVerifyEmailMessage] = useState(false);
 
   const handleSubmitButtonClick = async () => {
     // Reset previous errors
@@ -59,7 +60,6 @@ const Candidate = () => {
       setErrors((prevErrors) => ({
         ...prevErrors,
         emailError: true,
-        emailErrorMessage: "Email is already registered",
       }));
     }
   };
@@ -68,6 +68,13 @@ const Candidate = () => {
     const { id, value } = e.target;
     setCandidateData({ ...candidateData, [id]: value });
     setErrors({ ...errors, [id + "Error"]: false });
+
+    // Show verify email message when email input is changed
+    if (id === "email" && value) {
+      setVerifyEmailMessage(true);
+    } else {
+      setVerifyEmailMessage(false);
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -159,8 +166,20 @@ const Candidate = () => {
               />
               {errors.emailError && (
                 <p className="mt-1 text-sm text-red-500">
-                  {errors.emailErrorMessage ||
-                    "Please enter a valid email address"}
+                  Please enter a valid email address
+                </p>
+              )}
+              {verifyEmailMessage && (
+                <p className="mt-1 text-sm text-red-500">
+                  Please verify your email. Click{" "}
+                  <a
+                    href="https://mail.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    here
+                  </a>
                 </p>
               )}
             </div>
@@ -205,4 +224,5 @@ const Candidate = () => {
     </div>
   );
 };
+
 export default Candidate;

@@ -69,7 +69,7 @@ const DualGraphs = () => {
         </div>
       </div>
       <div className="rounded-lg p-0 mt-0 flex flex-col ">
-        <h2 className="text-xl font-bold mb-2 flex  text-gray-800 mt-5">
+        <h2 className="text-2xl font-bold mb-2 flex  text-gray-800 mt-5">
           <span className="font-bold">
             {t("graphView.candidatesDetails")}
           </span>
