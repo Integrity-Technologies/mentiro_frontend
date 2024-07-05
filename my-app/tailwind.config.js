@@ -20,7 +20,9 @@ module.exports = {
       },
 
       fontFamily: {
-        roboto: ['Roboto', 'sans-serif'],      },
+        roboto: ['Roboto', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+      },
         fontSize: {
           '22px': '22px',
           "14px": "14px",

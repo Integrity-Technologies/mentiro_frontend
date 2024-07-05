@@ -166,175 +166,135 @@ const Assessment = () => {
   };
 
   return (
-    <>
-      <div className="container bg-white mx-auto p-4 min-h-screen flex flex-col px-6 py-10 relative">
-        <BallProgressBar
-          steps={totalSteps}
-          currentStep={currentStep}
-          labels={labels}
-        />
+    <div className="container bg-blue-100 h-screen mx-auto p-4 flex flex-col font-roboto">
+      <h2 className="text-2xl font-medium mb-4">{t("Assessments.createAssessment")}</h2>
+      <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <BallProgressBar steps={totalSteps} currentStep={currentStep} labels={labels} />
+
         {showTestSelection ? (
           <TestSelection
             assessments={assessments}
             handleBackButtonClick={handleBackButtonClick}
             goToNextStep={goToNextStep}
-            currentStep={currentStep} // Add this prop
+            currentStep={currentStep}
           />
         ) : (
-          <div className="">
-            <div className="flex items-center mb-4 mt-5">
-              <FaClipboardList className="mr-2" size={22} />
-              <h2 className="text-22px font-bold mt-2">
-                {t("Assessments.title")}
-              </h2>
+          <div>
+          <h3 className="text-xl font-medium mb-4 mt-4">
+          {t("Assessments.assessmentDetails")}
+        </h3>
+        <div className="flex justify-end mt-2">
+          <Button
+            onClick={handleAddAssessment}
+            className="bg-blue-900 border-blue-900 hover:bg-blue-800 text-white font-bold w-24 py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
+          >
+            <span className="inline-block">
+              {showTestSelection ? t("Assessments.createAssessment") : t("Assessments.next")}
+            </span>
+          </Button>
+        </div>
+        
+          <div className="grid grid-cols-2 gap-4 mt-0">
+            <div className="relative">
+              <label htmlFor="formAssessmentName" className="mb-1 text-sm font-medium text-gray-700 flex items-center">
+                <FaInfoCircle className="mr-2" size={14} />
+                {t("Assessments.name")}
+              </label>
+              <input
+                type="text"
+                id="formAssessmentName"
+                className={`block w-full px-3 py-2 text-sm text-gray-900 bg-white rounded  border-1 border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 ${companyError ? "border-red-500" : ""}`}
+                value={assessmentName}
+                onChange={(e) => setAssessmentName(e.target.value)}
+              />
+              {companyError && <p className="mt-2 text-sm text-red-600">{companyError}</p>}
             </div>
-            <hr className="mb-6 border-gray-400" />
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="relative">
-                <label
-                  htmlFor="formAssessmentName"
-                  className="mb-1 text-sm font-medium text-gray-700 flex items-center"
-                >
-                  <div className="group inline-block ml-2 mr-2">
-                    <span className="relative z-10 block text-lg">
-                      <FaInfoCircle size={14} />{" "}
-                    </span>
-                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                      Enter the name of the assessment.
-                    </div>
-                  </div>
-                  {t("Assessments.name")}
-                </label>
-                <input
-                  type="text"
-                  id="formAssessmentName"
-                  className={`block px-3 py-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                    companyError ? "border-red-500" : ""
-                  }`}
-                  value={assessmentName}
-                  onChange={(e) => setAssessmentName(e.target.value)}
-                />
-                {companyError && (
-                  <p className="mt-2 text-sm text-red-600">{companyError}</p>
-                )}
-              </div>
-              <div className="relative">
-                <label
-                  htmlFor="formJobRole"
-                  className="flex mb-1 text-sm font-medium text-gray-700"
-                >
-                  <div className="group inline-block ml-2 mr-2">
-                    <span className="relative z-10 block text-lg overflow-hidden">
-                      <FaInfoCircle size={14} />{" "}
-                    </span>
-                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                      Specify the job role for which this assessment is
-                      intended.
-                    </div>
-                  </div>
-                  {t("Assessments.jobrole")}
-                </label>
-                <Select
-                  id="formJobRole"
-                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600 ${
-                    jobRoleError ? "border-red-500" : ""
-                  }`}
-                  value={jobRole}
-                  onChange={(selectedOption) => setJobRole(selectedOption)}
-                  options={jobRoleOptions}
-                  styles={customStyles} // Apply custom styles here
-                  placeholder="Job Role"
-                />
-                {jobRoleError && (
-                  <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
-                )}
-              </div>
 
-              <div className="relative">
-                <label
-                  htmlFor="formWorkArrangement"
-                  className="flex mb-1 text-sm font-medium text-gray-700"
-                >
-                  <div className="group inline-block ml-2 mr-2">
-                    <span className="relative z-10 block text-lg">
-                      <FaInfoCircle size={14} />{" "}
-                    </span>
-                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                      Choose the type of work arrangement for the job role, such
-                      as remote or on-site.
-                    </div>
+            <div className="relative">
+              <label htmlFor="formJobRole" className="flex mb-1 text-sm font-medium text-gray-700">
+                <div className="group inline-block ml-2 mr-2">
+                  <span className="relative z-10 block text-lg overflow-hidden">
+                    <FaInfoCircle size={14} />
+                  </span>
+                  <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                    Specify the job role for which this assessment is intended.
                   </div>
-                  {t("Assessments.WorkArrangement")}
-                </label>
-                <Select
-                  id="formWorkArrangement"
-                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600 ${
-                    workArrangementError ? "border-red-500" : ""
-                  }`}
-                  value={workArrangement}
-                  onChange={(selectedOption) =>
-                    setWorkArrangement(selectedOption)
-                  }
-                  options={workArrangementOptions}
-                  styles={customStyles} // Apply custom styles here
-                  placeholder="Work Arrangement"
-                />
-                {workArrangementError && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {workArrangementError}
-                  </p>
-                )}
-              </div>
-              <div className="relative">
-                <label
-                  htmlFor="formJobLocation"
-                  className="flex mb-1 text-sm font-medium text-gray-700"
-                >
-                  <div className="group inline-block ml-2 mr-2">
-                    <span className="relative z-10 block text-lg">
-                      <FaInfoCircle size={14} />{" "}
-                    </span>
-                    <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                      Enter the location where the job will be based.
-                    </div>
-                  </div>
-                  {t("Assessments.joblocation")}
-                </label>
-                <Select
-                  id="formJobLocation"
-                  className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600 ${
-                    jobLocationError ? "border-red-500" : ""
-                  }`}
-                  value={jobLocation}
-                  onChange={(selectedOption) => setJobLocation(selectedOption)}
-                  options={jobLocationOptions}
-                  styles={customStyles} // Apply custom styles here
-                  placeholder="Job Location"
-                />
-                {jobLocationError && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {jobLocationError}
-                  </p>
-                )}
-              </div>
+                </div>
+                {t("Assessments.jobrole")}
+              </label>
+              <Select
+                id="formJobRole"
+                className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600`}
+                value={jobRole}
+                onChange={(selectedOption) => setJobRole(selectedOption)}
+                options={jobRoleOptions}
+                styles={customStyles}
+                placeholder="Job Role"
+              />
+              {jobRoleError && (
+                <p className="mt-2 text-sm text-red-600">{jobRoleError}</p>
+              )}
             </div>
-            <div className="flex justify-end">
-              <Button
-                onClick={handleAddAssessment}
-                className="bg-black hover:bg-black text-white justify-center font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
-              >
-                {/* <FaPlus className="inline-block mr-2" /> */}
-                <span className="inline-block">
-                  {showTestSelection
-                    ? `${t("Assessments.createAssessment")}`
-                    : `${t("Assessments.next")}`}
-                </span>
-              </Button>
+
+            <div className="relative">
+              <label htmlFor="formWorkArrangement" className="flex mb-1 text-sm font-medium text-gray-700">
+                <div className="group inline-block ml-2 mr-2">
+                  <span className="relative z-10 block text-lg">
+                    <FaInfoCircle size={14} />
+                  </span>
+                  <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                    Indicate whether the role is remote, onsite, or hybrid.
+                  </div>
+                </div>
+                {t("Assessments.workarrangement")}
+              </label>
+              <Select
+                id="formWorkArrangement"
+                className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600`}
+                value={workArrangement}
+                onChange={(selectedOption) => setWorkArrangement(selectedOption)}
+                options={workArrangementOptions}
+                styles={customStyles}
+                placeholder="Work Arrangement"
+              />
+              {workArrangementError && (
+                <p className="mt-2 text-sm text-red-600">{workArrangementError}</p>
+              )}
+            </div>
+
+            <div className="relative">
+              <label htmlFor="formJobLocation" className="flex mb-1 text-sm font-medium text-gray-700">
+                <div className="group inline-block ml-2 mr-2">
+                  <span className="relative z-10 block text-lg overflow-hidden">
+                    <FaInfoCircle size={14} />
+                  </span>
+                  <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
+                    Select the location for the job.
+                  </div>
+                </div>
+                {t("Assessments.joblocation")}
+              </label>
+              <Select
+                id="formJobLocation"
+                className={`block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-600`}
+                value={jobLocation}
+                onChange={(selectedOption) => setJobLocation(selectedOption)}
+                options={jobLocationOptions}
+                styles={customStyles}
+                placeholder="Job Location"
+              />
+              {jobLocationError && (
+                <p className="mt-2 text-sm text-red-600">{jobLocationError}</p>
+              )}
             </div>
           </div>
+          </div>
         )}
+        
+        {/* Move these elements here */}
+        
       </div>
-    </>
+    </div>
   );
 };
 

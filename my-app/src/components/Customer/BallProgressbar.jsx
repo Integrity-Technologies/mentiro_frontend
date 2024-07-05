@@ -3,13 +3,13 @@ import React from 'react';
 const BallProgressBar = ({ steps, currentStep, labels }) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="flex justify-center items-center w-full">
+      <div className="flex justify-center items-center w-75">
         {Array.from({ length: steps }).map((_, index) => (
           <React.Fragment key={index}>
             {/* Render the ball */}
             <div className="flex flex-col items-center mx-2">
               <div
-                className={`w-10 h-10 rounded-full ${
+                className={`w-8 h-8 rounded-full ${
                   index <= currentStep ? 'bg-blue-500' : 'bg-gray-300'
                 } flex items-center justify-center text-white font-bold shadow-lg transition-transform duration-300 ease-in-out transform ${
                   index === currentStep ? 'scale-110' : 'scale-100'

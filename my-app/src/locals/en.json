@@ -276,7 +276,7 @@
   },
 
   "Assessments": {
-    "createAssessment": "Create Assessment",
+    "createAssessment": "Create New Assessment",
     "assessmentDetails": "Assessment Details", 
     "chooseTests": "Choose Tests", 
     "preview": "Review",

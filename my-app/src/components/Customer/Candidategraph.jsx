@@ -10,7 +10,6 @@ const CandidateGraph = ({ onRowClick }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const results = useSelector((state) => state.results.results);
-  console.log("🚀 ~ CandidateGraph ~ results:", results);
   const { t } = useTranslation();
   const [showResult, setShowResult] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,22 +28,20 @@ const CandidateGraph = ({ onRowClick }) => {
     fetchData();
   }, [dispatch]);
 
-  // const goToResultMenu = () => {
-  //   setShowResult(true);
-  // };
-
   const handlePageChange = (page) => setCurrentPage(page);
 
-  const filteredResults = Array.isArray(results) ? results.filter((candidate) => candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase()) ) : [];
+  const filteredResults = Array.isArray(results)
+    ? results.filter((candidate) =>
+        candidate.candidate_name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
-  // Helper function to compare assessment dates
   const compareDates = (a, b) => {
     const dateA = new Date(a.assessments[0]?.started_at);
     const dateB = new Date(b.assessments[0]?.started_at);
     return dateB - dateA;
   };
 
-  // Sorting filtered results array based on assessment date
   const sortedResults = filteredResults.sort(compareDates);
 
   const itemsPerPage = 10;
@@ -55,21 +52,21 @@ const CandidateGraph = ({ onRowClick }) => {
   const currentResults = sortedResults.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center">
+    <div className="w-full h-full flex flex-col justify-center items-center font-roboto">
       <div className="w-full">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-white">
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 border-b text-left text-xs font-bold text-gray-900 uppercase ">
                 {t("graphView.Candidate.Name")}
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase ">
                 {t("graphView.Candidate.Assessment")}
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase ">
                 {t("graphView.Candidate.Scores")}
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase ">
                 {t("graphView.Candidate.Date")}
               </th>
             </tr>
@@ -81,7 +78,8 @@ const CandidateGraph = ({ onRowClick }) => {
                   colSpan="4"
                   className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
                 >
-                  {error.includes("404") ? `${t("graphView.noData")}` : error}                </td>
+                  {error.includes("404") ? `${t("graphView.noData")}` : error}
+                </td>
               </tr>
             ) : currentResults.length > 0 ? (
               currentResults.map((candidate) =>
@@ -101,11 +99,21 @@ const CandidateGraph = ({ onRowClick }) => {
                         {assessment.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 group-hover:text-white">
-                        {test.score === null
-                          ? "0%"
-                          : test.score === undefined
-                          ? "-"
-                          : `${test.score}%`}
+                        <div className="flex items-center">
+                          <span className="mr-2">
+                            {test.score === null
+                              ? "0%"
+                              : test.score === undefined
+                              ? "-"
+                              : `${test.score}%`}
+                          </span>
+                          <div className="flex flex-col w-full h-4 bg-gray-200 overflow-hidden">
+                            <div
+                              className="h-full bg-blue-900"
+                              style={{ width: `${test.score || 0}%` }}
+                            ></div>
+                          </div>
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 group-hover:text-white">
                         {new Date(

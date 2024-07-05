@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { logout } from "../actions/authActions"; // Adjust the path as needed
 import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt } from "react-icons/fa"; // Import the icon
+// import { FaSignOutAlt } from "react-icons/fa"; // Import the icon
 
 const LanguageToggleButton = ({
   isLanguageButton,

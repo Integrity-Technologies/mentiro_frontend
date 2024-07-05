@@ -161,9 +161,9 @@ const ActiveAssessment = () => {
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
         <div className="flex space-x-2">
-          <button className="bg-blue-900 text-white px-4 py-2 rounded-md border border-blue-900 hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+          {/* <button className="bg-blue-900 text-white px-4 py-2 rounded-md border border-blue-900 hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
             Bulk Action
-          </button>
+          </button> */}
           <button className="bg-blue-900 text-white px-4 py-2 rounded-md border border-blue-900 hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
             Filter
           </button>
@@ -179,7 +179,7 @@ const ActiveAssessment = () => {
               >
                 Assessment Name
               </th>
-              <th className="py-2 px-4 border-b border-gray-200 text-left">
+              <th className="py-4 px-6 border-b border-gray-200 text-left">
                 Job Title
               </th>
               <th className="py-2 px-4 border-b border-gray-200 text-left">

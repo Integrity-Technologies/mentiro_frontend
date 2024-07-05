@@ -8,6 +8,7 @@ import Category from "./Categories";
 import Candidates from "./Candidates";
 import ViewTestResult from "./ViewTestResult";
 import Company from "./Company";
+import { NavLink } from "react-router-dom";
 import Question from "./Question";
 const logoImage = "/assets/icon.jpg";
 
@@ -23,6 +24,14 @@ const Dashboard = ({ isLanguageButton }) => {
 
   const handleClick = (link) => {
     setActiveLink(link);
+  };
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    console.log("User logged out");
+    // For example, clear user session and redirect to login page
+    // sessionStorage.clear();
+    // window.location.href = "/login";
   };
 
   const sections = {
@@ -64,6 +73,13 @@ const Dashboard = ({ isLanguageButton }) => {
               {link === "/Users" ? t("users.title") : link.replace("/", "")}
             </button>
           ))}
+          <NavLink
+            to="/" // Redirect to login page or any other route for logout
+            onClick={handleLogout}
+            className="p-4 text-left hover:bg-gray-300 focus:bg-gray-300 mt-4"
+          >
+            Logout
+          </NavLink>
         </nav>
         <div className="p-4 mt-auto">
           <LanguageToggleButton

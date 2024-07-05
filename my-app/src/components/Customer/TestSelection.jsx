@@ -74,10 +74,10 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
     setShowTestSelection(true);
   };
 
-  // const openModal = (testId) => {
-  //   setShowModal(true);
-  //   setModalTestId(testId);
-  // };
+  const openModal = (testId) => {
+    setShowModal(true);
+    setModalTestId(testId);
+  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -122,26 +122,32 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
   //   </div>
   // );
 
-  const Modal = ({ test, updateQuestionCount }) => {
+  const Modal = ({ test, updateQuestionCount, closeModal }) => {
+    const { t } = useTranslation();
     const [questionCounts, setQuestionCounts] = useState({
-      easy: 10,
-      medium: 10,
-      hard: 10,
+      easy: 0,
+      medium: 0,
+      hard: 0,
     });
     const [showAlert, setShowAlert] = useState(false);
-
-    const handleQuestionCountChange = (event, selectedDifficulty) => {
-      const newQuestionCounts = {
-        ...questionCounts,
-        [selectedDifficulty]: parseInt(event.target.value),
-      };
-      setQuestionCounts(newQuestionCounts);
+  
+    const handleQuestionCountChange = (event, difficulty) => {
+      const value = parseInt(event.target.value, 10);
+      console.log(`Changing ${difficulty} to ${value}`);
+      if (!isNaN(value)) {
+        setQuestionCounts((prevCounts) => ({
+          ...prevCounts,
+          [difficulty]: value,
+        }));
+      }
     };
-
+  
+    useEffect(() => {
+      console.log("Current question counts:", questionCounts);
+    }, [questionCounts]);
+  
     const saveQuestionCount = () => {
-      const allCountsZero = Object.values(questionCounts).every(
-        (count) => count === 0
-      );
+      const allCountsZero = Object.values(questionCounts).every((count) => count === 0);
       if (allCountsZero) {
         setShowAlert(true);
       } else {
@@ -149,7 +155,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
         closeModal();
       }
     };
-
+  
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
@@ -180,7 +186,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
           </div>
           <hr className="mb-6 border-gray-300" />
           <h3 className="text-sm text-gray-500 mb-4">Questions Split</h3>
-
+  
           {showAlert && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 transition-opacity duration-500 ease-in-out"
@@ -192,6 +198,7 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
               </span>
             </div>
           )}
+  
           <div className="mb-6">
             <h3 className="text-base font-semibold mb-2 text-gray-700">
               {t("TestSelection.easy")}
@@ -199,14 +206,14 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             <div className="flex items-center mb-4">
               <input
                 type="range"
-                value={questionCounts["easy"]}
+                value={questionCounts.easy}
                 min="0"
                 max="10"
                 onChange={(event) => handleQuestionCountChange(event, "easy")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-yellow-300"
               />
-              <div className="w-10 h-8  border-2 border-yellow-300 flex justify-center items-center text-gray-700">
-                {questionCounts["easy"]}
+              <div className="w-10 h-8 border-2 border-yellow-300 flex justify-center items-center text-gray-700">
+                {questionCounts.easy}
               </div>
             </div>
           </div>
@@ -217,14 +224,14 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             <div className="flex items-center mb-4">
               <input
                 type="range"
-                value={questionCounts["medium"]}
+                value={questionCounts.medium}
                 min="0"
                 max="10"
                 onChange={(event) => handleQuestionCountChange(event, "medium")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-green-300"
               />
-              <div className="w-10 h-8  border-2 border-green-500 flex justify-center items-center text-gray-700">
-                {questionCounts["medium"]}
+              <div className="w-10 h-8 border-2 border-green-500 flex justify-center items-center text-gray-700">
+                {questionCounts.medium}
               </div>
             </div>
           </div>
@@ -235,14 +242,14 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
             <div className="flex items-center mb-4">
               <input
                 type="range"
-                value={questionCounts["hard"]}
+                value={questionCounts.hard}
                 min="0"
                 max="10"
                 onChange={(event) => handleQuestionCountChange(event, "hard")}
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer mr-2 bg-red-500"
               />
-              <div className="w-10 h-8 border-2  border-red-500 flex justify-center items-center text-gray-700">
-                {questionCounts["hard"]}
+              <div className="w-10 h-8 border-2 border-red-500 flex justify-center items-center text-gray-700">
+                {questionCounts.hard}
               </div>
             </div>
           </div>
@@ -258,6 +265,8 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
       </div>
     );
   };
+  
+  
 
   const DescriptionModal = ({ description, onClose }) => (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -326,11 +335,11 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
         <Preview handleBackButton={handleBackButton} />
       ) : (
         <div className="min-h-screen flex flex-col px-6 py-10 relative">
-          <div className="flex items-center mb-4">
-            <FaClipboardCheck className="mr-2" size={22} />
-            <h3 className="text-center text-1xl font-bold mt-2">
+          <div className="mb-4">
+            <h3 className=" text-xl font-medium mt-2">
               {t("TestSelection.title")}
             </h3>
+            <p className="text-sm font-bold">Your Assesments  can have up to five tests. Look through the test library and picks the ones that fit best</p>
           </div>
 
           <div className="mb-4 relative">
@@ -373,69 +382,61 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
 </div>
 
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-14">
-            {filteredTests.map((test) => (
-              <div
-                key={test.id}
-                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border w-80 border-black"
-              >
-                <div className="relative">
-                  <div className="p-6">
-                    <div className="flex items-center mb-2">
-                      <MdPreview className="text-gray-600" size={22} />
-                      <h5 className="font-bold text-lg text-gray-800 ml-3 mt-2">
-                        {test.test_name}
-                      </h5>
-                    </div>
-                    <div className="mb-2 flex flex-wrap">
-                      {test.categories.map((category, index) => (
-                        <span
-                          key={index}
-                          className="bg-category-tag-bg text-black py-2 px-6 rounded-lg text-xs font-semibold mr-2 mb-2"
-                        >
-                          {category}
-                        </span>
-                      ))}
-                    </div>
-                    <h2 className="text-lg font-semibold text-gray-700 mb-2">
-                      {t("TestSelection.overview")}
-                    </h2>
-                    <p className="text-gray-600 mb-2">
-                      {truncateDescription(test.test_description)}
-                      {test.test_description.split(" ").length > 15 && (
-                        <span
-                          className="text-blue-500 cursor-pointer ml-2"
-                          onClick={() =>
-                            showFullDescription(test.test_description)
-                          }
-                        >
-                          See More
-                        </span>
-                      )}
-                    </p>
-                    {/* <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600 font-semibold flex items-center mt-2">
-                        <IoCreateSharp className="mr-1" />
-                        {calculateTotalQuestionCount(test.id)} Total Questions
-                      </span>
-                    </div> */}
-                  </div>
-                </div>
-                <div className="px-6 py-2 flex justify-end items-center">
-                  <button
-                    className={`py-2 px-4 rounded font-bold text-white shadow ${
-                      selectedTests.includes(test.id)
-                        ? "bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-                        : "bg-black hover:bg-black focus:outline-none focus:ring-2 focus:ring-black"
-                    } transition-colors duration-300 flex items-center gap-2`}
-                    onClick={() => handleTestSelection(test.id)}
-                  >
-                    {selectedTests.includes(test.id) ? "Selected" : "Add"}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-56">
+  {filteredTests.map((test) => (
+    <div
+      key={test.id}
+      className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border w-96 border-black" style={{ height: "350px"}}
+
+    >
+      <div className="relative p-6 flex flex-col items-center">
+        <MdPreview className="text-blue-900" size={32} />
+        <h5 className="font-bold text-lg text-gray-800 mt-3 text-center">
+          {test.test_name}
+        </h5>
+        <div className="mb-2 flex flex-wrap justify-center">
+          {test.categories.map((category, index) => (
+            <span
+              key={index}
+              className="bg-category-tag-bg text-black py-2 px-6 rounded-lg text-xs font-semibold mr-2 mb-2"
+            >
+              {category}
+            </span>
+          ))}
+        </div>
+        <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">
+          {t("TestSelection.overview")}
+        </h2>
+        <p className="text-gray-600 mb-2 text-center">
+          {truncateDescription(test.test_description)}
+          {test.test_description.split(" ").length > 15 && (
+            <span
+              className="text-blue-500 cursor-pointer ml-2"
+              onClick={() =>
+                showFullDescription(test.test_description)
+              }
+            >
+              See More
+            </span>
+          )}
+        </p>
+      </div>
+      <div className="px-6 py-2 flex justify-end items-center">
+        <button
+          className={`py-2 px-4 rounded font-bold text-white shadow ${
+            selectedTests.includes(test.id)
+              ? "bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+              : "bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-black"
+          } transition-colors duration-300 flex items-center gap-2`}
+          onClick={() => handleTestSelection(test.id)}
+        >
+          {selectedTests.includes(test.id) ? "Selected" : "Add"}
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
           <div className="text-center mt-8">
             <button
               className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"

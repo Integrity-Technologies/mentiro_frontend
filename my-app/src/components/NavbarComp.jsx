@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../actions/authActions";
+import { useNavigate } from "react-router-dom";
 import { FaAngleDown, FaUser, FaBuilding, FaSignOutAlt } from "react-icons/fa"; // Import icons from react-icons/fa
 import LanguageToggleButton from "./Togglebutton"; // Assuming correct path
 
@@ -11,6 +14,10 @@ const Navbar = ({
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [user, setUser] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -33,15 +40,21 @@ const Navbar = ({
     }
   }, []);
 
+  const handleLogout = () => {
+    localStorage.clear(); // Clear all items from local storage
+    dispatch(logout());
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+      navigate("/");
+    }, 2000); // 2000 milliseconds = 2 seconds, adjust as needed
+  };
+
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleLogout = () => {
-    localStorage.clear(); // Clear all items from local storage
-    setShowDropdown(false); // Close the dropdown after logout
-    // Optionally, you can redirect to the login page or homepage
-  };
+ 
 
   return (
     <div className="w-full bg-white shadow-md p-4 flex justify-between items-center z-10">

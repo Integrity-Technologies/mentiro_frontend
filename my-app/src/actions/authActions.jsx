@@ -66,12 +66,21 @@ export const login = (userData) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`);
+    const token = getToken(); // Retrieve token from local storage
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
+    };
+    console.log(token);
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`, axiosConfig);
     // console.log("~ logout ~ res:", res);
 
     localStorage.removeItem("token");
     // You may want to clear user data from localStorage or perform any other cleanup here
     dispatch({ type: LOGOUT_SUCCESS });
+
+    return res.data
     // Optionally, redirect the user to the login page or any other page after logout
     // history.push('/login'); // Assuming you have access to history object or use Redirect in the Logout component
   } catch (error) {
