@@ -298,11 +298,13 @@
     "overview": "Test Overview",
     "save": "Save",
     "next": "Next",
-    "back": "Back"
+    "back": "Back",
+    "add": "Add",
+    "remove": "Remove"
   },
 
   "PreviewAssessment": {
-    "title": "Preview Assessment",
+    "title": "Review Details",
     "name": "Assessment Name",
     "category": "Category",
     "totaltests": "Total Tests",

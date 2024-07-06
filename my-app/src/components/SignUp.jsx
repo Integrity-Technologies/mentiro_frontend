@@ -240,7 +240,7 @@ const SignUp = () => {
     control: (provided) => ({
       ...provided,
       minHeight: "40px", // Set this to match your input field's height
-      height: "52px", // Set this to match your input field's height
+      height: "55px", // Set this to match your input field's height
     }),
   };
 
@@ -342,8 +342,8 @@ const SignUp = () => {
               )}
               {currentPage === 2 && (
                 <>
-                  <div className="flex flex-wrap mb-3">
-                    <div className="w-full md:w-1/2 md:pr-2 mb-3 md:mb-0">
+                  <div className="flex flex-wrap mb-1">
+                    <div className="w-full md:w-1/2 md:pr-2 mb-1 md:mb-0">
                       <div className="relative">
                         <input
                           type="text"
@@ -392,7 +392,7 @@ const SignUp = () => {
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full px-3">
-                      <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-3">
                         {" "}
                         {/* Added space-x-4 for spacing */}
                         <Select
@@ -439,7 +439,7 @@ const SignUp = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mb-3">
+                  <div className="mb-1">
                     <div className="relative">
                       <input
                         type={showPassword ? "text" : "password"} 

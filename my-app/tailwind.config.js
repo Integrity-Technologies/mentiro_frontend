@@ -30,5 +30,58 @@ module.exports = {
         },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.slider-thumb-easy': {
+          '&::-webkit-slider-thumb': {
+            '-webkit-appearance': 'none',
+            'appearance': 'none',
+            'width': '1.25rem',
+            'height': '1.25rem',
+            'border-radius': '9999px',
+            'background': '#38a169', // green color
+          },
+          '&::-moz-range-thumb': {
+            'width': '1.25rem',
+            'height': '1.25rem',
+            'border-radius': '9999px',
+            'background': '#38a169', // green color
+          },
+        },
+        '.slider-thumb-medium': {
+          '&::-webkit-slider-thumb': {
+            '-webkit-appearance': 'none',
+            'appearance': 'none',
+            'width': '1.25rem',
+            'height': '1.25rem',
+            'border-radius': '9999px',
+            'background': '#d69e2e', // yellow color
+          },
+          '&::-moz-range-thumb': {
+            'width': '1.25rem',
+            'height': '1.25rem',
+            'border-radius': '9999px',
+            'background': '#d69e2e', // yellow color
+          },
+        },
+        '.slider-thumb-hard': {
+          '&::-webkit-slider-thumb': {
+            '-webkit-appearance': 'none',
+            'appearance': 'none',
+            'width': '1.25rem',
+            'height': '1.25rem',
+            'border-radius': '9999px',
+            'background': '#e53e3e', // red color
+          },
+          '&::-moz-range-thumb': {
+            'width': '1.25rem',
+            'height': '1.25rem',
+            'border-radius': '9999px',
+            'background': '#e53e3e', // red color
+          },
+        },
+      }, ['responsive', 'hover']);
+    },
+  ],
 }

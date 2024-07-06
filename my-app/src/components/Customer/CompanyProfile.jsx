@@ -119,14 +119,14 @@ const CompanyProfile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="bg-blue-100 min-h-screen p-8">
       <div className="flex items-center mb-6 mt-3">
         <h3 className="text-2xl font-semibold">
           {t("CompanyProfile.companyInformation")}
         </h3>
       </div>
-      <div className="bg-white rounded-md p-6 py-8 ">
-        {activeCompany && (
+      <div className="bg-white w-full max-w-5xl  rounded-lg shadow-lg p-8">
+      {activeCompany && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div className="flex flex-col items-start justify-center w-full">
               <label htmlFor="companyName" className="font-medium text-black">
@@ -137,8 +137,8 @@ const CompanyProfile = () => {
                 id="companyName"
                 value={activeCompany.name}
                 readOnly
-                className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
-              />
+                className="mt-2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                />
             </div>
             <div className="flex flex-col items-start justify-center w-full">
               <label htmlFor="companySize" className="font-medium text-black">
@@ -149,8 +149,8 @@ const CompanyProfile = () => {
                 id="companySize"
                 value={activeCompany.company_size}
                 readOnly
-                className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
-              />
+                className="mt-2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                />
             </div>
             <div className="flex flex-col items-start justify-center w-full">
               <label htmlFor="jobTitle" className="font-medium text-black">
@@ -161,8 +161,8 @@ const CompanyProfile = () => {
                 id="jobTitle"
                 value={activeCompany.job_title}
                 readOnly
-                className="mt-1 p-2 rounded border border-gray-300 focus:outline-none w-full"
-              />
+                className="mt-2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                />
             </div>
             
             {/* Add more fields for other company information */}
@@ -231,10 +231,7 @@ const CompanyProfile = () => {
           </Modal.Footer>
         </Modal> */}
       </div>
-      <div className="bg-blue-100 p-24 mt-4 rounded-lg">
-        {/* Content below the card with bg-blue-100 */}
-        {/* Add your additional content here */}
-      </div>
+      
     </div>
   );
 };

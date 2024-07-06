@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaClipboardList } from "react-icons/fa";
-// import { BiCategory } from "react-icons/bi"
+import { FaClipboardList, FaUser } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import {
@@ -101,6 +100,7 @@ const Preview = () => {
       console.error(error);
     }
   };
+
   const handleBackButton = () => {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
     setShowTestSelection(true);
@@ -115,46 +115,43 @@ const Preview = () => {
       )}
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">
-          <h3 className="text-3xl font-bold text-center mb-8 flex justify-center items-center">
-            <FaClipboardList className="mr-2" />
-            <span>{t("PreviewAssessment.title")}</span>
-          </h3>
-            
-{/* <div className="mt-10">
-  <div className="flex col-span-2 md:col-span-1">
-    <FaUser className="mr-2 mt-2 text-xl" />
-    <h3 className="text-2xl font-bold text-center flex items-center">
-      Assessment Name: {assessmentData.assessmentName}
-    </h3>
-  </div>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-2xl font-medium">{t("PreviewAssessment.title")}</h3>
+            <div className="flex mt-8 space-x-4">
+              <button
+                onClick={handleBackButton}
+                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
+              >
+                {t("PreviewAssessment.back")}
+              </button>
+              <button
+                onClick={handleSubmitButtonClick}
+                className="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-12 rounded transition-colors duration-300"
+              >
+                {t("PreviewAssessment.submit")}
+              </button>
+            </div>
+          </div>
 
-  <div className="flex col-span-2 md:col-span-1 mt-">
-    <BiCategory className="mr-2 mt-2 text-xl" />
-    <h3 className="text-2xl font-bold text-center flex items-center">Category:</h3>
-    {assessmentData.tests.map((test, index) => (
-      <span
-        key={index}
-        className="inline-block ml-5 mt-0 px-3 py-2 mr-2 mb-2 bg-category-tag-bg text-black text-sm font-semibold rounded-full"
-      >
-        {test.category}
-      </span>
-    ))}
-  </div>
-</div> */}
-
-<div className="grid gap-4 mb-8 md:grid-cols-2">
-            <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                {t("PreviewAssessment.name")}{" "}
+          <div className="flex flex-col p-0 mt-12 transition duration-300 ">
+              <h3 className="text-sm font-medium mb-1 text-gray-700">
+                {t("PreviewAssessment.name")}
               </h3>
-              <p className="text-lg font-bold text-gray-900">
+              <p className="text-2xl font-medium text-gray-900">
                 {assessmentData.assessmentName}
               </p>
             </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+           
+
             <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                {t("PreviewAssessment.category")}
-              </h3>
+              <div className="flex items-center">
+                <FaClipboardList className="text-xl mb-2 mr-2" />
+                <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                  {t("PreviewAssessment.category")}
+                </h3>
+              </div>
               <div className="flex flex-wrap">
                 {assessmentData.tests.map((test, index) => (
                   <span
@@ -167,71 +164,40 @@ const Preview = () => {
               </div>
             </div>
 
-
-
-
-
-{/* <div className="">
-  <div className="flex items-center col-span-2 md:col-span-1 mb-4 md:mb-0 mt-4">
-    <FaClipboardList className="mr-2 -mt-2 text-xl" />
-    <h3 className="text-2xl font-bold flex items-center">Total Tests:</h3>
-    <p className="text-2xl ml-5 font-bold text-gray-900">{assessmentData.tests.length}</p>
-  </div>
-
-  <div className="flex items-center col-span-2 md:col-span-1">
-    <MdAccessTime className="mr-2 -mt-2 text-xl" />
-    <h3 className="text-2xl font-bold">Assessment Time:</h3>
-    <span className="ml-5 -mt-3 px-3 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
-      <span className="text-lg font-bold mr-2 text-black">{assessmentData.assessmentTime}</span>
-      mins <MdAccessTime className="ml-1" />
-    </span>
-  </div>
-</div> */}
-
-
-
-            {/* <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                {t("PreviewAssessment.category")}
-              </h3>
-              <div className="flex flex-wrap">
-                {assessmentData.tests.map((test, index) => (
-                  <span
-                    key={index}
-                    className="inline-block px-3 py-1 mr-2 mb-2 bg-green-500 text-white text-sm font-semibold rounded-full"
-                  >
-                    {test.category}
-                  </span>
-                ))}
-              </div>
-            </div> */}
             <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                {t("PreviewAssessment.totaltests")}{" "}
-              </h3>
+              <div className="flex items-center">
+                <FaClipboardList className="text-xl mb-2 mr-2" />
+                <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                  {t("PreviewAssessment.totaltests")}
+                </h3>
+              </div>
               <p className="text-lg font-bold text-gray-900">
                 {assessmentData.tests.length}
               </p>
             </div>
-            <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-3 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                {t("PreviewAssessment.time")}{" "}
-              </h3>
+
+            <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
               <div className="flex items-center">
-                <span className=" px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
-                <MdAccessTime className="ml-1 mr-1" />
-                  <span className="text-lg font-bold  mr-2 text-black">
-                    {assessmentData.assessmentTime}  mins
+                <MdAccessTime className="text-xl mb-2 mr-2" />
+                <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                  {t("PreviewAssessment.time")}
+                </h3>
+              </div>
+              <div className="flex items-center">
+                <span className="px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
+                  <MdAccessTime className="ml-1 mr-1" />
+                  <span className="text-lg font-bold mr-2 text-black">
+                    {assessmentData.assessmentTime} mins
                   </span>
-                  
                 </span>
               </div>
             </div>
-            </div>
+          </div>
+
           <div className="mb-8">
             <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <FaClipboardList className="mr-2 " />
-              {t("PreviewAssessment.selectedtests")}{" "}
+              <FaClipboardList className="mr-2" />
+              {t("PreviewAssessment.selectedtests")}
             </h3>
             <table className="min-w-full divide-y divide-gray-200 shadow-md">
               <thead className="bg-gray-50">
@@ -266,12 +232,15 @@ const Preview = () => {
                       key={index}
                       className="hover:bg-blue-100 cursor-pointer transition duration-150"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {test.test_name}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {test.test_name}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap flex items-center text-sm text-gray-500">
-                      <MdAccessTime className="ml-1 mr-1" />
-                        {test.testTime} mins 
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {test.testTime} mins
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -279,20 +248,13 @@ const Preview = () => {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-center space-x-4">
+
+          <div className="flex justify-end">
             <button
-              size="lg"
               onClick={handleSubmitButtonClick}
-              className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300"
+              className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded transition-colors duration-300"
             >
               {t("PreviewAssessment.submit")}
-            </button>
-            <button
-              size="lg"
-              onClick={handleBackButton}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
-            >
-              {t("PreviewAssessment.back")}
             </button>
           </div>
         </div>

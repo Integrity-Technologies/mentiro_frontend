@@ -36,6 +36,7 @@ export const signUp = (userData) => async (dispatch) => {
 
 export const login = (userData) => async (dispatch) => {
   try {
+    console.log(process.env.REACT_APP_API_URL);
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/login`, userData);
     const { result, token } = res.data;
 
@@ -66,14 +67,8 @@ export const login = (userData) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    const token = getToken(); // Retrieve token from local storage
-    const axiosConfig = {
-      headers: {
-        Authorization: `Bearer ${token}` // Set authorization header
-      }
-    };
-    console.log(token);
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`, axiosConfig);
+    
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`);
     // console.log("~ logout ~ res:", res);
 
     localStorage.removeItem("token");
