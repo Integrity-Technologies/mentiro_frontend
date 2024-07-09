@@ -79,25 +79,25 @@ const CandidateProfile = () => {
           <tr>
             <th
               scope="col"
-              className="px-6 py-4 text-left font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-4 text-left font-bold text-gray-900 uppercase tracking-wider"
             >
               {t("candidates.firstName")}
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left font-bold text-gray-900 uppercase tracking-wider"
             >
               {t("candidates.lastName")}
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left font-bold text-gray-900 uppercase tracking-wider"
             >
               {t("candidates.email")}
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left font-bold text-gray-900 uppercase tracking-wider"
             >
               {t("candidates.dateJoined")}
             </th>

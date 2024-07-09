@@ -44,7 +44,8 @@
       "confirmPasswordMismatch": "Passwords do not match",
       "companyNameRequired": "Please enter your company name",
       "companySizeRequired": "Please enter your company size",
-      "jobTitleRequired": "Please enter your job title"
+      "jobTitleRequired": "Please enter your job title",
+      "jobTitleCustomRequired": "Please enter your custom job title"
     }
   },
 
@@ -283,7 +284,7 @@
     "name": "Assessment Name",
     "title": "Create New Assessment",
     "jobrole": "Job Role",
-    "WorkArrangement": "Work Arrangement",
+    "workarrangement": "Work Arrangement",
     "joblocation": "Job Location",
     "next": "Next"
   },
@@ -306,12 +307,14 @@
   "PreviewAssessment": {
     "title": "Review Details",
     "name": "Assessment Name",
-    "category": "Category",
+    "jobrole": "Job Role",
     "totaltests": "Total Tests",
     "time": "Assessment Time",
-    "selectedtests": "Selected Tests",
+    "selectedtests": "Tests Selected",
     "testname": "Test Name",
-    "duration": "Duration",
+    "workarrangement": "Work Arrangement",
+    "joblocation":"Job Location",
+    "duration": "Time",
     "submit": "Submit",
     "back": "Back"
   },

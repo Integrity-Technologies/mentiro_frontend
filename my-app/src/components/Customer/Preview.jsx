@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaClipboardList, FaUser } from "react-icons/fa";
-import { MdAccessTime } from "react-icons/md";
+import { FaLocationDot } from "react-icons/fa6";
+import { FiPenTool } from "react-icons/fi";
+import {FaClock} from "react-icons/fa"
+import { BsBuildingsFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import {
   addAssessmentWithTests,
@@ -116,7 +118,9 @@ const Preview = () => {
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-medium">{t("PreviewAssessment.title")}</h3>
+            <h3 className="text-2xl font-medium">
+              {t("PreviewAssessment.title")}
+            </h3>
             <div className="flex mt-8 space-x-4">
               <button
                 onClick={handleBackButton}
@@ -134,129 +138,155 @@ const Preview = () => {
           </div>
 
           <div className="flex flex-col p-0 mt-12 transition duration-300 ">
-              <h3 className="text-sm font-medium mb-1 text-gray-700">
-                {t("PreviewAssessment.name")}
-              </h3>
-              <p className="text-2xl font-medium text-gray-900">
-                {assessmentData.assessmentName}
-              </p>
-            </div>
+            <h3 className="text-sm font-medium mb-1 text-gray-700">
+              {t("PreviewAssessment.name")}
+            </h3>
+            <p className="text-2xl font-medium text-gray-900">
+              {assessmentData.assessmentName}
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-           
-
-            <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex items-center">
-                <FaClipboardList className="text-xl mb-2 mr-2" />
-                <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                  {t("PreviewAssessment.category")}
+          <div className="flex items-center gap-8 p-10">
+            <div className="flex flex-col items-center">
+              <FiPenTool className="text-2xl font-semibold text-blue-900 mb-0" />
+              <div className="flex flex-col item-center text-center p-2 transition duration-300">
+                <h3 className="text-lg font-medium text-gray-600">
+                  {t("PreviewAssessment.jobrole")}
                 </h3>
-              </div>
-              <div className="flex flex-wrap">
-                {assessmentData.tests.map((test, index) => (
-                  <span
-                    key={index}
-                    className="inline-block px-3 py-1 mr-2 mb-2 bg-category-tag-bg text-black text-sm font-semibold rounded-full"
-                  >
-                    {test.category}
-                  </span>
-                ))}
+                <p className="text-md font-medium whitespace-nowrap text-gray-500 mt-0 text-center">
+                  {assessmentData.job_role}
+                </p>
               </div>
             </div>
 
-            <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex items-center">
-                <FaClipboardList className="text-xl mb-2 mr-2" />
-                <h3 className="text-lg font-semibold mb-2 text-gray-700">
-                  {t("PreviewAssessment.totaltests")}
+            <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+
+            <div className="flex flex-col items-center">
+              <BsBuildingsFill className="text-2xl text-blue-900 mb-0" />
+              <div className="flex flex-col text-center p-2 transition duration-300">
+                <h3 className="text-lg font-medium whitespace-nowrap text-gray-600">
+                  {t("PreviewAssessment.workarrangement")}
                 </h3>
+                <p className="text-md font-medium text-gray-500 mt-0 text-center">
+                  {assessmentData.work_arrangement}
+                </p>
               </div>
-              <p className="text-lg font-bold text-gray-900">
-                {assessmentData.tests.length}
-              </p>
             </div>
 
-            <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-4 transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex items-center">
-                <MdAccessTime className="text-xl mb-2 mr-2" />
-                <h3 className="text-lg font-semibold mb-2 text-gray-700">
+            <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+
+            <div className="flex flex-col items-center">
+              <FaLocationDot className="text-2xl text-blue-900 mb-0" />
+              <div className="flex flex-col text-center p-2 transition duration-300">
+                <h3 className="text-lg font-medium whitespace-nowrap text-gray-600">
+                  {t("PreviewAssessment.joblocation")}
+                </h3>
+                <p className="text-md font-medium text-gray-500 mt-0 text-center">
+                  {assessmentData.job_location}
+                </p>
+              </div>
+            </div>
+
+            <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+
+            <div className="flex flex-col items-center">
+              <FaClock className="text-2xl text-blue-900 mb-0" />
+              <div className="flex flex-col text-center p-2 transition duration-300">
+                <h3 className="text-lg font-medium whitespace-nowrap text-gray-600">
                   {t("PreviewAssessment.time")}
                 </h3>
-              </div>
-              <div className="flex items-center">
-                <span className="px-2 py-1 bg-category-tag-bg text-black text-sm font-semibold rounded-full flex items-center">
-                  <MdAccessTime className="ml-1 mr-1" />
-                  <span className="text-lg font-bold mr-2 text-black">
-                    {assessmentData.assessmentTime} mins
-                  </span>
-                </span>
+                <p className="text-md font-bold text-gray-500 mt-0 text-center">
+                  {assessmentData.assessmentTime}
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <FaClipboardList className="mr-2" />
+          <div className="mb-8 mt-8">
+            <h3 className="text-sm font-medium mb-4 flex items-center">
               {t("PreviewAssessment.selectedtests")}
             </h3>
-            <table className="min-w-full divide-y divide-gray-200 shadow-md">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {t("PreviewAssessment.testname")}
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {t("PreviewAssessment.duration")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {assessmentData.tests.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan="2"
-                      className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
-                    >
-                      No tests selected
-                    </td>
-                  </tr>
-                ) : (
-                  assessmentData.tests.map((test, index) => (
-                    <tr
-                      key={index}
-                      className="hover:bg-blue-100 cursor-pointer transition duration-150"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {test.test_name}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {test.testTime} mins
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+            <p className="text-lg font-medium text-gray-900 -mt-3">
+              {assessmentData.tests.length} Test Selected
+            </p>
+            <table className="min-w-full divide-y divide-gray-200 shadow-md mt-5">
+  <thead className="bg-gray-50">
+    <tr>
+      <th
+        scope="col"
+        className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
+      >
+        {t("PreviewAssessment.testname")}
+      </th>
+      <th
+        scope="col"
+        className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
+      >
+        {t("PreviewAssessment.duration")}
+      </th>
+      <th
+        scope="col"
+        className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
+      >
+        Question Split
+      </th>
+    </tr>
+  </thead>
+  <tbody className="bg-white divide-y divide-gray-200">
+    {assessmentData.tests.length === 0 ? (
+      <tr>
+        <td
+          colSpan="3"
+          className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+        >
+          No tests selected
+        </td>
+      </tr>
+    ) : (
+      assessmentData.tests.map((test, index) => (
+        <tr
+          key={index}
+          className="hover:bg-blue-100 cursor-pointer transition duration-150"
+        >
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900">
+              {test.test_name}
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900">
+              {test.testTime} mins
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="flex items-center">
+              <div className="flex items-center justify-center w-10 h-5 bg-green-600 text-xs text-white">
+                {test.test_difficulty.easy}
+              </div>
+              <div className="flex items-center justify-center w-10 h-5 bg-yellow-500 text-xs text-white">
+                {test.test_difficulty.medium}
+              </div>
+              <div className="flex items-center justify-center w-10 h-5 bg-red-500 text-xs text-white">
+                {test.test_difficulty.hard}
+              </div>
+            </div>
+          </td>
+        </tr>
+      ))
+    )}
+  </tbody>
+</table>
+
           </div>
 
-          <div className="flex justify-end">
+          {/* <div className="flex justify-end">
             <button
               onClick={handleSubmitButtonClick}
               className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded transition-colors duration-300"
             >
               {t("PreviewAssessment.submit")}
             </button>
-          </div>
+          </div> */}
         </div>
       )}
       {showInviteCandidate && <InviteCandidate />}

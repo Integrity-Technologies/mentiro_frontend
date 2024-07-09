@@ -134,6 +134,9 @@ const SignUp = () => {
       if (!formData.jobTitle) {
         newErrors.jobTitle = t("signup.errors.jobTitleRequired");
       }
+      if (formData.jobTitle === "Other" && !jobTitleCustom) {
+        newErrors.jobTitleCustom = t("signup.errors.jobTitleCustomRequired");
+      }
     }
 
     setErrors(newErrors);
@@ -245,6 +248,8 @@ const SignUp = () => {
   };
 
   const customSelectStyles = {
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+
     control: (provided) => ({
       ...provided,
       minHeight: "120px", // Match the height of the input
@@ -253,6 +258,7 @@ const SignUp = () => {
       borderWidth: "1px", // Border width to match input
       borderRadius: "0.375rem", // Border radius to match input
       backgroundColor: "transparent",
+      zIndex: "9999",
       boxShadow: "none",
       "&:hover": {
         borderColor: "#3b82f6", // Border color on focus to match input
@@ -313,6 +319,18 @@ const SignUp = () => {
               <p className="text-lg text-gray-700">
                 Only companies can create accounts
               </p>
+            </div>
+             {/* Progress Bar */}
+             <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+              <div
+                className={`bg-blue-600 h-2.5 rounded-full`}
+                style={{ width: `${(currentPage / 3) * 100}%` }}
+              ></div>
+            </div>
+
+            {/* Step Indicator */}
+            <div className="text-center mb-4">
+              <span>{`${currentPage}/3`}</span>
             </div>
             <form className="space-y-4" onSubmit={handleSubmit}>
               {currentPage === 1 && (
@@ -406,7 +424,7 @@ const SignUp = () => {
                                 height="16"
                                 width="24"
                               />
-                              <span className="ml-2">{` ${option.country_short_name} - +${option.country_phone_code}`}</span>                            </div>
+                              <span className="ml-2">{` ${option.country_short_name}  +${option.country_phone_code}`}</span>                            </div>
                           )}
                           getOptionValue={(option) => option.country_short_name}
                           styles={customStyles}
@@ -421,12 +439,12 @@ const SignUp = () => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
-                            className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            className="block ml-1 px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" "
                           />
                           <label
                             htmlFor="phone"
-                            className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                            className="absolute ml-1 text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                           >
                             {t("signup.phone")}
                           </label>
@@ -572,14 +590,16 @@ const SignUp = () => {
                           label: title.title,
                         }))}
                         className={customSelectStyles}
+                        menuPortalTarget={document.body}
                         placeholder={t("signup.select_job_title")}
                       />
-                      {formData.jobTitle === "Other" && (
+                       {formData.jobTitle === "Other" && (
                         <div className="mb-3 mt-3 relative">
                           <input
                             type="text"
                             name="jobTitleCustom"
                             value={jobTitleCustom}
+                            style={customSelectStyles}
                             onChange={handleChange}
                             className="block px-2.5 pb-2 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=""
@@ -587,9 +607,14 @@ const SignUp = () => {
                           <label
                             htmlFor="jobTitleCustom"
                             className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                          >
+                            >
                             Custom Job Title
                           </label>
+                          {errors.jobTitleCustom && (
+                            <span className="text-danger text-sm">
+                              {errors.jobTitleCustom}
+                            </span>
+                          )}
                         </div>
                       )}
                       {errors.jobTitle && (
@@ -597,7 +622,7 @@ const SignUp = () => {
                           {errors.jobTitle}
                         </span>
                       )}
-                      </div>
+                    </div>
                       </div>
                   <div className="flex items-start mb-3">
                     <div className="flex items-center h-5">

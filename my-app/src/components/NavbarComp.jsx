@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../actions/authActions";
 import { useNavigate } from "react-router-dom";
-import { FaAngleDown, FaUser, FaBuilding, FaSignOutAlt } from "react-icons/fa"; // Import icons from react-icons/fa
-import LanguageToggleButton from "./Togglebutton"; // Assuming correct path
+import { FaAngleDown, FaUser, FaBuilding, FaSignOutAlt } from "react-icons/fa";
+import LanguageToggleButton from "./Togglebutton";
+import { useLocation } from "react-router-dom";
 
 const Navbar = ({
   isMenuCollapsed,
   handleLanguageChange,
   isLanguageButton,
 }) => {
+  const location = useLocation();
   const [showDropdown, setShowDropdown] = useState(false);
   const [user, setUser] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const dropdownRef = useRef(null); // Add this line
+  const containerRef = useRef(null); // Add this line
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,24 +44,46 @@ const Navbar = ({
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear(); // Clear all items from local storage
+    localStorage.clear();
     dispatch(logout());
     setShowAlert(true);
     setTimeout(() => {
       setShowAlert(false);
       navigate("/");
-    }, 2000); // 2000 milliseconds = 2 seconds, adjust as needed
+    }, 2000);
   };
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
- 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="w-full bg-white shadow-md p-4 flex justify-between items-center z-10">
-      <div className="text-lg font-semibold">Dashboard</div>
+    <div ref={containerRef} className="w-full bg-white shadow-md p-4 flex justify-between items-center z-10">
+      <div className="text-lg font-semibold">
+        {location.pathname === '/customer-dashboard' ? 'Dashboard' : (
+          location.pathname.includes('assessments') ? '' : (
+          location.pathname.includes('candidates-profile') ? '' : (
+          location.pathname.includes('test-result') ? '' : 'Dashboard'
+        )))}
+      </div>
       <div className="ml-auto relative flex items-center">
         {user && (
           <div className="flex items-center space-x-2">
@@ -70,34 +95,37 @@ const Navbar = ({
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
             >
               <span className="mr-2">{user.first_name}</span>
-              <FaAngleDown /> {/* Arrow icon */}
+              <FaAngleDown />
             </button>
           </div>
         )}
         {showDropdown && (
-          <div className="absolute right-0 mt-40 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-10">
+          <div
+            ref={dropdownRef}
+            className="absolute right-0 mt-40 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-10"
+          >
             <Link
               to="/customer-dashboard/user-info"
               className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100"
               style={{
-                textDecoration: "none", // Remove underline decoration
-                listStyle: "none", // Remove list-style decoration
-                outline: "none", // Remove outline on focus
+                textDecoration: "none",
+                listStyle: "none",
+                outline: "none",
               }}
             >
-              <FaUser className="mr-2" /> {/* User icon */}
+              <FaUser className="mr-2" />
               User Information
             </Link>
             <Link
               to="/customer-dashboard/company-profile"
               className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100"
               style={{
-                textDecoration: "none", // Remove underline decoration
-                listStyle: "none", // Remove list-style decoration
-                outline: "none", // Remove outline on focus
+                textDecoration: "none",
+                listStyle: "none",
+                outline: "none",
               }}
             >
-              <FaBuilding className="mr-2" /> {/* Building icon */}
+              <FaBuilding className="mr-2" />
               Company Profile
             </Link>
             <Link
@@ -105,12 +133,12 @@ const Navbar = ({
               className="flex items-center px-4 py-2 text-red-500 hover:bg-gray-100"
               onClick={handleLogout}
               style={{
-                textDecoration: "none", // Remove underline decoration
-                listStyle: "none", // Remove list-style decoration
-                outline: "none", // Remove outline on focus
+                textDecoration: "none",
+                listStyle: "none",
+                outline: "none",
               }}
             >
-              <FaSignOutAlt className="mr-2" /> {/* Sign out icon */}
+              <FaSignOutAlt className="mr-2" />
               Logout
             </Link>
           </div>

@@ -97,13 +97,13 @@ const ViewTestResult = () => {
           <tr>
             <th
               scope="col"
-              className="px-6 py-4 text-left font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-4 text-left font-bold text-gray-900 uppercase tracking-wider"
             >
               {t("candidatesResult.Name")}
             </th>
             <th
               scope="col"
-              className="px-6 py-4 text-left font-medium text-gray-500 uppercase tracking-wider relative flex items-center"
+              className="px-6 py-4 text-left font-bold text-gray-900 uppercase tracking-wider relative flex items-center"
             >
               {t("candidatesResult.assessmentName")}
               <div className="group inline-block ml-2">
@@ -117,7 +117,7 @@ const ViewTestResult = () => {
             </th>
             <th
               scope="col"
-              className="px-6 py-4 text-left font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-4 text-left font-bold text-gray-900 uppercase tracking-wider"
             >
               {t("candidatesResult.assessmentScore")}
             </th>
