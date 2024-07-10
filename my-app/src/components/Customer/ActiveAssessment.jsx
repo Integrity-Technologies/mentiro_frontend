@@ -210,7 +210,7 @@ const ActiveAssessment = () => {
                     {assessment.assessment_name}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 group-hover:text-white">
-                    {assessment.job_role_id}
+                    {assessment.job_role_name}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 group-hover:text-white">
                     {calculateTotalTests(assessment.tests)}

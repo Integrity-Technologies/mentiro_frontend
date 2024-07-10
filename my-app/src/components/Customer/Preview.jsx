@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { FiPenTool } from "react-icons/fi";
-import {FaClock} from "react-icons/fa"
+import { FaClock } from "react-icons/fa";
 import { BsBuildingsFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import {
@@ -117,11 +117,11 @@ const Preview = () => {
       )}
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
             <h3 className="text-2xl font-medium">
               {t("PreviewAssessment.title")}
             </h3>
-            <div className="flex mt-8 space-x-4">
+            <div className="flex mt-4 sm:mt-0 space-x-4">
               <button
                 onClick={handleBackButton}
                 className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
@@ -137,7 +137,7 @@ const Preview = () => {
             </div>
           </div>
 
-          <div className="flex flex-col p-0 mt-12 transition duration-300 ">
+          <div className="flex flex-col p-0 mt-12 transition duration-300">
             <h3 className="text-sm font-medium mb-1 text-gray-700">
               {t("PreviewAssessment.name")}
             </h3>
@@ -146,7 +146,7 @@ const Preview = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-8 p-10">
+          <div className="flex flex-col md:flex-row items-center gap-8 p-10">
             <div className="flex flex-col items-center">
               <FiPenTool className="text-2xl font-semibold text-blue-900 mb-0" />
               <div className="flex flex-col item-center text-center p-2 transition duration-300">
@@ -159,7 +159,7 @@ const Preview = () => {
               </div>
             </div>
 
-            <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+            <div className="hidden md:block border-l-2 border-gray-300 h-28 mx-8"></div>
 
             <div className="flex flex-col items-center">
               <BsBuildingsFill className="text-2xl text-blue-900 mb-0" />
@@ -173,7 +173,7 @@ const Preview = () => {
               </div>
             </div>
 
-            <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+            <div className="hidden md:block border-l-2 border-gray-300 h-28 mx-8"></div>
 
             <div className="flex flex-col items-center">
               <FaLocationDot className="text-2xl text-blue-900 mb-0" />
@@ -187,7 +187,7 @@ const Preview = () => {
               </div>
             </div>
 
-            <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+            <div className="hidden md:block border-l-2 border-gray-300 h-28 mx-8"></div>
 
             <div className="flex flex-col items-center">
               <FaClock className="text-2xl text-blue-900 mb-0" />
@@ -210,73 +210,72 @@ const Preview = () => {
               {assessmentData.tests.length} Test Selected
             </p>
             <table className="min-w-full divide-y divide-gray-200 shadow-md mt-5">
-  <thead className="bg-gray-50">
-    <tr>
-      <th
-        scope="col"
-        className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
-      >
-        {t("PreviewAssessment.testname")}
-      </th>
-      <th
-        scope="col"
-        className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
-      >
-        {t("PreviewAssessment.duration")}
-      </th>
-      <th
-        scope="col"
-        className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
-      >
-        Question Split
-      </th>
-    </tr>
-  </thead>
-  <tbody className="bg-white divide-y divide-gray-200">
-    {assessmentData.tests.length === 0 ? (
-      <tr>
-        <td
-          colSpan="3"
-          className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
-        >
-          No tests selected
-        </td>
-      </tr>
-    ) : (
-      assessmentData.tests.map((test, index) => (
-        <tr
-          key={index}
-          className="hover:bg-blue-100 cursor-pointer transition duration-150"
-        >
-          <td className="px-6 py-4 whitespace-nowrap">
-            <div className="text-sm text-gray-900">
-              {test.test_name}
-            </div>
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap">
-            <div className="text-sm text-gray-900">
-              {test.testTime} mins
-            </div>
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-10 h-5 bg-green-600 text-xs text-white">
-                {test.test_difficulty.easy}
-              </div>
-              <div className="flex items-center justify-center w-10 h-5 bg-yellow-500 text-xs text-white">
-                {test.test_difficulty.medium}
-              </div>
-              <div className="flex items-center justify-center w-10 h-5 bg-red-500 text-xs text-white">
-                {test.test_difficulty.hard}
-              </div>
-            </div>
-          </td>
-        </tr>
-      ))
-    )}
-  </tbody>
-</table>
-
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
+                  >
+                    {t("PreviewAssessment.testname")}
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
+                  >
+                    {t("PreviewAssessment.duration")}
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider"
+                  >
+                    Question Split
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {assessmentData.tests.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="3"
+                      className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+                    >
+                      No tests selected
+                    </td>
+                  </tr>
+                ) : (
+                  assessmentData.tests.map((test, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-blue-100 cursor-pointer transition duration-150"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {test.test_name}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {test.testTime} mins
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex items-center justify-center w-10 h-5 bg-green-600 text-xs text-white">
+                            {test.test_difficulty.easy}
+                          </div>
+                          <div className="flex items-center justify-center w-10 h-5 bg-yellow-500 text-xs text-white">
+                            {test.test_difficulty.medium}
+                          </div>
+                          <div className="flex items-center justify-center w-10 h-5 bg-red-500 text-xs text-white">
+                            {test.test_difficulty.hard}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
 
           {/* <div className="flex justify-end">

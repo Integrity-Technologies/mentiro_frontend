@@ -76,14 +76,20 @@ const Navbar = ({
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full bg-white shadow-md p-4 flex justify-between items-center z-10">
-      <div className="text-lg font-semibold">
-        {location.pathname === '/customer-dashboard' ? 'Dashboard' : (
-          location.pathname.includes('assessments') ? '' : (
-          location.pathname.includes('candidates-profile') ? '' : (
-          location.pathname.includes('test-result') ? '' : 'Dashboard'
-        )))}
-      </div>
+    <div
+    ref={containerRef}
+    className="w-full bg-white shadow-md p-4 flex justify-between items-center z-10"
+  >
+    <div className="text-lg font-semibold">
+      {[
+        "/graph",
+        "/assessments",
+        "/candidates-profile",
+        "/test-result",
+      ].includes(location.pathname)
+        ? ""
+        : ""}
+    </div>
       <div className="ml-auto relative flex items-center">
         {user && (
           <div className="flex items-center space-x-2">

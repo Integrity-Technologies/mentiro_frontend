@@ -64,6 +64,7 @@ function App() {
         <Route path="/api/assessment" element={<Candidates />} />
 
 
+
         <Route path="/customer-dashboard/*" element={<Customer isLanguageButton={true} />}>
           <Route path="graph" element={<DualLineGraph />} />
           <Route path="company-profile" element={<CompanyProfile />} />

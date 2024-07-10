@@ -79,7 +79,7 @@ const PreviewExistingAssessment = () => {
                     Job Role
                   </h3>
                   <p className="text-md font-medium whitespace-nowrap text-gray-500 mt-0 text-center">
-                    {assessmentData.job_role_id}
+                    {assessmentData.job_role_name}
                   </p>
                 </div>
               </div>
@@ -93,7 +93,7 @@ const PreviewExistingAssessment = () => {
                     Work Arrangement
                   </h3>
                   <p className="text-md font-medium text-gray-500 mt-0 text-center">
-                    {assessmentData.work_arrangement_id}
+                    {assessmentData.work_arrangement_name}
                   </p>
                 </div>
               </div>
@@ -107,14 +107,14 @@ const PreviewExistingAssessment = () => {
                     Job Location
                   </h3>
                   <p className="text-md font-medium text-gray-500 mt-0 text-center">
-                    {assessmentData.job_location_id}
+                    {assessmentData.job_location_name}
                   </p>
                 </div>
               </div>
 
               <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
 
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center -ml-6">
                 <FaClock className="text-2xl text-blue-900 mb-0" />
                 <div className="flex flex-col text-center p-2 transition duration-300">
                   <h3 className="text-lg font-medium whitespace-nowrap text-gray-600">

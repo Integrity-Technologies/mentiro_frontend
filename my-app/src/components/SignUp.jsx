@@ -348,7 +348,7 @@ const SignUp = () => {
                       htmlFor="email"
                       className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                     >
-                      {t("signup.email")}
+                      {t("signup.email")} <span className="text-red-500">*</span>
                     </label>
                     {errors.email && (
                       <span className="text-danger text-sm">
@@ -375,7 +375,7 @@ const SignUp = () => {
                           htmlFor="firstName"
                           className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                         >
-                          {t("signup.first_name")}
+                          {t("signup.first_name")}  <span className="text-red-500">*</span>
                         </label>
                         {errors.firstName && (
                           <span className="text-danger text-sm">
@@ -398,7 +398,7 @@ const SignUp = () => {
                           htmlFor="lastName"
                           className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                         >
-                          {t("signup.last_name")}
+                          {t("signup.last_name")}  <span className="text-red-500">*</span>
                         </label>
                         {errors.lastName && (
                           <span className="text-danger text-sm">
@@ -408,7 +408,7 @@ const SignUp = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-wrap -mx-3 mb-6">
+                  <div className="flex flex-wrap -mx-4 mb-6">
                     <div className="w-full px-3">
                       <div className="flex items-center space-x-3">
                         {" "}
@@ -446,7 +446,7 @@ const SignUp = () => {
                             htmlFor="phone"
                             className="absolute ml-1 text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                           >
-                            {t("signup.phone")}
+                            {t("signup.phone")}  <span className="text-red-500">*</span>
                           </label>
                           {errors.phone && (
                             <span className="text-danger text-sm">
@@ -471,7 +471,7 @@ const SignUp = () => {
                         htmlFor="password"
                         className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
-                        {t("signup.password")}
+                        {t("signup.password")}  <span className="text-red-500">*</span>
                       </label>
                       {errors.password && (
                         <p className="text-red-500 text-sm">{errors.password}</p>
@@ -506,7 +506,7 @@ const SignUp = () => {
                         htmlFor="confirmPassword"
                         className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
-                        {t("signup.confirm_password")}
+                        {t("signup.confirm_password")}  <span className="text-red-500">*</span> 
                       </label>
                       {errors.confirmPassword && (
                         <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
@@ -545,7 +545,7 @@ const SignUp = () => {
                         htmlFor="companyName"
                         className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
-                        {t("signup.company_name")}
+                        {t("signup.company_name")}  <span className="text-red-500">*</span>
                       </label>
                       {errors.companyName && (
                         <span className="text-danger text-sm">
@@ -567,8 +567,12 @@ const SignUp = () => {
                           label: size.size_range,
                         }))}
                         className={customSelectStyles}
-                        placeholder={t("signup.select_company_size")}
-                      />
+                        placeholder={
+                          <>
+                            {t("signup.select_company_size")}
+                            <span className="text-red-500"> *</span>
+                          </>
+                        }                      />
                       {errors.companySize && (
                         <span className="text-danger text-sm">
                           {errors.companySize}
@@ -591,7 +595,12 @@ const SignUp = () => {
                         }))}
                         className={customSelectStyles}
                         menuPortalTarget={document.body}
-                        placeholder={t("signup.select_job_title")}
+                        placeholder={
+                          <>
+                            {t("signup.select_job_title")}
+                            <span className="text-red-500"> *</span>
+                          </>
+                        }
                       />
                        {formData.jobTitle === "Other" && (
                         <div className="mb-3 mt-3 relative">
@@ -608,7 +617,7 @@ const SignUp = () => {
                             htmlFor="jobTitleCustom"
                             className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                             >
-                            Custom Job Title
+                            Custom Job Title  <span className="text-red-500">*</span>
                           </label>
                           {errors.jobTitleCustom && (
                             <span className="text-danger text-sm">

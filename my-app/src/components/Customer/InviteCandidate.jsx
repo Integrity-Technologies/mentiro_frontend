@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { MdCelebration } from "react-icons/md";
 import { FiCopy } from "react-icons/fi";
+import { FiPenTool } from "react-icons/fi";
+import { BsBuildingsFill } from "react-icons/bs";
+import { FaClock } from "react-icons/fa";
+import {FaLocationDot} from "react-icons/fa6"
 import InviteModal from "./Invitemodal";
 import { useTranslation } from "react-i18next";
 
@@ -12,10 +16,14 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
   const assessmentData = JSON.parse(localStorage.getItem("assessmentResponse"));
   const link = assessmentData?.shareablelink;
   const Name = assessmentData?.assessment_name;
+  const JobRole = assessmentData?.job_role_name;
+  const WorkArrangement = assessmentData?.work_arrangement_name;
+  const JobLocation = assessmentData?.job_location_name;
+  const Time = assessmentData?.assessment_time;
 
-  const handleInviteButtonClick = () => {
-    setShowModal(true);
-  };
+  // const handleInviteButtonClick = () => {
+  //   setShowModal(true);
+  // };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -35,9 +43,9 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
     );
   };
 
-  const redirectToDashboard = () => {
-    window.location.href = "/customer-dashboard"; // Redirect using window.location
-  };
+  // const redirectToDashboard = () => {
+  //   window.location.href = "/customer-dashboard"; // Redirect using window.location
+  // };
 
   return (
     <div className="bg-white min-h-screen flex flex-col mt-10 px-6 py-10 relative animate__animated animate__fadeIn font-roboto">
@@ -52,15 +60,74 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
         </div>
       )}
       <div className="flex flex-col p-0 mt-32 transition duration-300 ">
-            <h3 className="text-sm font-medium mb-1 text-gray-700">
-              {t("PreviewAssessment.name")}
+        <h3 className="text-sm font-medium mb-1 text-gray-700">
+          {t("PreviewAssessment.name")}
+        </h3>
+        <p className="text-2xl font-medium text-gray-900">
+          {Name}
+        </p>
+      </div>
+
+      {/* New Part Start */}
+      <div className="flex items-center gap-8 p-10">
+        <div className="flex flex-col items-center">
+          <FiPenTool className="text-2xl font-semibold text-blue-900 mb-0" />
+          <div className="flex flex-col item-center text-center p-2 transition duration-300">
+            <h3 className="text-lg whitespace-nowrap font-medium text-gray-600">
+              {t("PreviewAssessment.jobrole")}
             </h3>
-            <p className="text-2xl font-medium text-gray-900">
-              {Name}
+            <p className="text-md font-medium whitespace-nowrap text-gray-500 mt-0 text-center">
+              {JobRole}
             </p>
           </div>
+        </div>
+
+        <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+
+        <div className="flex flex-col items-center">
+          <BsBuildingsFill className="text-2xl text-blue-900 mb-0" />
+          <div className="flex flex-col text-center p-2 transition duration-300">
+            <h3 className="text-lg font-medium whitespace-nowrap text-gray-600">
+              {t("PreviewAssessment.workarrangement")}
+            </h3>
+            <p className="text-md font-medium text-gray-500 mt-0 text-center">
+              {WorkArrangement}
+            </p>
+          </div>
+        </div>
+
+        <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+
+        <div className="flex flex-col items-center">
+          <FaLocationDot className="text-2xl text-blue-900 mb-0" />
+          <div className="flex flex-col text-center p-2 transition duration-300">
+            <h3 className="text-lg font-medium whitespace-nowrap text-gray-600">
+              {t("PreviewAssessment.joblocation")}
+            </h3>
+            <p className="text-md font-medium text-gray-500 mt-0 text-center">
+              {JobLocation}
+            </p>
+          </div>
+        </div>
+
+        <div className="border-l-2 border-gray-300 h-28 mx-8"></div>
+
+        <div className="flex flex-col items-center -ml-6">
+          <FaClock className="text-2xl text-blue-900 mb-0" />
+          <div className="flex flex-col text-center p-2 transition duration-300">
+            <h3 className="text-lg font-medium whitespace-nowrap text-gray-600">
+              {t("PreviewAssessment.time")}
+            </h3>
+            <p className="text-md font-bold text-gray-500 mt-0 text-center">
+              {Time}
+            </p>
+          </div>
+        </div>
+      </div>
+      {/* New Part End */}
+
       <p className="mt-4 text-black">{t("InviteCandidate.invite")}</p>
-      <div className="mt-2 w-full max-w-lg">
+      <div className="mt-4 w-full max-w-lg">
         <h2 className="text-sm font-medium text-gray-500 mb-2">Assessment URL</h2>
         <div className="items-center relative">
           <input
