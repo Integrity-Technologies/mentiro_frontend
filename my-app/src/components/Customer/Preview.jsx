@@ -24,21 +24,21 @@ const Preview = () => {
 
   useEffect(() => {
     const assessmentData = JSON.parse(localStorage.getItem("assessmentData"));
-    const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
+    const CompanyName = (localStorage.getItem("CompanyName"));
     const selectedTests = JSON.parse(localStorage.getItem("selectedTests"));
     const assessmentName = assessmentData.assessment_name;
     const job_role = assessmentData.jobRole;
     const work_arrangement = assessmentData.workArrangement;
     const job_location = assessmentData.jobLocation;
 
-    if (assessmentData && activeCompany && selectedTests) {
-      const companyName = activeCompany.name;
+    if (assessmentData && CompanyName && selectedTests) {
+      const company_name = CompanyName;
       const data = {
         assessmentName,
         job_role,
         work_arrangement,
         job_location,
-        companyName,
+        company_name,
         tests: selectedTests,
       };
       setAssessmentData(data);
@@ -89,11 +89,12 @@ const Preview = () => {
           job_role: assessmentData.job_role,
           work_arrangement: assessmentData.work_arrangement,
           job_location: assessmentData.job_location,
-          company_name: assessmentData.companyName,
+          company_name: assessmentData.company_name,
           tests: assessmentData.tests,
         })
       );
 
+      console.log(assessmentData);
       setShowPreview(false);
       setShowInviteCandidate(true);
 

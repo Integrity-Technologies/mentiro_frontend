@@ -14,8 +14,7 @@ const ResultCard = () => {
   const user = useSelector((state) => state.auth.user); // Assuming you have user info in auth state
   const { t } = useTranslation();
 
-  const resultCount = results.length;
-
+  const resultCount = results?.length || 0;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,7 +47,7 @@ const ResultCard = () => {
             <span className="text-lg font-semibold">{t("Results")}</span>
           </p>
           <h2 className="text-3xl font-extrabold text-black mt-2">
-            {resultCount === 0 ? "0" : resultCount}
+            {resultCount}
           </h2>
         </div>
         <div className="flex items-center bg-blue-100 p-3 ml-24">

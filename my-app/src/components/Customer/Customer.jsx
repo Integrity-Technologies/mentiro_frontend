@@ -103,13 +103,13 @@ const Customer = ({ isLanguageButton }) => {
             </Link>
           ))}
         </nav>
-        {/* <div className="mt-3 ml-2">
+        <div className="mt-3 ml-2">
           <LanguageToggleButton
             isMenuCollapsed={isMenuCollapsed}
             onLanguageChange={handleLanguageChange}
             isLanguageButton={isLanguageButton}
           />
-        </div> */}
+        </div>
       </div>
       <div className="flex flex-col w-full">
         <Navbar /> {/* Include the Navbar component here */}

@@ -9,7 +9,6 @@ import { addCompany } from "../../actions/companyAction"; // Adjust the import p
 
 const CompanyProfile = () => {
   const [companyList, setCompanyList] = useState([]);
-  const [activeCompany, setActiveCompany] = useState(null);
   const [newCompanyName, setNewCompanyName] = useState("");
   const [showCreateCompanyModal, setShowCreateCompanyModal] = useState(false);
   const [isCompanyNameValid, setIsCompanyNameValid] = useState(true);
@@ -33,34 +32,12 @@ const CompanyProfile = () => {
         .get(`${process.env.REACT_APP_API_URL}/company/myCompanies`, config)
         .then((companyResponse) => {
           setCompanyList(companyResponse.data);
-  
-          const storedActiveCompany = JSON.parse(
-            localStorage.getItem("activeCompany")
-          );
-          if (storedActiveCompany) {
-            setActiveCompany(storedActiveCompany);
-          } else if (companyResponse.data.length > 0) {
-            // Set the first company as active by default
-            const defaultActiveCompany = companyResponse.data[0];
-            setActiveCompany(defaultActiveCompany);
-            localStorage.setItem(
-              "activeCompany",
-              JSON.stringify(defaultActiveCompany)
-            );
-  
-            // Update the activeCompany state to trigger UI update
-            setChangesMade(true); // Optional: set changes made flag if needed
-            
-            // Activate the company immediately upon loading
-            dispatch(addCompany(defaultActiveCompany));
-          }
         })
         .catch((error) => {
           console.error("Error fetching company data:", error);
         });
     }
   }, []);
-  
 
   const handleNewCompanyNameChange = (event) => {
     setNewCompanyName(event.target.value);
@@ -104,14 +81,7 @@ const CompanyProfile = () => {
               setSuccess(false);
             }, 3000); // Hide message after 3 seconds
 
-            if (companyResponse.data.length > 0) {
-              // setActiveCompany(companyResponse.data[0]);
-              // localStorage.setItem(
-              //   "activeCompany",
-              //   JSON.stringify(companyResponse.data[0])
-              // );
-              setChangesMade(false); // Reset changes made flag
-            }
+            setChangesMade(false); // Reset changes made flag
           })
           .catch((error) => {
             console.error("Error fetching updated company data:", error);
@@ -122,11 +92,6 @@ const CompanyProfile = () => {
       });
   };
 
-  const handleSaveChanges = () => {
-    // Implement logic to save changes to activeCompany if needed
-    setChangesMade(false); // Reset changes made flag
-  };
-
   return (
     <div className="bg-blue-100 min-h-screen p-8">
       <div className="flex items-center mb-6 mt-3">
@@ -134,51 +99,50 @@ const CompanyProfile = () => {
           {t("CompanyProfile.companyInformation")}
         </h3>
       </div>
-      <div className="bg-white w-full max-w-5xl  rounded-lg shadow-lg p-8">
-      {activeCompany && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="bg-white w-full max-w-5xl rounded-lg shadow-lg p-8">
+        {companyList.map((company) => (
+          <div key={company.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div className="flex flex-col items-start justify-center w-full">
-              <label htmlFor="companyName" className="font-medium text-black">
+              <label htmlFor={`companyName_${company.id}`} className="font-medium text-black">
                 {t("CompanyProfile.companyNamePlaceholder")}
               </label>
               <input
                 type="text"
-                id="companyName"
-                value={activeCompany.name}
+                id={`companyName_${company.id}`}
+                value={company.name}
                 readOnly
                 className="mt-2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                />
+              />
             </div>
             <div className="flex flex-col items-start justify-center w-full">
-              <label htmlFor="companySize" className="font-medium text-black">
+              <label htmlFor={`companySize_${company.id}`} className="font-medium text-black">
                 {t("CompanyProfile.companySize")}
               </label>
               <input
                 type="text"
-                id="companySize"
-                value={activeCompany.company_size}
+                id={`companySize_${company.id}`}
+                value={company.company_size}
                 readOnly
                 className="mt-2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                />
+              />
             </div>
             <div className="flex flex-col items-start justify-center w-full">
-              <label htmlFor="jobTitle" className="font-medium text-black">
+              <label htmlFor={`jobTitle_${company.id}`} className="font-medium text-black">
                 {t("CompanyProfile.jobTitle")}
               </label>
               <input
                 type="text"
-                id="jobTitle"
-                value={activeCompany.job_title}
+                id={`jobTitle_${company.id}`}
+                value={company.job_title}
                 readOnly
                 className="mt-2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                />
+              />
             </div>
-            
             {/* Add more fields for other company information */}
           </div>
-        )}
+        ))}
 
-        {changesMade && (
+        {/* {changesMade && (
           <div className="flex justify-end">
             <Button
               variant="primary"
@@ -188,7 +152,7 @@ const CompanyProfile = () => {
               {t("CompanyProfile.saveChanges")}
             </Button>
           </div>
-        )}
+        )} */}
 
         {success && (
           <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
@@ -240,7 +204,6 @@ const CompanyProfile = () => {
           </Modal.Footer>
         </Modal> */}
       </div>
-      
     </div>
   );
 };
