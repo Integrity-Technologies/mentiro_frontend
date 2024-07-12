@@ -5,6 +5,7 @@ import { getQuestionById } from '../../actions/QuestionAction';
 import { submitAnswer } from '../../actions/resultAction';
 import { BiTimeFive } from 'react-icons/bi';
 import PreviewPage from './PreviewQuestions';
+const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
 
 const Questions = ({ onComplete, onTimeExpired }) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -116,7 +117,7 @@ const Questions = ({ onComplete, onTimeExpired }) => {
       setShowPreviewPage(true);
     }
   };
-  
+
   const handleReviewSkipped = () => {
     setShowPreviewPage(false);
     setReviewingSkipped(true);
@@ -130,7 +131,7 @@ const Questions = ({ onComplete, onTimeExpired }) => {
       setShowPreviewPage(true);
     }
   };
-  
+
   const handleBallClick = (index) => {
     setCurrentQuestionIndex(index);
     setSelectedOption(null);
@@ -139,7 +140,7 @@ const Questions = ({ onComplete, onTimeExpired }) => {
 
   const renderProgressBalls = () => {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center -mt-4">
         {questions.map((_, index) => {
           let ballColor = 'bg-gray-300';
           if (attemptedQuestionIndexes.includes(index)) {
@@ -171,9 +172,10 @@ const Questions = ({ onComplete, onTimeExpired }) => {
   const timerStyle = timeRemaining <= 120 ? 'text-red-500' : 'text-black';
 
   return (
-    <Container fluid className="flex flex-col justify-center items-center">
+    <Container fluid className="flex flex-col min-h-screen justify-center items-center font-poppins">
       {showPreviewPage ? (
         <PreviewPage
+        totalQuestions={questions.length}
           attemptedCount={attemptedQuestionIndexes.length}
           skippedCount={skippedQuestionIndexes.length}
           onSubmit={onComplete}
@@ -181,52 +183,63 @@ const Questions = ({ onComplete, onTimeExpired }) => {
         />
       ) : (
         <>
-          <div className="flex mb-4">
-            <BiTimeFive className="text-xl mr-2" /> {/* Clock icon */}
-            <div className={`mr-2 ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>
+          <div className="flex flex-col items-center mt-4">
+            <img src={Mentirobluelogo} alt="Mentiro Logo" className="mb-4" style={{ height: '90px' }} />
           </div>
-          <div className="flex justify-between items-center w-full">
+         
+          <div className="flex justify-between items-center w-full mt-4">
             {renderProgressBalls()}
-            <div className="ml-2">
-              {currentQuestionIndex + 1}/{questions.length}
+            <div className="flex mb-4 justify-end w-full -mt-12">
+              <BiTimeFive className="text-xl mr-2" /> {/* Clock icon */}
+              <div className={`mr-2 ${timerStyle}`}>Time remaining: {formatTime(timeRemaining)}</div>
             </div>
           </div>
-          <Card className="p-6 shadow-lg rounded-lg mt-3 bg-white" style={{ width: '900px', overflowY: 'auto' }}>
-            {currentQuestion && (
-              <>
-                <h2 className="mb-4">{currentQuestion.question_text}</h2>
-                <Form>
-                  {currentQuestion.options &&
-                    currentQuestion.options.map((option, index) =>
-                      option.option_text ? (
-                        <div key={index} className="mb-2">
-                          <Form.Check
-                            type="radio"
-                            name="options"
-                            id={`option${index}`}
-                            label={option.option_text}
-                            checked={
-                              selectedOption &&
-                              selectedOption.option_text === option.option_text
-                            }
-                            onChange={() => handleOptionSelect(option)}
-                          />
-                        </div>
-                      ) : null
-                    )}
-                </Form>
-                {answerError && <p className="text-red-500">Please select an answer!</p>}
-                <div className="flex justify-between mt-4">
-                  <Button variant="dark" className="w-1/4" onClick={handleSkip}>
-                    Skip
-                  </Button>
-                  <Button variant="dark" className="w-1/4" onClick={handleNext}>
-                    Next
-                  </Button>
-                </div>
-              </>
-            )}
+          <Card className="p-6 shadow-lg rounded-lg mt-4 bg-white" style={{ width: '1100px', height: '580px', overflowY: "auto" }}>
+            <div className="flex">
+              {currentQuestion && (
+                <>
+                  <div className="w-1/2 pr-4">
+                    <div className="flex items-center mb-2 mt-5">
+                      <div className="text-xl font-bold">{`Question: ${currentQuestionIndex + 1}`}</div>
+                      <div className="ml-2 text-sm text-gray-500">{`of ${questions.length}`}</div>
+                    </div>
+                    <h2 className="mb-4 mt-4 text-3xl leading-normal">{currentQuestion.question_text}</h2>
+                  </div>
+                  <div className="w-1/2 pl-4 mt-16">
+                    <Form>
+                      {currentQuestion.options &&
+                        currentQuestion.options.map((option, index) =>
+                          option.option_text ? (
+                            <div key={index} className="mb-4 border-gray-400 border-1 p-3 rounded-md">
+                              <Form.Check
+                                type="radio"
+                                name="options"
+                                id={`option${index}`}
+                                label={option.option_text}
+                                checked={
+                                  selectedOption &&
+                                  selectedOption.option_text === option.option_text
+                                }
+                                onChange={() => handleOptionSelect(option)}
+                              />
+                            </div>
+                          ) : null
+                        )}
+                    </Form>
+                  </div>
+                </>
+              )}
+            </div>
+            {answerError && <p className="text-red-500">Please select an answer!</p>}
           </Card>
+          <div className="fixed mt-8 bottom-0 left-0 w-full bg-white p-4 shadow-lg flex justify-between">
+            <button className="w-1/6 h-10 ml-24 bg-blue-900 text-white" onClick={handleSkip}>
+              Skip
+            </button>
+            <button className="w-1/6 h-10 mr-24 bg-blue-900 text-white" onClick={handleNext}>
+              Next
+            </button>
+          </div>
         </>
       )}
     </Container>

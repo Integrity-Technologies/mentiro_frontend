@@ -80,16 +80,7 @@ const Navbar = ({
     ref={containerRef}
     className="w-full bg-white shadow-md p-4 flex justify-between items-center z-10"
   >
-    <div className="text-lg font-semibold">
-      {[
-        "/graph",
-        "/assessments",
-        "/candidates-profile",
-        "/test-result",
-      ].includes(location.pathname)
-        ? ""
-        : ""}
-    </div>
+    <div className="text-lg font-medium">Your Data Insights</div>
       <div className="ml-auto relative flex items-center">
         {user && (
           <div className="flex items-center space-x-2">

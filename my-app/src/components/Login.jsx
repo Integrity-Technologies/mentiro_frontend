@@ -30,7 +30,12 @@ const Login = () => {
     if (Object.keys(newErrors).length === 0) {
       try {
         setShowAlert(true);
-        const newresult = await dispatch(login({ email, password }));
+        const response = await dispatch(login({ email, password }));
+  
+        // Save company name to local storage
+        const companyName = response.result.company_name;
+        localStorage.setItem("CompanyName", companyName);
+  
         setTimeout(() => setShowAlert(false), 3000); // success
         const permissions = localStorage.getItem("user");
         if (permissions === "true") {
@@ -43,6 +48,7 @@ const Login = () => {
       }
     }
   };
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -51,7 +57,7 @@ const Login = () => {
   return (
     <section className="flex flex-col md:flex-row min-h-screen font-roboto">
       {/* Left Side - Dark Blue Box */}
-      <div className="relative hidden md:flex flex-col justify-center items-center w-full md:w-1/2 bg-blue-900 text-white p-10">
+      <div className="relative hidden md:flex flex-col justify-center items-center w-60 md:w-1/2 bg-blue-900 text-white p-10">
         <img src={logo} alt="Mentiro Logo" className="mb-6" />
         <div className="text-center max-w-lg z-10 relative">
           <h1 className="text-4xl font-bold mb-4">

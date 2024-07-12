@@ -25,6 +25,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [countryCode, setCountryCode] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
@@ -166,7 +167,9 @@ const SignUp = () => {
               company_size: formData.companySize,
             };
             const response = await dispatch(addCompany(companyData));
-            // console.log("🚀 ~ handleSubmit ~ response:", response)
+            console.log(companyData)
+            localStorage.setItem("CompanyName", companyData.name);
+
 
             // Store company name in localStorage
             localStorage.setItem("company", JSON.stringify(response.company));
@@ -320,8 +323,8 @@ const SignUp = () => {
                 Only companies can create accounts
               </p>
             </div>
-             {/* Progress Bar */}
-             <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
               <div
                 className={`bg-blue-600 h-2.5 rounded-full`}
                 style={{ width: `${(currentPage / 3) * 100}%` }}
@@ -348,7 +351,8 @@ const SignUp = () => {
                       htmlFor="email"
                       className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                     >
-                      {t("signup.email")} <span className="text-red-500">*</span>
+                      {t("signup.email")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     {errors.email && (
                       <span className="text-danger text-sm">
@@ -375,7 +379,8 @@ const SignUp = () => {
                           htmlFor="firstName"
                           className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                         >
-                          {t("signup.first_name")}  <span className="text-red-500">*</span>
+                          {t("signup.first_name")}{" "}
+                          <span className="text-red-500">*</span>
                         </label>
                         {errors.firstName && (
                           <span className="text-danger text-sm">
@@ -398,7 +403,8 @@ const SignUp = () => {
                           htmlFor="lastName"
                           className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                         >
-                          {t("signup.last_name")}  <span className="text-red-500">*</span>
+                          {t("signup.last_name")}{" "}
+                          <span className="text-red-500">*</span>
                         </label>
                         {errors.lastName && (
                           <span className="text-danger text-sm">
@@ -424,7 +430,8 @@ const SignUp = () => {
                                 height="16"
                                 width="24"
                               />
-                              <span className="ml-2">{` ${option.country_short_name}  +${option.country_phone_code}`}</span>                            </div>
+                              <span className="ml-2">{` ${option.country_short_name}  +${option.country_phone_code}`}</span>{" "}
+                            </div>
                           )}
                           getOptionValue={(option) => option.country_short_name}
                           styles={customStyles}
@@ -446,7 +453,8 @@ const SignUp = () => {
                             htmlFor="phone"
                             className="absolute ml-1 text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                           >
-                            {t("signup.phone")}  <span className="text-red-500">*</span>
+                            {t("signup.phone")}{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           {errors.phone && (
                             <span className="text-danger text-sm">
@@ -460,7 +468,7 @@ const SignUp = () => {
                   <div className="mb-1">
                     <div className="relative">
                       <input
-                        type={showPassword ? "text" : "password"} 
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
@@ -471,10 +479,13 @@ const SignUp = () => {
                         htmlFor="password"
                         className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
-                        {t("signup.password")}  <span className="text-red-500">*</span>
+                        {t("signup.password")}{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       {errors.password && (
-                        <p className="text-red-500 text-sm">{errors.password}</p>
+                        <p className="text-red-500 text-sm">
+                          {errors.password}
+                        </p>
                       )}
                       {/* Eye icon for toggling password visibility */}
                       <span className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -495,7 +506,7 @@ const SignUp = () => {
                   <div className="mb-3">
                     <div className="relative">
                       <input
-                        type={showPassword ? "text" : "password"} 
+                        type={showPassword ? "text" : "password"}
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
@@ -506,10 +517,13 @@ const SignUp = () => {
                         htmlFor="confirmPassword"
                         className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
-                        {t("signup.confirm_password")}  <span className="text-red-500">*</span> 
+                        {t("signup.confirm_password")}{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       {errors.confirmPassword && (
-                        <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+                        <p className="text-red-500 text-sm">
+                          {errors.confirmPassword}
+                        </p>
                       )}
                       {/* Eye icon for toggling password visibility */}
                       <span className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -545,7 +559,8 @@ const SignUp = () => {
                         htmlFor="companyName"
                         className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                       >
-                        {t("signup.company_name")}  <span className="text-red-500">*</span>
+                        {t("signup.company_name")}{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       {errors.companyName && (
                         <span className="text-danger text-sm">
@@ -566,13 +581,16 @@ const SignUp = () => {
                           value: size.size_range,
                           label: size.size_range,
                         }))}
+                        onMenuOpen={() => setDropdownOpen(true)}
+                        onMenuClose={() => setDropdownOpen(false)}
                         className={customSelectStyles}
                         placeholder={
                           <>
                             {t("signup.select_company_size")}
                             <span className="text-red-500"> *</span>
                           </>
-                        }                      />
+                        }
+                      />
                       {errors.companySize && (
                         <span className="text-danger text-sm">
                           {errors.companySize}
@@ -593,6 +611,8 @@ const SignUp = () => {
                           value: title.title,
                           label: title.title,
                         }))}
+                        onMenuOpen={() => setDropdownOpen(true)}
+                        onMenuClose={() => setDropdownOpen(false)}
                         className={customSelectStyles}
                         menuPortalTarget={document.body}
                         placeholder={
@@ -602,7 +622,7 @@ const SignUp = () => {
                           </>
                         }
                       />
-                       {formData.jobTitle === "Other" && (
+                      {formData.jobTitle === "Other" && !dropdownOpen && (
                         <div className="mb-3 mt-3 relative">
                           <input
                             type="text"
@@ -616,8 +636,9 @@ const SignUp = () => {
                           <label
                             htmlFor="jobTitleCustom"
                             className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                            >
-                            Custom Job Title  <span className="text-red-500">*</span>
+                          >
+                            Custom Job Title{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           {errors.jobTitleCustom && (
                             <span className="text-danger text-sm">
@@ -626,13 +647,14 @@ const SignUp = () => {
                           )}
                         </div>
                       )}
+
                       {errors.jobTitle && (
                         <span className="text-danger text-sm">
                           {errors.jobTitle}
                         </span>
                       )}
                     </div>
-                      </div>
+                  </div>
                   <div className="flex items-start mb-3">
                     <div className="flex items-center h-5">
                       <input

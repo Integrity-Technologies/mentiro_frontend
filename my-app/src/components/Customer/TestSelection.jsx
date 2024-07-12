@@ -37,22 +37,22 @@ const TestSelection = ({ handleBackButtonClick, goToNextStep }) => {
 
     setShowQuestion(true);
 
-    const activeCompany = JSON.parse(localStorage.getItem("activeCompany"));
-    const company_name = activeCompany.name;
+    const company_name = String(localStorage.getItem("CompanyName")); // Convert to string explicitly
 
-    const formattedTestsData = selectedTests.map((testId) => {
-      const test = tests.find((t) => t.id === testId);
-      return {
-        test_name: test.test_name,
-        test_difficulty: selectedQuestionCounts[testId] || {
-          easy: 0,
-          medium: 0,
-          hard: 0,
-        },
-        category: test.categories || "Uncategorized",
-        company: company_name,
-      };
-    });
+const formattedTestsData = selectedTests.map((testId) => {
+  const test = tests.find((t) => t.id === testId);
+  return {
+    test_name: test.test_name,
+    test_difficulty: selectedQuestionCounts[testId] || {
+      easy: 0,
+      medium: 0,
+      hard: 0,
+    },
+    category: test.categories || "Uncategorized",
+    company: company_name,
+  };
+});
+
 
     localStorage.setItem("selectedTests", JSON.stringify(formattedTestsData));
 

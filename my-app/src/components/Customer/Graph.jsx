@@ -16,6 +16,8 @@ const DualGraphs = () => {
   const [showCandidate, setShowCandidate] = useState(false);
   const navigate = useNavigate();
 
+  
+
   const goToResultMenu = () => {
     setShowResult(true);
     navigate("/customer-dashboard/test-result");

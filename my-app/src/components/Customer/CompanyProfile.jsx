@@ -21,30 +21,38 @@ const CompanyProfile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+  
     if (token) {
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-
+  
       axios
         .get(`${process.env.REACT_APP_API_URL}/company/myCompanies`, config)
         .then((companyResponse) => {
           setCompanyList(companyResponse.data);
-
+  
           const storedActiveCompany = JSON.parse(
             localStorage.getItem("activeCompany")
           );
           if (storedActiveCompany) {
             setActiveCompany(storedActiveCompany);
           } else if (companyResponse.data.length > 0) {
-            setActiveCompany(companyResponse.data[0]);
+            // Set the first company as active by default
+            const defaultActiveCompany = companyResponse.data[0];
+            setActiveCompany(defaultActiveCompany);
             localStorage.setItem(
               "activeCompany",
-              JSON.stringify(companyResponse.data[0])
+              JSON.stringify(defaultActiveCompany)
             );
+  
+            // Update the activeCompany state to trigger UI update
+            setChangesMade(true); // Optional: set changes made flag if needed
+            
+            // Activate the company immediately upon loading
+            dispatch(addCompany(defaultActiveCompany));
           }
         })
         .catch((error) => {
@@ -52,6 +60,7 @@ const CompanyProfile = () => {
         });
     }
   }, []);
+  
 
   const handleNewCompanyNameChange = (event) => {
     setNewCompanyName(event.target.value);
@@ -96,11 +105,11 @@ const CompanyProfile = () => {
             }, 3000); // Hide message after 3 seconds
 
             if (companyResponse.data.length > 0) {
-              setActiveCompany(companyResponse.data[0]);
-              localStorage.setItem(
-                "activeCompany",
-                JSON.stringify(companyResponse.data[0])
-              );
+              // setActiveCompany(companyResponse.data[0]);
+              // localStorage.setItem(
+              //   "activeCompany",
+              //   JSON.stringify(companyResponse.data[0])
+              // );
               setChangesMade(false); // Reset changes made flag
             }
           })

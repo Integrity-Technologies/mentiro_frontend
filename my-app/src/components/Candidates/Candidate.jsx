@@ -3,17 +3,20 @@ import { useDispatch } from "react-redux";
 import { addCandidate } from "../../actions/candidateAction";
 import Your_Tests from "./Your_Tests";
 import { isEmail } from "validator"; // Import validator for email format validation
+import { useLocation } from "react-router-dom";
 
 const loginimg = "/assets/loginimg.png"; // Image for the candidate section
 const logo = "/assets/logo.png"; // Logo
 
 const Candidate = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [showTests, setShowTests] = useState(false);
   const [candidateData, setCandidateData] = useState({
     first_name: "",
     last_name: "",
     email: "",
+    uniquelink: location.search.replace('?', ''), // Remove ?
   });
   const [errors, setErrors] = useState({});
   const [successAlert, setSuccessAlert] = useState(false);
@@ -48,7 +51,7 @@ const Candidate = () => {
     if (data) {
       setShowTests(true);
       setSuccessAlert(true);
-      localStorage.setItem("candidateId", data.id);
+      localStorage.setItem("candidateId", data.candidate.id);
     } else {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -61,11 +64,11 @@ const Candidate = () => {
     const { id, value } = e.target;
     setCandidateData({ ...candidateData, [id]: value });
     setErrors({ ...errors, [id + "Error"]: false });
-    if (id === "email" && value) {
-      setVerifyEmailMessage(true);
-    } else {
-      setVerifyEmailMessage(false);
-    }
+    // if (id === "email" && value) {
+    //   setVerifyEmailMessage(true);
+    // } else {
+    //   setVerifyEmailMessage(false);
+    // }
   };
 
   const handleCheckboxChange = (e) => {
@@ -186,7 +189,7 @@ const Candidate = () => {
                           Please enter a valid email address
                         </p>
                       )}
-                      {verifyEmailMessage && (
+                      {/* {verifyEmailMessage && (
                         <p className="mt-1 text-sm text-red-500">
                           Please verify your email. Click{" "}
                           <a
@@ -198,7 +201,7 @@ const Candidate = () => {
                             here
                           </a>
                         </p>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div className="mb-4">
