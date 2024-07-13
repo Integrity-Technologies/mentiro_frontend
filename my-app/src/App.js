@@ -25,6 +25,7 @@ import ActiveAssessment from "./components/Customer/ActiveAssessment";
 import ViewTestResult from "./components/Customer/ViewTestResult";
 import CandidateProfile from "./components/Customer/CandidatesProfile";
 import UserInfo from "./components/Customer/User-info.jsx";
+import YourTests from "./components/Candidates/Your_Tests.jsx";
 
 
 function App() {
@@ -57,11 +58,13 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/assessment" element={<Assessment />} />
+        {/* <Route path="/assessment" element={<Assessment />} /> */}
         <Route path="/candidates" element={<Candidates />} />
         <Route path="/admin-dashboard" element={<Admin isLanguageButton={isLanguageButton}/>} />
-        <Route path="/api/users/password/reset" element={<ResetPasswordForm />} />
+        <Route path="/password/reset/:token" element={<ResetPasswordForm />} />
         <Route path="/api/assessment" element={<Candidates />} />
+        <Route path="/assessment/tests" element={<YourTests />} />
+
 
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaSearch, FaEllipsisV } from "react-icons/fa";
+import { FaPlus, FaSearch, FaEllipsisV, FaCheckCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import TablePagination from "./TablePagination";
 import {
@@ -10,6 +10,9 @@ import Assessment from "./Assesment";
 import PreviewExistingAssessment from "./PreviewExistingAssesment";
 import { CSSTransition } from "react-transition-group";
 import { useTranslation } from "react-i18next";
+
+const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
+
 
 const ActiveAssessment = () => {
   const { t } = useTranslation();
@@ -137,6 +140,7 @@ const ActiveAssessment = () => {
   return (
     <div className="min-h-screen flex flex-col px-6 py-10 relative font-roboto">
       <div className="flex items-center justify-between mb-8">
+      
         <h1 className="text-3xl font-bold text-gray-800">
           {t("ActiveAssessment.title")}
         </h1>
@@ -148,7 +152,7 @@ const ActiveAssessment = () => {
           <span>{t("ActiveAssessment.create")}</span>
         </button>
       </div>
-
+     
       <div className="mb-4 flex items-center justify-between">
         <div className="relative flex-1">
           <input
@@ -169,6 +173,16 @@ const ActiveAssessment = () => {
           </button>
         </div>
       </div>
+      {deleteSuccess && (
+  <div className=" inset-0 flex items-center z-50">
+    <div className="bg-green-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
+      <FaCheckCircle className="text-black text-3xl" />
+      <span className="text-lg font-semibold">
+        Assessment Deleted Successfully
+      </span>
+    </div>
+  </div>
+)}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-50 text-12px">
@@ -273,33 +287,32 @@ const ActiveAssessment = () => {
         unmountOnExit
       >
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <p className="mb-4 text-gray-800">
-              Are you sure you want to delete this assessment?
-            </p>
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowDeleteConfirmation(false)}
-                className="mr-2 bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+  <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+    <div className="mb-4">
+      <img src={Mentirobluelogo} alt="Mentiro Logo" className="h-20 mx-auto" />
+    </div>
+    <p className="mb-4 text-gray-800">
+      Are you sure you want to delete this assessment?
+    </p>
+    <div className="flex justify-center gap-36">
+      <button
+        onClick={() => setShowDeleteConfirmation(false)}
+        className="mr-2 bg-blue-900 px-4 py-2 rounded-md text-white hover:bg-gray-400"
+      >
+        Cancel
+      </button>
+      <button
+        onClick={confirmDelete}
+        className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
       </CSSTransition>
 
-      {deleteSuccess && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-md transition duration-300">
-          Assessment deleted successfully!
-        </div>
-      )}
+      
     </div>
   );
 };

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../actions/authActions";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import { FaEye, FaEyeSlash, FaTimesCircle, FaCheckCircle } from "react-icons/fa"; // Import eye icons
 const logo = "/assets/logo.png";
 const loginimg = "/assets/loginimg.png";
-
 
 function ResetPasswordForm() {
   const { t } = useTranslation();
@@ -14,7 +13,7 @@ function ResetPasswordForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [alert, setAlert] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-  const location = useLocation();
+  const { token } = useParams(); // Get the token from the URL
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,9 +24,6 @@ function ResetPasswordForm() {
       setAlert({ variant: "danger", message: "Passwords don't match" });
       return;
     }
-
-    const searchParams = new URLSearchParams(location.search);
-    const token = searchParams.get("token");
 
     const result = await dispatch(
       resetPassword({ token, newPassword, confirmPassword })
@@ -84,14 +80,27 @@ function ResetPasswordForm() {
               <div
                 className={`${
                   alert.variant === "success"
-                    ? "bg-green-100 border-green-400 text-green-700"
-                    : "bg-red-100 border-red-400 text-red-700"
-                } border-l-4 p-1 my-4 rounded-lg`}
+                    ? "bg-green-100 border border-green-400 text-green-700"
+                    : "bg-red-100 border border-red-400 text-red-700"
+                } p-3 my-4 rounded-lg flex items-center`}
                 role="alert"
               >
-                <p>{alert.message}</p>
+                {alert.variant === "success" ? (
+                  <>
+                    <FaCheckCircle className="text-green-500 mr-2" />
+                    <strong className="font-bold">Success: </strong>
+                    <span className="ml-1">{alert.message}</span>
+                  </>
+                ) : (
+                  <>
+                    <FaTimesCircle className="text-red-500 mr-2" />
+                    <strong className="font-bold">Error: </strong>
+                    <span className="ml-1">{alert.message}</span>
+                  </>
+                )}
               </div>
             )}
+
             <div className="mb-3">
               <div className="relative">
                 <input

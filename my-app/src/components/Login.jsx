@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/authActions";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; // Assuming you're using React Icons library
+
 const loginimg = "/assets/loginimg.png";
 const logo = "/assets/logo.png"; 
 
@@ -36,7 +38,7 @@ const Login = () => {
         const companyName = response.result.company_name;
         localStorage.setItem("CompanyName", companyName);
   
-        setTimeout(() => setShowAlert(false), 3000); // success
+        setTimeout(() => setShowAlert(false), 8000); // success
         const permissions = localStorage.getItem("user");
         if (permissions === "true") {
           navigate("/admin-dashboard");
@@ -44,7 +46,7 @@ const Login = () => {
           navigate("/customer-dashboard");
         }
       } catch (error) {
-        setTimeout(() => setShowAlert(false), 3000); // error
+        setTimeout(() => setShowAlert(false), 8000); // error
       }
     }
   };
@@ -157,18 +159,27 @@ const Login = () => {
             </p>
           </form>
           {showAlert && (
-            <div
-              className={`mt-3 ${
-                authError
-                  ? "bg-red-100 border border-red-400 text-red-700"
-                  : "bg-green-100 border border-green-400 text-green-700"
-              } px-4 py-3 rounded-lg`}
-            >
-              <strong className="font-bold">
-                {authError ? "Error: " : "Success: "}
-              </strong>{" "}
-              {authError || "User Login Successfully"}
-            </div>
+           <div
+           className={`mt-3 ${
+             authError
+               ? "bg-red-100 border border-red-400 text-red-700"
+               : "bg-green-100 border border-green-400 text-green-700"
+           } px-4 py-3 rounded-lg flex items-center`}
+         >
+           {authError ? (
+             <>
+               <FaTimesCircle className="text-red-500 mr-2" />
+               <strong className="font-bold">Error: </strong>
+               {authError}
+             </>
+           ) : (
+             <>
+               <FaCheckCircle className="text-green-500 mr-2" />
+               <strong className="font-bold">Success: </strong>
+               User Login Successfully
+             </>
+           )}
+         </div>
           )}
         </div>
       </div>

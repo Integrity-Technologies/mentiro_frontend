@@ -67,8 +67,13 @@ export const login = (userData) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`);
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`, config);
     // console.log("~ logout ~ res:", res);
 
     localStorage.removeItem("token");

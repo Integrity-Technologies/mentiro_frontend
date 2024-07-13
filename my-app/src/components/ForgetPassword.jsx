@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { forgotPassword } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {FaCheckCircle} from "react-icons/fa"
 const loginimg = "/assets/loginimg.png";
 const logo = "/assets/logo.png"; 
 
@@ -113,14 +114,17 @@ const ForgetPassword = () => {
             </form>
           )}
           {isSubmitted && (
-            <div
-              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4"
-              role="alert"
-            >
-              <p className="text-center">{resetMessage}</p>
-            </div>
+           <div className=" inset-0 flex items-center justify-end z-50">
+           <div className="bg-green-100 text-black w-full max-w-lg p-6 rounded-lg shadow-lg flex items-center space-x-2">
+             <FaCheckCircle className="text-green-500 -mt-8 text-5xl" />
+             <p className="text-lg font-semibold">
+               {resetMessage}
+             </p>
+           </div>
+         </div>
+          
           )}
-          <div className="ml-10">
+          <div className="ml-10 mt-4">
             <p className="text-sm font-bold text-gray-700 ">
               Go back to{" "}
               <NavLink to="/" className="text-blue-900 hover:text-blue-800">

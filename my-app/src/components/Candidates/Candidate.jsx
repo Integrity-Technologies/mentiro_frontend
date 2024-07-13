@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCandidate } from "../../actions/candidateAction";
+import {FaCheckCircle} from "react-icons/fa"
 import Your_Tests from "./Your_Tests";
 import { isEmail } from "validator"; // Import validator for email format validation
 import { useLocation } from "react-router-dom";
@@ -22,7 +23,6 @@ const Candidate = () => {
   const [successAlert, setSuccessAlert] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [acceptMarketing, setAcceptMarketing] = useState(false);
-  const [verifyEmailMessage, setVerifyEmailMessage] = useState(false);
 
   const handleSubmitButtonClick = async () => {
     setErrors({});
@@ -169,11 +169,7 @@ const Candidate = () => {
                       <input
                         type="email"
                         id="email"
-                        className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
-                          errors.emailError
-                            ? "border-red-500"
-                            : "border-gray-300"
-                        }`}
+                        className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer `}
                         placeholder=" "
                         value={candidateData.email}
                         onChange={handleInputChange}
@@ -231,9 +227,14 @@ const Candidate = () => {
                     Submit
                   </button>
                   {successAlert && (
-                    <div className="mt-4 p-2 text-green-600 bg-green-200 border border-green-600 rounded">
+                    <div className=" inset-0 flex items-center z-50">
+                    <div className="bg-green-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
+                      <FaCheckCircle className="text-black text-3xl" />
+                      <span className="text-lg font-semibold">
                       Successfully added candidate.
+                      </span>
                     </div>
+                  </div>
                   )}
                 </form>
               </div>

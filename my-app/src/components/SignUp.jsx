@@ -5,7 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Flag from "react-world-flags";
 import { useTranslation } from "react-i18next";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import { FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from "react-icons/fa"; // Import eye icons
 import countries from "./../data/countries";
 import {
   addCompany,
@@ -702,22 +702,23 @@ const SignUp = () => {
               </p>
             </form>
             {showAlert &&
-              ((authError && (
-                <div
-                  className="mt-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg"
-                  role="alert"
-                >
-                  <strong className="font-bold">Error:</strong> {authError}
-                </div>
-              )) || (
-                <div
-                  className="mt-3 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg"
-                  role="alert"
-                >
-                  <strong className="font-bold">Success:</strong> Your account
-                  has been created successfully.
-                </div>
-              ))}
+  (authError ? (
+    <div
+      className="mt-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg flex items-center"
+      role="alert"
+    >
+      <FaTimesCircle className="text-red-500 mr-2" />
+      <strong className="font-bold">Error:</strong> {authError}
+    </div>
+  ) : (
+    <div
+      className="mt-3 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center"
+      role="alert"
+    >
+      <FaCheckCircle className="text-green-500 mr-2" />
+      <strong className="font-bold">Success:</strong> Your account has been created successfully.
+    </div>
+  ))}
           </div>
         </div>
       </section>
