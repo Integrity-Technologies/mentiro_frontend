@@ -114,7 +114,7 @@ const YourTests = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center font-poppins">
+    <div className="min-h-screen bg-blue-100 flex flex-col items-center justify-center font-poppins">
       {showQuestions ? (
         <TestTime
           onComplete={handleTestCompletion}

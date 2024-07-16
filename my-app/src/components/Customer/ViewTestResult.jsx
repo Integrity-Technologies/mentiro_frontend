@@ -7,6 +7,9 @@ import { TiChartBarOutline } from "react-icons/ti";
 import { FaSearch, FaInfoCircle } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 
+const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
+
+
 const ViewTestResult = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -128,7 +131,7 @@ const ViewTestResult = () => {
             <tr>
               <td
                 colSpan="3"
-                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+                className="text-center px-4 py-4 border bg-white-100 text-black-700"
               >
                 {t("candidatesResult.noData")}
               </td>
@@ -148,6 +151,7 @@ const ViewTestResult = () => {
                     {assessment.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  <div className="flex items-center">
                     <span>
                       {assessment.assessment_percentage !== null
                         ? assessment.assessment_percentage !== 0
@@ -157,6 +161,14 @@ const ViewTestResult = () => {
                           : "0%"
                         : "-"}
                     </span>
+                    <div className="flex flex-col w-50 h-4 ml-5 bg-gray-200 overflow-hidden">
+                            <div
+                              className="h-full bg-blue-900"
+                              style={{ width: `${assessment.assessment_percentage || 0}%` }}
+                            ></div>
+                          </div>
+                          </div>
+
                   </td>
                 </tr>
               ))
@@ -170,70 +182,94 @@ const ViewTestResult = () => {
         onPageChange={handlePageChange}
       />
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
-          <div className="bg-white rounded-lg shadow-lg p-4 w-2/3 relative">
-            <AiOutlineClose
-              className="absolute top-4 right-6 text-gray-500 cursor-pointer"
-              size={12}
-              onClick={closeModal}
-            />
-            <h2 className="text-14px font-bold mb-4">Included tests</h2>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50 text-12px">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Test
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Test Score
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200 text-14px">
-                {selectedTests.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan="3"
-                      className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
-                    >
-                      No Tests Available
-                    </td>
-                  </tr>
-                ) : (
-                  selectedTests.map((test, index) => (
-                    <tr
-                      key={index}
-                      className="hover:bg-active-link-bg cursor-pointer transition duration-150 group"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
-                        {test.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
-                        {getStatusMessage(test.status)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
-                        {test.score ? `${test.score}%` : "-"}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
+    <div className="bg-white rounded-lg shadow-lg p-4 w-2/3 relative">
+      <AiOutlineClose
+        className="absolute top-4 right-6 text-gray-500 cursor-pointer"
+        size={24}
+        onClick={closeModal}
+      />
+      <div className="flex flex-col items-center">
+        <img
+          src={Mentirobluelogo}
+          alt="Mentiro Logo"
+          className="h-24 mt-4"
+        />
+      </div>
+      <h2 className="text-14px font-bold mb-4 mt-4">Included tests</h2>
+
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50 text-12px">
+          <tr>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Test
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Test Score
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200 text-14px">
+          {selectedTests.length === 0 ? (
+            <tr>
+              <td
+                colSpan="3"
+                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+              >
+                No Tests Available
+              </td>
+            </tr>
+          ) : (
+            selectedTests.map((test, index) => (
+              <tr
+                key={index}
+                className="hover:bg-active-link-bg cursor-pointer transition duration-150 group"
+              >
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  {test.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  {getStatusMessage(test.status)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                  {test.score ? (
+                    <div className="flex items-center">
+                      <span className="mr-2">{test.score}%</span>
+                      <div className="w-full bg-gray-200 rounded">
+                        <div
+                          className="h-2 rounded"
+                          style={{
+                            width: `${test.score}%`,
+                            backgroundColor: index % 2 === 0 ? 'blue' : 'green'
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ) : (
+                    "-"
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

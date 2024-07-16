@@ -108,7 +108,7 @@ const CandidateProfile = () => {
             <tr>
               <td
                 colSpan="4"
-                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+                className="text-center px-4 py-4 border bg-white-100 text-black-700"
               >
                 {t("candidates.noData")}
               </td>

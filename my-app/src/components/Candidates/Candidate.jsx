@@ -40,16 +40,16 @@ const Candidate = () => {
       });
       return;
     }
-    if (!isEmail(candidateData.email)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        emailError: true,
-      }));
-      return;
-    }
+    // if (!isEmail(candidateData.email)) {
+    //   setErrors((prevErrors) => ({
+    //     ...prevErrors,
+    //     emailError: true,
+    //   }));
+    //   return;
+    // }
     const data = await dispatch(addCandidate(candidateData));
     if (data) {
-      setShowTests(true);
+      // setShowTests(true);
       setSuccessAlert(true);
       localStorage.setItem("candidateId", data.candidate.id);
     } else {
@@ -180,11 +180,11 @@ const Candidate = () => {
                       >
                         Email Address *
                       </label>
-                      {errors.emailError && (
+                      {/* {errors.emailError && (
                         <p className="mt-1 text-sm text-red-500">
                           Please enter a valid email address
                         </p>
-                      )}
+                      )} */}
                       {/* {verifyEmailMessage && (
                         <p className="mt-1 text-sm text-red-500">
                           Please verify your email. Click{" "}
@@ -228,10 +228,10 @@ const Candidate = () => {
                   </button>
                   {successAlert && (
                     <div className=" inset-0 flex items-center z-50">
-                    <div className="bg-green-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
-                      <FaCheckCircle className="text-black text-3xl" />
-                      <span className="text-lg font-semibold">
-                      Successfully added candidate.
+           <div className="bg-green-100 text-black w-full max-w-lg p-6 rounded-lg shadow-lg flex items-center space-x-2">
+           <FaCheckCircle className="text-green-500 text-5xl" />
+           <span className="text-lg font-semibold">
+                      Verify Your Email. Verification email sent to you gmail
                       </span>
                     </div>
                   </div>

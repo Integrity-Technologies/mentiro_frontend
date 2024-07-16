@@ -44,7 +44,7 @@ const Navbar = ({
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
+    // localStorage.clear();
     dispatch(logout());
     setShowAlert(true);
     setTimeout(() => {

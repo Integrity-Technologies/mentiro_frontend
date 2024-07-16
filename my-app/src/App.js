@@ -62,9 +62,8 @@ function App() {
         <Route path="/candidates" element={<Candidates />} />
         <Route path="/admin-dashboard" element={<Admin isLanguageButton={isLanguageButton}/>} />
         <Route path="/password/reset/:token" element={<ResetPasswordForm />} />
-        <Route path="/api/assessment" element={<Candidates />} />
-        <Route path="/assessment/tests" element={<YourTests />} />
-
+        <Route path="/assessment" element={<Candidates />} />
+        <Route path="/assessment/tests" element={<YourTests />} /> {/* New route for YourTests */}   
 
 
 

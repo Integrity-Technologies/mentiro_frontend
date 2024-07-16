@@ -184,14 +184,14 @@ const Assessment = () => {
           {t("Assessments.assessmentDetails")}
         </h3>
         <div className="flex justify-end mt-2">
-          <Button
+          <button
             onClick={handleAddAssessment}
             className="bg-blue-900 border-blue-900 hover:bg-blue-800 text-white font-bold w-24 py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
           >
             <span className="inline-block">
               {showTestSelection ? t("Assessments.createAssessment") : t("Assessments.next")}
             </span>
-          </Button>
+          </button>
         </div>
         
           <div className="grid grid-cols-2 gap-4 mt-0">
@@ -207,7 +207,7 @@ const Assessment = () => {
                 value={assessmentName}
                 onChange={(e) => setAssessmentName(e.target.value)}
               />
-              {companyError && <p className="mt-2 text-sm text-red-600">{companyError}</p>}
+              {/* {companyError && <p className="mt-2 text-sm text-red-600">{companyError}</p>} */}
             </div>
 
             <div className="relative">

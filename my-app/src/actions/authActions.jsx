@@ -73,10 +73,12 @@ export const logout = () => async (dispatch) => {
         Authorization: `Bearer ${token}`,
       },
     };
+    console.log(token)
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/users/logout`, config);
     // console.log("~ logout ~ res:", res);
 
     localStorage.removeItem("token");
+    localStorage.clear();
     // You may want to clear user data from localStorage or perform any other cleanup here
     dispatch({ type: LOGOUT_SUCCESS });
 
@@ -114,8 +116,8 @@ export const forgotPassword = (userData) => async (dispatch) => {
 export const resetPassword = (passwordData) => async (dispatch) => {
   try {
     const { token, newPassword, confirmPassword } = passwordData; // Destructure passwordData object
-    // console.log(token);
-    const res = await axios.put(`${process.env.REACT_APP_API_URL}/users/password/reset/:token`, {
+    // const token = "adfd1493fb58d12b4210d661f3eb19301d912ef5b1b70b286badf9a4a9550fc5"
+    const res = await axios.put(`${process.env.REACT_APP_API_URL}/users/password/reset`, {
       newPassword,
       confirmPassword,
       token,
