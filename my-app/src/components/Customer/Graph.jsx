@@ -43,7 +43,7 @@ const DualGraphs = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-blue-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-8 text-left text-black">
         <FaRegHandshake className="inline-block mr-2" />
         <span className="inline-block animate-pulse">

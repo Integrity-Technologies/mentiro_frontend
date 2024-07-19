@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, Outlet } from "react-router-dom";
-import { IoHomeOutline } from "react-icons/io5";
+import { IoHomeSharp  } from "react-icons/io5";
 import { FaListCheck } from "react-icons/fa6";
-import { IoBarChartOutline } from "react-icons/io5";
-import { LuUser } from "react-icons/lu";
-import { FaBuilding, FaBars } from "react-icons/fa";
+import { IoBarChart } from "react-icons/io5";
+import { FaUser  } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 import LanguageToggleButton from "../Togglebutton";
 import Navbar from "../NavbarComp"; // Import the Navbar component
 
@@ -29,13 +29,8 @@ const Customer = ({ isLanguageButton }) => {
     {
       label: `${t("CustomerDashboard.Dashboard")}`,
       link: "graph",
-      icon: <IoHomeOutline />,
+      icon: <IoHomeSharp  />,
     },
-    // {
-    //   label: `${t("CustomerDashboard.companyProfile")}`,
-    //   link: "company-profile",
-    //   icon: <FaBuilding />,
-    // },
     {
       label: `${t("CustomerDashboard.Assessment")}`,
       link: "assessments",
@@ -44,12 +39,12 @@ const Customer = ({ isLanguageButton }) => {
     {
       label: `${t("CustomerDashboard.candidateProfile")}`,
       link: "candidates-profile",
-      icon: <LuUser />,
+      icon: <FaUser />,
     },
     {
       label: `${t("CustomerDashboard.testResult")}`,
       link: "test-result",
-      icon: <IoBarChartOutline />,
+      icon: <IoBarChart />,
     },
   ];
 
@@ -57,7 +52,7 @@ const Customer = ({ isLanguageButton }) => {
     <div className="flex h-screen font-roboto">
       <div
         className={`flex flex-col ${
-          isMenuCollapsed ? "w-20" : "w-1/5"
+          isMenuCollapsed ? "w-20" : "w-full sm:w-1/3 md:w-1/5"
         } bg-customGray shadow h-full text-white overflow-y-auto transition-width duration-300`}
       >
         <div className="flex justify-between items-center p-3 relative">
@@ -66,12 +61,12 @@ const Customer = ({ isLanguageButton }) => {
               <img
                 src={logo}
                 alt="Logo"
-                className="rounded-full w-32 mt-5 mx-auto"
+                className="rounded-full w-16 sm:w-24 md:w-32 mt-5 mx-auto"
               />
             )}
           </div>
           <button onClick={toggleMenuCollapse} className="p-2 absolute right-0">
-            <div className=" rounded-full absolute p-2 right-0 mt-0">
+            <div className="rounded-full absolute p-2 right-0 mt-0">
               <FaBars />
             </div>
           </button>
@@ -82,13 +77,13 @@ const Customer = ({ isLanguageButton }) => {
               to={option.link}
               key={option.link}
               style={{
-                textDecoration: "none", // Remove underline decoration
-                listStyle: "none", // Remove list-style decoration
-                outline: "none", // Remove outline on focus
+                textDecoration: "none",
+                listStyle: "none",
+                outline: "none",
               }}
             >
               <button
-                className={`flex items-center px-4 md:px-20 py-2 text-white mb-3 w-full text-left text-sm transition-colors
+                className={`flex items-center px-4 md:px-8 lg:px-10 py-2 text-white mb-3 w-full text-left text-sm transition-colors
                   ${
                     location.pathname.includes(option.link)
                       ? "shadow-lg bg-blue-500 text-white shadow-green-300"

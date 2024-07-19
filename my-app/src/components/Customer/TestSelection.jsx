@@ -71,6 +71,7 @@ const formattedTestsData = selectedTests.map((testId) => {
 
   const handleBackButton = () => {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
+    console.log(currentStep);
     setShowTestSelection(true);
   };
 
@@ -196,7 +197,9 @@ const formattedTestsData = selectedTests.map((testId) => {
   return (
     <div>
       {showQuestion ? (
-        <Preview handleBackButton={handleBackButton} />
+        <Preview    
+        currentStep={currentStep}
+        handleBackButton={handleBackButton} />
       ) : (
         <div className="min-h-screen flex flex-col px-6 py-10 relative font-roboto">
           <div className="mb-4">

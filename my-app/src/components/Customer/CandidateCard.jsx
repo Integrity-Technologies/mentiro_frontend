@@ -4,7 +4,7 @@ import { getUserCandidates } from "../../actions/candidateAction";
 import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
 import { LuUser } from "react-icons/lu";
-import { FaChartLine  } from "react-icons/fa";
+import { FaChartLine } from "react-icons/fa";
 
 const CandidateCard = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const CandidateCard = () => {
   const { t } = useTranslation();
 
   // Set candidatesCount to 0 if there's an error or the candidates array is empty
-  const candidatesCount = candidates.length;
+  const candidatesCount = candidates.length || 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,12 +57,12 @@ const CandidateCard = () => {
   return (
     <div className="w-72 h-40 bg-white border border-gray-200 rounded-lg shadow-md p-4 font-roboto">
       <div className="flex items-start justify-between">
-      <div className="flex-1 mb-0">
+        <div className="flex-1 mb-0">
           <p className="text-gray-600 mt-0 mb-0">
             <span className="text-lg font-semibold">{t("Candidates")}</span>
           </p>
           <h2 className="text-3xl font-extrabold text-black mt-2">
-            {candidatesCount || 0}
+            {candidatesCount}
           </h2>
         </div>
         <div className="flex items-center bg-blue-100 p-3 ml-24">

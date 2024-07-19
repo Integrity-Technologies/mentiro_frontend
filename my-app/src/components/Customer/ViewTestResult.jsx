@@ -9,7 +9,6 @@ import { AiOutlineClose } from "react-icons/ai";
 
 const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
 
-
 const ViewTestResult = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -18,6 +17,8 @@ const ViewTestResult = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTests, setSelectedTests] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
+  const [recentTests, setRecentTests] = useState([]);
+  const [earlierTests, setEarlierTests] = useState([]);
 
   useEffect(() => {
     dispatch(getUserResults()); // Fetch results on component mount
@@ -59,7 +60,16 @@ const ViewTestResult = () => {
 
   const openModal = (tests) => {
     if (tests.length > 0) {
-      setSelectedTests(tests);
+      // Assuming you want to divide tests into recent and earlier categories
+      const now = new Date();
+      const recent = tests.filter(test => {
+        const testDate = new Date(test.date); // Assuming each test has a date property
+        return (now - testDate) / (1000 * 60 * 60 * 24) <= 30; // Recent if within last 30 days
+      });
+      const earlier = tests.filter(test => !recent.includes(test));
+
+      setRecentTests(recent);
+      setEarlierTests(earlier);
       setIsModalOpen(true);
     }
   };
@@ -67,6 +77,8 @@ const ViewTestResult = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedTests([]);
+    setRecentTests([]);
+    setEarlierTests([]);
   };
 
   return (
@@ -89,8 +101,7 @@ const ViewTestResult = () => {
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
         <div className="flex space-x-2 mr-5 mt-4">
-        
-          <button className="bg-blue-900 text-white px-4 py-2 rounded-md border border-blue-900 hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+          <button className=" text-blue-900 px-4 py-2 rounded-md border-2 border-blue-900 hover:bg-blue-800 flex hover:text-white items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
             Filter
           </button>
         </div>
@@ -151,24 +162,23 @@ const ViewTestResult = () => {
                     {assessment.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
-                  <div className="flex items-center">
-                    <span>
-                      {assessment.assessment_percentage !== null
-                        ? assessment.assessment_percentage !== 0
-                          ? assessment.assessment_percentage % 1 !== 0
-                            ? `${assessment.assessment_percentage.toFixed(1)}%`
-                            : `${assessment.assessment_percentage}%`
-                          : "0%"
-                        : "-"}
-                    </span>
-                    <div className="flex flex-col w-50 h-4 ml-5 bg-gray-200 overflow-hidden">
-                            <div
-                              className="h-full bg-blue-900"
-                              style={{ width: `${assessment.assessment_percentage || 0}%` }}
-                            ></div>
-                          </div>
-                          </div>
-
+                    <div className="flex items-center">
+                      <span>
+                        {assessment.assessment_percentage !== null
+                          ? assessment.assessment_percentage !== 0
+                            ? assessment.assessment_percentage % 1 !== 0
+                              ? `${assessment.assessment_percentage.toFixed(1)}%`
+                              : `${assessment.assessment_percentage}%`
+                            : "0%"
+                          : "-"}
+                      </span>
+                      <div className="flex flex-col w-50 h-4 ml-5 bg-gray-200 overflow-hidden">
+                        <div
+                          className="h-full bg-blue-900"
+                          style={{ width: `${assessment.assessment_percentage || 0}%` }}
+                        ></div>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -181,97 +191,69 @@ const ViewTestResult = () => {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
+
       {isModalOpen && (
-  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
-    <div className="bg-white rounded-lg shadow-lg p-4 w-2/3 relative">
-      <AiOutlineClose
-        className="absolute top-4 right-6 text-gray-500 cursor-pointer"
-        size={24}
-        onClick={closeModal}
-      />
-      <div className="flex flex-col items-center">
-        <img
-          src={Mentirobluelogo}
-          alt="Mentiro Logo"
-          className="h-24 mt-4"
-        />
-      </div>
-      <h2 className="text-14px font-bold mb-4 mt-4">Included tests</h2>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
+          <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 relative">
+            <AiOutlineClose
+              className="absolute top-4 right-6 text-red-500 cursor-pointer"
+              size={24}
+              onClick={closeModal}
+            />
+            <div className="flex flex-col items-center">
+              <img
+                src={Mentirobluelogo}
+                alt="Mentiro Logo"
+                className="h-20 mt-0"
+              />
+            </div>
+            <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">History Of Attempts</h2>
 
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50 text-12px">
-          <tr>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Test
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Status
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Test Score
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200 text-14px">
-          {selectedTests.length === 0 ? (
-            <tr>
-              <td
-                colSpan="3"
-                className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
-              >
-                No Tests Available
-              </td>
-            </tr>
-          ) : (
-            selectedTests.map((test, index) => (
-              <tr
-                key={index}
-                className="hover:bg-active-link-bg cursor-pointer transition duration-150 group"
-              >
-                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
-                  {test.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
-                  {getStatusMessage(test.status)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
-                  {test.score ? (
-                    <div className="flex items-center">
-                      <span className="mr-2">{test.score}%</span>
-                      <div className="w-full bg-gray-200 rounded">
-                        <div
-                          className="h-2 rounded"
-                          style={{
-                            width: `${test.score}%`,
-                            backgroundColor: index % 2 === 0 ? 'blue' : 'green'
-                          }}
-                        ></div>
+            <div className="mb-4">
+              {recentTests.length > 0 && (
+                <div>
+                                    <h3 className="text-lg font-semibold mb-2">{t("candidatesResult.recent")}</h3>
+                  <div className="grid grid-cols-1 gap-2">
+                    {recentTests.map((test, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between border border-black p-2 rounded-lg"
+                      >
+                        <span className="flex-1">{test.name}</span>
+                        <span className="flex-1 text-center">{test.status}</span>
+                        <span className="flex-1 text-center">{test.score}</span>
                       </div>
-                    </div>
-                  ) : (
-                    "-"
-                  )}
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  </div>
-)}
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
+            <div>
+              {earlierTests.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Earlier</h3>
+                  <div className="grid grid-cols-1 gap-2">
+                    {earlierTests.map((test, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between border border-gray-200 p-3 rounded-lg"
+                      >
+                        <span className="flex-1">{test.name}</span>
+                        <span className="flex-1 text-center">{test.status}</span>
+                        <span className="flex-1 text-center">score      {test.score}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default ViewTestResult;
+

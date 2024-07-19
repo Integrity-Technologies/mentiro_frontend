@@ -1,6 +1,9 @@
 import React from 'react';
 
 const BallProgressBar = ({ steps, currentStep, labels }) => {
+
+  console.log('Current Step:', currentStep);
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex justify-center items-center w-75">

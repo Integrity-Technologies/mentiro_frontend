@@ -104,17 +104,24 @@ const Preview = () => {
     }
   };
 
+
   const handleBackButton = () => {
-    setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
-    setShowTestSelection(true);
-    setShowPreview(false);
-    setProgress((prevProgress) => prevProgress - 1);
+    setCurrentStep((prevStep) => Math.max(0, prevStep - 1)); // Decrease current step by 1
+    setProgress((prevProgress) => Math.max(0, prevProgress - 1)); // Decrease progress by 1
+    setShowTestSelection(true); // Show the test selection component
+    setShowPreview(false); // Hide the preview component
   };
+  
+  // Log the updated currentStep whenever it changes
+ 
+  
+  
+  
 
   return (
     <>
       {showTestSelection && (
-        <TestSelection handleBackButton={handleBackButton} />
+        <TestSelection currentStep={currentStep} handleBackButton={handleBackButton} />
       )}
       {!showTestSelection && showPreview && assessmentData && (
         <div className="mt-8">

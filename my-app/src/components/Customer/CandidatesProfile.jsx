@@ -69,7 +69,7 @@ const CandidateProfile = () => {
 
         <div className="flex space-x-2 mr-5 mt-4">
         
-          <button className="bg-blue-900 text-white px-4 py-2 rounded-md border border-blue-900 hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+          <button className="text-blue-900 px-4 py-2 rounded-md border-2 border-blue-900 hover:text-white hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
             Filter
           </button>
         </div>

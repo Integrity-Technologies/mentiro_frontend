@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { FaClipboardCheck } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
+const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
+
+
 const Modal = ({ updateQuestionCount, closeModal }) => {
   const { t } = useTranslation();
   const [questionCounts, setQuestionCounts] = useState({
@@ -37,10 +40,12 @@ const Modal = ({ updateQuestionCount, closeModal }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-4 rounded-lg shadow-lg w-50 max-w-md mx-auto">
         <div className="flex items-center mb-4">
+        
           <button
             className="ml-auto text-gray-500 hover:text-gray-700"
             onClick={closeModal}
           >
+          
             <svg
               className="w-6 h-6 text-red-500"
               fill="none"
@@ -58,8 +63,15 @@ const Modal = ({ updateQuestionCount, closeModal }) => {
           </button>
         </div>
         {/* <hr className="mb-6 border-gray-300" /> */}
+        <div className="flex flex-col items-center justify-center">
+        <img
+          src={Mentirobluelogo}
+          alt="Mentiro Logo"
+          className="h-20 -mt-4 justify-center items-center"
+        />
+      </div>
 
-        <div className="text-center">
+        <div className="text-center mt-2">
           <h3 className="text-xl text-black mb-2">Questions Split</h3>
           <p className="text-sm text-gray-500 mb-6">
             Each test can have up to 10 questions. Use the slider to set the

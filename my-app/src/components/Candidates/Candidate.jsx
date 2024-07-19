@@ -231,7 +231,7 @@ const Candidate = () => {
            <div className="bg-green-100 text-black w-full max-w-lg p-6 rounded-lg shadow-lg flex items-center space-x-2">
            <FaCheckCircle className="text-green-500 text-5xl" />
            <span className="text-lg font-semibold">
-                      Verify Your Email. Verification email sent to you gmail
+           Please verify your email. A verification email has been sent to your Gmail account.
                       </span>
                     </div>
                   </div>
