@@ -183,7 +183,7 @@ const Assessment = () => {
           <h3 className="text-xl font-medium mb-4 mt-4">
           {t("Assessments.assessmentDetails")}
         </h3>
-        <div className="flex justify-end mt-2">
+        {/* <div className="flex justify-end mt-2">
           <button
             onClick={handleAddAssessment}
             className="bg-blue-900 border-blue-900 hover:bg-blue-800 text-white font-bold w-24 py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
@@ -192,7 +192,7 @@ const Assessment = () => {
               {showTestSelection ? t("Assessments.createAssessment") : t("Assessments.next")}
             </span>
           </button>
-        </div>
+        </div> */}
         
           <div className="grid grid-cols-2 gap-4 mt-0">
             <div className="relative">
@@ -288,9 +288,27 @@ const Assessment = () => {
               )}
             </div>
           </div>
+          <div className="flex justify-end mt-6">
+          <button
+            onClick={handleAddAssessment}
+            className="bg-blue-900 border-blue-900 hover:bg-blue-800 text-white font-bold w-24 py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
+          >
+            Next
+          </button>
+        </div>
           </div>
         )}
         
+        {/* <div className="flex justify-end mt-4">
+          <button
+            onClick={handleAddAssessment}
+            className="bg-blue-900 border-blue-900 hover:bg-blue-800 text-white font-bold w-24 py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-2 ml-auto"
+          >
+            <span className="inline-block">
+              {showTestSelection ? t("Assessments.createAssessment") : t("Assessments.next")}
+            </span>
+          </button>
+        </div> */}
         {/* Move these elements here */}
         
       </div>

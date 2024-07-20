@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
-import { TiChartBarOutline } from "react-icons/ti";
 import { FaSearch, FaInfoCircle } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -25,7 +24,6 @@ const ViewTestResult = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // Filter results if activeCompany is set
     if (Array.isArray(results)) {
       const filtered = results.filter((result) =>
         result.companies && result.companies.length > 0
@@ -46,30 +44,32 @@ const ViewTestResult = () => {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
-  const getStatusMessage = (status) => {
-    if (status.includes("Not attempted any questions from this test")) {
-      return "Not Attempted";
-    } else if (status.includes("Attempted")) {
-      const attemptedCount = status.match(/Attempted (\d+) questions/);
-      if (attemptedCount && attemptedCount[1]) {
-        return "Incomplete";
-      }
-    }
-    return status;
-  };
-
   const openModal = (tests) => {
     if (tests.length > 0) {
-      // Assuming you want to divide tests into recent and earlier categories
-      const now = new Date();
-      const recent = tests.filter(test => {
-        const testDate = new Date(test.date); // Assuming each test has a date property
-        return (now - testDate) / (1000 * 60 * 60 * 24) <= 30; // Recent if within last 30 days
-      });
-      const earlier = tests.filter(test => !recent.includes(test));
+      const recent = [];
+      const earlier = [];
 
-      setRecentTests(recent);
-      setEarlierTests(earlier);
+      tests.forEach((test) => {
+        if (test.status === "Attempted" || test.status === "Not Attempted") {
+          recent.push(test);
+        } else if (test.status === "Previous Attempt") {
+          earlier.push(test);
+        }
+
+        if (Array.isArray(test.previous_attempts)) {
+          test.previous_attempts.forEach((attempt) => {
+            earlier.push({
+              ...test,
+              score: attempt.score,
+              status: "Previous Attempt",
+              date: attempt.date,
+            });
+          });
+        }
+      });
+
+      setRecentTests(recent.slice(0, 2)); // Show only the first 2 recent tests
+      setEarlierTests(earlier.slice(0, 2)); // Show only the first 2 earlier tests
       setIsModalOpen(true);
     }
   };
@@ -84,7 +84,6 @@ const ViewTestResult = () => {
   return (
     <div className="rounded-xl p-6 min-h-screen font-roboto">
       <div className="flex items-center mb-4">
-        {/* <TiChartBarOutline className="mr-2" size={40} /> */}
         <h1 className="font-bold mt-1 text-gray-700 text-3xl">
           {t("candidatesResult.title")}
         </h1>
@@ -101,7 +100,7 @@ const ViewTestResult = () => {
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
         <div className="flex space-x-2 mr-5 mt-4">
-          <button className=" text-blue-900 px-4 py-2 rounded-md border-2 border-blue-900 hover:bg-blue-800 flex hover:text-white items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+          <button className="text-blue-900 px-4 py-2 rounded-md border-2 border-blue-900 hover:bg-blue-800 flex hover:text-white items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
             Filter
           </button>
         </div>
@@ -208,43 +207,30 @@ const ViewTestResult = () => {
               />
             </div>
             <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">History Of Attempts</h2>
-
-            <div className="mb-4">
+            <div>
               {recentTests.length > 0 && (
-                <div>
-                                    <h3 className="text-lg font-semibold mb-2">{t("candidatesResult.recent")}</h3>
-                  <div className="grid grid-cols-1 gap-2">
-                    {recentTests.map((test, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between border border-black p-2 rounded-lg"
-                      >
-                        <span className="flex-1">{test.name}</span>
-                        <span className="flex-1 text-center">{test.status}</span>
-                        <span className="flex-1 text-center">{test.score}</span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold mb-2">Recent</h3>
+                  {recentTests.map((test, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border border-black rounded-md mb-2">
+                      <span>{test.name}</span>
+                      <span>{test.status}</span>
+                      <span>{test.score}%</span>
+                    </div>
+                  ))}
                 </div>
               )}
-            </div>
 
-            <div>
               {earlierTests.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Earlier</h3>
-                  <div className="grid grid-cols-1 gap-2">
-                    {earlierTests.map((test, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between border border-gray-200 p-3 rounded-lg"
-                      >
-                        <span className="flex-1">{test.name}</span>
-                        <span className="flex-1 text-center">{test.status}</span>
-                        <span className="flex-1 text-center">score      {test.score}%</span>
-                      </div>
-                    ))}
-                  </div>
+                  {earlierTests.map((test, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border border-black rounded-md mb-2">
+                      <span>{test.name}</span>
+                      <span>{test.status}</span>
+                      <span>{test.score}%</span>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -256,4 +242,3 @@ const ViewTestResult = () => {
 };
 
 export default ViewTestResult;
-

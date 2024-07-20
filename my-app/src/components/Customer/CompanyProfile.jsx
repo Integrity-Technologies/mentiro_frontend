@@ -6,6 +6,7 @@ import { FaBuilding } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { addCompany } from "../../actions/companyAction"; // Adjust the import path as necessary
+import LanguageToggleButton from "../Togglebutton"; // Adjust the import path as necessary
 
 const CompanyProfile = () => {
   const [companyList, setCompanyList] = useState([]);
@@ -20,14 +21,14 @@ const CompanyProfile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-  
+
     if (token) {
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-  
+
       axios
         .get(`${process.env.REACT_APP_API_URL}/company/myCompanies`, config)
         .then((companyResponse) => {
@@ -99,7 +100,14 @@ const CompanyProfile = () => {
           {t("CompanyProfile.companyInformation")}
         </h3>
       </div>
-      <div className="bg-white w-full max-w-5xl rounded-lg shadow-lg p-8">
+      <div className="relative bg-white w-full max-w-5xl rounded-lg shadow-lg p-8">
+        <div className="absolute top-4 right-4">
+          <LanguageToggleButton
+            isLanguageButton={true}
+            onLanguageChange={() => {}}
+            isMenuCollapsed={false}
+          />
+        </div>
         {companyList.map((company) => (
           <div key={company.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div className="flex flex-col items-start justify-center w-full">
@@ -142,67 +150,11 @@ const CompanyProfile = () => {
           </div>
         ))}
 
-        {/* {changesMade && (
-          <div className="flex justify-end">
-            <Button
-              variant="primary"
-              onClick={handleSaveChanges}
-              className="bg-primary hover:bg-primary-dark"
-            >
-              {t("CompanyProfile.saveChanges")}
-            </Button>
-          </div>
-        )} */}
-
         {success && (
           <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
             {t("CompanyProfile.successMessage")}
           </div>
         )}
-
-        {/* <Modal
-          show={showCreateCompanyModal}
-          onHide={() => setShowCreateCompanyModal(false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title className="flex items-center">
-              <FaBuilding className="mr-2 text-primary" />
-              {t("CompanyProfile.createCompany")}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="relative">
-              <input
-                type="text"
-                id="company"
-                value={newCompanyName}
-                onChange={handleNewCompanyNameChange}
-                placeholder=""
-                className={`block px-2 pb-1.5 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border ${
-                  isCompanyNameValid ? "border-gray-300" : "border-red-500"
-                } appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
-              />
-              <label
-                htmlFor="company"
-                className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-              >
-                {t("CompanyProfile.companyNamePlaceholder")}{" "}
-              </label>
-              {!isCompanyNameValid && (
-                <p className="text-red-500 text-sm mt-1">{companyNameError}</p>
-              )}
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="primary"
-              onClick={handleCreateCompany}
-              className="bg-primary hover:bg-primary-dark"
-            >
-              {t("CompanyProfile.create")}
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
       </div>
     </div>
   );

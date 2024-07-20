@@ -129,7 +129,7 @@ const Preview = () => {
             <h3 className="text-2xl font-medium">
               {t("PreviewAssessment.title")}
             </h3>
-            <div className="flex mt-4 sm:mt-0 space-x-4">
+            {/* <div className="flex mt-4 sm:mt-0 space-x-4">
               <button
                 onClick={handleBackButton}
                 className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded transition-colors duration-300"
@@ -142,7 +142,7 @@ const Preview = () => {
               >
                 {t("PreviewAssessment.submit")}
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col p-0 mt-12 transition duration-300">
@@ -286,14 +286,20 @@ const Preview = () => {
             </table>
           </div>
 
-          {/* <div className="flex justify-end">
-            <button
-              onClick={handleSubmitButtonClick}
-              className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded transition-colors duration-300"
-            >
-              {t("PreviewAssessment.submit")}
-            </button>
-          </div> */}
+          <div className="mt-5 bottom-0 left-0 right-0  p-3  flex justify-between">
+              <button
+                onClick={handleBackButton}
+                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border-1 border-blue-900 rounded transition-colors duration-300"
+              >
+                {t("PreviewAssessment.back")}
+              </button>
+              <button
+                onClick={handleSubmitButtonClick}
+                className="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-12 rounded transition-colors duration-300"
+              >
+                {t("PreviewAssessment.submit")}
+              </button>
+            </div>
         </div>
       )}
       {showInviteCandidate && <InviteCandidate />}

@@ -253,63 +253,66 @@ const formattedTestsData = selectedTests.map((testId) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 gap-y-6">
           {filteredTests.map((test) => (
               <div
-                key={test.id}
-                onClick={() => handleTestSelection(test.id)}
-                style={{ height: "350px", width: "320px"}}
-                className={`bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border-1  border-gray-500 ${
-                  selectedTests.includes(test.id) ? "bg-blue-100" : ""
-                }`}
-              >
-                <div className="relative p-6 flex flex-col items-center">
-                <div className="rounded-full bg-blue-200 p-2">
-      <IoDocumentTextOutline className="text-blue-900" size={32} />
-    </div>
-                  <h5 className="font-bold text-lg text-gray-800 mt-3 text-center">
-                    {test.test_name}
-                  </h5>
-                  <div className="mb-2 flex flex-wrap justify-center">
-                    {test.categories.map((category, index) => (
-                      <span
-                        key={index}
-                        className="bg-category-tag-bg text-black py-2 px-6 rounded-lg text-xs font-semibold mr-2 mb-2"
-                      >
-                        {category}
-                      </span>
-                    ))}
-                  </div>
-                  <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">
-                    {t("TestSelection.overview")}
-                  </h2>
-                  <p className="text-gray-600 mb-2 text-center">
-                    {truncateDescription(test.test_description)}
-                    {test.test_description.split(" ").length > 15 && (
-                      <span
-                        className="text-blue-500 cursor-pointer ml-2"
-                        onClick={() =>
-                          showFullDescription(test.test_description)
-                        }
-                      >
-                        See More
-                      </span>
-                    )}
-                  </p>
+              key={test.id}
+              onClick={() => handleTestSelection(test.id)}
+              className={`bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 border border-gray-500 ${
+                selectedTests.includes(test.id) ? "bg-blue-100" : ""
+              }`}
+              style={{ height: "350px", width: "320px" }}
+            >
+              <div className="relative p-6 flex flex-col h-full ">
+                <div className="items-center relative flex flex-col ">
+              <div className="flex items-center justify-center rounded-full bg-blue-200 p-2 w-16 h-16">
+  <IoDocumentTextOutline className="text-blue-900" size={32} />
+</div>
+</div>
+
+                <h5 className="font-bold text-lg text-gray-800 mt-3 text-center">
+                  {test.test_name}
+                </h5>
+                <div className="mb-2 flex flex-wrap justify-center">
+                  {test.categories.map((category, index) => (
+                    <span
+                      key={index}
+                      className="bg-category-tag-bg text-black py-2 px-6 rounded-lg text-xs font-semibold mr-2 mb-2"
+                    >
+                      {category}
+                    </span>
+                  ))}
                 </div>
-                <div className="px-6 py-2 flex justify-end items-center">
-                <button
-                  className={`mt-0 px-4 p-2 rounded ${selectedTests.includes(test.id) ? 'bg-red-500 text-white' : 'bg-blue-900 text-white'}`}
-                  onClick={() => handleTestSelection(test.id)}
-                >
-                  {selectedTests.includes(test.id) ? t("TestSelection.remove") : t("TestSelection.add")}
-                </button>
+                <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">
+                  {t("TestSelection.overview")}
+                </h2>
+                <p className="text-gray-600 mb-2 text-center flex-grow">
+                  {truncateDescription(test.test_description)}
+                  {test.test_description.split(" ").length > 15 && (
+                    <span
+                      className="text-blue-500 cursor-pointer ml-2"
+                      onClick={() => showFullDescription(test.test_description)}
+                    >
+                      See More
+                    </span>
+                  )}
+                </p>
+                <div className="flex justify-end mt-auto">
+                  <button
+                    className={`px-4 p-2 rounded ${
+                      selectedTests.includes(test.id) ? "bg-red-500 text-white" : "bg-blue-900 text-white"
+                    }`}
+                    onClick={() => handleTestSelection(test.id)}
+                  >
+                    {selectedTests.includes(test.id) ? t("TestSelection.remove") : t("TestSelection.add")}
+                  </button>
                 </div>
               </div>
-            ))}
+            </div>     
+                 ))}
           </div>
 
           <div className="mt-5 bottom-0 left-0 right-0  p-3  flex justify-between">
             <button
               onClick={handleBackButtonClick}
-              className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+              className="bg-white text-blue-900 border-1 border-blue-900 font-semibold py-2 px-4 rounded"
             >
               {t("TestSelection.back")}
             </button>

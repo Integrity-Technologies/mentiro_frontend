@@ -4,7 +4,7 @@ import { getAssessmentByUniqueLink } from "../../actions/AssesmentAction";
 import { getUserResults } from "../../actions/resultAction";
 import TestTime from "./TestTime";
 
-const logo = "/assets/logo.png"; 
+const logo = "/assets/logo.png";
 
 const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
 
@@ -18,7 +18,6 @@ const YourTests = () => {
   const [uniqueLink, setUniqueLink] = useState(null);
 
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     const searchParams = window.location.search;
@@ -124,33 +123,28 @@ const YourTests = () => {
       ) : (
         <>
           {timeExpired ? (
-            <div className="flex w-full min-h-screen">
-            <div className="w-1/2 bg-blue-900 flex flex-col items-center justify-center text-white">
-              <img
-                src={logo}
-                alt="Mentiro Logo"
-                className="h-24 mt-4"
-              />
-              <div className="p-8 text-center">
-                <h2 className="text-2xl font-bold">Time Expired</h2>
-                <p className="mt-4">
-                  Finishing the assessment will give you a chance to show your skills and be noticed by the recruiters
-                </p>
+            <div className="flex w-full min-h-screen items-center justify-center bg-blue-100 p-4">
+              <div className="flex flex-col items-center">
+                <img
+                  src={Mentirobluelogo}
+                  alt="Mentiro Logo"
+                  className="h-24 mb-4"
+                />
+                <div className="bg-white p-12 max-w-4xl rounded-lg shadow-lg text-center">
+                  <h1 className="text-4xl font-bold mb-4 text-blue-900">
+                    Thank You
+                  </h1>
+                  <p className="text-lg text-gray-600">
+                    Thank you for participating in the assessment.
+                    Unfortunately, the allotted time for the test has ended.
+                    Your responses have been saved. You may reattempt the
+                    assessment by simply opening the link again at your
+                    convenience.
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="w-1/2 flex flex-col items-center justify-center bg-blue-100 p-8">
-              <div className="bg-white p-12 rounded-lg shadow-lg text-center">
-                <h1 className="text-4xl font-bold mb-4 text-blue-900">
-                  Thank You
-                </h1>
-                <p className="text-lg text-gray-600">
-                  Thank you for participating in the assessment. Unfortunately, the allotted time for the test has ended. Your responses have been saved. You may reattempt the assessment by simply opening the link again at your convenience.
-                </p>
-              </div>
-            </div>
-          </div>
           ) : (
-            
             <>
               {showTestsSection ? (
                 <>
@@ -206,27 +200,20 @@ const YourTests = () => {
                   </div>
                 </>
               ) : (
-                <div className="flex w-full min-h-screen">
-                  <div className="w-1/2 bg-blue-900 flex flex-col items-center justify-center text-white">
+                <div className="flex w-full min-h-screen items-center justify-center bg-blue-100 p-4">
+                  <div className="flex flex-col items-center">
                     <img
-                      src={logo}
+                      src={Mentirobluelogo}
                       alt="Mentiro Logo"
-                      className="h-24 mt-4"
+                      className="h-24 mb-4"
                     />
-                    <div className="p-8 text-center">
-                      <h2 className="text-2xl font-bold">All Tests Completed</h2>
-                      <p className="mt-4">
-                        Thank you for participating in all the assessments. We appreciate your effort and time.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-1/2 flex flex-col items-center justify-center bg-blue-100 p-8">
                     <div className="bg-white p-12 rounded-lg shadow-lg text-center">
                       <h1 className="text-4xl font-bold mb-4 text-blue-900">
                         Thank You
                       </h1>
                       <p className="text-lg text-gray-600">
-                        Thank you for completing the tests! We appreciate your time and effort.
+                        Thank you for completing the tests! We appreciate your
+                        time and effort.
                       </p>
                     </div>
                   </div>
@@ -234,7 +221,6 @@ const YourTests = () => {
               )}
             </>
           )}
-          
         </>
       )}
     </div>
