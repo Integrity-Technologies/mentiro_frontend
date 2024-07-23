@@ -274,11 +274,13 @@ const ActiveAssessment = () => {
           </tbody>
         </table>
       </div>
-      <TablePagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+      {currentResults.length > 0 && (
+        <TablePagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
       <CSSTransition
         in={showDeleteConfirmation}
         timeout={300}

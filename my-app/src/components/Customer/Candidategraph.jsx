@@ -76,7 +76,7 @@ const CandidateGraph = ({ onRowClick }) => {
                 <tr>
                 <td
                   colSpan="4"
-                  className="text-center px-4 py-4 border bg-white-100 text-black-700"
+                  className="text-center px-4 py-4 border bg-white text-black"
                 >
                   {error.includes("404") ? `${t("graphView.noData")}` : error}
                 </td>

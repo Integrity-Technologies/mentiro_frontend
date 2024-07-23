@@ -100,11 +100,16 @@ const SignUp = () => {
       if (!formData.lastName) {
         newErrors.lastName = t("signup.errors.lastNameRequired");
       }
-      if (!formData.phone) {
-        newErrors.phone = t("signup.errors.phoneRequired");
-      } else if (formData.phone.length < 10 || formData.phone.length > 15) {
+      // if (!formData.phone) {
+      //   newErrors.phone = t("signup.errors.phoneRequired");
+      // } 
+      // else     
+      if (
+        formData.phone &&
+        (formData.phone.length < 10 || formData.phone.length > 15)
+      ) {
         newErrors.phone = t("signup.errors.phoneLength");
-      } else if (!validatePhoneNumber(formData.phone)) {
+      } else if (formData.phone && !validatePhoneNumber(formData.phone)) {
         newErrors.phone = t("signup.errors.phoneInvalid");
       }
       if (!formData.password) {
@@ -324,17 +329,35 @@ const SignUp = () => {
               </p>
             </div>
             {/* Progress Bar */}
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+            <div className="w-full h-2 flex overflow-hidden bg-gray-300 rounded mb-4">
+              <div
+                className={`flex-1 ${
+                  currentPage >= 1 ? "bg-blue-500" : "bg-gray-300"
+                } border-r border-white`}
+              ></div>
+              <div
+                className={`flex-1 ${
+                  currentPage >= 2 ? "bg-blue-500" : "bg-gray-300"
+                } border-r border-white`}
+              ></div>
+              <div
+                className={`flex-1 ${
+                  currentPage >= 3 ? "bg-blue-500" : "bg-gray-300"
+                }`}
+              ></div>
+            </div>
+
+            {/* <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
               <div
                 className={`bg-blue-600 h-2.5 rounded-full`}
                 style={{ width: `${(currentPage / 3) * 100}%` }}
               ></div>
-            </div>
+            </div> */}
 
             {/* Step Indicator */}
-            <div className="text-center mb-4">
+            {/* <div className="text-center mb-4">
               <span>{`${currentPage}/3`}</span>
-            </div>
+            </div> */}
             <form className="space-y-4" onSubmit={handleSubmit}>
               {currentPage === 1 && (
                 <div className="mb-3">
@@ -414,10 +437,9 @@ const SignUp = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-wrap -mx-4 mb-6">
+                  <div className="flex flex-wrap -mx-4 mb-8">
                     <div className="w-full px-3">
-                      <div className="flex items-center space-x-3">
-                        {" "}
+                      <div className="flex items-center space-x-3 w-full">
                         {/* Added space-x-4 for spacing */}
                         <Select
                           value={currentCountry}
@@ -439,7 +461,6 @@ const SignUp = () => {
                           placeholder={t("signup.select_country")}
                         />
                         <div className="relative flex-1">
-                          {" "}
                           {/* Added flex-1 to make input stretch */}
                           <input
                             type="text"
@@ -454,18 +475,16 @@ const SignUp = () => {
                             className="absolute ml-1 text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                           >
                             {t("signup.phone")}{" "}
-                            <span className="text-red-500">*</span>
+                            {/* <span className="text-red-500">*</span> */}
                           </label>
                           {errors.phone && (
-                            <span className="text-danger text-sm">
-                              {errors.phone}
-                            </span>
+                            <span className="text-danger text-sm absolute top-full mt-1">{errors.phone}</span>
                           )}
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="mb-1">
+                  <div className="mb-3 mt-4">
                     <div className="relative">
                       <input
                         type={showPassword ? "text" : "password"}

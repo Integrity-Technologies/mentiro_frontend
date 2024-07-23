@@ -16,7 +16,7 @@ import {
       case FETCH_CANDIDATES_SUCCESS:
         return {
           ...state,
-          candidates: action.payload,
+          candidates: action.payload, // Handle empty array correctly
           error: null,
         };
       case ADD_CANDIDATE_SUCCESS:

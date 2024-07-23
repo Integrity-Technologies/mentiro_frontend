@@ -23,9 +23,15 @@ const CandidateCard = () => {
         setError(err.message);
       }
     };
-
+  
     fetchData();
   }, [dispatch]);
+  
+  useEffect(() => {
+    console.log('Candidates updated:', candidates);
+  }, [candidates]); // This will log candidates when they change
+  
+  
 
   const options = {
     chart: {

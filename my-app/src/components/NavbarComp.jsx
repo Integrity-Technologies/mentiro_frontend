@@ -141,13 +141,13 @@ const Navbar = ({
           </div>
         )}
       </div>
-      <div className="ml-4">
+      {/* <div className="ml-4">
         <LanguageToggleButton
           isMenuCollapsed={isMenuCollapsed}
           onLanguageChange={handleLanguageChange}
           isLanguageButton={isLanguageButton}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

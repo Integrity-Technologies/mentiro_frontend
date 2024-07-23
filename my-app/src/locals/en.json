@@ -32,8 +32,8 @@
       "emailRequired": "Please enter your email",
       "emailInvalid": "Please enter a valid email address",
       "phoneRequired": "Please enter your phone number",
-      "phoneInvalid": "Please enter a valid phone number using digits only",
-      "phoneLength": "Phone number must be between 10 and 15 digits long",
+       "phoneInvalid": "Please enter a valid phone number using digits",
+      "phoneLength": "Phone must be between 10 and 15 digits long",
       "passwordRequired": "Please enter your password",
       "passwordLength": "Password must be at least 6 characters",
       "passwordUppercase": "Password must contain at least one uppercase letter",
@@ -194,8 +194,8 @@
     "Dashboard": "Dashboard",
     "companyProfile": "Company Profile",
     "Assessment": "Assessment",
-    "candidateProfile": "Candidate Profile",
-    "testResult": "Test Result"
+    "candidateProfile": "Candidates",
+    "testResult": "Result"
   },
 
   "toggleButton":{
@@ -239,7 +239,7 @@
   },
 
   "candidatesResult":{
-    "title":"Candidates Result",
+    "title":"Result",
     "searchPlaceholder": "Search by candidate",
     "noData": "No candidate result found",
     "id": "ID",

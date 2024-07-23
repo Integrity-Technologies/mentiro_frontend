@@ -101,13 +101,6 @@ const CompanyProfile = () => {
         </h3>
       </div>
       <div className="relative bg-white w-full max-w-5xl rounded-lg shadow-lg p-8">
-        <div className="absolute top-4 right-4">
-          <LanguageToggleButton
-            isLanguageButton={true}
-            onLanguageChange={() => {}}
-            isMenuCollapsed={false}
-          />
-        </div>
         {companyList.map((company) => (
           <div key={company.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div className="flex flex-col items-start justify-center w-full">
@@ -144,6 +137,16 @@ const CompanyProfile = () => {
                 value={company.job_title}
                 readOnly
                 className="mt-2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              />
+            </div>
+            <div className="flex flex-col items-start justify-center w-full mt-0">
+              <label htmlFor={`languageToggle_${company.id}`} className="font-medium mb-2 text-black">
+                Language
+              </label>
+              <LanguageToggleButton
+                isLanguageButton={true}
+                onLanguageChange={() => {}}
+                isMenuCollapsed={false}
               />
             </div>
             {/* Add more fields for other company information */}

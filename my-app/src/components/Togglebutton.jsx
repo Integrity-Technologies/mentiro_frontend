@@ -1,81 +1,77 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
-import { logout } from "../actions/authActions"; // Adjust the path as needed
-import { useNavigate } from "react-router-dom";
-// import { FaSignOutAlt } from "react-icons/fa"; // Import the icon
+import React from 'react';
+import Select from 'react-select';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { logout } from '../actions/authActions'; // Adjust the path as needed
+import { useNavigate } from 'react-router-dom';
 
-const LanguageToggleButton = ({
-  isLanguageButton,
-  onLanguageChange,
-  isMenuCollapsed,
-}) => {
+const LanguageToggleButton = ({ onLanguageChange }) => {
   const { t, i18n } = useTranslation();
-  const [showAlert, setShowAlert] = useState(false);
-  const navigate = useNavigate();
-  const currentLanguage = i18n.language;
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    onLanguageChange(lng);
+  const handleChange = (selectedOption) => {
+    if (selectedOption.value === 'logout') {
+      handleLogout();
+    } else {
+      i18n.changeLanguage(selectedOption.value);
+      onLanguageChange(selectedOption.value);
+    }
   };
 
   const handleLogout = () => {
     localStorage.clear(); // Clear all items from local storage
     dispatch(logout());
-    setShowAlert(true);
     setTimeout(() => {
-      setShowAlert(false);
-      navigate("/");
+      navigate('/');
     }, 2000); // 2000 milliseconds = 2 seconds, adjust as needed
   };
 
-  return (
-    <div>
-      {isLanguageButton && (
-        <div className="sticky top-0 right-5 z-50 p-2">
-          <label className="inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              value=""
-              className="sr-only peer"
-              onClick={() =>
-                changeLanguage(currentLanguage === "en" ? "ar" : "en")
-              }
-            />
-            <div className="sticky w-11 h-6 border-1 border-white bg-blue-900 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-900 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            {!isMenuCollapsed && (
-              <span className="ms-2 text-sm text-black dark:text-gray-300">
-               Language: {currentLanguage === "en" ? "English" : "Arabic"}
-              </span>
-            )}
-          </label>
-        </div>
-      )}
+  const options = [
+    { value: 'en', label: 'English' },
+    { value: 'ar', label: 'Arabic' },
+    // { value: 'logout', label: 'Logout' },
+  ];
 
-      <div className="fixed-bottom ml-md-5">
-        {showAlert && (
-          <div className="inline-block p-2 mb-2 ml-6 text-sm text-red-700 bg-red-100 border border-red-400 rounded-md text-center">
-            {t("toggleButton.logoutSuccess")}
-          </div>
-        )}
-        {/* <div className="flex ml-5 items-center mb-2">
-          <a
-            onClick={handleLogout}
-            className={`flex items-center text-sm rounded hover:bg-gray-800 transition-colors no-underline ${
-              isMenuCollapsed
-                ? "bg-black text-white p-2"
-                : "px-4 py-2 bg-black text-white hover:bg-gray-800"
-            }`}
-          >
-            <FaSignOutAlt className={`${isMenuCollapsed ? "" : "ltr:mr-2 rtl:ml-2"}`} />
-            {!isMenuCollapsed && t("toggleButton.Logout")}
-          </a>
-        </div> */}
-      </div>
-    </div>
+  // Custom styles for react-select
+  const customStyles = {
+    container: (provided) => ({
+      ...provided,
+      width: '100%',
+      maxWidth: 'lg',
+    }),
+    control: (provided) => ({
+      ...provided,
+      height: '50px', // Adjust height here
+      minHeight: '50px', // Ensure min height
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      padding: 4,
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      padding: 4,
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      height: 'auto',
+    }),
+    input: (provided) => ({
+      ...provided,
+      margin: 0,
+      padding: 0,
+    }),
+  };
+
+  return (
+    <Select
+      options={options}
+      onChange={handleChange}
+      value={options.find(option => option.value === i18n.language)}
+      className="w-full"
+      styles={customStyles}
+    />
   );
 };
 

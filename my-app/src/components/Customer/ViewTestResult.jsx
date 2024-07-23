@@ -5,8 +5,7 @@ import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
 import { FaSearch, FaInfoCircle } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
-
-const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
+const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Ensure this path is correct
 
 const ViewTestResult = () => {
   const { t } = useTranslation();
@@ -16,8 +15,6 @@ const ViewTestResult = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTests, setSelectedTests] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
-  const [recentTests, setRecentTests] = useState([]);
-  const [earlierTests, setEarlierTests] = useState([]);
 
   useEffect(() => {
     dispatch(getUserResults()); // Fetch results on component mount
@@ -46,19 +43,14 @@ const ViewTestResult = () => {
 
   const openModal = (tests) => {
     if (tests.length > 0) {
-      const recent = [];
-      const earlier = [];
+      const allTests = [];
 
       tests.forEach((test) => {
-        if (test.status === "Attempted" || test.status === "Not Attempted") {
-          recent.push(test);
-        } else if (test.status === "Previous Attempt") {
-          earlier.push(test);
-        }
+        allTests.push(test);
 
         if (Array.isArray(test.previous_attempts)) {
           test.previous_attempts.forEach((attempt) => {
-            earlier.push({
+            allTests.push({
               ...test,
               score: attempt.score,
               status: "Previous Attempt",
@@ -68,8 +60,7 @@ const ViewTestResult = () => {
         }
       });
 
-      setRecentTests(recent.slice(0, 2)); // Show only the first 2 recent tests
-      setEarlierTests(earlier.slice(0, 2)); // Show only the first 2 earlier tests
+      setSelectedTests(allTests);
       setIsModalOpen(true);
     }
   };
@@ -77,9 +68,14 @@ const ViewTestResult = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedTests([]);
-    setRecentTests([]);
-    setEarlierTests([]);
   };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const progressBarColors = ["bg-blue-900", "bg-green-500", "bg-yellow-500", "bg-red-500"];
 
   return (
     <div className="rounded-xl p-6 min-h-screen font-roboto">
@@ -132,15 +128,22 @@ const ViewTestResult = () => {
               scope="col"
               className="px-6 py-4 text-left font-bold text-gray-900 uppercase tracking-wider"
             >
+              recent attempt
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-4 text-left font-bold text-gray-900 uppercase tracking-wider"
+            >
               {t("candidatesResult.assessmentScore")}
             </th>
+           
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {filteredResults.length === 0 ? (
             <tr>
               <td
-                colSpan="3"
+                colSpan="4"
                 className="text-center px-4 py-4 border bg-white-100 text-black-700"
               >
                 {t("candidatesResult.noData")}
@@ -161,6 +164,9 @@ const ViewTestResult = () => {
                     {assessment.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
+                    {formatDate(assessment.started_at)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                     <div className="flex items-center">
                       <span>
                         {assessment.assessment_percentage !== null
@@ -179,6 +185,7 @@ const ViewTestResult = () => {
                       </div>
                     </div>
                   </td>
+                  
                 </tr>
               ))
             )
@@ -191,52 +198,45 @@ const ViewTestResult = () => {
         onPageChange={handlePageChange}
       />
 
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
-          <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 relative">
-            <AiOutlineClose
-              className="absolute top-4 right-6 text-red-500 cursor-pointer"
-              size={24}
-              onClick={closeModal}
-            />
-            <div className="flex flex-col items-center">
-              <img
-                src={Mentirobluelogo}
-                alt="Mentiro Logo"
-                className="h-20 mt-0"
-              />
-            </div>
-            <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">History Of Attempts</h2>
-            <div>
-              {recentTests.length > 0 && (
-                <div className="mb-4">
-                  <h3 className="text-lg font-semibold mb-2">Recent</h3>
-                  {recentTests.map((test, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border border-black rounded-md mb-2">
-                      <span>{test.name}</span>
-                      <span>{test.status}</span>
-                      <span>{test.score}%</span>
-                    </div>
-                  ))}
+{isModalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
+    <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 relative">
+      <AiOutlineClose
+        className="absolute top-4 right-6 text-red-500 cursor-pointer"
+        size={24}
+        onClick={closeModal}
+      />
+      <div className="flex flex-col items-center">
+        <img
+          src={Mentirobluelogo}
+          alt="Mentiro Logo"
+          className="h-20 mt-0"
+        />
+      </div>
+      <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">Marks Breakdown</h2>
+      <div>
+        {selectedTests.length > 0 && (
+          <div className="mb-4">
+            {selectedTests.map((test, index) => (
+              <div key={index} className="flex items-center justify-between p-2 mb-2 border border-gray-200 rounded-lg">
+                <div className="text-gray-700 font-medium w-1/3">{test.name}</div>
+                <div className="text-gray-500 w-1/3 text-center">{test.status}</div>
+                <div className="text-gray-500 w-1/3 text-right">{test.score}%</div>
+                <div className="flex flex-col w-50 h-4 ml-5 bg-gray-200 overflow-hidden w-1/3">
+                  <div
+                    className={`${progressBarColors[index % progressBarColors.length]} h-full`}
+                    style={{ width: `${test.score || 0}%` }}
+                  ></div>
                 </div>
-              )}
-
-              {earlierTests.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Earlier</h3>
-                  {earlierTests.map((test, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border border-black rounded-md mb-2">
-                      <span>{test.name}</span>
-                      <span>{test.status}</span>
-                      <span>{test.score}%</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+              </div>
+            ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
