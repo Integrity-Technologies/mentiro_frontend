@@ -24,7 +24,7 @@ const YourTests = () => {
     if (searchParams.startsWith("?")) {
       const uniqueLinkParam = searchParams.substring(1); // Remove the "?" at the start
       setUniqueLink(uniqueLinkParam);
-      console.log("Extracted uniqueLink:", uniqueLinkParam);
+      // console.log("Extracted uniqueLink:", uniqueLinkParam);
     } else {
       console.error("uniqueLink parameter is missing in the URL");
     }

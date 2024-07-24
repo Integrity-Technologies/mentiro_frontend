@@ -31,7 +31,6 @@ export const getAllCandidates = () => async (dispatch) => {
   } catch (error) {
     const errorMessage = error.response?.data?.error || "Error fetching candidates";
     dispatch({ type: CANDIDATE_ERROR, payload: errorMessage });
-    throw error;
   }
 };
 
@@ -99,17 +98,17 @@ export const getUserCandidates = () => async (dispatch) => {
     const token = getToken(); // Retrieve token from local storage
     const axiosConfig = {
       headers: {
-        Authorization: `Bearer ${token}`, // Set authorization header
-      },
+        Authorization: `Bearer ${token}` // Set authorization header
+      }
     };
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/candidate/user/candidates`, axiosConfig);
+    // console.log(res);
 
-    // Dispatch empty array if no candidates are found
-    const formattedUsers = res.data.length ? res.data.map((user) => ({
-      ...user,
-      created_at: user.created_at.split("T")[0], // Extract date part only
-      password: "*****",
-    })) : [];
+    const formattedUsers = res.data.map((user) => ({
+        ...user,
+        created_at: user.created_at.split("T")[0], // Extract date part only
+        password: "*****",
+      }));
 
     dispatch({ type: FETCH_CANDIDATES_SUCCESS, payload: formattedUsers });
     
@@ -120,5 +119,3 @@ export const getUserCandidates = () => async (dispatch) => {
     throw error;
   }
 };
-
-

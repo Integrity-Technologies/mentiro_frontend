@@ -28,7 +28,7 @@ const CandidateCard = () => {
   }, [dispatch]);
   
   useEffect(() => {
-    console.log('Candidates updated:', candidates);
+    // console.log('Candidates updated:', candidates);
   }, [candidates]); // This will log candidates when they change
   
   

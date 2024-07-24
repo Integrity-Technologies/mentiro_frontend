@@ -94,7 +94,7 @@ const Preview = () => {
         })
       );
 
-      console.log(assessmentData);
+      // console.log(assessmentData);
       setShowPreview(false);
       setShowInviteCandidate(true);
 

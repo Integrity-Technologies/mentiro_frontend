@@ -128,7 +128,7 @@ const CandidateGraph = ({ onRowClick }) => {
               <tr>
                 <td
                   colSpan="4"
-                  className="text-center px-4 py-4 border bg-yellow-100 text-yellow-700"
+                  className="text-center px-4 py-4 border bg-white text-black"
                 >
                   {t("graphView.noData")}
                 </td>

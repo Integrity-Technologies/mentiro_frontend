@@ -71,7 +71,7 @@ const formattedTestsData = selectedTests.map((testId) => {
 
   const handleBackButton = () => {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
-    console.log(currentStep);
+    // console.log(currentStep);
     setShowTestSelection(true);
   };
 

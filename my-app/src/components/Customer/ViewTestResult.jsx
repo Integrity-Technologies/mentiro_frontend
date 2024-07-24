@@ -67,7 +67,7 @@ const ViewTestResult = () => {
 
   const openHistoryModal = (assessments) => {
     if (assessments.length > 0) {
-      console.log(assessments.assessment_percentage);
+      // console.log(assessments.assessment_percentage);
       setHistoryTests(assessments);
       setIsHistoryModalOpen(true);
     }

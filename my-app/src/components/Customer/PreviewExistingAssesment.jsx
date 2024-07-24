@@ -37,17 +37,37 @@ const PreviewExistingAssessment = () => {
   }, [dispatch]);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(assessmentData?.shareablelink).then(
-      function () {
+    const textToCopy = assessmentData?.shareablelink || "";
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy).then(
+        function () {
+          setCopySuccess(true);
+          setTimeout(() => {
+            setCopySuccess(false);
+          }, 2000);
+        },
+        function (err) {
+          console.error("Unable to copy to clipboard:", err);
+        }
+      );
+    } else {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand("copy");
         setCopySuccess(true);
         setTimeout(() => {
           setCopySuccess(false);
         }, 2000);
-      },
-      function (err) {
+      } catch (err) {
         console.error("Unable to copy to clipboard:", err);
       }
-    );
+      document.body.removeChild(textArea);
+    }
   };
 
   return (

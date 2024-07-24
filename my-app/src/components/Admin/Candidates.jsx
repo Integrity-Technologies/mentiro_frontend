@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Form, FormControl } from "react-bootstrap";
+import { Table, Button, Modal, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCandidates,
@@ -12,23 +12,20 @@ import TablePagination from "./TablePagination"; // Import your TablePagination 
 const Candidates = () => {
   const dispatch = useDispatch();
   const candidates = useSelector((state) => state.candidates.candidates);
+  const error = useSelector((state) => state.candidates.error); // Get error from state
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editCandidateData, setEditCandidateData] = useState(null);
   const [newCandidateData, setNewCandidateData] = useState({
     first_name: "",
     last_name: "",
-    // phone: "",
     email: "",
-    // password: "",
     created_at: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
-  const [phoneError, setPhoneError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [candidateIdToDelete, setCandidateIdToDelete] = useState(null);
@@ -83,12 +80,6 @@ const Candidates = () => {
     } else {
       setLastNameError("");
     }
-    // if (!newCandidateData.phone.trim()) {
-    //   setPhoneError("Phone number is required");
-    //   hasError = true;
-    // } else {
-    //   setPhoneError("");
-    // }
     if (
       !newCandidateData.email.trim() ||
       !validateEmail(newCandidateData.email.trim())
@@ -98,13 +89,6 @@ const Candidates = () => {
     } else {
       setEmailError("");
     }
-
-    // if (!newCandidateData.password.trim()) {
-    //   setPasswordError("Password is required");
-    //   hasError = true;
-    // } else {
-    //   setPasswordError("");
-    // }
 
     if (hasError) {
       return;
@@ -119,7 +103,6 @@ const Candidates = () => {
 
     dispatch(addCandidate(newCandidateData)).then(() => {
       resetForm();
-
       dispatch(getAllCandidates());
       handleCloseAddModal();
     });
@@ -134,7 +117,7 @@ const Candidates = () => {
 
   const handleDeleteCandidate = async (id) => {
     await dispatch(deleteCandidate(id));
-    setShowDeleteModal(false)
+    setShowDeleteModal(false);
     await dispatch(getAllCandidates());
   };
 
@@ -142,7 +125,7 @@ const Candidates = () => {
     const fullName = `${candidate.first_name} ${candidate.last_name}`;
     return fullName.toLowerCase().includes(searchTerm.toLowerCase());
   });
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of users per page
@@ -155,21 +138,17 @@ const Candidates = () => {
     indexOfLastItem
   );
   const handlePageChange = (page) => setCurrentPage(page);
-  
+
   const resetForm = () => {
     setNewCandidateData({
       first_name: "",
       last_name: "",
-      // phone: "",
       email: "",
-      // password: "",
       created_at: "",
     });
     setFirstNameError("");
     setLastNameError("");
-    setPhoneError("");
     setEmailError("");
-    setPasswordError("");
   };
 
   return (
@@ -202,36 +181,45 @@ const Candidates = () => {
           </tr>
         </thead>
         <tbody>
-          {currentCandidates.map((candidate) => (
-            <tr key={candidate.id}>
-              <td className="border border-gray-400 px-4 py-2">{candidate.id}</td>
-              <td className="border border-gray-400 px-4 py-2">{candidate.first_name}</td>
-              <td className="border border-gray-400 px-4 py-2">{candidate.last_name}</td>
-              <td className="border border-gray-400 px-4 py-2">{candidate.email}</td>
-              <td className="border border-gray-400 px-4 py-2">{candidate.created_at}</td>
-              <td className="border border-gray-400 px-4 py-2">
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
-                  onClick={() => handleShowEditModal(candidate)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
-                  onClick={() => handleDeleteCandidate(candidate.id)}
-                >
-                  Delete
-                </button>
+          {currentCandidates.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="text-center bg-gray-200 p-3">
+                Candidates not found
               </td>
             </tr>
-          ))}
+          ) : (
+            currentCandidates.map((candidate) => (
+              <tr key={candidate.id}>
+                <td className="border border-gray-400 px-4 py-2">{candidate.id}</td>
+                <td className="border border-gray-400 px-4 py-2">{candidate.first_name}</td>
+                <td className="border border-gray-400 px-4 py-2">{candidate.last_name}</td>
+                <td className="border border-gray-400 px-4 py-2">{candidate.email}</td>
+                <td className="border border-gray-400 px-4 py-2">{candidate.created_at}</td>
+                <td className="border border-gray-400 px-4 py-2">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
+                    onClick={() => handleShowEditModal(candidate)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                    onClick={() => handleShowDeleteModal(candidate.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       <TablePagination
-        totalPages={totalPages}
         currentPage={currentPage}
+        totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+      {/* Add Candidate Modal */}
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Candidate</Modal.Title>
@@ -242,98 +230,74 @@ const Candidates = () => {
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
+                placeholder="Enter first name"
                 value={newCandidateData.first_name}
-                onChange={(e) => {
+                onChange={(e) =>
                   setNewCandidateData({
                     ...newCandidateData,
                     first_name: e.target.value,
-                  });
-                  setFirstNameError("");
-                }}
+                  })
+                }
               />
               {firstNameError && (
-                <div className="text-danger">{firstNameError}</div>
+                <Form.Text className="text-danger">{firstNameError}</Form.Text>
               )}
             </Form.Group>
             <Form.Group controlId="formLastName">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
+                placeholder="Enter last name"
                 value={newCandidateData.last_name}
-                onChange={(e) => {
+                onChange={(e) =>
                   setNewCandidateData({
                     ...newCandidateData,
                     last_name: e.target.value,
-                  });
-                  setLastNameError("");
-                }}
+                  })
+                }
               />
               {lastNameError && (
-                <div className="text-danger">{lastNameError}</div>
+                <Form.Text className="text-danger">{lastNameError}</Form.Text>
               )}
             </Form.Group>
-            {/* <Form.Group controlId="formPhone">
-              <Form.Label>Phone</Form.Label>
-              <Form.Control
-                type="text"
-                value={newCandidateData.phone}
-                onChange={(e) => {
-                  setNewCandidateData({
-                    ...newCandidateData,
-                    phone: e.target.value,
-                  });
-                  setPhoneError("");
-                }}
-              />
-              {phoneError && <div className="text-danger">{phoneError}</div>}
-            </Form.Group> */}
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
+                placeholder="Enter email"
                 value={newCandidateData.email}
-                onChange={(e) => {
+                onChange={(e) =>
                   setNewCandidateData({
                     ...newCandidateData,
                     email: e.target.value,
-                  });
-                  setEmailError("");
-                }}
+                  })
+                }
               />
-              {emailError && <div className="text-danger">{emailError}</div>}
+              {emailError && (
+                <Form.Text className="text-danger">{emailError}</Form.Text>
+              )}
             </Form.Group>
-            {/* <Form.Group controlId="formPassword">
-              <Form.Label>Password</Form.Label>
+            <Form.Group controlId="formDate">
+              <Form.Label>Date Joined</Form.Label>
               <Form.Control
-                type="password"
-                value={newCandidateData.password}
-                onChange={(e) => {
+                type="date"
+                placeholder="Select date"
+                value={newCandidateData.created_at}
+                onChange={(e) =>
                   setNewCandidateData({
                     ...newCandidateData,
-                    password: e.target.value,
-                  });
-                  setPasswordError("");
-                }}
+                    created_at: e.target.value,
+                  })
+                }
               />
-              {passwordError && (
-                <div className="text-danger">{passwordError}</div>
-              )}
-            </Form.Group> */}
+            </Form.Group>
+            <Button variant="primary" onClick={handleAddCandidate}>
+              Add Candidate
+            </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal}>
-            Close
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleAddCandidate}
-            className="text-left"
-          >
-            Add Candidate
-          </Button>
-        </Modal.Footer>
       </Modal>
+      {/* Edit Candidate Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Candidate</Modal.Title>
@@ -344,6 +308,7 @@ const Candidates = () => {
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
+                placeholder="Enter first name"
                 value={newCandidateData.first_name}
                 onChange={(e) =>
                   setNewCandidateData({
@@ -352,11 +317,15 @@ const Candidates = () => {
                   })
                 }
               />
+              {firstNameError && (
+                <Form.Text className="text-danger">{firstNameError}</Form.Text>
+              )}
             </Form.Group>
             <Form.Group controlId="formLastName">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
+                placeholder="Enter last name"
                 value={newCandidateData.last_name}
                 onChange={(e) =>
                   setNewCandidateData({
@@ -365,24 +334,15 @@ const Candidates = () => {
                   })
                 }
               />
+              {lastNameError && (
+                <Form.Text className="text-danger">{lastNameError}</Form.Text>
+              )}
             </Form.Group>
-            {/* <Form.Group controlId="formPhone">
-              <Form.Label>Phone</Form.Label>
-              <Form.Control
-                type="text"
-                value={newCandidateData.phone}
-                onChange={(e) =>
-                  setNewCandidateData({
-                    ...newCandidateData,
-                    phone: e.target.value,
-                  })
-                }
-              />
-            </Form.Group> */}
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
+                placeholder="Enter email"
                 value={newCandidateData.email}
                 onChange={(e) =>
                   setNewCandidateData({
@@ -391,37 +351,38 @@ const Candidates = () => {
                   })
                 }
               />
+              {emailError && (
+                <Form.Text className="text-danger">{emailError}</Form.Text>
+              )}
             </Form.Group>
-            {/* <Form.Group controlId="formPassword">
-              <Form.Label>Password</Form.Label>
+            <Form.Group controlId="formDate">
+              <Form.Label>Date Joined</Form.Label>
               <Form.Control
-                type="password"
-                value={newCandidateData.password}
+                type="date"
+                placeholder="Select date"
+                value={newCandidateData.created_at}
                 onChange={(e) =>
                   setNewCandidateData({
                     ...newCandidateData,
-                    password: e.target.value,
+                    created_at: e.target.value,
                   })
                 }
               />
-            </Form.Group> */}
+            </Form.Group>
+            <Button variant="primary" onClick={handleEditCandidate}>
+              Save Changes
+            </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseEditModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleEditCandidate}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
       </Modal>
-
+      {/* Delete Candidate Modal */}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Candidate</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to delete this candidate?</Modal.Body>
+        <Modal.Body>
+          Are you sure you want to delete this candidate?
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseDeleteModal}>
             Cancel
@@ -434,6 +395,7 @@ const Candidates = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* {error && <div className="alert alert-danger">{error}</div>} */}
     </div>
   );
 };
