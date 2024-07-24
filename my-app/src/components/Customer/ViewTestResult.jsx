@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserResults } from "../../actions/resultAction";
 import TablePagination from "./TablePagination";
 import { useTranslation } from "react-i18next";
-import { FaSearch, FaInfoCircle } from "react-icons/fa";
+import { FaSearch, FaInfoCircle, FaEllipsisV } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
+
 const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Ensure this path is correct
 
 const ViewTestResult = () => {
@@ -13,8 +14,11 @@ const ViewTestResult = () => {
   const { results } = useSelector((state) => state.results);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false); // New state for the history modal
   const [selectedTests, setSelectedTests] = useState([]);
+  const [historyTests, setHistoryTests] = useState([]); // New state for history tests
   const [filteredResults, setFilteredResults] = useState([]);
+  const [dropdownVisible, setDropdownVisible] = useState({});
 
   useEffect(() => {
     dispatch(getUserResults()); // Fetch results on component mount
@@ -22,8 +26,8 @@ const ViewTestResult = () => {
 
   useEffect(() => {
     if (Array.isArray(results)) {
-      const filtered = results.filter((result) =>
-        result.companies && result.companies.length > 0
+      const filtered = results.filter(
+        (result) => result.companies && result.companies.length > 0
       );
       setFilteredResults(filtered);
     }
@@ -48,16 +52,7 @@ const ViewTestResult = () => {
       tests.forEach((test) => {
         allTests.push(test);
 
-        if (Array.isArray(test.previous_attempts)) {
-          test.previous_attempts.forEach((attempt) => {
-            allTests.push({
-              ...test,
-              score: attempt.score,
-              status: "Previous Attempt",
-              date: attempt.date,
-            });
-          });
-        }
+        
       });
 
       setSelectedTests(allTests);
@@ -70,12 +65,51 @@ const ViewTestResult = () => {
     setSelectedTests([]);
   };
 
+  const openHistoryModal = (assessments) => {
+    if (assessments.length > 0) {
+      console.log(assessments.assessment_percentage);
+      setHistoryTests(assessments);
+      setIsHistoryModalOpen(true);
+    }
+  };
+
+  const closeHistoryModal = () => {
+    setIsHistoryModalOpen(false);
+    setHistoryTests([]);
+  };
+
+  const toggleDropdown = (candidateId, assessmentIndex) => {
+    setDropdownVisible((prev) => ({
+      ...prev,
+      [`${candidateId}-${assessmentIndex}`]: !prev[`${candidateId}-${assessmentIndex}`],
+    }));
+  };
+
+  const hideDropdown = () => {
+    setDropdownVisible({});
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideDropdown);
+    return () => {
+      document.removeEventListener("click", hideDropdown);
+    };
+  }, []);
+
+  const handleDropdownClick = (event, candidateId, assessmentIndex) => {
+    event.stopPropagation();
+    toggleDropdown(candidateId, assessmentIndex);
+  };
+
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  const progressBarColors = ["bg-blue-900", "bg-green-500", "bg-yellow-500", "bg-red-500"];
+  const progressBarColors = [
+    "bg-blue-900",
+    
+  ];
 
   return (
     <div className="rounded-xl p-6 min-h-screen font-roboto">
@@ -120,7 +154,8 @@ const ViewTestResult = () => {
                   <FaInfoCircle size={14} />
                 </span>
                 <div className="absolute hidden group-hover:block bg-gray-500 text-white text-xs rounded py-1 px-2 -mt-8 ml-6 w-40">
-                  Click on 'Candidates Result' to view the test details of assessments.
+                  Click on 'Candidates Result' to view the test details of
+                  assessments.
                 </div>
               </div>
             </th>
@@ -136,14 +171,16 @@ const ViewTestResult = () => {
             >
               {t("candidatesResult.assessmentScore")}
             </th>
-           
+            <th className="px-6 py-4 text-left font-bold text-gray-900 uppercase tracking-wider">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 text-14px">
           {filteredResults.length === 0 ? (
             <tr>
               <td
-                colSpan="4"
+                colSpan="5"
                 className="text-center px-4 py-4 border bg-white-100 text-black-700"
               >
                 {t("candidatesResult.noData")}
@@ -172,31 +209,69 @@ const ViewTestResult = () => {
                         {assessment.assessment_percentage !== null
                           ? assessment.assessment_percentage !== 0
                             ? assessment.assessment_percentage % 1 !== 0
-                              ? `${assessment.assessment_percentage.toFixed(1)}%`
+                              ? `${assessment.assessment_percentage.toFixed(
+                                  1
+                                )}%`
                               : `${assessment.assessment_percentage}%`
                             : "0%"
                           : "-"}
                       </span>
-                      <div className="flex flex-col w-50 h-4 ml-5 bg-gray-200 overflow-hidden">
+                      <div className="w-75 h-5 bg-gray-200 ml-2">
                         <div
-                          className="h-full bg-blue-900"
-                          style={{ width: `${assessment.assessment_percentage || 0}%` }}
+                          className={`h-full ${progressBarColors[
+                            assessment.assessment_percentage === null
+                              ? 0
+                              : Math.min(
+                                  Math.floor(assessment.assessment_percentage / 25),
+                                  progressBarColors.length - 1
+                                )
+                          ]} `}
+                          style={{
+                            width: `${assessment.assessment_percentage}%`,
+                          }}
                         ></div>
                       </div>
                     </div>
                   </td>
-                  
+                  <td className="relative group-hover:text-white">
+                    <button
+                      className="text-gray-500 hover:text-gray-900 ml-10 focus:outline-none"
+                      onClick={(event) =>
+                        handleDropdownClick(event, candidate.id, index)
+                      }
+                    >
+                      <FaEllipsisV />
+                    </button>
+                    {dropdownVisible[`${candidate.id}-${index}`] && (
+                      <div className="absolute right-0 z-10 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg group-hover:text-white">
+                        {/* <button
+                          className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 focus:outline-none"
+                          onClick={() => openModal(assessment.tests)}
+                        >
+                          View Details
+                        </button> */}
+                        <button
+                          className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 focus:outline-none"
+                          onClick={() => openHistoryModal(assessment.tests)} // Open the history modal
+                        >
+                          History of Attempts
+                        </button>
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))
             )
           )}
         </tbody>
       </table>
-      <TablePagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+      {currentResults.length > 0 && (
+        <TablePagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
 
 {isModalOpen && (
   <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
@@ -236,6 +311,56 @@ const ViewTestResult = () => {
     </div>
   </div>
 )}
+ {isHistoryModalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
+    <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 relative">
+      <AiOutlineClose
+        className="absolute top-4 right-6 text-red-500 cursor-pointer"
+        size={24}
+        onClick={closeHistoryModal}
+      />
+      <div className="flex flex-col items-center">
+        <img
+          src={Mentirobluelogo}
+          alt="Mentiro Logo"
+          className="h-20 mt-0"
+        />
+      </div>
+      <div className="flex flex-col items-center">
+        <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">
+          History of Attempts
+        </h2>
+      </div>
+      <div className="flex flex-col  mb-4">
+        <h3 className="text-xl font-semibold">Assessment Name</h3>
+        <p className="text-lg text-gray-700">Web developer</p>
+      </div>
+      <div className="flex flex-col  mb-4">
+        <h3 className="text-xl font-semibold">Candidate Name</h3>
+        <p className="text-lg text-gray-700">Hamza</p>
+      </div>
+      <div>
+        {historyTests.length === 0 ? (
+          <p className="text-center text-gray-500">No previous attempts available</p>
+        ) : (
+          <div>
+            {historyTests.map((test, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 border border-black rounded-md mb-2"
+              >
+                <span className="font-semibold">{test.test_name}</span>
+                <span>{test.status}</span>
+                <span>{test.score}%</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
 
     </div>
   );
