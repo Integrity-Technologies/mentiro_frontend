@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaClipboardCheck } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
-const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
+const Mentirobluelogo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721929527/Mentirobluelogo_ufvjsg.png"; // Logo
 
 
 const Modal = ({ updateQuestionCount, closeModal }) => {

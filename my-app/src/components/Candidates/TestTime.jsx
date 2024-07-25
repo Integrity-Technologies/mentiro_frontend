@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { createResult } from "../../actions/resultAction";
 import Questions from "./Questions";
 
-const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
+const Mentirobluelogo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721929527/Mentirobluelogo_ufvjsg.png"; // Logo
 
 
 const TestTime = ({ onComplete, onBack, onTimeExpired }) => {

@@ -68,9 +68,9 @@ const Assessmentgraph = () => {
 
   const series = [assessmentsCount];
 
-  if (loading) {
-    return <div className="text-center">Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div className="text-center">Loading...</div>;
+  // }
 
   if (error && assessmentsCount === 0) {
     return (

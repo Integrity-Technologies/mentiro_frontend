@@ -6,20 +6,20 @@ import { FaListCheck } from "react-icons/fa6";
 import { IoBarChart } from "react-icons/io5";
 import { FaUser  } from "react-icons/fa";
 import { FaBars } from "react-icons/fa";
-import LanguageToggleButton from "../Togglebutton";
+// import LanguageToggleButton from "../Togglebutton";
 import Navbar from "../NavbarComp"; // Import the Navbar component
 
-const logo = "/assets/logo.png";
+const logo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png";
 
 const Customer = ({ isLanguageButton }) => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  // const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
 
-  const handleLanguageChange = (lng) => {
-    setSelectedLanguage(lng);
-  };
+  // const handleLanguageChange = (lng) => {
+  //   setSelectedLanguage(lng);
+  // };
 
   const toggleMenuCollapse = () => {
     setIsMenuCollapsed(!isMenuCollapsed);

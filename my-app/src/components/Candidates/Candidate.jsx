@@ -7,7 +7,7 @@ import { isEmail } from "validator"; // Import validator for email format valida
 import { useLocation } from "react-router-dom";
 
 const loginimg = "/assets/loginimg.png"; // Image for the candidate section
-const logo = "/assets/logo.png"; // Logo
+const logo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png"; // Logo
 
 const Candidate = () => {
   const dispatch = useDispatch();

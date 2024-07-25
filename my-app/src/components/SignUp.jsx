@@ -5,7 +5,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Flag from "react-world-flags";
 import { useTranslation } from "react-i18next";
-import { FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from "react-icons/fa"; // Import eye icons
+import {
+  FaEye,
+  FaEyeSlash,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa"; // Import eye icons
 import countries from "./../data/countries";
 import {
   addCompany,
@@ -13,7 +18,8 @@ import {
   fetchCompanySizes,
 } from "../actions/companyAction";
 const loginimg = "/assets/loginimg.png";
-const logo = "/assets/logo.png";
+const logo =
+  "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png";
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -25,7 +31,10 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [countryCode, setCountryCode] = useState("");
+  const [password, setPassword] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isPopoverVisible, setPopoverVisible] = useState(false);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
@@ -46,7 +55,42 @@ const SignUp = () => {
   const [companySizes, setCompanySizes] = useState([]);
   const [jobTitleCustom, setJobTitleCustom] = useState(""); // Add this line
 
+
   // console.log("🚀 ~ SignUp ~ companySizes:", companySizes);
+
+
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      password: newPassword,
+    }));
+    setPopoverVisible(newPassword.length > 0); // Show popover if there's text
+  };
+
+  // Function to calculate password strength
+  const calculateStrength = () => {
+    let strength = 0;
+    const password = formData.password; // Use password from formData
+    const checks = [
+      /[A-Z]/,          // Uppercase
+      /\d/,             // Numbers
+      /[!@&]/,          // Special characters
+      /[a-z]/,          // Lowercase
+      /.{8,}/           // Minimum length
+    ];
+
+    checks.forEach((regex) => {
+      if (regex.test(password)) {
+        strength += 20;
+      }
+    });
+
+    return strength;
+  };
+
+  const strength = calculateStrength();
+
 
   // Fetch job titles and company sizes on component mount
   useEffect(() => {
@@ -86,7 +130,10 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     let newErrors = {};
+  
+    // Page-specific validations
     if (currentPage === 1) {
       if (!formData.email) {
         newErrors.email = t("signup.errors.emailRequired");
@@ -100,14 +147,7 @@ const SignUp = () => {
       if (!formData.lastName) {
         newErrors.lastName = t("signup.errors.lastNameRequired");
       }
-      // if (!formData.phone) {
-      //   newErrors.phone = t("signup.errors.phoneRequired");
-      // } 
-      // else     
-      if (
-        formData.phone &&
-        (formData.phone.length < 10 || formData.phone.length > 15)
-      ) {
+      if (formData.phone && (formData.phone.length < 10 || formData.phone.length > 15)) {
         newErrors.phone = t("signup.errors.phoneLength");
       } else if (formData.phone && !validatePhoneNumber(formData.phone)) {
         newErrors.phone = t("signup.errors.phoneInvalid");
@@ -144,7 +184,7 @@ const SignUp = () => {
         newErrors.jobTitleCustom = t("signup.errors.jobTitleCustomRequired");
       }
     }
-
+  
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       if (currentPage < 3) {
@@ -152,33 +192,32 @@ const SignUp = () => {
       } else {
         try {
           setShowAlert(true);
+  
+          // Remove leading zero from phone number before submission
+          let phone = formData.phone;
+          if (phone.startsWith('0')) {
+            phone = phone.slice(1);
+          }
+  
           const userData = {
             first_name: formData.firstName,
             last_name: formData.lastName,
             email: formData.email,
-            phone: `+${countryCode}${formData.phone}`,
+            phone: `+${countryCode}${phone}`,
             password: formData.password,
             confirm_password: formData.confirmPassword,
           };
           const newresult = await dispatch(signUp(userData));
-          // console.log("🚀 ~ handleSubmit ~ newresult:", newresult);
           if (newresult?.success) {
             const companyData = {
               name: formData.companyName,
-              job_title:
-                formData.jobTitle === "Other"
-                  ? jobTitleCustom
-                  : formData.jobTitle,
+              job_title: formData.jobTitle === "Other" ? jobTitleCustom : formData.jobTitle,
               company_size: formData.companySize,
             };
             const response = await dispatch(addCompany(companyData));
-            console.log(companyData)
             localStorage.setItem("CompanyName", companyData.name);
-
-
-            // Store company name in localStorage
             localStorage.setItem("company", JSON.stringify(response.company));
-
+  
             if (response?.success) {
               navigate("/customer-dashboard");
             } else {
@@ -192,6 +231,7 @@ const SignUp = () => {
       }
     }
   };
+  
 
   const handleBack = () => {
     setCurrentPage(currentPage - 1);
@@ -242,6 +282,8 @@ const SignUp = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  
 
   const customStyles = {
     menu: (provided) => ({
@@ -478,50 +520,137 @@ const SignUp = () => {
                             {/* <span className="text-red-500">*</span> */}
                           </label>
                           {errors.phone && (
-                            <span className="text-danger text-sm absolute top-full mt-1">{errors.phone}</span>
+                            <span className="text-danger text-sm absolute top-full mt-1">
+                              {errors.phone}
+                            </span>
                           )}
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="mb-3 mt-4">
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "
-                      />
-                      <label
-                        htmlFor="password"
-                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                      >
-                        {t("signup.password")}{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      {errors.password && (
-                        <p className="text-red-500 text-sm">
-                          {errors.password}
-                        </p>
-                      )}
-                      {/* Eye icon for toggling password visibility */}
-                      <span className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        {showPassword ? (
-                          <FaEyeSlash
-                            className="text-gray-500 cursor-pointer"
-                            onClick={togglePasswordVisibility}
-                          />
-                        ) : (
-                          <FaEye
-                            className="text-gray-500 cursor-pointer"
-                            onClick={togglePasswordVisibility}
-                          />
-                        )}
-                      </span>
-                    </div>
-                  </div>
+                  <div className="relative mb-4">
+  <div className="relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      name="password"
+      value={formData.password}
+      onChange={handlePasswordChange}
+      onFocus={() => setPopoverVisible(true)} // Show popover on focus
+      onBlur={() => setPopoverVisible(false)} // Hide popover on blur
+      className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      placeholder=" "
+    />
+    <label
+      htmlFor="password"
+      className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+    >
+      Password
+    </label>
+    {isPopoverVisible && (
+      <div className="absolute top-full left-0 mt-2 w-full bg-white shadow-md rounded-lg p-4 dark:bg-neutral-800 dark:border dark:border-neutral-700 z-20">
+        <div className="flex mt-2 -mx-1 gap-2">
+          {[20, 40, 60, 80, 100].map((step, index) => (
+            <div
+              key={index}
+              className={`flex-1 h-2 rounded-full ${
+                strength >= step ? 'bg-teal-500' : 'bg-gray-300'
+              }`}
+            ></div>
+          ))}
+        </div>
+        <h4 className="mt-3 text-sm font-semibold text-gray-800 dark:text-white">
+          Your password must contain:
+        </h4>
+        <ul className="space-y-1 text-sm text-gray-500 dark:text-neutral-500">
+          <li className={`flex items-center gap-x-2 ${formData.password.length >= 6 ? 'text-teal-500' : ''}`}>
+            <span className={`${formData.password.length >= 6 ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span className={`${formData.password.length < 6 ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </span>
+            Minimum number of characters is 6.
+          </li>
+          <li className={`flex items-center gap-x-2 ${/[a-z]/.test(formData.password) ? 'text-teal-500' : ''}`}>
+            <span className={`${/[a-z]/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span className={`${!/[a-z]/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </span>
+            Should contain lowercase.
+          </li>
+          <li className={`flex items-center gap-x-2 ${/[A-Z]/.test(formData.password) ? 'text-teal-500' : ''}`}>
+            <span className={`${/[A-Z]/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span className={`${!/[A-Z]/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </span>
+            Should contain uppercase.
+          </li>
+          <li className={`flex items-center gap-x-2 ${/\d/.test(formData.password) ? 'text-teal-500' : ''}`}>
+            <span className={`${/\d/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span className={`${!/\d/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </span>
+            Should contain numbers.
+          </li>
+          <li className={`flex items-center gap-x-2 ${/[!@&]/.test(formData.password) ? 'text-teal-500' : ''}`}>
+            <span className={`${/[!@&]/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span className={`${!/[!@&]/.test(formData.password) ? 'block' : 'hidden'}`}>
+              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </span>
+            Should contain special characters.
+          </li>
+        </ul>
+      </div>
+    )}
+    <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+      {showPassword ? (
+        <FaEyeSlash
+          className="text-gray-500 cursor-pointer"
+          onClick={togglePasswordVisibility}
+        />
+      ) : (
+        <FaEye
+          className="text-gray-500 cursor-pointer"
+          onClick={togglePasswordVisibility}
+        />
+      )}
+    </span>
+  </div>
+</div>
+
                   <div className="mb-3">
                     <div className="relative">
                       <input
@@ -721,23 +850,24 @@ const SignUp = () => {
               </p>
             </form>
             {showAlert &&
-  (authError ? (
-    <div
-      className="mt-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg flex items-center"
-      role="alert"
-    >
-      <FaTimesCircle className="text-red-500 mr-2" />
-      <strong className="font-bold">Error:</strong> {authError}
-    </div>
-  ) : (
-    <div
-      className="mt-3 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center"
-      role="alert"
-    >
-      <FaCheckCircle className="text-green-500 mr-2" />
-      <strong className="font-bold">Success:</strong> Your account has been created successfully.
-    </div>
-  ))}
+              (authError ? (
+                <div
+                  className="mt-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg flex items-center"
+                  role="alert"
+                >
+                  <FaTimesCircle className="text-red-500 mr-2" />
+                  <strong className="font-bold">Error:</strong> {authError}
+                </div>
+              ) : (
+                <div
+                  className="mt-3 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center"
+                  role="alert"
+                >
+                  <FaCheckCircle className="text-green-500 mr-2" />
+                  <strong className="font-bold">Success:</strong> Your account
+                  has been created successfully.
+                </div>
+              ))}
           </div>
         </div>
       </section>

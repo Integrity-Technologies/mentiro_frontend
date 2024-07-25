@@ -216,7 +216,7 @@ const ViewTestResult = () => {
                             : "0%"
                           : "-"}
                       </span>
-                      <div className="w-75 h-5 bg-gray-200 ml-2">
+                      <div className="w-100 h-5 bg-gray-200 ml-2">
                         <div
                           className={`h-full ${progressBarColors[
                             assessment.assessment_percentage === null
