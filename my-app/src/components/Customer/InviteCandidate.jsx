@@ -30,19 +30,37 @@ const InviteCandidate = ({ handleBackButtonClick }) => {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(link).then(
-      function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(
+        function () {
+          setCopySuccess(true);
+          setTimeout(() => {
+            setCopySuccess(false);
+          }, 2000); // Hide message after 2 seconds
+        },
+        function (err) {
+          console.error("Unable to copy to clipboard:", err);
+        }
+      );
+    } else {
+      // Fallback method for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = link;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
         setCopySuccess(true);
         setTimeout(() => {
           setCopySuccess(false);
         }, 2000); // Hide message after 2 seconds
-      },
-      function (err) {
+      } catch (err) {
         console.error("Unable to copy to clipboard:", err);
       }
-    );
+      document.body.removeChild(textArea);
+    }
   };
-
+  
   // const redirectToDashboard = () => {
   //   window.location.href = "/customer-dashboard"; // Redirect using window.location
   // };
