@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 
 const Userinfo = () => {
@@ -30,14 +29,14 @@ const Userinfo = () => {
 
   return (
     <div className="bg-blue-100 min-h-screen p-8">
-      {user ? (
+      {user && (
         <>
           <div className="flex items-center mb-6 mt-2">
             <h3 className="text-2xl font-semibold ml-1">
               {t("CompanyProfile.personalInformation")}
             </h3>
           </div>
-          <div className="bg-white w-full max-w-5xl  rounded-lg shadow-lg p-8">
+          <div className="bg-white w-full max-w-5xl rounded-lg shadow-lg p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <label htmlFor="firstName" className="font-medium text-gray-700">
@@ -90,10 +89,6 @@ const Userinfo = () => {
             </div>
           </div>
         </>
-      ) : (
-        <p className="text-lg font-semibold text-center text-primary">
-          {t("CompanyProfile.loginMessage")}
-        </p>
       )}
     </div>
   );

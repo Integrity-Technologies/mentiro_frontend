@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { FaBuilding } from "react-icons/fa";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+
 import { addCompany } from "../../actions/companyAction"; // Adjust the import path as necessary
 import LanguageToggleButton from "../Togglebutton"; // Adjust the import path as necessary
 

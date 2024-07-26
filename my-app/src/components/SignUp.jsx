@@ -407,6 +407,7 @@ const SignUp = () => {
                     <input
                       type="email"
                       name="email"
+                      id="email"
                       value={formData.email}
                       onChange={handleChange}
                       className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -415,7 +416,7 @@ const SignUp = () => {
                     <label
                       htmlFor="email"
                       className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                    >
+                      >
                       {t("signup.email")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -435,6 +436,7 @@ const SignUp = () => {
                         <input
                           type="text"
                           name="firstName"
+                          id="firstName"
                           value={formData.firstName}
                           onChange={handleChange}
                           className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -459,6 +461,7 @@ const SignUp = () => {
                         <input
                           type="text"
                           name="lastName"
+                          id="lastName"
                           value={formData.lastName}
                           onChange={handleChange}
                           className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -507,6 +510,7 @@ const SignUp = () => {
                           <input
                             type="text"
                             name="phone"
+                            id="phone"
                             value={formData.phone}
                             onChange={handleChange}
                             className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -534,6 +538,7 @@ const SignUp = () => {
       type={showPassword ? "text" : "password"}
       name="password"
       value={formData.password}
+      id="password"
       onChange={handlePasswordChange}
       onFocus={() => setPopoverVisible(true)} // Show popover on focus
       onBlur={() => setPopoverVisible(false)} // Hide popover on blur
@@ -548,9 +553,9 @@ const SignUp = () => {
     </label>
     {isPopoverVisible && (
       <div className="absolute top-full left-0 mt-2 w-full bg-white shadow-md rounded-lg p-4 dark:bg-neutral-800 dark:border dark:border-neutral-700 z-20 font-roboto">
-      <h4 className="mt-3 text-sm font-medium text-gray-500 dark:text-white">
-         Password Strength:   {strength}%
-        </h4>
+      {/* <h4 className="mt-3 text-sm font-medium text-gray-500 dark:text-white">
+         Password Strength:   
+        </h4> */}
         <div className="flex mt-2 -mx-1 gap-2">
           {[20, 40, 60, 80, 100].map((step, index) => (
             <div
@@ -659,6 +664,7 @@ const SignUp = () => {
                       <input
                         type={showPassword ? "text" : "password"}
                         name="confirmPassword"
+                        id="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -701,6 +707,7 @@ const SignUp = () => {
                       <input
                         type="text"
                         name="companyName"
+                        id="companyName"
                         value={formData.companyName}
                         onChange={handleChange}
                         className="block px-2.5 pb-2 pt-3 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"

@@ -19,6 +19,7 @@ const ViewTestResult = () => {
   const [historyTests, setHistoryTests] = useState([]); // New state for history tests
   const [filteredResults, setFilteredResults] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState({});
+  
 
   useEffect(() => {
     dispatch(getUserResults()); // Fetch results on component mount
@@ -110,6 +111,7 @@ const ViewTestResult = () => {
     "bg-blue-900",
     
   ];
+
 
   return (
     <div className="rounded-xl p-6 min-h-screen font-roboto">
@@ -289,6 +291,7 @@ const ViewTestResult = () => {
         />
       </div>
       <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">Marks Breakdown</h2>
+     
       <div>
         {selectedTests.length > 0 && (
           <div className="mb-4">

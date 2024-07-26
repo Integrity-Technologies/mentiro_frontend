@@ -24,19 +24,29 @@ const PreviewPage = ({ totalQuestions, attemptedCount, skippedCount, onSubmit, o
           {renderQuestionCount('Skipped Questions', skippedCount)}
         </div>
         <div className="d-flex justify-content-around mt-4 gap-4">
-          <button 
-            className={`border-2 border-blue-900 text-blue-900 w-50 h-10 ${skippedCount === 0 ? 'cursor-not-allowed opacity-50' : ''}`} 
-            onClick={onReviewSkipped} 
-            disabled={skippedCount === 0}
-          >
-            Review Skipped Questions
-          </button>
-          <button 
-            className="bg-blue-900 text-white w-52 h-10" 
-            onClick={onSubmit}
-          >
-            Submit
-          </button>
+          {skippedCount > 0 ? (
+            <>
+              <button 
+                className="border-2 border-blue-900 text-blue-900 w-50 h-10" 
+                onClick={onReviewSkipped}
+              >
+                Review Skipped Questions
+              </button>
+              <button 
+                className="bg-blue-900 text-white w-52 h-10" 
+                onClick={onSubmit}
+              >
+                Submit
+              </button>
+            </>
+          ) : (
+            <button 
+              className="bg-blue-900 text-white w-full h-10" 
+              onClick={onSubmit}
+            >
+              Submit
+            </button>
+          )}
         </div>
       </Card>
     </>

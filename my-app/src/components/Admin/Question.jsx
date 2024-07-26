@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  Form, Button, Modal } from "react-bootstrap";
+import { Table, Form, FormControl, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "../../actions/authActions"; // Import getToken function
 import {
@@ -28,6 +28,7 @@ const Question = () => {
       { option_text: "", is_correct: false },
       { option_text: "", is_correct: false },
     ],
+    question_time: "",
   });
   const [questionError, setQuestionError] = useState("");
   const [typeError, setTypeError] = useState("");
@@ -61,6 +62,7 @@ const Question = () => {
   const handleAddQuestion = async () => {
     if (newQuestion.options.some((option) => option.option_text !== "")) {
       // Only add question if there are options
+      console.log("newQuestion", newQuestion);
       await dispatch(addQuestion(newQuestion)); // Call addQuestion action
       await dispatch(getQuestions());
       handleCloseAddModal();
@@ -72,24 +74,24 @@ const Question = () => {
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleCloseEditModal = () => setShowEditModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
-//   const handleShowEditModal = () => setShowEditModal(true);
+  //   const handleShowEditModal = () => setShowEditModal(true);
   const EditQuestion = async (newQuestion) => {
-    if(selectedQuestion){
-        // console.log(selectedQuestion.id);
-        await dispatch(editQuestion(selectedQuestion.id, newQuestion)); // Call editQuestion action
-        await dispatch(getQuestions());
+    if (selectedQuestion) {
+      // console.log(selectedQuestion.id);
+      await dispatch(editQuestion(selectedQuestion.id, newQuestion)); // Call editQuestion action
+      await dispatch(getQuestions());
     }
     handleCloseEditModal();
-  }
-const handleShowEditModal = (question) => {
+  };
+  const handleShowEditModal = (question) => {
     setSelectedQuestion(question);
     setShowEditModal(true);
-}
+  };
 
-const handleDeleteModal = (question) => {
-  setSelectedQuestion(question);
-  setShowDeleteModal(true);
-};
+  const handleDeleteModal = (question) => {
+    setSelectedQuestion(question);
+    setShowDeleteModal(true);
+  };
 
   const handleDeleteQuestion = async () => {
     if (selectedQuestion) {
@@ -138,7 +140,9 @@ const handleDeleteModal = (question) => {
           <tr>
             <th className="border border-gray-400 px-4 py-2">ID</th>
             <th className="border border-gray-400 px-4 py-2">Question Text</th>
-            <th className="border border-gray-400 px-4 py-2">Difficulty Level</th>
+            <th className="border border-gray-400 px-4 py-2">
+              Difficulty Level
+            </th>
             <th className="border border-gray-400 px-4 py-2">Categories</th>
             <th className="border border-gray-400 px-4 py-2">Actions</th>
           </tr>
@@ -146,10 +150,18 @@ const handleDeleteModal = (question) => {
         <tbody>
           {currentQuestions.map((question) => (
             <tr key={question.id}>
-              <td className="border border-gray-400 px-4 py-2">{question.id}</td>
-              <td className="border border-gray-400 px-4 py-2">{question.question_text}</td>
-              <td className="border border-gray-400 px-4 py-2">{question.difficulty_level}</td>
-              <td className="border border-gray-400 px-4 py-2">{question.categories}</td>
+              <td className="border border-gray-400 px-4 py-2">
+                {question.id}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                {question.question_text}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                {question.difficulty_level}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                {question.categories}
+              </td>
               <td className="border border-gray-400 px-4 py-2">
                 <button
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
@@ -168,7 +180,11 @@ const handleDeleteModal = (question) => {
           ))}
         </tbody>
       </table>
-      <TablePagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+      <TablePagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
       <Modal show={showAddModal} onHide={handleCloseAddModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Question</Modal.Title>
@@ -217,6 +233,21 @@ const handleDeleteModal = (question) => {
                 }
               />
             </Form.Group>
+            <Form.Group controlId="formQuestionTime">
+              <Form.Label>Question Time (minutes)</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter question time in minutes"
+                value={newQuestion.question_time}
+                onChange={(e) =>
+                  setNewQuestion({
+                    ...newQuestion,
+                    question_time: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+
             <Form.Group controlId="formOptions">
               <Form.Label>Options</Form.Label>
               {newQuestion.options.map((option, index) => (
@@ -231,7 +262,9 @@ const handleDeleteModal = (question) => {
                     type="checkbox"
                     label="Is Correct"
                     checked={option.is_correct}
-                    onChange={(e) => handleCorrectChange(e.target.checked, index)}
+                    onChange={(e) =>
+                      handleCorrectChange(e.target.checked, index)
+                    }
                   />
                 </div>
               ))}
@@ -296,6 +329,20 @@ const handleDeleteModal = (question) => {
                 }
               />
             </Form.Group>
+            <Form.Group controlId="formQuestionTime">
+              <Form.Label>Question Time (minutes)</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter question time in minutes"
+                value={newQuestion.question_time}
+                onChange={(e) =>
+                  setNewQuestion({
+                    ...newQuestion,
+                    question_time: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
             <Form.Group controlId="formOptions">
               <Form.Label>Options</Form.Label>
               {newQuestion.options.map((option, index) => (
@@ -310,7 +357,9 @@ const handleDeleteModal = (question) => {
                     type="checkbox"
                     label="Is Correct"
                     checked={option.is_correct}
-                    onChange={(e) => handleCorrectChange(e.target.checked, index)}
+                    onChange={(e) =>
+                      handleCorrectChange(e.target.checked, index)
+                    }
                   />
                 </div>
               ))}
@@ -330,9 +379,7 @@ const handleDeleteModal = (question) => {
         <Modal.Header closeButton>
           <Modal.Title>Delete Question</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this question?
-        </Modal.Body>
+        <Modal.Body>Are you sure you want to delete this question?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
