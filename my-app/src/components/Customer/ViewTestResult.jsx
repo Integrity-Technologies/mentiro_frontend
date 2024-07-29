@@ -19,6 +19,9 @@ const ViewTestResult = () => {
   const [historyTests, setHistoryTests] = useState([]); // New state for history tests
   const [filteredResults, setFilteredResults] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState({});
+  const [selectedAssessmentName, setSelectedAssessmentName] = useState("");
+const [selectedCandidateName, setSelectedCandidateName] = useState("");
+
   
 
   useEffect(() => {
@@ -46,20 +49,21 @@ const ViewTestResult = () => {
 
   const handlePageChange = (page) => setCurrentPage(page);
 
-  const openModal = (tests) => {
+  const openModal = (tests, assessmentName, candidateName) => {
     if (tests.length > 0) {
       const allTests = [];
-
+  
       tests.forEach((test) => {
         allTests.push(test);
-
-        
       });
-
+  
       setSelectedTests(allTests);
+      setSelectedAssessmentName(assessmentName); // Set the assessment name
+      setSelectedCandidateName(candidateName); // Set the candidate name
       setIsModalOpen(true);
     }
   };
+  
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -194,8 +198,8 @@ const ViewTestResult = () => {
                 <tr
                   key={`${candidate.id}-${index}`}
                   className="hover:bg-active-link-bg cursor-pointer transition duration-150 hover:text-white group"
-                  onClick={() => openModal(assessment.tests)}
-                >
+                  onClick={() => openModal(assessment.tests, assessment.name, candidate.candidate_name)}
+                  >
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500 group-hover:text-white">
                     {candidate.candidate_name}
                   </td>
@@ -277,7 +281,7 @@ const ViewTestResult = () => {
 
 {isModalOpen && (
   <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
-    <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 relative">
+    <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 relative max-h-screen">
       <AiOutlineClose
         className="absolute top-4 right-6 text-red-500 cursor-pointer"
         size={24}
@@ -291,29 +295,67 @@ const ViewTestResult = () => {
         />
       </div>
       <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">Marks Breakdown</h2>
-     
-      <div>
-        {selectedTests.length > 0 && (
-          <div className="mb-4">
-            {selectedTests.map((test, index) => (
-              <div key={index} className="flex items-center justify-between p-2 mb-2 border border-gray-200 rounded-lg">
-                <div className="text-gray-700 font-medium w-1/3">{test.name}</div>
-                <div className="text-gray-500 w-1/3 text-center">{test.status}</div>
-                <div className="text-gray-500 w-1/3 text-right">{test.score}%</div>
-                <div className="flex flex-col w-50 h-4 ml-5 bg-gray-200 overflow-hidden w-1/3">
-                  <div
-                    className={`${progressBarColors[index % progressBarColors.length]} h-full`}
-                    style={{ width: `${test.score || 0}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+      
+      <div className="mb-4">
+        <label className="font-sm font-bold text-blue-900">Assessment Name:</label>
+        <h4 className="font-md">{selectedAssessmentName}</h4>
+      </div>
+      
+      <div className="mb-4">
+        <label className="font-sm font-bold text-blue-900">Candidate Name:</label>
+        <h4 className="font-md">{selectedCandidateName}</h4>
+      </div>
+      
+      <div className="overflow-y-auto max-h-60"> {/* Adjust max-height as needed */}
+        <table className="w-full table-auto">
+          <thead>
+            <tr className="text-gray-700 border-t">
+              <th className="px-4 py-2">Test Name</th>
+              <th className="px-4 py-2">Status</th>
+              <th className="px-4 py-2">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedTests.length > 0 ? (
+              selectedTests.map((test, index) => (
+                <tr key={index} className="border-t mb-0"> {/* Added margin-bottom */}
+                  <td className="px-3 py-3 text-gray-700"> {/* Increased padding */}
+                    {test.name}
+                  </td>
+                  <td className="px-3 py-3 text-gray-500"> {/* Increased padding */}
+                    {test.status}
+                  </td>
+                  <td className="px-3 py-3">
+                    <div className="flex items-center">
+                      <div className="text-gray-500 mr-2">{test.score}%</div>
+                      <div className="flex flex-col w-full h-4 bg-gray-200 overflow-hidden rounded-lg">
+                        <div
+                          className={`${progressBarColors[index % progressBarColors.length]} h-full`}
+                          style={{ width: `${test.score || 0}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className="px-4 py-2 text-center text-gray-500">
+                  No tests available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 )}
+
+
+
+
+
  {isHistoryModalOpen && (
   <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 font-roboto">
     <div className="bg-white rounded-lg shadow-lg p-4 w-1/2 relative">

@@ -107,6 +107,13 @@ const ActiveAssessment = () => {
     toggleDropdown(index);
   };
 
+  const copyLinkToClipboard = (link) => {
+    console.log("🚀 ~ copyLinkToClipboard ~ link:", link)
+    navigator.clipboard.writeText(link).then(() => {
+      console.log("Link copied to clipboard!");
+    });
+  };
+
   if (currentView === "newassessment") {
     return <Assessment />;
   }
@@ -257,6 +264,12 @@ const ActiveAssessment = () => {
                         >
                           Delete
                         </button>
+                        <button
+  className="block px-4 py-2 text-left w-full text-gray-800 hover:bg-gray-100"
+  onClick={() => copyLinkToClipboard(assessment.uniquelink)}
+>
+  Copy Link
+</button>
                       </div>
                     )}
                   </td>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
 import { NavLink, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import Flag from "react-world-flags";
 import { useTranslation } from "react-i18next";
 import {
@@ -147,10 +148,13 @@ const SignUp = () => {
       if (!formData.lastName) {
         newErrors.lastName = t("signup.errors.lastNameRequired");
       }
-      if (formData.phone && (formData.phone.length < 10 || formData.phone.length > 15)) {
-        newErrors.phone = t("signup.errors.phoneLength");
-      } else if (formData.phone && !validatePhoneNumber(formData.phone)) {
-        newErrors.phone = t("signup.errors.phoneInvalid");
+      if (!formData.phone) {
+        newErrors.phone = t('signup.errors.phoneRequired');
+      } else {
+        const phoneValidationResult = validatePhoneNumber(formData.phone, currentCountry.country_short_name);
+        if (!phoneValidationResult.isValid) {
+          newErrors.phone = t('signup.errors.phoneInvalid');
+        }
       }
       if (!formData.password) {
         newErrors.password = t("signup.errors.passwordRequired");
@@ -253,9 +257,12 @@ const SignUp = () => {
     return emailRegex.test(email);
   };
 
-  const validatePhoneNumber = (phone) => {
-    const phoneRegex = /^\+?[0-9]+$/;
-    return phoneRegex.test(phone);
+  const validatePhoneNumber = (phone, countryCode) => {
+    const phoneNumber = parsePhoneNumberFromString(phone, countryCode);
+    return {
+      isValid: phoneNumber && phoneNumber.isValid(),
+      formattedNumber: phoneNumber ? phoneNumber.formatInternational() : null
+    };
   };
 
   const handleChange = (e) => {
@@ -524,10 +531,8 @@ const SignUp = () => {
                             {/* <span className="text-red-500">*</span> */}
                           </label>
                           {errors.phone && (
-                            <span className="text-danger text-sm absolute top-full mt-1">
-                              {errors.phone}
-                            </span>
-                          )}
+                <div className="text-red-500 text-xs mt-1">{errors.phone}</div>
+              )}
                         </div>
                       </div>
                     </div>

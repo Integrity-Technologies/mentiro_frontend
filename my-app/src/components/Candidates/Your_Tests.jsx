@@ -16,6 +16,7 @@ const YourTests = () => {
   const [showQuestions, setShowQuestions] = useState(false);
   const [completedTests, setCompletedTests] = useState(new Set());
   const [uniqueLink, setUniqueLink] = useState(null);
+  const [loading, setLoading] = useState(true); // New state for loading
 
   const dispatch = useDispatch();
 
@@ -61,6 +62,8 @@ const YourTests = () => {
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
       }
     };
 
@@ -111,6 +114,23 @@ const YourTests = () => {
     setTimeExpired(true);
     setShowQuestions(false);
   };
+
+  if (loading) {
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center bg-blue-100 p-4">
+        <div className="flex flex-col items-center">
+          <img
+            src={Mentirobluelogo}
+            alt="Mentiro Logo"
+            className="h-24 mb-4"
+          />
+          <div className="bg-white p-12 rounded-lg shadow-lg text-center">
+            <h1 className="text-4xl font-bold mb-4 text-blue-900">Loading...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col items-center justify-center font-poppins">

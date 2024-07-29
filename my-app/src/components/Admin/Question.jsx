@@ -9,6 +9,7 @@ import {
   editQuestion,
 } from "../../actions/QuestionAction"; // Import action functions
 import TablePagination from "./TablePagination"; // Import your TablePagination component
+
 const Question = () => {
   const dispatch = useDispatch();
   const questions = useSelector((state) => state.question.questions);
@@ -22,34 +23,52 @@ const Question = () => {
     question_text: "",
     difficulty_level: "",
     category_names: [],
-    options: [
-      { option_text: "", is_correct: false },
-      { option_text: "", is_correct: false },
-      { option_text: "", is_correct: false },
-      { option_text: "", is_correct: false },
-    ],
+    options: [], // Initialize options as an empty array
     question_time: "",
+    question_type: "", // New property for question type
   });
   const [questionError, setQuestionError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [levelError, setLevelError] = useState("");
   const [categoriesError, setCategoriesError] = useState("");
+  
   useEffect(() => {
     dispatch(getQuestions());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (newQuestion.question_type === "MCQS") {
+      setNewQuestion((prevQuestion) => ({
+        ...prevQuestion,
+        options: [
+          { option_text: "", is_correct: false },
+          { option_text: "", is_correct: false },
+          { option_text: "", is_correct: false },
+          { option_text: "", is_correct: false },
+        ],
+      }));
+    } else if (newQuestion.question_type === "true_false") {
+      setNewQuestion((prevQuestion) => ({
+        ...prevQuestion,
+        options: [{ option_text: "True", is_correct: false }, { option_text: "False", is_correct: false }],
+      }));
+    }
+  }, [newQuestion.question_type]);
+
   const handleOptionChange = (text, index) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index].option_text = text;
     setNewQuestion({ ...newQuestion, options: updatedOptions });
   };
+
   const handleCorrectChange = (checked, index) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index].is_correct = checked;
     setNewQuestion({ ...newQuestion, options: updatedOptions });
   };
-  const MAX_OPTIONS = 4; // Maximum number of options
+
   const addOption = () => {
-    if (newQuestion.options.length < MAX_OPTIONS) {
+    if (newQuestion.question_type === "MCQS" && newQuestion.options.length < 4) {
       setNewQuestion({
         ...newQuestion,
         options: [
@@ -59,32 +78,39 @@ const Question = () => {
       });
     }
   };
+
   const handleAddQuestion = async () => {
-    if (newQuestion.options.some((option) => option.option_text !== "")) {
-      // Only add question if there are options
+    if (
+      (newQuestion.question_type === "MCQS" &&
+        newQuestion.options.some((option) => option.option_text !== "")) ||
+      newQuestion.question_type === "true_false"
+    ) {
+      // Only add question if there are options and the question type is "Multiple Choice" or "True/False"
       console.log("newQuestion", newQuestion);
       await dispatch(addQuestion(newQuestion)); // Call addQuestion action
       await dispatch(getQuestions());
       handleCloseAddModal();
     } else {
       // Show an error message or prevent adding question if there are no options
-      console.error("Please add at least one option.");
+      console.error("Please add options or select True/False.");
     }
   };
+
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleCloseEditModal = () => setShowEditModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
-  //   const handleShowEditModal = () => setShowEditModal(true);
-  const EditQuestion = async (newQuestion) => {
+
+  const EditQuestion = async (updatedQuestion) => {
     if (selectedQuestion) {
-      // console.log(selectedQuestion.id);
-      await dispatch(editQuestion(selectedQuestion.id, newQuestion)); // Call editQuestion action
+      await dispatch(editQuestion(selectedQuestion.id, updatedQuestion)); // Call editQuestion action
       await dispatch(getQuestions());
     }
     handleCloseEditModal();
   };
+
   const handleShowEditModal = (question) => {
     setSelectedQuestion(question);
+    setNewQuestion(question); // Set newQuestion to the selected question for editing
     setShowEditModal(true);
   };
 
@@ -100,13 +126,16 @@ const Question = () => {
       setShowDeleteModal(false);
     }
   };
+
   const filteredQuestions = questions.filter((question) => {
     const fullQuestion = `${question.question_text} ${question.difficulty_level} ${question.categories}`;
     return fullQuestion.toLowerCase().includes(searchTerm.toLowerCase());
   });
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of users per page
+
   // Pagination logic
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -116,6 +145,7 @@ const Question = () => {
     indexOfLastItem
   );
   const handlePageChange = (page) => setCurrentPage(page);
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4">Questions</h1>
@@ -144,6 +174,7 @@ const Question = () => {
               Difficulty Level
             </th>
             <th className="border border-gray-400 px-4 py-2">Categories</th>
+            <th className="border border-gray-400 px-4 py-2">Type</th> {/* New Column */}
             <th className="border border-gray-400 px-4 py-2">Actions</th>
           </tr>
         </thead>
@@ -161,6 +192,9 @@ const Question = () => {
               </td>
               <td className="border border-gray-400 px-4 py-2">
                 {question.categories}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                {question.question_type} {/* Display the question type */}
               </td>
               <td className="border border-gray-400 px-4 py-2">
                 <button
@@ -205,6 +239,45 @@ const Question = () => {
                 }
               />
             </Form.Group>
+            <Form.Group controlId="formQuestionType">
+              <Form.Label>Question Type</Form.Label>
+              <Form.Control
+                as="select"
+                value={newQuestion.question_type}
+                onChange={(e) =>
+                  setNewQuestion({
+                    ...newQuestion,
+                    question_type: e.target.value,
+                  })
+                }
+              >
+                <option value="">Select Type</option>
+                <option value="MCQS">Multiple Choice</option>
+                <option value="true_false">True/False</option>
+              </Form.Control>
+            </Form.Group>
+            {newQuestion.question_type && (
+              <>
+                {newQuestion.options.map((option, index) => (
+                  <Form.Group key={index} controlId={`formOption${index}`}>
+                    <Form.Label>Option {index + 1}</Form.Label>
+                    <FormControl
+                      type="text"
+                      placeholder={`Enter option ${index + 1}`}
+                      value={option.option_text}
+                      onChange={(e) => handleOptionChange(e.target.value, index)}
+                    />
+                    <Form.Check
+                      type="checkbox"
+                      label="Correct"
+                      checked={option.is_correct}
+                      onChange={(e) => handleCorrectChange(e.target.checked, index)}
+                    />
+                  </Form.Group>
+                ))}
+               
+              </>
+            )}
             <Form.Group controlId="formDifficultyLevel">
               <Form.Label>Difficulty Level</Form.Label>
               <Form.Control
@@ -224,20 +297,20 @@ const Question = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter categories (comma separated)"
-                value={newQuestion.category_names}
+                value={newQuestion.category_names.join(",")}
                 onChange={(e) =>
                   setNewQuestion({
                     ...newQuestion,
-                    category_names: e.target.value.split(","),
+                    category_names: e.target.value.split(",").map((cat) => cat.trim()),
                   })
                 }
               />
             </Form.Group>
             <Form.Group controlId="formQuestionTime">
-              <Form.Label>Question Time (minutes)</Form.Label>
+              <Form.Label>Question Time</Form.Label>
               <Form.Control
-                type="number"
-                placeholder="Enter question time in minutes"
+                type="text"
+                placeholder="Enter question time"
                 value={newQuestion.question_time}
                 onChange={(e) =>
                   setNewQuestion({
@@ -247,46 +320,25 @@ const Question = () => {
                 }
               />
             </Form.Group>
-
-            <Form.Group controlId="formOptions">
-              <Form.Label>Options</Form.Label>
-              {newQuestion.options.map((option, index) => (
-                <div key={index} className="mb-3">
-                  <Form.Control
-                    type="text"
-                    placeholder={`Option ${index + 1}`}
-                    value={option.option_text}
-                    onChange={(e) => handleOptionChange(e.target.value, index)}
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="Is Correct"
-                    checked={option.is_correct}
-                    onChange={(e) =>
-                      handleCorrectChange(e.target.checked, index)
-                    }
-                  />
-                </div>
-              ))}
-              {newQuestion.options.length < MAX_OPTIONS && (
-                <Button variant="primary" onClick={addOption}>
-                  Add Option
-                </Button>
-              )}
-            </Form.Group>
-            <Button variant="success" onClick={handleAddQuestion}>
+            {questionError && <div className="text-danger">{questionError}</div>}
+            {typeError && <div className="text-danger">{typeError}</div>}
+            {levelError && <div className="text-danger">{levelError}</div>}
+            {categoriesError && <div className="text-danger">{categoriesError}</div>}
+            <Button variant="primary" onClick={handleAddQuestion} >
               Add Question
             </Button>
           </Form>
         </Modal.Body>
       </Modal>
-      {/* Edit Question Modal */}
+
+      {/* Edit Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Question</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={() => EditQuestion(newQuestion)}>
+            {/* Same fields as Add Question Modal */}
             <Form.Group controlId="formQuestionText">
               <Form.Label>Question Text</Form.Label>
               <Form.Control
@@ -301,6 +353,49 @@ const Question = () => {
                 }
               />
             </Form.Group>
+            <Form.Group controlId="formQuestionType">
+              <Form.Label>Question Type</Form.Label>
+              <Form.Control
+                as="select"
+                value={newQuestion.question_type}
+                onChange={(e) =>
+                  setNewQuestion({
+                    ...newQuestion,
+                    question_type: e.target.value,
+                  })
+                }
+              >
+                <option value="">Select Type</option>
+                <option value="Multiple Choice">Multiple Choice</option>
+                <option value="True/False">True/False</option>
+              </Form.Control>
+            </Form.Group>
+            {newQuestion.question_type && (
+              <>
+                {newQuestion.options.map((option, index) => (
+                  <Form.Group key={index} controlId={`formOption${index}`}>
+                    <Form.Label>Option {index + 1}</Form.Label>
+                    <FormControl
+                      type="text"
+                      placeholder={`Enter option ${index + 1}`}
+                      value={option.option_text}
+                      onChange={(e) => handleOptionChange(e.target.value, index)}
+                    />
+                    <Form.Check
+                      type="checkbox"
+                      label="Correct"
+                      checked={option.is_correct}
+                      onChange={(e) => handleCorrectChange(e.target.checked, index)}
+                    />
+                  </Form.Group>
+                ))}
+                {newQuestion.question_type === "Multiple Choice" && (
+                  <Button variant="secondary" onClick={addOption}>
+                    Add Option
+                  </Button>
+                )}
+              </>
+            )}
             <Form.Group controlId="formDifficultyLevel">
               <Form.Label>Difficulty Level</Form.Label>
               <Form.Control
@@ -320,20 +415,20 @@ const Question = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter categories (comma separated)"
-                value={newQuestion.category_names}
+                value={newQuestion.category_names.join(",")}
                 onChange={(e) =>
                   setNewQuestion({
                     ...newQuestion,
-                    category_names: e.target.value.split(","),
+                    category_names: e.target.value.split(",").map((cat) => cat.trim()),
                   })
                 }
               />
             </Form.Group>
             <Form.Group controlId="formQuestionTime">
-              <Form.Label>Question Time (minutes)</Form.Label>
+              <Form.Label>Question Time</Form.Label>
               <Form.Control
-                type="number"
-                placeholder="Enter question time in minutes"
+                type="text"
+                placeholder="Enter question time"
                 value={newQuestion.question_time}
                 onChange={(e) =>
                   setNewQuestion({
@@ -343,41 +438,17 @@ const Question = () => {
                 }
               />
             </Form.Group>
-            <Form.Group controlId="formOptions">
-              <Form.Label>Options</Form.Label>
-              {newQuestion.options.map((option, index) => (
-                <div key={index} className="mb-3">
-                  <Form.Control
-                    type="text"
-                    placeholder={`Option ${index + 1}`}
-                    value={option.option_text}
-                    onChange={(e) => handleOptionChange(e.target.value, index)}
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="Is Correct"
-                    checked={option.is_correct}
-                    onChange={(e) =>
-                      handleCorrectChange(e.target.checked, index)
-                    }
-                  />
-                </div>
-              ))}
-              {newQuestion.options.length < MAX_OPTIONS && (
-                <Button variant="primary" onClick={addOption}>
-                  Add Option
-                </Button>
-              )}
-            </Form.Group>
-            <Button variant="primary" onClick={() => EditQuestion(newQuestion)}>
-              Save Changes
+            <Button variant="primary" type="submit">
+              Update Question
             </Button>
           </Form>
         </Modal.Body>
       </Modal>
+
+      {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Delete Question</Modal.Title>
+          <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this question?</Modal.Body>
         <Modal.Footer>
@@ -392,4 +463,5 @@ const Question = () => {
     </div>
   );
 };
+
 export default Question;
