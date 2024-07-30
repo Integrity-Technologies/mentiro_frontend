@@ -131,7 +131,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     let newErrors = {};
   
     // Page-specific validations
@@ -141,7 +141,36 @@ const SignUp = () => {
       } else if (!validateEmail(formData.email)) {
         newErrors.email = t("signup.errors.emailInvalid");
       }
+  
+      setErrors(newErrors);
+      if (Object.keys(newErrors).length === 0) {
+        try {
+          // API call for step 1
+          const response = await fetch("http://localhost:5000/api/users/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: formData.email }),
+          });
+  
+          const data = await response.json();
+  
+          if (response.ok) {
+            // Handle successful API response
+            localStorage.setItem('response', JSON.stringify(data)); // Save the response to local storage
+            setCurrentPage(currentPage + 1); // Move to the next page
+          } else {
+            // Handle API errors
+            setErrors({ ...errors, email: data.message || "User with this email already exists" });
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setErrors({ ...errors, email: "Network error" });
+        }
+      }
     } else if (currentPage === 2) {
+      // Step 2 validations and handling
       if (!formData.firstName) {
         newErrors.firstName = t("signup.errors.firstNameRequired");
       }
@@ -174,7 +203,57 @@ const SignUp = () => {
       } else if (formData.password !== formData.confirmPassword) {
         newErrors.confirmPassword = t("signup.errors.confirmPasswordMismatch");
       }
+      setErrors(newErrors);
+      if (Object.keys(newErrors).length === 0) {
+        try {
+          // Retrieve previous response from local storage
+          const responseStr = localStorage.getItem("response");
+          
+          // Parse the response to get userId
+          const responseData = JSON.parse(responseStr);
+          const userId = responseData?.userId;
+        
+          // API call for step 12
+          const response = await fetch("http://localhost:5000/api/users/register/complete", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              first_name: formData.firstName,
+              last_name: formData.lastName,
+              phone: formData.phone,
+              password: formData.password,
+              userID: userId // Include userId in the request body
+            }),
+          });
+        
+          const data = await response.json();
+        
+          if (response.ok) {
+            if (data.success) {
+              console.log(data.token);
+              localStorage.setItem("token", data.token);
+
+              
+              // localStorage.setItem("userId", data.userId);
+        
+              // Proceed to the next page
+              setCurrentPage(currentPage + 1);
+            }
+          } else {
+            // Handle API errors
+            setErrors({ ...errors, email: data.message || "Something went wrong" });
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setErrors({ ...errors, email: "Network error" });
+        }
+        
+  }
+      
     } else if (currentPage === 3) {
+      // Step 3 validations and handling
       if (!formData.companyName) {
         newErrors.companyName = t("signup.errors.companyNameRequired");
       }
@@ -187,13 +266,8 @@ const SignUp = () => {
       if (formData.jobTitle === "Other" && !jobTitleCustom) {
         newErrors.jobTitleCustom = t("signup.errors.jobTitleCustomRequired");
       }
-    }
-  
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      if (currentPage < 3) {
-        setCurrentPage(currentPage + 1);
-      } else {
+      setErrors(newErrors);
+      if (Object.keys(newErrors).length === 0) {
         try {
           setShowAlert(true);
   
@@ -203,16 +277,15 @@ const SignUp = () => {
             phone = phone.slice(1);
           }
   
-          const userData = {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            email: formData.email,
-            phone: `+${countryCode}${phone}`,
-            password: formData.password,
-            confirm_password: formData.confirmPassword,
-          };
-          const newresult = await dispatch(signUp(userData));
-          if (newresult?.success) {
+          // const userData = {
+          //   first_name: formData.firstName,
+          //   last_name: formData.lastName,
+          //   email: formData.email,
+          //   phone: `+${countryCode}${phone}`,
+          //   password: formData.password,
+          //   confirm_password: formData.confirmPassword,
+          // };
+         
             const companyData = {
               name: formData.companyName,
               job_title: formData.jobTitle === "Other" ? jobTitleCustom : formData.jobTitle,
@@ -227,7 +300,7 @@ const SignUp = () => {
             } else {
               console.error("Failed to create company", await response.text());
             }
-          }
+          
           setTimeout(() => setShowAlert(false), 2000);
         } catch (error) {
           setTimeout(() => setShowAlert(false), 2000);
@@ -257,13 +330,16 @@ const SignUp = () => {
     return emailRegex.test(email);
   };
 
-  const validatePhoneNumber = (phone, countryCode) => {
-    const phoneNumber = parsePhoneNumberFromString(phone, countryCode);
-    return {
-      isValid: phoneNumber && phoneNumber.isValid(),
-      formattedNumber: phoneNumber ? phoneNumber.formatInternational() : null
-    };
+  const validatePhoneNumber = (phoneNumber, country) => {
+    const parsedNumber = parsePhoneNumberFromString(phoneNumber, country);
+    if (parsedNumber && parsedNumber.isValid()) {
+      return { isValid: true, error: '' };
+    } else {
+      return { isValid: false, error: 'Invalid phone number' };
+    }
   };
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -48,6 +48,7 @@ const ActiveAssessment = () => {
     setShowDeleteConfirmation(false);
     setDeleteSuccess(true);
     setTimeout(() => setDeleteSuccess(false), 3000);
+    
   };
 
   const getMonthName = (dateString) => {
@@ -266,8 +267,7 @@ const ActiveAssessment = () => {
                         </button>
                         <button
   className="block px-4 py-2 text-left w-full text-gray-800 hover:bg-gray-100"
-  onClick={() => copyLinkToClipboard(assessment.uniquelink)}
->
+  onClick={() => copyLinkToClipboard(assessment.shareablelink)}>
   Copy Link
 </button>
                       </div>

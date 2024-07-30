@@ -297,12 +297,12 @@ const [selectedCandidateName, setSelectedCandidateName] = useState("");
       <h2 className="text-2xl font-medium mb-4 mt-4 items-center justify-center text-center">Marks Breakdown</h2>
       
       <div className="mb-4">
-        <label className="font-sm font-bold text-blue-900">Assessment Name:</label>
+        <label className="font-xs font-bold text-blue-900">Assessment Name:</label>
         <h4 className="font-md">{selectedAssessmentName}</h4>
       </div>
       
       <div className="mb-4">
-        <label className="font-sm font-bold text-blue-900">Candidate Name:</label>
+        <label className="font-xs font-bold text-blue-900">Candidate Name:</label>
         <h4 className="font-md">{selectedCandidateName}</h4>
       </div>
       

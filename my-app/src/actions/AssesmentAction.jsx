@@ -117,6 +117,7 @@ export const deleteAssessment = (assessmentId) => async (dispatch) => {
       type: ASSESSMENT_ERROR,
       payload: error?.response?.data?.error,
     });
+    console.log(error?.response?.data?.error);
   }
 };
 
