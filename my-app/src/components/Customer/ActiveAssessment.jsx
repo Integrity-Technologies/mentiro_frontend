@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next";
 
 const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Logo
 
-
 const ActiveAssessment = () => {
   const { t } = useTranslation();
   const [currentView, setCurrentView] = useState("activeassessment");
@@ -21,6 +20,10 @@ const ActiveAssessment = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [uniqueLink, setUniqueLink] = useState("");
+  const errorAssessment = useSelector((state) => state.assessment.error); // Access the error message
+  console.log("🚀 ~ ActiveAssessment ~ errorAssessment:", errorAssessment);
+  const [errorAssessmentVisible, setErrorAssessmentVisible] = useState(false);
+
   const [currentPreviewView, setCurrentPreviewView] =
     useState("activeassessment");
   const [deleteSuccess, setDeleteSuccess] = useState(false);
@@ -41,14 +44,23 @@ const ActiveAssessment = () => {
     setSelectedAssessmentId(assessmentId);
     setShowDeleteConfirmation(true);
   };
-
+  useEffect(() => {
+    if (
+      errorAssessment ===
+      'update or delete on table "assessments" violates foreign key constraint "results_assessment_id_fkey" on table "results"'
+    ) {
+      setErrorAssessmentVisible(true);
+      setTimeout(() => setErrorAssessmentVisible(false), 3000);
+    }
+  }, [errorAssessment]);
   const confirmDelete = async () => {
     await dispatch(deleteAssessment(selectedAssessmentId));
-    await dispatch(getAllAssessments());
     setShowDeleteConfirmation(false);
-    setDeleteSuccess(true);
-    setTimeout(() => setDeleteSuccess(false), 3000);
-    
+    if (!errorAssessment) {
+      setDeleteSuccess(true);
+      await dispatch(getAllAssessments());
+      setTimeout(() => setDeleteSuccess(false), 3000);
+    }
   };
 
   const getMonthName = (dateString) => {
@@ -56,13 +68,11 @@ const ActiveAssessment = () => {
     const options = { month: "long" };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
-
   const getRelativeCreationDate = (dateString) => {
     const date = new Date(dateString);
     const currentDate = new Date();
     const diffInMilliseconds = currentDate - date;
     const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
-
     if (diffInDays === 0) {
       return "today";
     } else if (diffInDays === 1) {
@@ -71,58 +81,48 @@ const ActiveAssessment = () => {
       return `${diffInDays} days ago`;
     }
   };
-
   const filteredAssessments = Array.isArray(assessments?.assessments)
     ? assessments?.assessments?.filter((assessment) => {
         const fullName = `${assessment.assessment_name} ${assessment.last_name}`;
         return fullName.toLowerCase().includes(searchTerm.toLowerCase());
       })
     : [];
-
   const handlePreview = (uniqueLink) => {
     setUniqueLink(uniqueLink);
     localStorage.setItem("uniqueLink", uniqueLink);
     setCurrentPreviewView("preview");
   };
-
   const toggleDropdown = (index) => {
     setDropdownVisible((prev) => ({
       ...prev,
       [index]: !prev[index],
     }));
   };
-
   const hideDropdown = () => {
     setDropdownVisible({});
   };
-
   useEffect(() => {
     document.addEventListener("click", hideDropdown);
     return () => {
       document.removeEventListener("click", hideDropdown);
     };
   }, []);
-
   const handleDropdownClick = (event, index) => {
     event.stopPropagation();
     toggleDropdown(index);
   };
-
   const copyLinkToClipboard = (link) => {
-    console.log("🚀 ~ copyLinkToClipboard ~ link:", link)
+    // console.log("🚀 ~ copyLinkToClipboard ~ link:", link);
     navigator.clipboard.writeText(link).then(() => {
       console.log("Link copied to clipboard!");
     });
   };
-
   if (currentView === "newassessment") {
     return <Assessment />;
   }
-
   if (currentPreviewView === "preview") {
     return <PreviewExistingAssessment />;
   }
-
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredAssessments.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -131,12 +131,10 @@ const ActiveAssessment = () => {
     indexOfFirstItem,
     indexOfLastItem
   );
-
   const handlePageChange = (page) => setCurrentPage(page);
-
   const getStatus = (isActive) => {
     return isActive ? (
-      <span className="text-green-500 group-hover:text-white" >• Active</span>
+      <span className="text-green-500 group-hover:text-white">• Active</span>
     ) : (
       <span className="text-red-600">• InAcive</span>
     );
@@ -144,11 +142,9 @@ const ActiveAssessment = () => {
   const calculateTotalTests = (tests) => {
     return tests.length;
   };
-
   return (
     <div className="min-h-screen flex flex-col px-6 py-10 relative font-roboto">
       <div className="flex items-center justify-between mb-8">
-      
         <h1 className="text-3xl font-bold text-gray-800">
           {t("ActiveAssessment.title")}
         </h1>
@@ -160,7 +156,7 @@ const ActiveAssessment = () => {
           <span>{t("ActiveAssessment.create")}</span>
         </button>
       </div>
-     
+
       <div className="mb-4 flex items-center justify-between">
         <div className="relative flex-1">
           <input
@@ -177,20 +173,30 @@ const ActiveAssessment = () => {
             Bulk Action
           </button> */}
           <button className="text-blue-900 px-4 py-2 rounded-md border-2 border-blue-900 hover:text-white hover:bg-blue-800 flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
-          Filter
+            Filter
           </button>
         </div>
       </div>
-      {deleteSuccess && (
-  <div className=" inset-0 flex items-center z-50">
-    <div className="bg-green-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
-      <FaCheckCircle className="text-black text-3xl" />
-      <span className="text-lg font-semibold">
-        Assessment Deleted Successfully
-      </span>
-    </div>
-  </div>
-)}
+      {errorAssessmentVisible && (
+        <div className=" inset-0 flex items-center z-50">
+          <div className="bg-red-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
+            <span className="text-lg font-semibold">
+              The result for this assessment is created, cannot be updated or
+              deleted.
+            </span>
+          </div>
+        </div>
+      )}
+      {deleteSuccess && !errorAssessmentVisible && (
+        <div className=" inset-0 flex items-center z-50">
+          <div className="bg-green-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
+            <FaCheckCircle className="text-black text-3xl" />
+            <span className="text-lg font-semibold">
+              Assessment Deleted Successfully
+            </span>
+          </div>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-50 text-12px">
@@ -266,10 +272,13 @@ const ActiveAssessment = () => {
                           Delete
                         </button>
                         <button
-  className="block px-4 py-2 text-left w-full text-gray-800 hover:bg-gray-100"
-  onClick={() => copyLinkToClipboard(assessment.shareablelink)}>
-  Copy Link
-</button>
+                          className="block px-4 py-2 text-left w-full text-gray-800 hover:bg-gray-100"
+                          onClick={() =>
+                            copyLinkToClipboard(assessment.uniquelink)
+                          }
+                        >
+                          Copy Link
+                        </button>
                       </div>
                     )}
                   </td>
@@ -279,7 +288,8 @@ const ActiveAssessment = () => {
               <tr>
                 <td
                   colSpan="7"
-                  className="text-center px-4 py-4 border bg-white-100 text-black-700"                >
+                  className="text-center px-4 py-4 border bg-white-100 text-black-700"
+                >
                   {t("ActiveAssessment.noData")}
                 </td>
               </tr>
@@ -301,34 +311,35 @@ const ActiveAssessment = () => {
         unmountOnExit
       >
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-  <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-    <div className="mb-4">
-      <img src={Mentirobluelogo} alt="Mentiro Logo" className="h-20 mx-auto" />
-    </div>
-    <p className="mb-4 text-gray-800">
-      Are you sure you want to delete this assessment?
-    </p>
-    <div className="flex justify-center gap-36">
-      <button
-        onClick={() => setShowDeleteConfirmation(false)}
-        className="mr-2 bg-blue-900 px-4 py-2 rounded-md text-white hover:bg-gray-400"
-      >
-        Cancel
-      </button>
-      <button
-        onClick={confirmDelete}
-        className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-      >
-        Delete
-      </button>
-    </div>
-  </div>
-</div>
+          <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+            <div className="mb-4">
+              <img
+                src={Mentirobluelogo}
+                alt="Mentiro Logo"
+                className="h-20 mx-auto"
+              />
+            </div>
+            <p className="mb-4 text-gray-800">
+              Are you sure you want to delete this assessment?
+            </p>
+            <div className="flex justify-center gap-36">
+              <button
+                onClick={() => setShowDeleteConfirmation(false)}
+                className="mr-2 bg-blue-900 px-4 py-2 rounded-md text-white hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       </CSSTransition>
-
-      
     </div>
   );
 };
-
 export default ActiveAssessment;

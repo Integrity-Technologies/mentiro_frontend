@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; // Assuming you're using React Icons library
 
 const loginimg = "/assets/loginimg.png";
-const logo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png"; 
+const logo = "https://assets.mentiro.com/logos/logo.png"; 
 
 
 const Login = () => {

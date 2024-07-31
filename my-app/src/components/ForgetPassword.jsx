@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {FaCheckCircle} from "react-icons/fa"
 const loginimg = "/assets/loginimg.png";
-const logo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png"; 
+const logo = "https://assets.mentiro.com/logos/logo.png"; 
 
 const ForgetPassword = () => {
   const { t } = useTranslation();

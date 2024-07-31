@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { addCandidate } from "../../actions/candidateAction";
 import {FaCheckCircle} from "react-icons/fa"
 import Your_Tests from "./Your_Tests";
-import { isEmail } from "validator"; // Import validator for email format validation
+// import { isEmail } from "validator"; // Import validator for email format validation
 import { useLocation } from "react-router-dom";
 
 const loginimg = "/assets/loginimg.png"; // Image for the candidate section
-const logo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png"; // Logo
+const logo = "https://assets.mentiro.com/logos/logo.png"; // Logo
 
 const Candidate = () => {
   const dispatch = useDispatch();

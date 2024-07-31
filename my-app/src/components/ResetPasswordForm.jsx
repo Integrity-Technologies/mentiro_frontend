@@ -4,7 +4,7 @@ import { resetPassword } from "../actions/authActions";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash, FaTimesCircle, FaCheckCircle } from "react-icons/fa"; // Import eye icons
-const logo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png"; 
+const logo = "https://assets.mentiro.com/logos/logo.png"; 
 const loginimg = "/assets/loginimg.png";
 
 function ResetPasswordForm() {

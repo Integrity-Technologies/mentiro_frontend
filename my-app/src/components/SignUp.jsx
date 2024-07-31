@@ -20,7 +20,7 @@ import {
 } from "../actions/companyAction";
 const loginimg = "/assets/loginimg.png";
 const logo =
-  "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721924634/Logo_ree8gd.png";
+  "https://assets.mentiro.com/logos/logo.png";
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -146,7 +146,7 @@ const SignUp = () => {
       if (Object.keys(newErrors).length === 0) {
         try {
           // API call for step 1
-          const response = await fetch("http://localhost:5000/api/users/register", {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -177,9 +177,7 @@ const SignUp = () => {
       if (!formData.lastName) {
         newErrors.lastName = t("signup.errors.lastNameRequired");
       }
-      if (!formData.phone) {
-        newErrors.phone = t('signup.errors.phoneRequired');
-      } else {
+      if (formData.phone) {
         const phoneValidationResult = validatePhoneNumber(formData.phone, currentCountry.country_short_name);
         if (!phoneValidationResult.isValid) {
           newErrors.phone = t('signup.errors.phoneInvalid');
@@ -213,19 +211,26 @@ const SignUp = () => {
           const responseData = JSON.parse(responseStr);
           const userId = responseData?.userId;
         
-          // API call for step 12
-          const response = await fetch("http://localhost:5000/api/users/register/complete", {
+          // Construct the request body
+          const requestBody = {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            password: formData.password,
+            userID: userId // Include userId in the request body
+          };
+  
+          // Conditionally add phone number to the request body
+          if (formData.phone) {
+            requestBody.phone = formData.phone;
+          }
+  
+          // API call for step 2
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/users/register/complete`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              first_name: formData.firstName,
-              last_name: formData.lastName,
-              phone: formData.phone,
-              password: formData.password,
-              userID: userId // Include userId in the request body
-            }),
+            body: JSON.stringify(requestBody),
           });
         
           const data = await response.json();
@@ -234,10 +239,6 @@ const SignUp = () => {
             if (data.success) {
               console.log(data.token);
               localStorage.setItem("token", data.token);
-
-              
-              // localStorage.setItem("userId", data.userId);
-        
               // Proceed to the next page
               setCurrentPage(currentPage + 1);
             }
@@ -249,8 +250,7 @@ const SignUp = () => {
           console.error("Error:", error);
           setErrors({ ...errors, email: "Network error" });
         }
-        
-  }
+      }
       
     } else if (currentPage === 3) {
       // Step 3 validations and handling
@@ -330,13 +330,9 @@ const SignUp = () => {
     return emailRegex.test(email);
   };
 
-  const validatePhoneNumber = (phoneNumber, country) => {
-    const parsedNumber = parsePhoneNumberFromString(phoneNumber, country);
-    if (parsedNumber && parsedNumber.isValid()) {
-      return { isValid: true, error: '' };
-    } else {
-      return { isValid: false, error: 'Invalid phone number' };
-    }
+    const validatePhoneNumber = (phoneNumber, countryCode) => {
+    const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber, countryCode);
+    return parsedPhoneNumber ? { isValid: parsedPhoneNumber.isValid() } : { isValid: false };
   };
 
 
