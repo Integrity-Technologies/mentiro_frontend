@@ -21,6 +21,7 @@ const Assessment = () => {
   const [jobRole, setJobRole] = useState(null);
   const [jobRoleError, setJobRoleError] = useState("");
   const [workArrangement, setWorkArrangement] = useState("");
+  const [assessmentNameError, setAssessmentNameError] = useState("");
   const [workArrangementError, setWorkArrangementError] = useState("");
   const [jobLocation, setJobLocation] = useState("");
   const [jobLocationError, setJobLocationError] = useState("");
@@ -82,38 +83,43 @@ const Assessment = () => {
 
   const handleAddAssessment = () => {
     let error = false;
+  
+    // Validate assessment name
     if (assessmentName.trim() === "") {
-      setCompanyError("Assessment name is required.");
+      setAssessmentNameError("Assessment name is required.");
       error = true;
     } else {
-      setCompanyError("");
+      setAssessmentNameError("");
     }
-
+  
+    // Validate job role
     if (!jobRole) {
       setJobRoleError("Job role is required.");
       error = true;
     } else {
       setJobRoleError("");
     }
-
+  
+    // Validate work arrangement
     if (!workArrangement) {
       setWorkArrangementError("Work arrangement is required.");
       error = true;
     } else {
       setWorkArrangementError("");
     }
-
+  
+    // Validate job location
     if (!jobLocation) {
       setJobLocationError("Job location is required.");
       error = true;
     } else {
       setJobLocationError("");
     }
-
+  
     if (error) {
       return;
     }
-
+  
     // Create an object to store in local storage
     const assessmentData = {
       assessment_name: assessmentName.trim(),
@@ -121,18 +127,16 @@ const Assessment = () => {
       workArrangement: workArrangement.value,
       jobLocation: jobLocation.value,
     };
-
+  
     // Stringify the object before saving to local storage
     localStorage.setItem("assessmentData", JSON.stringify(assessmentData));
-
+  
     // Reset fields and move to the next step
     setAssessmentName("");
     setCurrentStep(1);
-
-    if (!companyError) {
-      setShowTestSelection(true);
-    }
+    setShowTestSelection(true);
   };
+  
 
   const handleBackButtonClick = () => {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
@@ -207,7 +211,9 @@ const Assessment = () => {
                 value={assessmentName}
                 onChange={(e) => setAssessmentName(e.target.value)}
               />
-              {/* {companyError && <p className="mt-2 text-sm text-red-600">{companyError}</p>} */}
+              {assessmentNameError && (
+    <p className="mt-2 text-sm text-red-600">{assessmentNameError}</p>
+  )}
             </div>
 
             <div className="relative">

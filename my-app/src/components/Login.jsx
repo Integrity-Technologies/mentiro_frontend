@@ -176,7 +176,7 @@ const Login = () => {
              <>
                <FaCheckCircle className="text-green-500 mr-2" />
                <strong className="font-bold">Success: </strong>
-               User Login Successfully
+                   User Login Successfully
              </>
            )}
          </div>

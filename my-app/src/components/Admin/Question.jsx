@@ -110,8 +110,22 @@ const Question = () => {
 
   const handleShowEditModal = (question) => {
     setSelectedQuestion(question);
-    setNewQuestion(question); // Set newQuestion to the selected question for editing
+    setNewQuestion({
+      ...question,
+      options: question.options || [], // Ensure options is always an array
+    });
     setShowEditModal(true);
+  };
+  const handleEditQuestion = async () => {
+    if (selectedQuestion) {
+      try {
+        await dispatch(editQuestion(selectedQuestion.id, newQuestion)); // Call editQuestion action
+        await dispatch(getQuestions());
+        handleCloseEditModal(); // Close modal after successful edit
+      } catch (error) {
+        console.error("Error updating question:", error);
+      }
+    }
   };
 
   const handleDeleteModal = (question) => {
@@ -297,7 +311,7 @@ const Question = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter categories (comma separated)"
-                value={newQuestion.category_names.join(",")}
+                value={newQuestion.category_names}
                 onChange={(e) =>
                   setNewQuestion({
                     ...newQuestion,
@@ -333,118 +347,117 @@ const Question = () => {
 
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Question</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={() => EditQuestion(newQuestion)}>
-            {/* Same fields as Add Question Modal */}
-            <Form.Group controlId="formQuestionText">
-              <Form.Label>Question Text</Form.Label>
-              <Form.Control
+  <Modal.Header closeButton>
+    <Modal.Title>Edit Question</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form onSubmit={(e) => { e.preventDefault(); handleEditQuestion(); }}>
+      {/* Same fields as Add Question Modal */}
+      <Form.Group controlId="formQuestionText">
+        <Form.Label>Question Text</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter question text"
+          value={newQuestion.question_text}
+          onChange={(e) =>
+            setNewQuestion({
+              ...newQuestion,
+              question_text: e.target.value,
+            })
+          }
+        />
+      </Form.Group>
+      <Form.Group controlId="formQuestionType">
+        <Form.Label>Question Type</Form.Label>
+        <Form.Control
+          as="select"
+          value={newQuestion.question_type}
+          onChange={(e) =>
+            setNewQuestion({
+              ...newQuestion,
+              question_type: e.target.value,
+            })
+          }
+        >
+          <option value="">Select Type</option>
+          <option value="MCQS">Multiple Choice</option>
+          <option value="true_false">True/False</option>
+        </Form.Control>
+      </Form.Group>
+      {newQuestion.question_type && (
+        <>
+          {Array.isArray(newQuestion.options) && newQuestion.options.map((option, index) => (
+            <Form.Group key={index} controlId={`formOption${index}`}>
+              <Form.Label>Option {index + 1}</Form.Label>
+              <FormControl
                 type="text"
-                placeholder="Enter question text"
-                value={newQuestion.question_text}
-                onChange={(e) =>
-                  setNewQuestion({
-                    ...newQuestion,
-                    question_text: e.target.value,
-                  })
-                }
+                placeholder={`Enter option ${index + 1}`}
+                value={option.option_text}
+                onChange={(e) => handleOptionChange(e.target.value, index)}
+              />
+              <Form.Check
+                type="checkbox"
+                label="Correct"
+                checked={option.is_correct}
+                onChange={(e) => handleCorrectChange(e.target.checked, index)}
               />
             </Form.Group>
-            <Form.Group controlId="formQuestionType">
-              <Form.Label>Question Type</Form.Label>
-              <Form.Control
-                as="select"
-                value={newQuestion.question_type}
-                onChange={(e) =>
-                  setNewQuestion({
-                    ...newQuestion,
-                    question_type: e.target.value,
-                  })
-                }
-              >
-                <option value="">Select Type</option>
-                <option value="Multiple Choice">Multiple Choice</option>
-                <option value="True/False">True/False</option>
-              </Form.Control>
-            </Form.Group>
-            {newQuestion.question_type && (
-              <>
-                {newQuestion.options.map((option, index) => (
-                  <Form.Group key={index} controlId={`formOption${index}`}>
-                    <Form.Label>Option {index + 1}</Form.Label>
-                    <FormControl
-                      type="text"
-                      placeholder={`Enter option ${index + 1}`}
-                      value={option.option_text}
-                      onChange={(e) => handleOptionChange(e.target.value, index)}
-                    />
-                    <Form.Check
-                      type="checkbox"
-                      label="Correct"
-                      checked={option.is_correct}
-                      onChange={(e) => handleCorrectChange(e.target.checked, index)}
-                    />
-                  </Form.Group>
-                ))}
-                {newQuestion.question_type === "Multiple Choice" && (
-                  <Button variant="secondary" onClick={addOption}>
-                    Add Option
-                  </Button>
-                )}
-              </>
-            )}
-            <Form.Group controlId="formDifficultyLevel">
-              <Form.Label>Difficulty Level</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter difficulty level"
-                value={newQuestion.difficulty_level}
-                onChange={(e) =>
-                  setNewQuestion({
-                    ...newQuestion,
-                    difficulty_level: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group controlId="formCategories">
-              <Form.Label>Categories</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter categories (comma separated)"
-                value={newQuestion.category_names.join(",")}
-                onChange={(e) =>
-                  setNewQuestion({
-                    ...newQuestion,
-                    category_names: e.target.value.split(",").map((cat) => cat.trim()),
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group controlId="formQuestionTime">
-              <Form.Label>Question Time</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter question time"
-                value={newQuestion.question_time}
-                onChange={(e) =>
-                  setNewQuestion({
-                    ...newQuestion,
-                    question_time: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Update Question
+          ))}
+          {newQuestion.question_type === "MCQS" && (
+            <Button variant="secondary" onClick={addOption}>
+              Add Option
             </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-
+          )}
+        </>
+      )}
+      <Form.Group controlId="formDifficultyLevel">
+        <Form.Label>Difficulty Level</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter difficulty level"
+          value={newQuestion.difficulty_level}
+          onChange={(e) =>
+            setNewQuestion({
+              ...newQuestion,
+              difficulty_level: e.target.value,
+            })
+          }
+        />
+      </Form.Group>
+      <Form.Group controlId="formCategories">
+        <Form.Label>Categories</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter categories (comma separated)"
+          value={newQuestion.category_names}
+          onChange={(e) =>
+            setNewQuestion({
+              ...newQuestion,
+              category_names: e.target.value.split(",").map((cat) => cat.trim()),
+            })
+          }
+        />
+      </Form.Group>
+      <Form.Group controlId="formQuestionTime">
+        <Form.Label>Question Time</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter question time"
+          value={newQuestion.question_time}
+          onChange={(e) =>
+            setNewQuestion({
+              ...newQuestion,
+              question_time: e.target.value,
+            })
+          }
+        />
+      </Form.Group>
+      <Button variant="primary" type="submit">
+        Update Question
+      </Button>
+    </Form>
+  </Modal.Body>
+</Modal>
       {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>

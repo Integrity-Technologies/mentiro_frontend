@@ -114,12 +114,36 @@ const ActiveAssessment = () => {
     toggleDropdown(index);
   };
   const copyLinkToClipboard = (link) => {
-    navigator.clipboard.writeText(link).then(() => {
-      setPopupMessage("Link copied successfully!");
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(link).then(() => {
+        setPopupMessage("Link copied successfully!");
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
+      }).catch(err => {
+        console.error("Failed to copy: ", err);
+        setPopupMessage("Failed to copy link.");
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 3000);
+      });
+    } else {
+      // Fallback for older browsers or non-secure contexts
+      const textArea = document.createElement("textarea");
+      textArea.value = link;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        setPopupMessage("Link copied successfully!");
+      } catch (err) {
+        console.error("Failed to copy: ", err);
+        setPopupMessage("Failed to copy link.");
+      }
+      document.body.removeChild(textArea);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);
-    });
+    }
   };
+  
   if (currentView === "newassessment") {
     return <Assessment />;
   }

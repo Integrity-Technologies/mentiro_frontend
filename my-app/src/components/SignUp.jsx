@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../actions/authActions";
 import { NavLink, useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import Flag from "react-world-flags";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,8 +19,7 @@ import {
   fetchCompanySizes,
 } from "../actions/companyAction";
 const loginimg = "/assets/loginimg.png";
-const logo =
-  "https://assets.mentiro.com/logos/logo.png";
+const logo = "https://assets.mentiro.com/logos/logo.png";
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -32,10 +31,9 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [countryCode, setCountryCode] = useState("");
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isPopoverVisible, setPopoverVisible] = useState(false);
-
 
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
@@ -56,9 +54,7 @@ const SignUp = () => {
   const [companySizes, setCompanySizes] = useState([]);
   const [jobTitleCustom, setJobTitleCustom] = useState(""); // Add this line
 
-
   // console.log("🚀 ~ SignUp ~ companySizes:", companySizes);
-
 
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
@@ -74,11 +70,11 @@ const SignUp = () => {
     let strength = 0;
     const password = formData.password; // Use password from formData
     const checks = [
-      /[A-Z]/,          // Uppercase
-      /\d/,             // Numbers
-      /[!@&]/,          // Special characters
-      /[a-z]/,          // Lowercase
-      /.{8,}/           // Minimum length
+      /[A-Z]/, // Uppercase
+      /\d/, // Numbers
+      /[!@&]/, // Special characters
+      /[a-z]/, // Lowercase
+      /.{8,}/, // Minimum length
     ];
 
     checks.forEach((regex) => {
@@ -91,7 +87,6 @@ const SignUp = () => {
   };
 
   const strength = calculateStrength();
-
 
   // Fetch job titles and company sizes on component mount
   useEffect(() => {
@@ -131,9 +126,9 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     let newErrors = {};
-  
+
     // Page-specific validations
     if (currentPage === 1) {
       if (!formData.email) {
@@ -141,28 +136,34 @@ const SignUp = () => {
       } else if (!validateEmail(formData.email)) {
         newErrors.email = t("signup.errors.emailInvalid");
       }
-  
+
       setErrors(newErrors);
       if (Object.keys(newErrors).length === 0) {
         try {
           // API call for step 1
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: formData.email }),
-          });
-  
+          const response = await fetch(
+            `${process.env.REACT_APP_API_URL}/users/register`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email: formData.email }),
+            }
+          );
+
           const data = await response.json();
-  
+
           if (response.ok) {
             // Handle successful API response
-            localStorage.setItem('response', JSON.stringify(data)); // Save the response to local storage
+            localStorage.setItem("response", JSON.stringify(data)); // Save the response to local storage
             setCurrentPage(currentPage + 1); // Move to the next page
           } else {
             // Handle API errors
-            setErrors({ ...errors, email: data.message || "User with this email already exists" });
+            setErrors({
+              ...errors,
+              email: data.message || "User with this email already exists",
+            });
           }
         } catch (error) {
           console.error("Error:", error);
@@ -178,9 +179,12 @@ const SignUp = () => {
         newErrors.lastName = t("signup.errors.lastNameRequired");
       }
       if (formData.phone) {
-        const phoneValidationResult = validatePhoneNumber(formData.phone, currentCountry.country_short_name);
+        const phoneValidationResult = validatePhoneNumber(
+          formData.phone,
+          currentCountry.country_short_name
+        );
         if (!phoneValidationResult.isValid) {
-          newErrors.phone = t('signup.errors.phoneInvalid');
+          newErrors.phone = phoneValidationResult.message;
         }
       }
       if (!formData.password) {
@@ -206,35 +210,38 @@ const SignUp = () => {
         try {
           // Retrieve previous response from local storage
           const responseStr = localStorage.getItem("response");
-          
+
           // Parse the response to get userId
           const responseData = JSON.parse(responseStr);
           const userId = responseData?.userId;
-        
+
           // Construct the request body
           const requestBody = {
             first_name: formData.firstName,
             last_name: formData.lastName,
             password: formData.password,
-            userID: userId // Include userId in the request body
+            userID: userId, // Include userId in the request body
           };
-  
+
           // Conditionally add phone number to the request body
           if (formData.phone) {
             requestBody.phone = formData.phone;
           }
-  
+
           // API call for step 2
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/users/register/complete`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          });
-        
+          const response = await fetch(
+            `${process.env.REACT_APP_API_URL}/users/register/complete`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(requestBody),
+            }
+          );
+
           const data = await response.json();
-        
+
           if (response.ok) {
             if (data.success) {
               console.log(data.token);
@@ -244,14 +251,16 @@ const SignUp = () => {
             }
           } else {
             // Handle API errors
-            setErrors({ ...errors, email: data.message || "Something went wrong" });
+            setErrors({
+              ...errors,
+              email: data.message || "Something went wrong",
+            });
           }
         } catch (error) {
           console.error("Error:", error);
           setErrors({ ...errors, email: "Network error" });
         }
       }
-      
     } else if (currentPage === 3) {
       // Step 3 validations and handling
       if (!formData.companyName) {
@@ -270,13 +279,13 @@ const SignUp = () => {
       if (Object.keys(newErrors).length === 0) {
         try {
           setShowAlert(true);
-  
+
           // Remove leading zero from phone number before submission
           let phone = formData.phone;
-          if (phone.startsWith('0')) {
+          if (phone.startsWith("0")) {
             phone = phone.slice(1);
           }
-  
+
           // const userData = {
           //   first_name: formData.firstName,
           //   last_name: formData.lastName,
@@ -285,22 +294,25 @@ const SignUp = () => {
           //   password: formData.password,
           //   confirm_password: formData.confirmPassword,
           // };
-         
-            const companyData = {
-              name: formData.companyName,
-              job_title: formData.jobTitle === "Other" ? jobTitleCustom : formData.jobTitle,
-              company_size: formData.companySize,
-            };
-            const response = await dispatch(addCompany(companyData));
-            localStorage.setItem("CompanyName", companyData.name);
-            localStorage.setItem("company", JSON.stringify(response.company));
-  
-            if (response?.success) {
-              navigate("/customer-dashboard");
-            } else {
-              console.error("Failed to create company", await response.text());
-            }
-          
+
+          const companyData = {
+            name: formData.companyName,
+            job_title:
+              formData.jobTitle === "Other"
+                ? jobTitleCustom
+                : formData.jobTitle,
+            company_size: formData.companySize,
+          };
+          const response = await dispatch(addCompany(companyData));
+          localStorage.setItem("CompanyName", companyData.name);
+          localStorage.setItem("company", JSON.stringify(response.company));
+
+          if (response?.success) {
+            navigate("/customer-dashboard");
+          } else {
+            console.error("Failed to create company", await response.text());
+          }
+
           setTimeout(() => setShowAlert(false), 2000);
         } catch (error) {
           setTimeout(() => setShowAlert(false), 2000);
@@ -308,7 +320,6 @@ const SignUp = () => {
       }
     }
   };
-  
 
   const handleBack = () => {
     setCurrentPage(currentPage - 1);
@@ -330,20 +341,59 @@ const SignUp = () => {
     return emailRegex.test(email);
   };
 
-    const validatePhoneNumber = (phoneNumber, countryCode) => {
-    const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber, countryCode);
-    return parsedPhoneNumber ? { isValid: parsedPhoneNumber.isValid() } : { isValid: false };
+  const validatePhoneNumber = (phoneNumber, countryCode) => {
+    const country = countries.find((c) => c.country_short_name === countryCode);
+
+    if (!country) {
+      return { isValid: false, message: "Invalid country code" };
+    }
+
+    const phoneLength = country.phone_number_length;
+
+    if (phoneLength === undefined || phoneLength === null) {
+      return {
+        isValid: false,
+        message: "Phone length not defined for this country",
+      };
+    }
+
+    const parsedPhoneNumber = phoneNumber.replace(/\D/g, ""); // Removing non-digit characters
+
+    if (parsedPhoneNumber.length !== phoneLength) {
+      return {
+        isValid: false,
+        message: `Please enter a valid phone number`,
+      };
+    }
+
+    return { isValid: true, message: "" };
   };
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "phone") {
+      if (value.trim() !== "") {
+        const validationResult = validatePhoneNumber(
+          value,
+          currentCountry.country_short_name
+        );
+        if (!validationResult.isValid) {
+          setErrors({ ...errors, phone: validationResult.message });
+        } else {
+          setErrors({ ...errors, phone: "" });
+        }
+      } else {
+        setErrors({ ...errors, phone: "" });
+      }
+    }
+
     if (name === "jobTitleCustom") {
       setJobTitleCustom(value);
     }
   };
+
   const handleJobTitleChange = (selectedOption) => {
     setFormData({ ...formData, jobTitle: selectedOption.value });
     setErrors({ ...errors, jobTitle: "" }); // Clear the validation error
@@ -361,8 +411,6 @@ const SignUp = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
-  
 
   const customStyles = {
     menu: (provided) => ({
@@ -495,7 +543,7 @@ const SignUp = () => {
                     <label
                       htmlFor="email"
                       className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                      >
+                    >
                       {t("signup.email")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -585,7 +633,6 @@ const SignUp = () => {
                           placeholder={t("signup.select_country")}
                         />
                         <div className="relative flex-1">
-                          {/* Added flex-1 to make input stretch */}
                           <input
                             type="text"
                             name="phone"
@@ -599,142 +646,345 @@ const SignUp = () => {
                             htmlFor="phone"
                             className="absolute ml-1 text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                           >
-                            {t("signup.phone")}{" "}
-                            {/* <span className="text-red-500">*</span> */}
+                            {t("signup.phone")}
                           </label>
                           {errors.phone && (
-                <div className="text-red-500 text-xs mt-1">{errors.phone}</div>
-              )}
+                            <div className="text-red-500 text-xs mt-1">
+                              {errors.phone}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="relative mb-4 mt-4">
-  <div className="relative">
-    <input
-      type={showPassword ? "text" : "password"}
-      name="password"
-      value={formData.password}
-      id="password"
-      onChange={handlePasswordChange}
-      onFocus={() => setPopoverVisible(true)} // Show popover on focus
-      onBlur={() => setPopoverVisible(false)} // Hide popover on blur
-      className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-      placeholder=" "
-    />
-    <label
-      htmlFor="password"
-      className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-    >
-      Password
-    </label>
-    {isPopoverVisible && (
-      <div className="absolute top-full left-0 mt-2 w-full bg-white shadow-md rounded-lg p-4 dark:bg-neutral-800 dark:border dark:border-neutral-700 z-20 font-roboto">
-      {/* <h4 className="mt-3 text-sm font-medium text-gray-500 dark:text-white">
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        id="password"
+                        onChange={handlePasswordChange}
+                        onFocus={() => setPopoverVisible(true)} // Show popover on focus
+                        onBlur={() => setPopoverVisible(false)} // Hide popover on blur
+                        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "
+                      />
+                      <label
+                        htmlFor="password"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                      >
+                        Password
+                      </label>
+                      {isPopoverVisible && (
+                        <div className="absolute top-full left-0 mt-2 w-full bg-white shadow-md rounded-lg p-4 dark:bg-neutral-800 dark:border dark:border-neutral-700 z-20 font-roboto">
+                          {/* <h4 className="mt-3 text-sm font-medium text-gray-500 dark:text-white">
          Password Strength:   
         </h4> */}
-        <div className="flex mt-2 -mx-1 gap-2">
-          {[20, 40, 60, 80, 100].map((step, index) => (
-            <div
-              key={index}
-              className={`flex-1 h-2 rounded-full ${
-                strength >= step ? 'bg-teal-500' : 'bg-gray-300'
-              }`}
-            ></div>
-          ))}
-        </div>
-        <h4 className="mt-3 text-sm font-semibold text-gray-800 dark:text-white">
-          Your password must contain:
-        </h4>
-        <ul className="space-y-1 text-sm text-gray-500 dark:text-neutral-500">
-          <li className={`flex items-center gap-x-2 ${formData.password.length >= 6 ? 'text-teal-500' : ''}`}>
-            <span className={`${formData.password.length >= 6 ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </span>
-            <span className={`${formData.password.length < 6 ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-              </svg>
-            </span>
-            Minimum number of characters is 6.
-          </li>
-          <li className={`flex items-center gap-x-2 ${/[a-z]/.test(formData.password) ? 'text-teal-500' : ''}`}>
-            <span className={`${/[a-z]/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </span>
-            <span className={`${!/[a-z]/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-              </svg>
-            </span>
-            Should contain lowercase.
-          </li>
-          <li className={`flex items-center gap-x-2 ${/[A-Z]/.test(formData.password) ? 'text-teal-500' : ''}`}>
-            <span className={`${/[A-Z]/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </span>
-            <span className={`${!/[A-Z]/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-              </svg>
-            </span>
-            Should contain uppercase.
-          </li>
-          <li className={`flex items-center gap-x-2 ${/\d/.test(formData.password) ? 'text-teal-500' : ''}`}>
-            <span className={`${/\d/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </span>
-            <span className={`${!/\d/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-              </svg>
-            </span>
-            Should contain numbers.
-          </li>
-          <li className={`flex items-center gap-x-2 ${/[!@&]/.test(formData.password) ? 'text-teal-500' : ''}`}>
-            <span className={`${/[!@&]/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-teal-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </span>
-            <span className={`${!/[!@&]/.test(formData.password) ? 'block' : 'hidden'}`}>
-              <svg className="shrink-0 w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-              </svg>
-            </span>
-            Should contain special characters.
-          </li>
-        </ul>
-      </div>
-    )}
-    <span className="absolute inset-y-0 right-0 flex items-center pr-3">
-      {showPassword ? (
-        <FaEyeSlash
-          className="text-gray-500 cursor-pointer"
-          onClick={togglePasswordVisibility}
-        />
-      ) : (
-        <FaEye
-          className="text-gray-500 cursor-pointer"
-          onClick={togglePasswordVisibility}
-        />
-      )}
-    </span>
-  </div>
-</div>
+                          <div className="flex mt-2 -mx-1 gap-2">
+                            {[20, 40, 60, 80, 100].map((step, index) => (
+                              <div
+                                key={index}
+                                className={`flex-1 h-2 rounded-full ${
+                                  strength >= step
+                                    ? "bg-teal-500"
+                                    : "bg-gray-300"
+                                }`}
+                              ></div>
+                            ))}
+                          </div>
+                          <h4 className="mt-3 text-sm font-semibold text-gray-800 dark:text-white">
+                            Your password must contain:
+                          </h4>
+                          <ul className="space-y-1 text-sm text-gray-500 dark:text-neutral-500">
+                            <li
+                              className={`flex items-center gap-x-2 ${
+                                formData.password.length >= 6
+                                  ? "text-teal-500"
+                                  : ""
+                              }`}
+                            >
+                              <span
+                                className={`${
+                                  formData.password.length >= 6
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-teal-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              </span>
+                              <span
+                                className={`${
+                                  formData.password.length < 6
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-gray-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M18 6 6 18"></path>
+                                  <path d="m6 6 12 12"></path>
+                                </svg>
+                              </span>
+                              Minimum number of characters is 6.
+                            </li>
+                            <li
+                              className={`flex items-center gap-x-2 ${
+                                /[a-z]/.test(formData.password)
+                                  ? "text-teal-500"
+                                  : ""
+                              }`}
+                            >
+                              <span
+                                className={`${
+                                  /[a-z]/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-teal-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              </span>
+                              <span
+                                className={`${
+                                  !/[a-z]/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-gray-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M18 6 6 18"></path>
+                                  <path d="m6 6 12 12"></path>
+                                </svg>
+                              </span>
+                              Should contain lowercase.
+                            </li>
+                            <li
+                              className={`flex items-center gap-x-2 ${
+                                /[A-Z]/.test(formData.password)
+                                  ? "text-teal-500"
+                                  : ""
+                              }`}
+                            >
+                              <span
+                                className={`${
+                                  /[A-Z]/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-teal-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              </span>
+                              <span
+                                className={`${
+                                  !/[A-Z]/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-gray-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M18 6 6 18"></path>
+                                  <path d="m6 6 12 12"></path>
+                                </svg>
+                              </span>
+                              Should contain uppercase.
+                            </li>
+                            <li
+                              className={`flex items-center gap-x-2 ${
+                                /\d/.test(formData.password)
+                                  ? "text-teal-500"
+                                  : ""
+                              }`}
+                            >
+                              <span
+                                className={`${
+                                  /\d/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-teal-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              </span>
+                              <span
+                                className={`${
+                                  !/\d/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-gray-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M18 6 6 18"></path>
+                                  <path d="m6 6 12 12"></path>
+                                </svg>
+                              </span>
+                              Should contain numbers.
+                            </li>
+                            <li
+                              className={`flex items-center gap-x-2 ${
+                                /[!@&]/.test(formData.password)
+                                  ? "text-teal-500"
+                                  : ""
+                              }`}
+                            >
+                              <span
+                                className={`${
+                                  /[!@&]/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-teal-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              </span>
+                              <span
+                                className={`${
+                                  !/[!@&]/.test(formData.password)
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <svg
+                                  className="shrink-0 w-4 h-4 text-gray-500"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M18 6 6 18"></path>
+                                  <path d="m6 6 12 12"></path>
+                                </svg>
+                              </span>
+                              Should contain special characters.
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                      <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+                        {showPassword ? (
+                          <FaEyeSlash
+                            className="text-gray-500 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          />
+                        ) : (
+                          <FaEye
+                            className="text-gray-500 cursor-pointer"
+                            onClick={togglePasswordVisibility}
+                          />
+                        )}
+                      </span>
+                    </div>
+                  </div>
 
                   <div className="mb-3">
                     <div className="relative">
