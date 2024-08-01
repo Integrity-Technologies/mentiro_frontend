@@ -20,6 +20,8 @@ const ActiveAssessment = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [uniqueLink, setUniqueLink] = useState("");
+  const [showPopup, setShowPopup] = useState(false); // State for popup visibility
+  const [popupMessage, setPopupMessage] = useState(""); // State for popup message
   const errorAssessment = useSelector((state) => state.assessment.error); // Access the error message
   console.log("🚀 ~ ActiveAssessment ~ errorAssessment:", errorAssessment);
   const [errorAssessmentVisible, setErrorAssessmentVisible] = useState(false);
@@ -112,9 +114,10 @@ const ActiveAssessment = () => {
     toggleDropdown(index);
   };
   const copyLinkToClipboard = (link) => {
-    // console.log("🚀 ~ copyLinkToClipboard ~ link:", link);
     navigator.clipboard.writeText(link).then(() => {
-      console.log("Link copied to clipboard!");
+      setPopupMessage("Link copied successfully!");
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
     });
   };
   if (currentView === "newassessment") {
@@ -274,7 +277,7 @@ const ActiveAssessment = () => {
                         <button
                           className="block px-4 py-2 text-left w-full text-gray-800 hover:bg-gray-100"
                           onClick={() =>
-                            copyLinkToClipboard(assessment.uniquelink)
+                            copyLinkToClipboard(assessment.shareablelink)
                           }
                         >
                           Copy Link
@@ -339,6 +342,15 @@ const ActiveAssessment = () => {
           </div>
         </div>
       </CSSTransition>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-90 z-50">
+          <div className="bg-green-100 p-6 rounded-lg shadow-lg flex  items-center">
+            <FaCheckCircle className="text-green-500 text-3xl" />
+            <p className="text-black text-lg mt-3 ml-2">{popupMessage}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
