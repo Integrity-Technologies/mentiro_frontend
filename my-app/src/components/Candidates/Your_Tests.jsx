@@ -6,7 +6,7 @@ import TestTime from "./TestTime";
 
 const logo = "/assets/logo.png";
 
-const Mentirobluelogo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721929527/Mentirobluelogo_ufvjsg.png"; // Logo
+const Mentirobluelogo = "https://mentiro-assets.b-cdn.net/logos/Mentirobluelogo.png"; // Logo
 
 const YourTests = () => {
   const [tests, setTests] = useState([]);

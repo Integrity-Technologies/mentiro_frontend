@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { FaSearch, FaInfoCircle, FaEllipsisV } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 
-const Mentirobluelogo = "/assets/Mentirobluelogo.png"; // Ensure this path is correct
+const Mentirobluelogo = "https://mentiro-assets.b-cdn.net/logos/Mentirobluelogo.png"; // Ensure this path is correct
 
 const ViewTestResult = () => {
   const { t } = useTranslation();

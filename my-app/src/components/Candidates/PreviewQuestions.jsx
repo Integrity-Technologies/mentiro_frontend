@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 
-const Mentirobluelogo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721929527/Mentirobluelogo_ufvjsg.png"; // Logo
+const Mentirobluelogo = "https://mentiro-assets.b-cdn.net/logos/Mentirobluelogo.png"; // Logo
 
 const PreviewPage = ({ totalQuestions, attemptedCount, skippedCount, onSubmit, onReviewSkipped }) => {
   const renderQuestionCount = (label, count) => (

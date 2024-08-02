@@ -208,8 +208,7 @@ const ActiveAssessment = () => {
         <div className=" inset-0 flex items-center z-50">
           <div className="bg-red-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
             <span className="text-lg font-semibold">
-              The result for this assessment is created, cannot be updated or
-              deleted.
+            This assessment is linked to a candidate result and cannot be modified.
             </span>
           </div>
         </div>

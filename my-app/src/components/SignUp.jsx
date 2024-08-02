@@ -102,7 +102,7 @@ const SignUp = () => {
     const fetchLocation = async () => {
       try {
         const response = await fetch(
-          "https://ipinfo.io/json?token=15f12699e3dd0b"
+          "https://ipinfo.io/json?token=3695ae925b91ed"
         );
         const data = await response.json();
         const country = countries.find(
@@ -323,17 +323,17 @@ const SignUp = () => {
 
   const handleBack = () => {
     setCurrentPage(currentPage - 1);
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      companyName: "",
-      companySize: "",
-      jobTitle: "",
-      password: "",
-      confirmPassword: "",
-    });
+    // setFormData({
+    //   firstName: "",
+    //   lastName: "",
+    //   email: "",
+    //   phone: "",
+    //   companyName: "",
+    //   companySize: "",
+    //   jobTitle: "",
+    //   password: "",
+    //   confirmPassword: "",
+    // });
   };
 
   const validateEmail = (email) => {

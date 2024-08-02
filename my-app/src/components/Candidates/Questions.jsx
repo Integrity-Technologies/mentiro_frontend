@@ -5,7 +5,7 @@ import { getQuestionById } from '../../actions/QuestionAction';
 import { submitAnswer } from '../../actions/resultAction';
 import { BiTimeFive } from 'react-icons/bi';
 import PreviewPage from './PreviewQuestions';
-const Mentirobluelogo = "https://res.cloudinary.com/dbkxdbmfy/image/upload/v1721929527/Mentirobluelogo_ufvjsg.png"; // Logo
+const Mentirobluelogo = "https://mentiro-assets.b-cdn.net/logos/Mentirobluelogo.png"; // Logo
 
 const Questions = ({ onComplete, onTimeExpired }) => {
   const [selectedOption, setSelectedOption] = useState(null);
