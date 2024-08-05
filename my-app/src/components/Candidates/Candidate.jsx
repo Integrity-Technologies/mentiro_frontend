@@ -6,7 +6,7 @@ import Your_Tests from "./Your_Tests";
 // import { isEmail } from "validator"; // Import validator for email format validation
 import { useLocation } from "react-router-dom";
 
-const loginimg = "/assets/loginimg.png"; // Image for the candidate section
+const loginimg = "https://mentiro-assets.b-cdn.net/Mentiro%20Images/Mentiro-login-img.png"; // Image for the candidate section
 const logo = "https://assets.mentiro.com/logos/logo.png"; // Logo
 
 const Candidate = () => {

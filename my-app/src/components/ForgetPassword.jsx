@@ -4,7 +4,7 @@ import { forgotPassword } from "../actions/authActions";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {FaCheckCircle} from "react-icons/fa"
-const loginimg = "/assets/loginimg.png";
+const loginimg = "https://mentiro-assets.b-cdn.net/Mentiro%20Images/Mentiro-login-img.png";
 const logo = "https://assets.mentiro.com/logos/logo.png"; 
 
 const ForgetPassword = () => {

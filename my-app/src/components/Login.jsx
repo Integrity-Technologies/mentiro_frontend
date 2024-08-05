@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; // Assuming you're using React Icons library
 
-const loginimg = "/assets/loginimg.png";
+const loginimg = "https://mentiro-assets.b-cdn.net/Mentiro%20Images/Mentiro-login-img.png";
 const logo = "https://assets.mentiro.com/logos/logo.png"; 
 
 

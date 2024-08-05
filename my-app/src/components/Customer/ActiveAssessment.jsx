@@ -56,33 +56,46 @@ const ActiveAssessment = () => {
     }
   }, [errorAssessment]);
   const confirmDelete = async () => {
-    await dispatch(deleteAssessment(selectedAssessmentId));
-    setShowDeleteConfirmation(false);
-    if (!errorAssessment) {
+    try {
+      console.log("Attempting to delete assessment...");
+      await dispatch(deleteAssessment(selectedAssessmentId));
+      console.log("Assessment deleted successfully.");
+  
+      setShowDeleteConfirmation(false);
       setDeleteSuccess(true);
+  
+      // Refresh the assessments list
       await dispatch(getAllAssessments());
+  
+      console.log("Assessments refreshed.");
       setTimeout(() => setDeleteSuccess(false), 3000);
+    } catch (error) {
+      console.error("Error deleting assessment:", error);
+      setErrorAssessmentVisible(true);
+      setTimeout(() => setErrorAssessmentVisible(false), 3000);
     }
   };
+  
+  
 
-  const getMonthName = (dateString) => {
-    const date = new Date(dateString);
-    const options = { month: "long" };
-    return new Intl.DateTimeFormat("en-US", options).format(date);
-  };
-  const getRelativeCreationDate = (dateString) => {
-    const date = new Date(dateString);
-    const currentDate = new Date();
-    const diffInMilliseconds = currentDate - date;
-    const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
-    if (diffInDays === 0) {
-      return "today";
-    } else if (diffInDays === 1) {
-      return "yesterday";
-    } else {
-      return `${diffInDays} days ago`;
-    }
-  };
+  // const getMonthName = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const options = { month: "long" };
+  //   return new Intl.DateTimeFormat("en-US", options).format(date);
+  // };
+  // const getRelativeCreationDate = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const currentDate = new Date();
+  //   const diffInMilliseconds = currentDate - date;
+  //   const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+  //   if (diffInDays === 0) {
+  //     return "today";
+  //   } else if (diffInDays === 1) {
+  //     return "yesterday";
+  //   } else {
+  //     return `${diffInDays} days ago`;
+  //   }
+  // };
   const filteredAssessments = Array.isArray(assessments?.assessments)
     ? assessments?.assessments?.filter((assessment) => {
         const fullName = `${assessment.assessment_name} ${assessment.last_name}`;
@@ -205,24 +218,25 @@ const ActiveAssessment = () => {
         </div>
       </div>
       {errorAssessmentVisible && (
-        <div className=" inset-0 flex items-center z-50">
-          <div className="bg-red-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
-            <span className="text-lg font-semibold">
-            This assessment is linked to a candidate result and cannot be modified.
-            </span>
-          </div>
-        </div>
-      )}
-      {deleteSuccess && !errorAssessmentVisible && (
-        <div className=" inset-0 flex items-center z-50">
-          <div className="bg-green-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
-            <FaCheckCircle className="text-black text-3xl" />
-            <span className="text-lg font-semibold">
-              Assessment Deleted Successfully
-            </span>
-          </div>
-        </div>
-      )}
+  <div className="inset-0 flex items-center z-50">
+    <div className="bg-red-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
+      <span className="text-lg font-semibold">
+        This assessment is linked to a candidate result and cannot be modified.
+      </span>
+    </div>
+  </div>
+)}
+
+{deleteSuccess && !errorAssessmentVisible && (
+  <div className="inset-0 flex items-center z-50">
+    <div className="bg-green-100 text-black w-100 p-6 rounded-lg shadow-lg flex items-center space-x-2">
+      <FaCheckCircle className="text-black text-3xl" />
+      <span className="text-lg font-semibold">
+        Assessment Deleted Successfully
+      </span>
+    </div>
+  </div>
+)}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-50 text-12px">

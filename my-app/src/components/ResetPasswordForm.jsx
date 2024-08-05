@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash, FaTimesCircle, FaCheckCircle } from "react-icons/fa"; // Import eye icons
 const logo = "https://assets.mentiro.com/logos/logo.png"; 
-const loginimg = "/assets/loginimg.png";
+const loginimg = "https://mentiro-assets.b-cdn.net/Mentiro%20Images/Mentiro-login-img.png";
 
 function ResetPasswordForm() {
   const { t } = useTranslation();
