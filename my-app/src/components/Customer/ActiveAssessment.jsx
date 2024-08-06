@@ -23,8 +23,10 @@ const ActiveAssessment = () => {
   const [showPopup, setShowPopup] = useState(false); // State for popup visibility
   const [popupMessage, setPopupMessage] = useState(""); // State for popup message
   const errorAssessment = useSelector((state) => state.assessment.error); // Access the error message
-  console.log("🚀 ~ ActiveAssessment ~ errorAssessment:", errorAssessment);
+  // console.log("🚀 ~ ActiveAssessment ~ errorAssessment:", errorAssessment);
   const [errorAssessmentVisible, setErrorAssessmentVisible] = useState(false);
+  const [openDropdownIndex, setOpenDropdownIndex] = useState(null); // State to manage which dropdown is open
+
 
   const [currentPreviewView, setCurrentPreviewView] =
     useState("activeassessment");
@@ -114,7 +116,7 @@ const ActiveAssessment = () => {
     }));
   };
   const hideDropdown = () => {
-    setDropdownVisible({});
+    setOpenDropdownIndex(null); // Close dropdown when clicking outside
   };
   useEffect(() => {
     document.addEventListener("click", hideDropdown);
@@ -124,8 +126,14 @@ const ActiveAssessment = () => {
   }, []);
   const handleDropdownClick = (event, index) => {
     event.stopPropagation();
-    toggleDropdown(index);
+    if (openDropdownIndex === index) {
+      setOpenDropdownIndex(null); // Close dropdown if already open
+    } else {
+      setOpenDropdownIndex(index); // Open new dropdown
+    }
   };
+
+ 
   const copyLinkToClipboard = (link) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(link).then(() => {
@@ -297,7 +305,7 @@ const ActiveAssessment = () => {
                       className="cursor-pointer"
                       onClick={(event) => handleDropdownClick(event, index)}
                     />
-                    {dropdownVisible[index] && (
+                    {openDropdownIndex === index && (
                       <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
                         <button
                           className="block px-4 py-2 text-left w-full text-gray-800 hover:bg-gray-100"

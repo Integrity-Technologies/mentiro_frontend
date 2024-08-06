@@ -198,8 +198,8 @@ const formattedTestsData = selectedTests.map((testId) => {
     <div>
       {showQuestion ? (
         <Preview    
-        currentStep={currentStep}
-        handleBackButton={handleBackButton} />
+        handleBackButton={handleBackButtonClick}
+        goToNextStep={goToNextStep} />
       ) : (
         <div className="min-h-screen flex flex-col px-6 py-10 relative font-roboto">
           <div className="mb-4">

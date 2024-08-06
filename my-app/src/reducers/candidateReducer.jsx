@@ -4,6 +4,7 @@ import {
     EDIT_CANDIDATE_SUCCESS,
     DELETE_CANDIDATE_SUCCESS,
     CANDIDATE_ERROR,
+    CLEAR_CANDIDATES,
   } from "../actions/candidateAction";
   
   const initialState = {
@@ -13,6 +14,12 @@ import {
   
   const candidateReducer = (state = initialState, action) => {
     switch (action.type) {
+      case CLEAR_CANDIDATES:
+      return {
+        ...state,
+        candidates: [],
+        error: null,
+      };
       case FETCH_CANDIDATES_SUCCESS:
         return {
           ...state,

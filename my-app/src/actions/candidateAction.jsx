@@ -6,6 +6,7 @@ export const FETCH_CANDIDATES_SUCCESS = "FETCH_CANDIDATES_SUCCESS";
 export const ADD_CANDIDATE_SUCCESS = "ADD_CANDIDATE_SUCCESS";
 export const EDIT_CANDIDATE_SUCCESS = "EDIT_CANDIDATE_SUCCESS";
 export const DELETE_CANDIDATE_SUCCESS = "DELETE_CANDIDATE_SUCCESS";
+export const   CLEAR_CANDIDATES =   "CLEAR_CANDIDATES";
 export const CANDIDATE_ERROR = "CANDIDATE_ERROR";
 
 export const getAllCandidates = () => async (dispatch) => {
@@ -101,17 +102,21 @@ export const getUserCandidates = () => async (dispatch) => {
         Authorization: `Bearer ${token}` // Set authorization header
       }
     };
+
+    // Dispatch an action to clear the current candidates before fetching new ones
+    dispatch({ type: CLEAR_CANDIDATES });
+
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/candidate/user/candidates`, axiosConfig);
     // console.log(res);
 
     const formattedUsers = res.data.map((user) => ({
-        ...user,
-        created_at: user.created_at.split("T")[0], // Extract date part only
-        password: "*****",
-      }));
+      ...user,
+      created_at: user.created_at.split("T")[0], // Extract date part only
+      password: "*****",
+    }));
 
     dispatch({ type: FETCH_CANDIDATES_SUCCESS, payload: formattedUsers });
-    
+
     return formattedUsers;
   } catch (error) {
     const errorMessage = error.response?.data?.error || "Error fetching candidates";

@@ -12,7 +12,7 @@ import TestSelection from "./TestSelection";
 import InviteCandidate from "./InviteCandidate";
 import { useTranslation } from "react-i18next";
 
-const Preview = () => {
+const Preview = ( { handleBackButton, goToNextStep } ) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [showInviteCandidate, setShowInviteCandidate] = useState(false);
@@ -25,7 +25,7 @@ const Preview = () => {
   const [assessmentData, setAssessmentData] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState({});
   const [progress, setProgress] = useState(0);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(2); // Initialize to a value greater than 0
 
   useEffect(() => {
     const assessmentData = JSON.parse(localStorage.getItem("assessmentData"));
@@ -130,12 +130,25 @@ const Preview = () => {
     }
   };
 
-  const handleBackButton = () => {
-    setCurrentStep((prevStep) => Math.max(0, prevStep - 1)); // Decrease current step by 1
-    setProgress((prevProgress) => Math.max(0, prevProgress - 1)); // Decrease progress by 1
-    setShowTestSelection(true); // Show the test selection component
-    setShowPreview(false); // Hide the preview component
-  };
+//   const handleBackButton = () => {
+//     setCurrentStep((prevStep) => {
+//         const newStep = Math.max(0, prevStep - 1);
+//         console.log(`Current Step: ${prevStep} -> ${newStep}`);
+//         return newStep;
+//     });
+
+//     setProgress((prevProgress) => {
+//         const newProgress = Math.max(0, prevProgress - 1);
+//         console.log(`Progress: ${prevProgress} -> ${newProgress}`);
+//         return newProgress;
+//     });
+
+//     setShowTestSelection(true);
+//     setShowPreview(false);
+    
+//     console.log('Show Test Selection:', true);
+//     console.log('Show Preview:', false);
+// };
 
   // Log the updated currentStep whenever it changes
   const handleOpenModal = () => {

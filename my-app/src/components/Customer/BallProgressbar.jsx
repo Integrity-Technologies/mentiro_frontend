@@ -1,8 +1,7 @@
 import React from 'react';
+import { FaCheck } from 'react-icons/fa';
 
 const BallProgressBar = ({ steps, currentStep, labels }) => {
-
-  console.log('Current Step:', currentStep);
 
   return (
     <div className="flex flex-col items-center">
@@ -13,12 +12,12 @@ const BallProgressBar = ({ steps, currentStep, labels }) => {
             <div className="flex flex-col items-center mx-2">
               <div
                 className={`w-8 h-8 rounded-full ${
-                  index <= currentStep ? 'bg-blue-500' : 'bg-gray-300'
+                  index < currentStep ? 'bg-blue-900' : 'bg-gray-300'
                 } flex items-center justify-center text-white font-bold shadow-lg transition-transform duration-300 ease-in-out transform ${
                   index === currentStep ? 'scale-110' : 'scale-100'
                 } hover:scale-110`}
               >
-                {index + 1}
+                {index < currentStep ? <FaCheck /> : index + 1}
               </div>
               {/* Render the label */}
               <span className="mt-2 text-center text-sm font-medium text-gray-700">
@@ -29,7 +28,7 @@ const BallProgressBar = ({ steps, currentStep, labels }) => {
             {index < steps - 1 && (
               <div
                 className={`flex-auto h-2 mx-2 ${
-                  index < currentStep ? 'bg-blue-500' : 'bg-gray-300'
+                  index < currentStep ? 'bg-blue-900' : 'bg-gray-300'
                 } transition-colors duration-300`}
                 style={{ width: 'calc(100% / (steps - 1) - 1rem)' }} // Dynamic width
               />
@@ -42,9 +41,3 @@ const BallProgressBar = ({ steps, currentStep, labels }) => {
 };
 
 export default BallProgressBar;
-
-
-
-
-
-
